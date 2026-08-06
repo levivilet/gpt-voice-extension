@@ -24,17 +24,6 @@ export const createInstance = async (
 ): Promise<ActiveTrelloViewInstance> => {
   const state = {}
 
-  const requestRerender = (): void => {
-    // @ts-ignore
-    const request = context?.requestRerender
-    if (!request) {
-      return
-    }
-    globalThis.setTimeout(() => {
-      void request()
-    }, 0)
-  }
-
   const instance: ActiveTrelloViewInstance = {
     getContext() {
       return {}
