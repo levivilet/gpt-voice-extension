@@ -4,7 +4,7 @@ import path, { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { root } from './root.ts'
 
-const extensionId = 'builtin.gpt-voice'
+const extensionId = 'builtin.gptvoice'
 
 const assertFileExists = async (file: string): Promise<void> => {
   try {
@@ -19,7 +19,7 @@ const readJson = async <T>(file: string): Promise<T> => {
   return JSON.parse(content) as T
 }
 
-const assertgpt-voiceExtensionEntry = (
+const assertgptvoiceExtensionEntry = (
   entries: readonly Record<string, unknown>[],
   file: string,
 ): Record<string, unknown> => {
@@ -30,7 +30,7 @@ const assertgpt-voiceExtensionEntry = (
   return entry
 }
 
-const assertStaticgpt-voiceExtension = async (
+const assertStaticgptvoiceExtension = async (
   commitHash: string,
 ): Promise<void> => {
   const commitDir = path.join(root, 'dist', commitHash)
@@ -54,7 +54,7 @@ const assertStaticgpt-voiceExtension = async (
 
   const extensionsJson =
     await readJson<readonly Record<string, unknown>[]>(extensionsJsonPath)
-  const extensionEntry = assertgpt-voiceExtensionEntry(
+  const extensionEntry = assertgptvoiceExtensionEntry(
     extensionsJson,
     extensionsJsonPath,
   )
@@ -71,7 +71,7 @@ const assertStaticgpt-voiceExtension = async (
   const webExtensionsJson = await readJson<readonly Record<string, unknown>[]>(
     webExtensionsJsonPath,
   )
-  assertgpt-voiceExtensionEntry(webExtensionsJson, webExtensionsJsonPath)
+  assertgptvoiceExtensionEntry(webExtensionsJson, webExtensionsJsonPath)
 
   const workerPath = path.join(
     commitDir,
@@ -123,4 +123,4 @@ await cp(
   { recursive: true, force: true },
 )
 
-await assertStaticgpt-voiceExtension(commitHash)
+await assertStaticgptvoiceExtension(commitHash)
