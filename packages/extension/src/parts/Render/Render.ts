@@ -4,7 +4,36 @@ import {
   VirtualDomElements,
 } from '@lvce-editor/virtual-dom-worker'
 
-export const render = (): readonly VirtualDomNode[] => {
+interface State {
+  readonly inProgress: boolean
+}
+
+const renderButton = (state: State): readonly VirtualDomNode[] => {
+  if (state.inProgress) {
+    return [
+      {
+        type: VirtualDomElements.Button,
+        className: 'GptVoiceButton',
+        id: 'toggle',
+        childCount: 1,
+        onClick: 'handleClickStart',
+      },
+      text('Stop talking'),
+    ]
+  }
+  return [
+    {
+      type: VirtualDomElements.Button,
+      className: 'GptVoiceButton',
+      id: 'toggle',
+      childCount: 1,
+      onClick: 'handleClickStart',
+    },
+    text('Start talking'),
+  ]
+}
+
+export const render = (state: any): readonly VirtualDomNode[] => {
   return [
     {
       childCount: 4,
@@ -27,14 +56,7 @@ export const render = (): readonly VirtualDomNode[] => {
       childCount: 1,
     },
     text('idle'),
-    {
-      type: VirtualDomElements.Button,
-      className: 'GptVoiceButton',
-      id: 'toggle',
-      childCount: 1,
-      onClick: 'handleClickStart',
-    },
-    text('Start talking'),
+    ...renderButton(state),
     {
       type: VirtualDomElements.Div,
       childCount: 0,

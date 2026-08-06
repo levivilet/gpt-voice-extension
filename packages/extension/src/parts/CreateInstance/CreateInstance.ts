@@ -44,12 +44,15 @@ export const createInstance = async (
       return []
     },
     async handleClickStart(): Promise<void> {
-      console.log(`start clicked`)
+      state.inProgress = !state.inProgress
       requestRerender()
+      console.log(`clicked`)
       // handleClickStart(context)
       // updateContext(state)
     },
-    render,
+    render() {
+      return render(state)
+    },
     renderActionsDom(): readonly VirtualDomNode[] {
       return [
         {
