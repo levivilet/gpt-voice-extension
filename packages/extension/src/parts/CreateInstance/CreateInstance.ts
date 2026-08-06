@@ -8,46 +8,11 @@ import { getTitle } from '../GetTitle/GetTitle.ts'
 import { type MenuEntry } from '../MenuEntries/MenuEntries.ts'
 
 export interface ActiveTrelloViewInstance extends VirtualDomViewInstance {
-  readonly addCard: (options: any) => Promise<void>
-  readonly addList: (options: any) => Promise<void>
-  readonly backToBoards: () => Promise<void>
-  readonly cancelNewCard: () => void
-  readonly closeBoardFilter: () => void
-  readonly closeCardDetail: () => void
   readonly getContext: () => Readonly<Record<string, boolean>>
   readonly getCss: () => string
   readonly getMenuEntries: (menuId: string) => readonly MenuEntry[]
-  readonly handleAddCardActionPointerDown: () => Promise<void>
-  readonly handleCardDescriptionCancelPointerDown: () => Promise<void>
-  readonly handleCardLabelPickerPointerDown: () => Promise<void>
-  readonly handleDragEnd: () => Promise<void>
-  readonly handleDragLeave: () => Promise<void>
-  readonly handleDragOver: (name: string) => Promise<void>
-  readonly handleDragStart: (name: string) => Promise<void>
-  readonly handleDrop: (name: string, fileList?: FileList) => Promise<void>
-  readonly handleImageError: (name: string) => Promise<void>
-  readonly handleKeyDown: (
-    name: string,
-    key: string,
-    ctrlKey?: boolean,
-  ) => Promise<void>
-  readonly handleSashPointerDown: (clientX: number) => Promise<void>
-  readonly handleSashPointerMove: (clientX: number) => Promise<void>
-  readonly handleSashPointerUp: () => Promise<void>
-  readonly logout: () => Promise<void>
-  readonly openCard: (cardId: string) => Promise<void>
-  readonly openMockBoard: (options: any) => Promise<void>
-  readonly refreshBoards: () => Promise<void>
-  readonly reload: () => Promise<void>
-  readonly renderActionsDom: () => readonly VirtualDomNode[]
-  readonly renderFocus: (
-    oldContext: Readonly<Record<string, boolean>>,
-    newContext: Readonly<Record<string, boolean>>,
-  ) => string
-  readonly renderSelections: () => readonly ViewSelection[]
+
   readonly renderTitle: () => string
-  readonly saveCardDetail: () => Promise<void>
-  readonly startAddCard: (listId: string) => void
   readonly submitNewCard: () => Promise<void>
 }
 
