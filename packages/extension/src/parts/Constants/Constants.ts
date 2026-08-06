@@ -1,6 +1,0 @@
-export const viewId = 'gpt-voice.views.boards'
-export const searchEnabledPreference = 'gpt-voice.searchEnabled'
-export const boardBackgroundEnabledPreference = 'gpt-voice.boardBackgroundEnabled'
-export const cardDetailPopupEnabledPreference = 'gpt-voice.cardDetailPopupEnabled'
-export const batchRequestsEnabledPreference = 'gpt-voice.batchRequestsEnabled'
-export const gpt-voicePowerUpsUrl = 'https://gpt-voice.com/power-ups/admin'
