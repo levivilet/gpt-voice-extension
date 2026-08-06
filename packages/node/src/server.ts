@@ -8,6 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = join(__dirname, '..')
 configDotenv({
   path: join(root, '.env'),
+  quiet: true,
 })
 
 const app = express()
