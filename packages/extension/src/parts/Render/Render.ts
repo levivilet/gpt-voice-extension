@@ -82,7 +82,7 @@ const renderTranscript = (state: State): readonly VirtualDomNode[] => {
     {
       childCount: 1,
       className: 'GptVoiceTranscript',
-      type: VirtualDomElements.Pre,
+      type: VirtualDomElements.Div,
     },
     text(transcribedText),
   ]
