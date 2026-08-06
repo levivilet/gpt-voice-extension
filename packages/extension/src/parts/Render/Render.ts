@@ -12,22 +12,22 @@ const renderButton = (state: State): readonly VirtualDomNode[] => {
   if (state.inProgress) {
     return [
       {
-        type: VirtualDomElements.Button,
+        childCount: 1,
         className: 'GptVoiceButton',
         id: 'toggle',
-        childCount: 1,
         onClick: 'handleClickStart',
+        type: VirtualDomElements.Button,
       },
       text('Stop talking'),
     ]
   }
   return [
     {
-      type: VirtualDomElements.Button,
+      childCount: 1,
       className: 'GptVoiceButton',
       id: 'toggle',
-      childCount: 1,
       onClick: 'handleClickStart',
+      type: VirtualDomElements.Button,
     },
     text('Start talking'),
   ]
@@ -37,18 +37,18 @@ const renderStatus = (state: State): readonly VirtualDomNode[] => {
   if (state.inProgress) {
     return [
       {
-        type: VirtualDomElements.Div,
-        className: 'GptVoiceStatus',
         childCount: 1,
+        className: 'GptVoiceStatus',
+        type: VirtualDomElements.Div,
       },
       text('In Progress'),
     ]
   }
   return [
     {
-      type: VirtualDomElements.Div,
-      className: 'GptVoiceStatus',
       childCount: 1,
+      className: 'GptVoiceStatus',
+      type: VirtualDomElements.Div,
     },
     text('idle'),
   ]
@@ -63,14 +63,14 @@ const getBubbleClassName = (inProgress: boolean): string => {
 const renderStage = (state: State): readonly VirtualDomNode[] => {
   return [
     {
-      type: VirtualDomElements.Div,
-      className: 'GptVoiceStage',
       childCount: 1,
+      className: 'GptVoiceStage',
+      type: VirtualDomElements.Div,
     },
     {
-      type: VirtualDomElements.Div,
-      className: getBubbleClassName(state.inProgress),
       childCount: 0,
+      className: getBubbleClassName(state.inProgress),
+      type: VirtualDomElements.Div,
     },
   ]
 }
@@ -78,9 +78,9 @@ const renderStage = (state: State): readonly VirtualDomNode[] => {
 const renderTranscript = (state: State): readonly VirtualDomNode[] => {
   return [
     {
-      type: VirtualDomElements.Div,
       childCount: 0,
       className: 'GptVoiceTranscript',
+      type: VirtualDomElements.Div,
     },
   ]
 }
