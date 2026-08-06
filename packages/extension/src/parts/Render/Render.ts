@@ -32,6 +32,7 @@ export const render = (): readonly VirtualDomNode[] => {
       className: 'GptVoiceButton',
       id: 'toggle',
       childCount: 1,
+      onClick: 'handleClickStart',
     },
     text('Start talking'),
     {

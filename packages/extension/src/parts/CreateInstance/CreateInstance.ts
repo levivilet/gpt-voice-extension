@@ -16,7 +16,7 @@ export interface ActiveTrelloViewInstance extends VirtualDomViewInstance {
   readonly getContext: () => Readonly<Record<string, boolean>>
   readonly getCss: () => string
   readonly getMenuEntries: (menuId: string) => readonly MenuEntry[]
-
+  readonly handleClickStart: () => Promise<void>
   readonly renderTitle: () => string
 }
 
@@ -38,6 +38,11 @@ export const createInstance = async (
     },
     getMenuEntries() {
       return []
+    },
+    async handleClickStart(): Promise<void> {
+      console.log(`start clicked`)
+      // handleClickStart(context)
+      // updateContext(state)
     },
     render,
     renderActionsDom(): readonly VirtualDomNode[] {
