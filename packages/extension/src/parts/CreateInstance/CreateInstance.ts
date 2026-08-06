@@ -24,6 +24,10 @@ export const createInstance = async (
 ): Promise<ActiveTrelloViewInstance> => {
   const state = {}
 
+  setTimeout(() => {
+    context?.requestRerender()
+  }, 100)
+
   const instance: ActiveTrelloViewInstance = {
     getContext() {
       return {}
@@ -45,7 +49,14 @@ export const createInstance = async (
       ]
     },
     renderActionsDom(): readonly VirtualDomNode[] {
-      return [text('hello world')]
+      return [
+        {
+          type: VirtualDomElements.Div,
+          chiltCount: 1,
+          className: 'main',
+        },
+        text('hello world'),
+      ]
     },
     renderFocus(
       oldContext: Readonly<Record<string, boolean>>,
