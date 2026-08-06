@@ -16,5 +16,15 @@
       "label": "gpt-voice: Show"
     }
   ],
-  "keybindings": []
+  "keybindings": [],
+  "views": [
+    {
+      "css": "media/gpt-voice.css",
+      "displayName": "Gpt Voice",
+      "id": "gpt-voice",
+      "title": "Trello",
+      "icon": "media/trello.svg",
+      "kind": "virtualDom"
+    }
+  ]
 }
