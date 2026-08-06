@@ -6,7 +6,6 @@ import type {
 import type { VirtualDomNode } from '@lvce-editor/virtual-dom-worker'
 import { getTitle } from '../GetTitle/GetTitle.ts'
 import { type MenuEntry } from '../MenuEntries/MenuEntries.ts'
-} from '../UpdateContext/UpdateContext.ts'
 
 export interface ActiveTrelloViewInstance extends VirtualDomViewInstance {
   readonly addCard: (options: any) => Promise<void>
@@ -50,17 +49,6 @@ export interface ActiveTrelloViewInstance extends VirtualDomViewInstance {
   readonly saveCardDetail: () => Promise<void>
   readonly startAddCard: (listId: string) => void
   readonly submitNewCard: () => Promise<void>
-}
-
-interface MutableTrelloViewActionContext extends TrelloViewActionContext {
-  client: TrelloClient
-  currentBoardStorage: CurrentBoardStorage
-  imageCache: TrelloImageCache
-  recentStorage: RecentBoardStorage
-  requestRerender: () => void
-  showContextMenu: (menuId: string, x: number, y: number) => Promise<void>
-  state: TrelloViewState
-  storage: CredentialStorage
 }
 
 const activeInstances = new Set<ActiveTrelloViewInstance>()
@@ -159,10 +147,10 @@ export const reloadActiveTrelloViewInstances = async (): Promise<void> => {
 export const createInstance = async (
   context?: ViewContext,
 ): Promise<ActiveTrelloViewInstance> => {
-  const state = createInitialState()
-  const viewContext: MutableTrelloViewActionContext = {
+  const state = {}
+  const viewContext = {
     client: undefined as never,
-    currentBoardStorage: createMemoryCurrentBoardStorage(),
+    currentBoardStorage: {},
     imageCache: undefined as never,
     recentStorage: undefined as never,
     requestRerender: undefined as never,
@@ -172,7 +160,6 @@ export const createInstance = async (
   }
 
   const requestRerender = (): void => {
-    updateContext(state)
     // @ts-ignore
     const request = context?.requestRerender
     if (!request) {
