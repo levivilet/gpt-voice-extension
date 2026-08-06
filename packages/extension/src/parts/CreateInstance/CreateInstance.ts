@@ -33,18 +33,6 @@ export const createInstance = async (
     }, 0)
   }
 
-  const showContextMenu = async (
-    menuId: string,
-    x: number,
-    y: number,
-  ): Promise<void> => {
-    const request = (context as any)?.showContextMenu
-    if (!request) {
-      return
-    }
-    await request(menuId, x, y)
-  }
-
   const initialize = async (rerender: boolean): Promise<void> => {
     if (rerender) {
       requestRerender()
