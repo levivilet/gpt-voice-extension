@@ -46,9 +46,6 @@ export const createInstance = async (
     async handleClickStart(): Promise<void> {
       state.inProgress = !state.inProgress
       requestRerender()
-      console.log(`clicked`)
-      // handleClickStart(context)
-      // updateContext(state)
     },
     render() {
       return render(state)
