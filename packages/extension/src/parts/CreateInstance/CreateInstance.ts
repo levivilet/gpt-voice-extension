@@ -19,8 +19,6 @@ export interface ActiveTrelloViewInstance extends VirtualDomViewInstance {
   readonly renderTitle: () => string
 }
 
-const activeInstances = new Set<ActiveTrelloViewInstance>()
-
 export const createInstance = async (
   context?: ViewContext,
 ): Promise<ActiveTrelloViewInstance> => {
@@ -36,10 +34,6 @@ export const createInstance = async (
       void request()
     }, 0)
   }
-
-  const initialize = async (rerender: boolean): Promise<void> => {}
-
-  await initialize(false)
 
   const instance: ActiveTrelloViewInstance = {
     getContext() {
@@ -81,6 +75,5 @@ export const createInstance = async (
       return {}
     },
   }
-  activeInstances.add(instance)
   return instance
 }
