@@ -50,7 +50,6 @@ app.get('/token', async (req, res) => {
         headers: {
           Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*', // TODO
         },
         method: 'POST',
       },
@@ -60,6 +59,10 @@ app.get('/token', async (req, res) => {
       console.error('Token error:', data)
       return res.status(response.status).json(data)
     }
+    res.setHeader(
+      'Access-Control-Allow-Origin',
+      '*', // TODO
+    )
     res.json(data)
   } catch (error) {
     console.error('Token generation error:', error)
