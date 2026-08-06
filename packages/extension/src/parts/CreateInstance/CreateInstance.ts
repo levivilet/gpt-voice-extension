@@ -183,52 +183,6 @@ export const createInstance = async (
   }
 
   const initialize = async (rerender: boolean): Promise<void> => {
-    const filterValue = rerender
-      ? state.draftBoardFilter
-      : getSavedFilterValue(context?.state)
-    const dependencies = dependencyState.factory()
-    const {
-      client,
-      imageCache,
-      readBoardBackgroundEnabled,
-      readCardDetailPopupEnabled,
-      readSearchEnabled,
-      recentStorage,
-      storage,
-    } = dependencies
-    const currentBoardStorage =
-      dependencies.currentBoardStorage || createMemoryCurrentBoardStorage()
-    viewContext.imageCache?.dispose()
-
-    Object.assign(state, createInitialState())
-    viewContext.client = client
-    viewContext.currentBoardStorage = currentBoardStorage
-    viewContext.imageCache = imageCache || createTrelloImageCache()
-    viewContext.recentStorage = recentStorage
-    viewContext.requestRerender = requestRerender
-    viewContext.showContextMenu = showContextMenu
-    viewContext.storage = storage
-
-    if (readSearchEnabled) {
-      state.searchEnabled = await readSearchEnabled()
-    }
-    if (readBoardBackgroundEnabled) {
-      state.boardBackgroundEnabled = await readBoardBackgroundEnabled()
-    }
-    if (readCardDetailPopupEnabled) {
-      state.cardDetailPopupEnabled = await readCardDetailPopupEnabled()
-    }
-    state.recentBoardViews = await recentStorage.read()
-    const storedCredentials = await storage.read()
-    if (storedCredentials) {
-      state.credentials = storedCredentials
-      state.draftApiKey = storedCredentials.apiKey
-      state.draftToken = storedCredentials.token
-      await loadBoards(viewContext, false)
-      await restoreCurrentBoard(viewContext)
-    }
-    state.draftBoardFilter = filterValue
-    updateContext(state)
     if (rerender) {
       requestRerender()
     }
