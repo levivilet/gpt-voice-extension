@@ -27,8 +27,8 @@ fs.copyFileSync(
   join(root, 'dist', 'media', 'gpt-voice.css'),
 )
 fs.copyFileSync(
-  join(media, 'gpt-voice.svg'),
-  join(root, 'dist', 'media', 'gpt-voice.svg'),
+  join(media, 'trello.svg'),
+  join(root, 'dist', 'media', 'trello.svg'),
 )
 fs.copyFileSync(
   join(media, 'comments.svg'),
