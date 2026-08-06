@@ -3,7 +3,7 @@ import type {
   ViewSelection,
   VirtualDomViewInstance,
 } from '@lvce-editor/api'
-import type { VirtualDomNode } from '@lvce-editor/virtual-dom-worker'
+import { type VirtualDomNode, text } from '@lvce-editor/virtual-dom-worker'
 import { getTitle } from '../GetTitle/GetTitle.ts'
 import { type MenuEntry } from '../MenuEntries/MenuEntries.ts'
 
@@ -81,61 +81,11 @@ export const createInstance = async (
   await initialize(false)
 
   const instance: ActiveTrelloViewInstance = {
-    async addCard({
-      listId,
-      name,
-    }: {
-      readonly name: string
-      readonly listId: string
-    }): Promise<void> {
-      // TODO make this one function
-      await instance?.handleEvent?.({
-        name: 'startAddList',
-        type: 'click',
-      })
-      await instance?.handleEvent?.({
-        name: 'newListTitle',
-        type: 'input',
-        value: name,
-      })
-      await instance?.handleEvent?.({
-        name: 'addList',
-        type: 'submit',
-      })
-    },
-    async addList({ name }: { readonly name: string }): Promise<void> {
-      // TODO make this one function
-      await instance?.handleEvent?.({
-        name: 'startAddList',
-        type: 'click',
-      })
-      await instance?.handleEvent?.({
-        name: 'newListTitle',
-        type: 'input',
-        value: name,
-      })
-      await instance?.handleEvent?.({
-        name: 'addList',
-        type: 'submit',
-      })
-    },
-
-    closeCardDetail(): void {
-      closeCardDetailAction(viewContext)
-      updateContext(state)
-    },
-
     render(): readonly VirtualDomNode[] {
-      if (!state.credentials) {
-        return renderAuth(state)
-      }
-      if (state.boardDetail) {
-        return renderBoardDetail(state, state.boardDetail)
-      }
-      return renderBoards(state)
+      return [text('hello world')]
     },
     renderActionsDom(): readonly VirtualDomNode[] {
-      return renderActionsDom(state)
+      return [text('hello world')]
     },
     renderFocus(
       oldContext: Readonly<Record<string, boolean>>,
