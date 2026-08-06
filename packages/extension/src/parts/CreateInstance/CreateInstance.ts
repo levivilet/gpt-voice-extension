@@ -308,19 +308,6 @@ export const createInstance = async (
 
   await initialize(false)
 
-  const runEventHandler = async (
-    handler: () => void | Promise<void>,
-  ): Promise<void> => {
-    activeInstances.delete(instance)
-    activeInstances.add(instance)
-    state.pendingSelections = []
-    try {
-      await handler()
-    } finally {
-      updateContext(state)
-    }
-  }
-
   const instance: ActiveTrelloViewInstance = {
     async addCard({
       listId,
@@ -360,172 +347,12 @@ export const createInstance = async (
         type: 'submit',
       })
     },
-    async backToBoards(): Promise<void> {
-      await goBackToBoards(viewContext)
-      updateContext(state)
-    },
-    cancelNewCard(): void {
-      cancelAddCard(viewContext)
-      updateContext(state)
-    },
-    closeBoardFilter(): void {
-      closeBoardFilterAction(viewContext)
-      updateContext(state)
-    },
+
     closeCardDetail(): void {
       closeCardDetailAction(viewContext)
       updateContext(state)
     },
-    async dispose(): Promise<void> {
-      activeInstances.delete(instance)
-      viewContext.imageCache.dispose()
-    },
-    getContext(): Readonly<Record<string, boolean>> {
-      return state.context
-    },
-    getCss(): string {
-      return getCss(state)
-    },
-    getMenuEntries(menuId: string): readonly MenuEntry[] {
-      return getMenuEntries(state, menuId)
-    },
-    async handleAddCardActionPointerDown(): Promise<void> {
-      await runEventHandler(() => {})
-    },
-    async handleCardDescriptionCancelPointerDown(): Promise<void> {
-      await runEventHandler(() => {})
-    },
-    async handleCardLabelPickerPointerDown(): Promise<void> {
-      await runEventHandler(() => {})
-    },
-    async handleDragEnd(): Promise<void> {
-      await runEventHandler(() => handleDragEndEvent(viewContext))
-    },
-    async handleDragLeave(): Promise<void> {
-      await runEventHandler(() => handleDragLeaveEvent(viewContext))
-    },
-    async handleDragOver(name: string): Promise<void> {
-      await runEventHandler(() =>
-        handleDragOverEvent(viewContext, { name, type: 'dragover' }),
-      )
-    },
-    async handleDragStart(name: string): Promise<void> {
-      await runEventHandler(() =>
-        handleDragStartEvent(viewContext, { name, type: 'dragstart' }),
-      )
-    },
-    async handleDrop(name: string, fileList?: FileList): Promise<void> {
-      await runEventHandler(() =>
-        handleDropEvent(viewContext, { name, type: 'drop' }, fileList),
-      )
-    },
-    async handleEvent(event: Readonly<ViewEvent>): Promise<void> {
-      await runEventHandler(async () => {
-        if (event.type === 'focus') {
-          handleFocusEvent(viewContext, event)
-          return
-        }
-        if (event.type === 'input') {
-          await handleInputEvent(viewContext, event)
-          return
-        }
-        if (event.type === 'click') {
-          await handleClickEvent(viewContext, event)
-          return
-        }
-        if (event.type === 'contextmenu') {
-          await handleContextMenuEvent(viewContext, event)
-          return
-        }
-        if (event.type === 'submit') {
-          await handleSubmitEvent(viewContext, event)
-          return
-        }
-        if (event.type === 'blur') {
-          await handleBlurEvent(viewContext, event)
-          if (!event.name || state.focusedName === event.name) {
-            state.focusedName = ''
-          }
-        }
-      })
-    },
-    async handleImageError(name: string): Promise<void> {
-      await runEventHandler(() => handleImageErrorEvent(viewContext, name))
-    },
-    async handleKeyDown(
-      name: string,
-      key: string,
-      ctrlKey = false,
-    ): Promise<void> {
-      await runEventHandler(() =>
-        handleKeyDownEvent(viewContext, {
-          ctrlKey,
-          key,
-          name,
-          type: 'keydown',
-        } as ViewEvent & {
-          readonly ctrlKey: boolean
-          readonly key: string
-        }),
-      )
-    },
-    async handleSashPointerDown(clientX: number): Promise<void> {
-      await runEventHandler(() =>
-        startResizeCardDetail(viewContext, {
-          clientX,
-          name: 'resizeCardDetail',
-          type: 'pointerdown',
-        } as ViewEvent & { readonly clientX: number }),
-      )
-    },
-    async handleSashPointerMove(clientX: number): Promise<void> {
-      await runEventHandler(() =>
-        resizeCardDetail(viewContext, {
-          clientX,
-          type: 'pointermove',
-        } as ViewEvent & { readonly clientX: number }),
-      )
-    },
-    async handleSashPointerUp(): Promise<void> {
-      await runEventHandler(() => stopResizeCardDetail(viewContext))
-    },
-    async logout(): Promise<void> {
-      await logout(viewContext)
-      updateContext(state)
-    },
-    async openCard(cardId: string): Promise<void> {
-      await openCard(viewContext, cardId)
-      updateContext(state)
-    },
-    async openMockBoard({
-      id,
-      name,
-    }: {
-      readonly name: string
-      readonly id: string
-    }): Promise<void> {
-      await instance.handleEvent?.({
-        name: 'apiKey',
-        type: 'input',
-        value: 'abcdefghijklmnopqrstuvwxyz123456',
-      })
-      await instance.handleEvent?.({
-        name: 'token',
-        type: 'input',
-        value: 'abcdefghijklmnopqrstuvwxyz123456',
-      })
-      await instance.handleEvent?.({
-        name: 'connect',
-        type: 'click',
-      })
-    },
-    async refreshBoards(): Promise<void> {
-      await loadBoards(viewContext)
-      updateContext(state)
-    },
-    async reload(): Promise<void> {
-      await initialize(true)
-    },
+
     render(): readonly VirtualDomNode[] {
       if (!state.credentials) {
         return renderAuth(state)
