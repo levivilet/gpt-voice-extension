@@ -2,12 +2,11 @@ import express from 'express'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import 'dotenv/config'
+import { Server } from 'http'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const app = express()
 app.use(express.static(path.join(__dirname, 'public')))
-
-const PORT = process.env.PORT || 3000
 
 if (!process.env.OPENAI_API_KEY) {
   console.warn(
@@ -46,6 +45,7 @@ app.get('/token', async (req, res) => {
         headers: {
           Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
           'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
         },
         method: 'POST',
       },
@@ -62,6 +62,23 @@ app.get('/token', async (req, res) => {
   }
 })
 
-app.listen(PORT, () => {
-  console.info(`Realtime demo running at http://localhost:${PORT}`)
-})
+const servers: Record<string, Server> = Object.create(null)
+
+export const startServer = async (id: string, port: number): Promise<void> => {
+  const { resolve, promise } = Promise.withResolvers<void>()
+  const server = app.listen(port, () => {
+    resolve(undefined)
+  })
+  servers[id] = server
+  await promise
+}
+
+export const stopServer = async (id: string) => {
+  const server = servers[id]
+  delete servers[id]
+  const { resolve, promise } = Promise.withResolvers<void>()
+  server.close(() => {
+    resolve()
+  })
+  await promise
+}

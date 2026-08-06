@@ -6,7 +6,11 @@
   "repository": "https://github.com/levivilet/gpt-voice-extension",
   "browser": "dist/gptVoiceMain.js",
   "isolated": true,
-  "contentSecurityPolicy": ["default-src 'none'", "script-src 'self'"],
+  "contentSecurityPolicy": [
+    "default-src 'none'",
+    "script-src 'self'",
+    "connect-src 'self' http://localhost:3333 https://api.openai.com"
+  ],
   "categories": ["Other"],
   "configuration": {},
   "activation": ["onView:gpt-voice.views.default"],
@@ -25,6 +29,14 @@
       "title": "Gpt Voice",
       "icon": "media/trello.svg",
       "kind": "virtualDom"
+    }
+  ],
+  "rpc": [
+    {
+      "id": "gpt-voice-client",
+      "type": "node",
+      "name": "Gpt Voice",
+      "url": "../node/src/gptVoiceClient.ts"
     }
   ]
 }
