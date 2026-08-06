@@ -30,10 +30,6 @@ fs.copyFileSync(
   join(media, 'trello.svg'),
   join(root, 'dist', 'media', 'trello.svg'),
 )
-fs.copyFileSync(
-  join(media, 'comments.svg'),
-  join(root, 'dist', 'media', 'comments.svg'),
-)
 
 const bundle = await rollup({
   input: join(extension, 'src', 'gptVoiceMain.ts'),
