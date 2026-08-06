@@ -84,8 +84,6 @@ export const createInstance = async (
       return []
     },
     async handleClickStart(): Promise<void> {
-      state.inProgress = !state.inProgress
-      requestRerender()
       // TODO create node rpc (starting node app)
       // TODO start node server
       try {
@@ -103,6 +101,9 @@ export const createInstance = async (
           uid: -1,
         })
         console.log('all worked')
+
+        state.inProgress = !state.inProgress
+        requestRerender()
       } catch (error) {
         console.error(error)
       }
