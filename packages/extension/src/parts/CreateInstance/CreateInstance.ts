@@ -3,7 +3,11 @@ import type {
   ViewSelection,
   VirtualDomViewInstance,
 } from '@lvce-editor/api'
-import { type VirtualDomNode, text } from '@lvce-editor/virtual-dom-worker'
+import {
+  type VirtualDomNode,
+  text,
+  VirtualDomElements,
+} from '@lvce-editor/virtual-dom-worker'
 import { getTitle } from '../GetTitle/GetTitle.ts'
 import { type MenuEntry } from '../MenuEntries/MenuEntries.ts'
 
@@ -52,7 +56,14 @@ export const createInstance = async (
       return ''
     },
     render(): readonly VirtualDomNode[] {
-      return [text('hello world')]
+      return [
+        {
+          type: VirtualDomElements.Div,
+          chiltCount: 1,
+          className: 'main',
+        },
+        text('hello world'),
+      ]
     },
     renderActionsDom(): readonly VirtualDomNode[] {
       return [text('hello world')]
@@ -61,7 +72,7 @@ export const createInstance = async (
       oldContext: Readonly<Record<string, boolean>>,
       newContext: Readonly<Record<string, boolean>>,
     ): string {
-      return ''
+      return '.main'
     },
     renderSelections(): readonly ViewSelection[] {
       return []
