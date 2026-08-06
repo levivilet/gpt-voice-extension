@@ -1,9 +1,9 @@
 import { expect, test } from '@jest/globals'
-import type { TrelloCardDetail } from '../src/parts/TrelloTypes/TrelloTypes.ts'
+import type { gpt-voiceCardDetail } from '../src/parts/gpt-voiceTypes/gpt-voiceTypes.ts'
 import { createInitialState } from '../src/parts/CreateInitialState/CreateInitialState.ts'
 import { updateSelectedCard } from '../src/parts/UpdateSelectedCard/UpdateSelectedCard.ts'
 
-const selectedCardDetail: TrelloCardDetail = {
+const selectedCardDetail: gpt-voiceCardDetail = {
   attachments: [
     {
       id: 'attachment-1',

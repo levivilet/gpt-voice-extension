@@ -1,8 +1,8 @@
 import type { ViewEvent } from '@lvce-editor/api'
 import type {
-  TrelloViewActionContext,
-  TrelloViewState,
-} from '../TrelloViewState/TrelloViewState.ts'
+  gpt-voiceViewActionContext,
+  gpt-voiceViewState,
+} from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import { findBoardCard } from '../FindBoardCard/FindBoardCard.ts'
 import { moveCardToList } from '../MoveCardToList/MoveCardToList.ts'
 import { uploadCardAttachments } from '../UploadCardAttachments/UploadCardAttachments.ts'
@@ -31,7 +31,7 @@ const getListIdFromName = (name: string | undefined): string => {
 }
 
 const getDroppedCardId = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
   event: Readonly<ViewEvent>,
 ): string => {
   const value = getEventString(event, 'value')
@@ -49,27 +49,27 @@ const getDroppedCardId = (
   return state.draggedCardId
 }
 
-const clearDragState = (state: Readonly<TrelloViewState>): void => {
-  const mutableState = state as TrelloViewState
+const clearDragState = (state: Readonly<gpt-voiceViewState>): void => {
+  const mutableState = state as gpt-voiceViewState
   mutableState.draggedCardId = ''
   mutableState.dragTargetListId = ''
 }
 
 export const handleDragStartEvent = (
-  context: TrelloViewActionContext,
+  context: gpt-voiceViewActionContext,
   event: Readonly<ViewEvent>,
 ): void => {
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   const cardId = getCardIdFromName(event.name)
   state.draggedCardId = cardId
   state.dragTargetListId = ''
 }
 
 export const handleDragOverEvent = (
-  context: TrelloViewActionContext,
+  context: gpt-voiceViewActionContext,
   event: Readonly<ViewEvent>,
 ): void => {
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   if (event.name === cardDetailName && !state.draggedCardId) {
     if (state.cardAttachmentDropActive) {
       return
@@ -87,9 +87,9 @@ export const handleDragOverEvent = (
 }
 
 export const handleDragLeaveEvent = (
-  context: TrelloViewActionContext,
+  context: gpt-voiceViewActionContext,
 ): void => {
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   if (state.cardAttachmentDropActive) {
     state.cardAttachmentDropActive = false
     context.requestRerender()
@@ -102,18 +102,18 @@ export const handleDragLeaveEvent = (
   context.requestRerender()
 }
 
-export const handleDragEndEvent = (context: TrelloViewActionContext): void => {
+export const handleDragEndEvent = (context: gpt-voiceViewActionContext): void => {
   clearDragState(context.state)
   context.requestRerender()
 }
 
 export const handleDropEvent = async (
-  context: TrelloViewActionContext,
+  context: gpt-voiceViewActionContext,
   event: Readonly<ViewEvent>,
   fileList?: FileList,
 ): Promise<void> => {
   const { requestRerender } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   if (event.name === cardDetailName && !state.draggedCardId) {
     await uploadCardAttachments(context, fileList)
     return

@@ -2,13 +2,13 @@ import {
   VirtualDomElements,
   type VirtualDomNode,
 } from '@lvce-editor/virtual-dom-worker'
-import type { TrelloViewState } from '../TrelloViewState/TrelloViewState.ts'
+import type { gpt-voiceViewState } from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import { renderCardDescriptionEditor } from '../RenderCardDescriptionEditor/RenderCardDescriptionEditor.ts'
 import { renderCardDescriptionHeader } from '../RenderCardDescriptionHeader/RenderCardDescriptionHeader.ts'
 import { renderCardDescriptionPreview } from '../RenderCardDescriptionPreview/RenderCardDescriptionPreview.ts'
 
 const renderCardDescriptionContent = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
   description: string,
 ): readonly VirtualDomNode[] => {
   const { editingCardDescription } = state
@@ -19,14 +19,14 @@ const renderCardDescriptionContent = (
 }
 
 export const renderCardDescription = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
   description: string,
 ): readonly VirtualDomNode[] => {
   const content = renderCardDescriptionContent(state, description)
   return [
     {
       childCount: 2,
-      className: 'TrelloCardDescriptionSection',
+      className: 'gpt-voiceCardDescriptionSection',
       type: VirtualDomElements.Div,
     },
     ...renderCardDescriptionHeader(),

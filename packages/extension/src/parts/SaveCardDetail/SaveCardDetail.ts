@@ -1,15 +1,15 @@
 import type {
-  TrelloViewActionContext,
-  TrelloViewState,
-} from '../TrelloViewState/TrelloViewState.ts'
+  gpt-voiceViewActionContext,
+  gpt-voiceViewState,
+} from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import { getErrorMessage } from '../GetErrorMessage/GetErrorMessage.ts'
 import { updateBoardDetailCard } from '../UpdateBoardDetailCard/UpdateBoardDetailCard.ts'
 
 export const saveCardDetail = async (
-  context: TrelloViewActionContext,
+  context: gpt-voiceViewActionContext,
 ): Promise<void> => {
   const { client, requestRerender } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   if (
     !state.credentials ||
     !state.selectedCardDetail ||

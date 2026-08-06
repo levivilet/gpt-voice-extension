@@ -2,7 +2,7 @@
 
 import type { Test } from '@lvce-editor/test-with-playwright'
 
-export const name = 'trello.virtual-dom-view.list-create'
+export const name = 'gpt-voice.virtual-dom-view.list-create'
 export const skip = true
 
 export const test: Test = async ({ Command, expect, Locator }) => {
@@ -10,20 +10,20 @@ export const test: Test = async ({ Command, expect, Locator }) => {
   // and at the same time use mock data
 
   // arrange
-  await Command.executeExtensionCommand('trello.test.useMockData', {
+  await Command.executeExtensionCommand('gpt-voice.test.useMockData', {
     boardDetails: {},
     boards: [],
     cardDetails: {},
   })
 
   // act
-  await Command.executeExtensionCommand('trello.openMockBoard', {
+  await Command.executeExtensionCommand('gpt-voice.openMockBoard', {
     id: 'abc',
     name: 'abc',
   })
 
   // assert
-  const boards = Locator('.TrelloBoards')
+  const boards = Locator('.gpt-voiceBoards')
   await expect(boards).toBeVisible()
   await expect(boards).toHaveText(`RefreshSign outBoardsNo boards found`)
 }

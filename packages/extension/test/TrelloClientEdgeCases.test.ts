@@ -1,21 +1,21 @@
 // cspell:ignore subrequest subresponses
 
 import { expect, test } from '@jest/globals'
-import type { TrelloApiCache } from '../src/parts/TrelloApiCache/TrelloApiCache.ts'
+import type { gpt-voiceApiCache } from '../src/parts/gpt-voiceApiCache/gpt-voiceApiCache.ts'
 import type {
   FetchLike,
-  TrelloResponse,
-} from '../src/parts/TrelloClientTypes/TrelloClientTypes.ts'
+  gpt-voiceResponse,
+} from '../src/parts/gpt-voiceClientTypes/gpt-voiceClientTypes.ts'
 import type {
-  TrelloBoard,
-  TrelloCard,
-  TrelloCredentials,
-} from '../src/parts/TrelloTypes/TrelloTypes.ts'
+  gpt-voiceBoard,
+  gpt-voiceCard,
+  gpt-voiceCredentials,
+} from '../src/parts/gpt-voiceTypes/gpt-voiceTypes.ts'
 import { readCachedBoardDetail } from '../src/parts/GetBoardDetail/GetBoardDetail.ts'
 import { readCachedCardDetail } from '../src/parts/GetCardDetail/GetCardDetail.ts'
 import { moveCard } from '../src/parts/MoveCard/MoveCard.ts'
 import {
-  createTrelloRequestUrl,
+  creategpt-voiceRequestUrl,
   deleteCachedJson,
   readCachedJson,
   requestJson,
@@ -23,24 +23,24 @@ import {
 } from '../src/parts/RequestJson/RequestJson.ts'
 import { readCachedSearch } from '../src/parts/Search/Search.ts'
 import {
-  createMemoryTrelloApiCache,
-  createCacheStorageTrelloApiCache,
-  createTrelloApiCacheRequestUrl,
+  createMemorygpt-voiceApiCache,
+  createCacheStoragegpt-voiceApiCache,
+  creategpt-voiceApiCacheRequestUrl,
   getCredentialFingerprint,
-} from '../src/parts/TrelloApiCache/TrelloApiCache.ts'
-import { createTrelloClient } from '../src/parts/TrelloClient/TrelloClient.ts'
+} from '../src/parts/gpt-voiceApiCache/gpt-voiceApiCache.ts'
+import { creategpt-voiceClient } from '../src/parts/gpt-voiceClient/gpt-voiceClient.ts'
 
-const credentials: TrelloCredentials = {
+const credentials: gpt-voiceCredentials = {
   apiKey: 'abcdefghijklmnopqrstuvwxyz123456',
   token: 'abcdefghijklmnopqrstuvwxyz123456abcdefghijklmnopqrstuvwxyz123456',
 }
 
-const board: TrelloBoard = {
+const board: gpt-voiceBoard = {
   id: 'board-1',
   name: 'Roadmap',
 }
 
-const card: TrelloCard = {
+const card: gpt-voiceCard = {
   id: 'card-1',
   name: 'Ship tests',
 }
@@ -69,7 +69,7 @@ const withCryptoUnavailable = async (
 }
 
 test('request helpers handle defaults, missing caches, and status text errors', async () => {
-  expect(createTrelloRequestUrl('/boards', credentials)).toContain(
+  expect(creategpt-voiceRequestUrl('/boards', credentials)).toContain(
     '/1/boards?key=',
   )
   await expect(
@@ -79,7 +79,7 @@ test('request helpers handle defaults, missing caches, and status text errors', 
     deleteCachedJson(undefined, '/boards', credentials),
   ).resolves.toBeUndefined()
 
-  const failedResponse: TrelloResponse = {
+  const failedResponse: gpt-voiceResponse = {
     async json(): Promise<unknown> {
       return undefined
     },
@@ -92,12 +92,12 @@ test('request helpers handle defaults, missing caches, and status text errors', 
   }
   await expect(
     requestJson(async () => failedResponse, '/boards', credentials),
-  ).rejects.toThrow('Trello request failed: 503 Service Unavailable')
+  ).rejects.toThrow('gpt-voice request failed: 503 Service Unavailable')
 })
 
 test('requestJson caches explicit GET requests and tolerates cache failures', async () => {
   const writes: string[] = []
-  const cache: TrelloApiCache = {
+  const cache: gpt-voiceApiCache = {
     async delete(): Promise<void> {},
     async read<T>(): Promise<T | undefined> {
       return undefined
@@ -107,7 +107,7 @@ test('requestJson caches explicit GET requests and tolerates cache failures', as
       throw new Error('Cache quota exceeded')
     },
   }
-  const response: TrelloResponse = {
+  const response: gpt-voiceResponse = {
     async json(): Promise<unknown> {
       return {
         ok: true,
@@ -148,11 +148,11 @@ test('requestJsonBatch handles empty and oversized request lists', async () => {
   })
   await expect(
     requestJsonBatch<readonly unknown[]>(failOnFetch, requests, credentials),
-  ).rejects.toThrow('Trello batch requests support at most 10 requests')
+  ).rejects.toThrow('gpt-voice batch requests support at most 10 requests')
 })
 
 test('requestJsonBatch rejects outer request failures', async () => {
-  const failedResponse: TrelloResponse = {
+  const failedResponse: gpt-voiceResponse = {
     async json(): Promise<unknown> {
       return undefined
     },
@@ -170,7 +170,7 @@ test('requestJsonBatch rejects outer request failures', async () => {
       [{ path: '/cards/card-1' }],
       credentials,
     ),
-  ).rejects.toThrow('Trello request failed: 503 batch unavailable')
+  ).rejects.toThrow('gpt-voice request failed: 503 batch unavailable')
 })
 
 test('requestJsonBatch rejects malformed subresponses', async () => {
@@ -184,7 +184,7 @@ test('requestJsonBatch rejects malformed subresponses', async () => {
   ]
 
   for (const value of malformedValues) {
-    const response: TrelloResponse = {
+    const response: gpt-voiceResponse = {
       async json(): Promise<unknown> {
         return value
       },
@@ -201,12 +201,12 @@ test('requestJsonBatch rejects malformed subresponses', async () => {
         [{ path: '/cards/card-1' }],
         credentials,
       ),
-    ).rejects.toThrow('Trello batch request returned an invalid response')
+    ).rejects.toThrow('gpt-voice batch request returned an invalid response')
   }
 })
 
 test('requestJsonBatch includes structured subrequest errors', async () => {
-  const response: TrelloResponse = {
+  const response: gpt-voiceResponse = {
     async json(): Promise<unknown> {
       return [{ 500: { message: 'Internal error' } }]
     },
@@ -224,11 +224,11 @@ test('requestJsonBatch includes structured subrequest errors', async () => {
       [{ path: '/cards/card-1' }],
       credentials,
     ),
-  ).rejects.toThrow('Trello request failed: 500 {"message":"Internal error"}')
+  ).rejects.toThrow('gpt-voice request failed: 500 {"message":"Internal error"}')
 })
 
 test('cache helpers tolerate read and delete failures', async () => {
-  const cache: TrelloApiCache = {
+  const cache: gpt-voiceApiCache = {
     async delete(): Promise<void> {
       throw new Error('Delete failed')
     },
@@ -246,12 +246,12 @@ test('cache helpers tolerate read and delete failures', async () => {
   ).resolves.toBeUndefined()
 })
 
-test('trello api caches gracefully disable themselves without Web Crypto', async () => {
+test('gpt-voice api caches gracefully disable themselves without Web Crypto', async () => {
   await withCryptoUnavailable(async () => {
     expect(await getCredentialFingerprint(credentials)).toBeUndefined()
     expect(
-      await createTrelloApiCacheRequestUrl(
-        createTrelloRequestUrl('/boards', credentials),
+      await creategpt-voiceApiCacheRequestUrl(
+        creategpt-voiceRequestUrl('/boards', credentials),
         credentials,
       ),
     ).toBeUndefined()
@@ -261,39 +261,39 @@ test('trello api caches gracefully disable themselves without Web Crypto', async
         throw new Error('Cache Storage should not be opened')
       },
     } as unknown as CacheStorage
-    const cache = createCacheStorageTrelloApiCache(cacheStorage)
+    const cache = createCacheStoragegpt-voiceApiCache(cacheStorage)
     expect(cache).toBeDefined()
     await expect(
-      cache?.read(createTrelloRequestUrl('/boards', credentials), credentials),
+      cache?.read(creategpt-voiceRequestUrl('/boards', credentials), credentials),
     ).resolves.toBeUndefined()
     await expect(
       cache?.write(
-        createTrelloRequestUrl('/boards', credentials),
+        creategpt-voiceRequestUrl('/boards', credentials),
         credentials,
         [],
       ),
     ).resolves.toBeUndefined()
     await expect(
       cache?.delete(
-        createTrelloRequestUrl('/boards', credentials),
+        creategpt-voiceRequestUrl('/boards', credentials),
         credentials,
       ),
     ).resolves.toBeUndefined()
 
-    const memoryCache = createMemoryTrelloApiCache()
+    const memoryCache = createMemorygpt-voiceApiCache()
     await expect(
       memoryCache.read(
-        createTrelloRequestUrl('/boards', credentials),
+        creategpt-voiceRequestUrl('/boards', credentials),
         credentials,
       ),
     ).resolves.toBeUndefined()
     await memoryCache.write(
-      createTrelloRequestUrl('/boards', credentials),
+      creategpt-voiceRequestUrl('/boards', credentials),
       credentials,
       [],
     )
     await memoryCache.delete(
-      createTrelloRequestUrl('/boards', credentials),
+      creategpt-voiceRequestUrl('/boards', credentials),
       credentials,
     )
     expect(memoryCache.keys()).toEqual([])
@@ -307,7 +307,7 @@ test('cache storage factory and reads handle unavailable data', async () => {
     value: undefined,
   })
   try {
-    expect(createCacheStorageTrelloApiCache()).toBeUndefined()
+    expect(createCacheStoragegpt-voiceApiCache()).toBeUndefined()
   } finally {
     Object.defineProperty(globalThis, 'caches', {
       configurable: true,
@@ -324,22 +324,22 @@ test('cache storage factory and reads handle unavailable data', async () => {
       } as unknown as Cache
     },
   } as unknown as CacheStorage
-  const cache = createCacheStorageTrelloApiCache(cacheStorage)
+  const cache = createCacheStoragegpt-voiceApiCache(cacheStorage)
   await expect(
-    cache?.read(createTrelloRequestUrl('/boards', credentials), credentials),
+    cache?.read(creategpt-voiceRequestUrl('/boards', credentials), credentials),
   ).resolves.toBeUndefined()
 
-  const memoryCache = createMemoryTrelloApiCache()
+  const memoryCache = createMemorygpt-voiceApiCache()
   await expect(
     memoryCache.read(
-      createTrelloRequestUrl('/missing', credentials),
+      creategpt-voiceRequestUrl('/missing', credentials),
       credentials,
     ),
   ).resolves.toBeUndefined()
 })
 
 test('cached compound requests require every response part', async () => {
-  const missingCache: TrelloApiCache = {
+  const missingCache: gpt-voiceApiCache = {
     async delete(): Promise<void> {},
     async read<T>(): Promise<T | undefined> {
       return undefined
@@ -356,7 +356,7 @@ test('cached compound requests require every response part', async () => {
     readCachedCardDetail(missingCache, card, credentials),
   ).resolves.toBeUndefined()
 
-  const partialBoardCache: TrelloApiCache = {
+  const partialBoardCache: gpt-voiceApiCache = {
     async delete(): Promise<void> {},
     async read<T>(requestUrl: string): Promise<T | undefined> {
       if (new URL(requestUrl).pathname.endsWith('/lists')) {
@@ -399,14 +399,14 @@ test('moveCard supports cards that have no source list', async () => {
   expect(requests).toHaveLength(1)
 })
 
-test('createTrelloClient can use the global fetch default', async () => {
+test('creategpt-voiceClient can use the global fetch default', async () => {
   const originalFetch = globalThis.fetch
   Object.defineProperty(globalThis, 'fetch', {
     configurable: true,
     value: async (): Promise<Response> => Response.json([]),
   })
   try {
-    await expect(createTrelloClient().listBoards(credentials)).resolves.toEqual(
+    await expect(creategpt-voiceClient().listBoards(credentials)).resolves.toEqual(
       [],
     )
   } finally {

@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type, @typescript-eslint/prefer-readonly-parameter-types */
 import type { Test } from '@lvce-editor/test-with-playwright'
 
-export const name = 'trello.virtual-dom-view.card-create'
+export const name = 'gpt-voice.virtual-dom-view.card-create'
 export const skip = true
 
 const createBoardDetail = (board, lists) => {
@@ -12,9 +12,9 @@ const createBoardDetail = (board, lists) => {
   }
 }
 
-const useMockDataAndShowTrello = async (Command, mockData) => {
-  await Command.executeExtensionCommand('trello.test.useMockData', mockData)
-  await Command.executeExtensionCommand('trello.show')
+const useMockDataAndShowgpt-voice = async (Command, mockData) => {
+  await Command.executeExtensionCommand('gpt-voice.test.useMockData', mockData)
+  await Command.executeExtensionCommand('gpt-voice.show')
 }
 
 const connectWithCredentials = async ({ expect, Locator }) => {
@@ -51,7 +51,7 @@ export const test: Test = async ({ Command, expect, Locator }) => {
     id: 'board-1',
     name: 'Roadmap',
   }
-  await useMockDataAndShowTrello(Command, {
+  await useMockDataAndShowgpt-voice(Command, {
     boardDetails: {
       'board-1': createBoardDetail(board, []),
     },
@@ -61,13 +61,13 @@ export const test: Test = async ({ Command, expect, Locator }) => {
   await connectWithCredentials({ expect, Locator })
   await openBoard(Locator, expect)
 
-  await Command.executeExtensionCommand('trello.handleClickEvent', {
+  await Command.executeExtensionCommand('gpt-voice.handleClickEvent', {
     name: 'startAddList',
   })
-  await Command.executeExtensionCommand('trello.handleInputEvent', {
+  await Command.executeExtensionCommand('gpt-voice.handleInputEvent', {
     name: 'newListTitle:abc',
   })
-  // await Command.executeExtensionCommand('trello.handleSubmitEvent', {
+  // await Command.executeExtensionCommand('gpt-voice.handleSubmitEvent', {
   //   name: 'addList',
   // })
   // TODO create list, then create card
@@ -78,7 +78,7 @@ export const test: Test = async ({ Command, expect, Locator }) => {
   // await expect(title).toBeVisible()
   // await title.type(' edited')
 
-  // const descriptionPreview = Locator('.TrelloCardDescriptionPreview')
+  // const descriptionPreview = Locator('.gpt-voiceCardDescriptionPreview')
   // await expect(descriptionPreview).toBeVisible()
   // // eslint-disable-next-line e2e/no-direct-click
   // await descriptionPreview.click()

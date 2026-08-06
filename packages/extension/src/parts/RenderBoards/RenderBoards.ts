@@ -4,10 +4,10 @@ import {
   type VirtualDomNode,
 } from '@lvce-editor/virtual-dom-worker'
 import type {
-  TrelloBoard,
-  TrelloSearchResult,
-} from '../TrelloTypes/TrelloTypes.ts'
-import type { TrelloViewState } from '../TrelloViewState/TrelloViewState.ts'
+  gpt-voiceBoard,
+  gpt-voiceSearchResult,
+} from '../gpt-voiceTypes/gpt-voiceTypes.ts'
+import type { gpt-voiceViewState } from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import {
   getRecentlyViewedBoards,
   getWorkspaceSections,
@@ -19,7 +19,7 @@ import { renderError } from '../RenderError/RenderError.ts'
 import { renderListTitle } from '../RenderListTitle/RenderListTitle.ts'
 import { renderTitle } from '../RenderTitle/RenderTitle.ts'
 import { renderToolbar } from '../RenderToolbar/RenderToolbar.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 
 interface VirtualDomSegment {
   readonly childCount: number
@@ -27,25 +27,25 @@ interface VirtualDomSegment {
 }
 
 const renderSearchForm = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
 ): readonly VirtualDomNode[] => {
   const { draftSearchQuery } = state
   return [
     {
       childCount: 1,
-      className: 'TrelloSearchForm',
+      className: 'gpt-voiceSearchForm',
       name: 'search',
       onSubmit: DomEventListenerFunctions.HandleSubmit,
       type: VirtualDomElements.Form,
     },
     {
       childCount: 0,
-      className: 'TrelloInput',
+      className: 'gpt-voiceInput',
       name: 'search',
       onBlur: DomEventListenerFunctions.HandleBlur,
       onFocus: DomEventListenerFunctions.HandleFocus,
       onInput: DomEventListenerFunctions.HandleInput,
-      placeholder: TrelloStrings.searchTrello(),
+      placeholder: gpt-voiceStrings.searchgpt-voice(),
       type: VirtualDomElements.Input,
       value: draftSearchQuery,
     },
@@ -53,12 +53,12 @@ const renderSearchForm = (
 }
 
 const renderBoardButton = (
-  board: Readonly<TrelloBoard>,
+  board: Readonly<gpt-voiceBoard>,
 ): readonly VirtualDomNode[] => {
   return [
     {
       childCount: 1,
-      className: 'TrelloBoardButton',
+      className: 'gpt-voiceBoardButton',
       name: `board:${board.id}`,
       onClick: DomEventListenerFunctions.HandleClick,
       type: VirtualDomElements.Button,
@@ -68,12 +68,12 @@ const renderBoardButton = (
 }
 
 const renderBoardGrid = (
-  boards: readonly TrelloBoard[],
+  boards: readonly gpt-voiceBoard[],
 ): readonly VirtualDomNode[] => {
   return [
     {
       childCount: boards.length,
-      className: 'TrelloBoardGrid',
+      className: 'gpt-voiceBoardGrid',
       type: VirtualDomElements.Div,
     },
     ...boards.flatMap(renderBoardButton),
@@ -81,7 +81,7 @@ const renderBoardGrid = (
 }
 
 const renderRecentlyViewed = (
-  boards: readonly TrelloBoard[],
+  boards: readonly gpt-voiceBoard[],
 ): VirtualDomSegment => {
   if (boards.length === 0) {
     return { childCount: 0, dom: [] }
@@ -91,10 +91,10 @@ const renderRecentlyViewed = (
     dom: [
       {
         childCount: 2,
-        className: 'TrelloSection',
+        className: 'gpt-voiceSection',
         type: VirtualDomElements.Div,
       },
-      ...renderListTitle(TrelloStrings.recentlyViewed()),
+      ...renderListTitle(gpt-voiceStrings.recentlyViewed()),
       ...renderBoardGrid(boards),
     ],
   }
@@ -106,7 +106,7 @@ const renderWorkspaceSection = (
   return [
     {
       childCount: 2,
-      className: 'TrelloWorkspace',
+      className: 'gpt-voiceWorkspace',
       type: VirtualDomElements.Div,
     },
     ...renderListTitle(section.name),
@@ -115,43 +115,43 @@ const renderWorkspaceSection = (
 }
 
 const renderSearchResult = (
-  result: Readonly<TrelloSearchResult>,
+  result: Readonly<gpt-voiceSearchResult>,
 ): readonly VirtualDomNode[] => {
   if (result.type === 'board') {
     return [
       {
         childCount: 1,
-        className: 'TrelloSearchResult',
+        className: 'gpt-voiceSearchResult',
         name: `board:${result.id}`,
         onClick: DomEventListenerFunctions.HandleClick,
         type: VirtualDomElements.Button,
       },
-      text(TrelloStrings.boardSearchResult(result.name)),
+      text(gpt-voiceStrings.boardSearchResult(result.name)),
     ]
   }
   return [
     {
       childCount: 1,
-      className: 'TrelloSearchResult',
+      className: 'gpt-voiceSearchResult',
       type: VirtualDomElements.Div,
     },
-    text(TrelloStrings.cardSearchResult(result.name)),
+    text(gpt-voiceStrings.cardSearchResult(result.name)),
   ]
 }
 
 const renderSearchContent = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
 ): VirtualDomSegment => {
   const { activeSearchQuery, loading, searchResults } = state
   if (loading) {
-    return { childCount: 1, dom: [text(TrelloStrings.searching())] }
+    return { childCount: 1, dom: [text(gpt-voiceStrings.searching())] }
   }
   if (searchResults.length === 0) {
     return {
       childCount: 2,
       dom: [
-        ...renderListTitle(TrelloStrings.searchResultsFor(activeSearchQuery)),
-        text(TrelloStrings.noSearchResults()),
+        ...renderListTitle(gpt-voiceStrings.searchResultsFor(activeSearchQuery)),
+        text(gpt-voiceStrings.noSearchResults()),
       ],
     }
   }
@@ -160,13 +160,13 @@ const renderSearchContent = (
     dom: [
       {
         childCount: 2,
-        className: 'TrelloSearchSection',
+        className: 'gpt-voiceSearchSection',
         type: VirtualDomElements.Div,
       },
-      ...renderListTitle(TrelloStrings.searchResultsFor(activeSearchQuery)),
+      ...renderListTitle(gpt-voiceStrings.searchResultsFor(activeSearchQuery)),
       {
         childCount: searchResults.length,
-        className: 'TrelloSearchResults',
+        className: 'gpt-voiceSearchResults',
         type: VirtualDomElements.Div,
       },
       ...searchResults.flatMap(renderSearchResult),
@@ -175,17 +175,17 @@ const renderSearchContent = (
 }
 
 const renderBoardContent = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
 ): VirtualDomSegment => {
   const { activeSearchQuery, boards, loading } = state
   if (activeSearchQuery) {
     return renderSearchContent(state)
   }
   if (loading) {
-    return { childCount: 1, dom: [text(TrelloStrings.loadingBoards())] }
+    return { childCount: 1, dom: [text(gpt-voiceStrings.loadingBoards())] }
   }
   if (boards.length === 0) {
-    return { childCount: 1, dom: [text(TrelloStrings.noBoardsFound())] }
+    return { childCount: 1, dom: [text(gpt-voiceStrings.noBoardsFound())] }
   }
   const recentBoards = getRecentlyViewedBoards(state)
   const workspaceSections = getWorkspaceSections(state)
@@ -196,17 +196,17 @@ const renderBoardContent = (
       ...recentlyViewed.dom,
       {
         childCount: 1 + workspaceSections.length,
-        className: 'TrelloWorkspaces',
+        className: 'gpt-voiceWorkspaces',
         type: VirtualDomElements.Div,
       },
-      ...renderListTitle(TrelloStrings.yourWorkspaces()),
+      ...renderListTitle(gpt-voiceStrings.yourWorkspaces()),
       ...workspaceSections.flatMap(renderWorkspaceSection),
     ],
   }
 }
 
 const renderSearchToolbar = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
 ): readonly VirtualDomNode[] => {
   const { searchEnabled } = state
   if (!searchEnabled) {
@@ -216,7 +216,7 @@ const renderSearchToolbar = (
 }
 
 export const renderBoards = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
 ): readonly VirtualDomNode[] => {
   const { error } = state
   const boardContent = renderBoardContent(state)
@@ -229,13 +229,13 @@ export const renderBoards = (
         boardContent.childCount +
         (searchToolbar.length > 0 ? 1 : 0) +
         (errorDom.length > 0 ? 1 : 0),
-      className: MergeClassNames.mergeClassNames('TrelloView', 'TrelloBoards'),
+      className: MergeClassNames.mergeClassNames('gpt-voiceView', 'gpt-voiceBoards'),
       name: 'boards',
       onContextMenu: DomEventListenerFunctions.HandleContextMenu,
       type: VirtualDomElements.Div,
     },
     ...searchToolbar,
-    ...renderTitle(TrelloStrings.boards()),
+    ...renderTitle(gpt-voiceStrings.boards()),
     ...boardContent.dom,
     ...errorDom,
   ]

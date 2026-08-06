@@ -7,10 +7,10 @@ import {
   createMockData,
   openBoard,
   openCard,
-  useMockDataAndShowTrello,
-} from './_trello.virtual-dom-view.shared.ts'
+  useMockDataAndShowgpt-voice,
+} from './_gpt-voice.virtual-dom-view.shared.ts'
 
-export const name = 'trello.virtual-dom-view.card-comment-cancel'
+export const name = 'gpt-voice.virtual-dom-view.card-comment-cancel'
 
 export const test: Test = async ({ Command, expect, Locator }) => {
   const boards = createBoards(1)
@@ -20,7 +20,7 @@ export const test: Test = async ({ Command, expect, Locator }) => {
       createList('list-1', 'Todo', [card]),
     ]),
   }
-  await useMockDataAndShowTrello(Command, {
+  await useMockDataAndShowgpt-voice(Command, {
     ...createMockData(boards, boardDetails),
     cardDetails: {
       'card-1': {

@@ -1,9 +1,9 @@
-import type { TrelloCard } from '../TrelloTypes/TrelloTypes.ts'
-import type { TrelloViewState } from '../TrelloViewState/TrelloViewState.ts'
+import type { gpt-voiceCard } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
+import type { gpt-voiceViewState } from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 
 export const getCardListId = (
-  state: Readonly<TrelloViewState>,
-  card: Readonly<TrelloCard>,
+  state: Readonly<gpt-voiceViewState>,
+  card: Readonly<gpt-voiceCard>,
 ): string => {
   if (card.idList) {
     return card.idList

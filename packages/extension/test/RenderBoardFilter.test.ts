@@ -15,13 +15,13 @@ test('renders an open board filter popup with its current value', () => {
     draftBoardFilter: 'ready',
   })
 
-  expect(dom.some((node) => node.className === 'TrelloBoardFilterPopup')).toBe(
-    true,
-  )
+  expect(
+    dom.some((node) => node.className === 'gpt-voiceBoardFilterPopup'),
+  ).toBe(true)
   expect(dom.find((node) => node.name === 'boardFilter')?.value).toBe('ready')
   expect(dom.some((node) => node.name === 'closeBoardFilter')).toBe(true)
   expect(
-    dom.find((node) => node.className === 'TrelloBoardFilterOverlay'),
+    dom.find((node) => node.className === 'gpt-voiceBoardFilterOverlay'),
   ).toEqual(
     expect.objectContaining({
       childCount: 0,

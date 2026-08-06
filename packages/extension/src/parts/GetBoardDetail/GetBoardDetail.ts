@@ -1,18 +1,18 @@
-import type { TrelloApiCache } from '../TrelloApiCache/TrelloApiCache.ts'
-import type { FetchLike } from '../TrelloClientTypes/TrelloClientTypes.ts'
+import type { gpt-voiceApiCache } from '../gpt-voiceApiCache/gpt-voiceApiCache.ts'
+import type { FetchLike } from '../gpt-voiceClientTypes/gpt-voiceClientTypes.ts'
 import type {
-  TrelloBoard,
-  TrelloBoardDetail,
-  TrelloCredentials,
-  TrelloList,
-  TrelloCard,
-} from '../TrelloTypes/TrelloTypes.ts'
+  gpt-voiceBoard,
+  gpt-voiceBoardDetail,
+  gpt-voiceCredentials,
+  gpt-voiceList,
+  gpt-voiceCard,
+} from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 import {
   deleteCachedJson,
   readCachedJson,
   requestJson,
   requestJsonBatch,
-  type TrelloBatchRequest,
+  type gpt-voiceBatchRequest,
 } from '../RequestJson/RequestJson.ts'
 
 const batchRequestLimit = 10
@@ -28,9 +28,9 @@ const cardsParams = {
 } as const
 
 export const deleteCachedBoardLists = async (
-  cache: TrelloApiCache | undefined,
+  cache: gpt-voiceApiCache | undefined,
   boardId: string,
-  credentials: TrelloCredentials,
+  credentials: gpt-voiceCredentials,
 ): Promise<void> => {
   await deleteCachedJson(
     cache,
@@ -41,9 +41,9 @@ export const deleteCachedBoardLists = async (
 }
 
 export const deleteCachedListCards = async (
-  cache: TrelloApiCache | undefined,
+  cache: gpt-voiceApiCache | undefined,
   listId: string,
-  credentials: TrelloCredentials,
+  credentials: gpt-voiceCredentials,
 ): Promise<void> => {
   await deleteCachedJson(
     cache,
@@ -54,11 +54,11 @@ export const deleteCachedListCards = async (
 }
 
 export const readCachedBoardDetail = async (
-  cache: TrelloApiCache | undefined,
-  board: TrelloBoard,
-  credentials: TrelloCredentials,
-): Promise<TrelloBoardDetail | undefined> => {
-  const lists = await readCachedJson<readonly Omit<TrelloList, 'cards'>[]>(
+  cache: gpt-voiceApiCache | undefined,
+  board: gpt-voiceBoard,
+  credentials: gpt-voiceCredentials,
+): Promise<gpt-voiceBoardDetail | undefined> => {
+  const lists = await readCachedJson<readonly Omit<gpt-voiceList, 'cards'>[]>(
     cache,
     `/boards/${board.id}/lists`,
     credentials,
@@ -69,7 +69,7 @@ export const readCachedBoardDetail = async (
   }
   const cardsByList = await Promise.all(
     lists.map((list) => {
-      return readCachedJson<readonly TrelloCard[]>(
+      return readCachedJson<readonly gpt-voiceCard[]>(
         cache,
         `/lists/${list.id}/cards`,
         credentials,
@@ -94,12 +94,12 @@ export const readCachedBoardDetail = async (
 
 export const getBoardDetail = async (
   fetchLike: FetchLike,
-  board: TrelloBoard,
-  credentials: TrelloCredentials,
-  cache?: TrelloApiCache,
+  board: gpt-voiceBoard,
+  credentials: gpt-voiceCredentials,
+  cache?: gpt-voiceApiCache,
   batchRequestsEnabled = false,
-): Promise<TrelloBoardDetail> => {
-  const lists = await requestJson<readonly Omit<TrelloList, 'cards'>[]>(
+): Promise<gpt-voiceBoardDetail> => {
+  const lists = await requestJson<readonly Omit<gpt-voiceList, 'cards'>[]>(
     fetchLike,
     `/boards/${board.id}/lists`,
     credentials,
@@ -111,7 +111,7 @@ export const getBoardDetail = async (
     ? await getCardsBatched(fetchLike, lists, credentials, cache)
     : await Promise.all(
         lists.map((list) => {
-          return requestJson<readonly TrelloCard[]>(
+          return requestJson<readonly gpt-voiceCard[]>(
             fetchLike,
             `/lists/${list.id}/cards`,
             credentials,
@@ -135,23 +135,23 @@ export const getBoardDetail = async (
 
 const getCardsBatched = async (
   fetchLike: FetchLike,
-  lists: readonly Omit<TrelloList, 'cards'>[],
-  credentials: TrelloCredentials,
-  cache?: TrelloApiCache,
-): Promise<readonly (readonly TrelloCard[])[]> => {
-  const requests: TrelloBatchRequest[] = lists.map((list) => {
+  lists: readonly Omit<gpt-voiceList, 'cards'>[],
+  credentials: gpt-voiceCredentials,
+  cache?: gpt-voiceApiCache,
+): Promise<readonly (readonly gpt-voiceCard[])[]> => {
+  const requests: gpt-voiceBatchRequest[] = lists.map((list) => {
     return {
       params: cardsParams,
       path: `/lists/${list.id}/cards`,
     }
   })
-  const batches: TrelloBatchRequest[][] = []
+  const batches: gpt-voiceBatchRequest[][] = []
   for (let index = 0; index < requests.length; index += batchRequestLimit) {
     batches.push(requests.slice(index, index + batchRequestLimit))
   }
   const results = await Promise.all(
-    batches.map((batch: readonly TrelloBatchRequest[]) => {
-      return requestJsonBatch<readonly (readonly TrelloCard[])[]>(
+    batches.map((batch: readonly gpt-voiceBatchRequest[]) => {
+      return requestJsonBatch<readonly (readonly gpt-voiceCard[])[]>(
         fetchLike,
         batch,
         credentials,

@@ -7,10 +7,10 @@ import {
   createMockData,
   openBoard,
   openCard,
-  useMockDataAndShowTrello,
-} from './_trello.virtual-dom-view.shared.ts'
+  useMockDataAndShowgpt-voice,
+} from './_gpt-voice.virtual-dom-view.shared.ts'
 
-export const name = 'trello.virtual-dom-view.card-label-picker'
+export const name = 'gpt-voice.virtual-dom-view.card-label-picker'
 
 export const test: Test = async ({ Command, expect, Locator }) => {
   const boards = createBoards(1)
@@ -20,7 +20,7 @@ export const test: Test = async ({ Command, expect, Locator }) => {
       createList('list-1', 'Todo', [card]),
     ]),
   }
-  await useMockDataAndShowTrello(Command, {
+  await useMockDataAndShowgpt-voice(Command, {
     ...createMockData(boards, boardDetails),
     boardLabels: {
       'board-1': [
@@ -46,7 +46,7 @@ export const test: Test = async ({ Command, expect, Locator }) => {
   await openPicker.click()
   await Command.execute('Timeout.sleep', 100)
 
-  const picker = Locator('.TrelloCardLabelPicker')
+  const picker = Locator('.gpt-voiceCardLabelPicker')
   const search = Locator('input[name="cardLabelSearch"]')
   const ready = Locator('button[name="addCardLabel:label-1"]')
   const needsReview = Locator('button[name="addCardLabel:label-2"]')

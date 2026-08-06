@@ -3,21 +3,21 @@ import {
   VirtualDomElements,
   type VirtualDomNode,
 } from '@lvce-editor/virtual-dom-worker'
-import type { TrelloComment } from '../TrelloTypes/TrelloTypes.ts'
+import type { gpt-voiceComment } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 import { getCommentInitials } from '../CommentHelpers/CommentHelpers.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 
 export const renderCardDetailAvatar = (
-  comment: Readonly<TrelloComment>,
+  comment: Readonly<gpt-voiceComment>,
   author: string,
   avatarUrl: string,
 ): readonly VirtualDomNode[] => {
   if (avatarUrl) {
     return [
       {
-        alt: TrelloStrings.avatar(author),
+        alt: gpt-voiceStrings.avatar(author),
         childCount: 0,
-        className: 'TrelloCardCommentAvatar',
+        className: 'gpt-voiceCardCommentAvatar',
         src: avatarUrl,
         type: VirtualDomElements.Img,
       },
@@ -26,7 +26,7 @@ export const renderCardDetailAvatar = (
   return [
     {
       childCount: 1,
-      className: 'TrelloCardCommentAvatar',
+      className: 'gpt-voiceCardCommentAvatar',
       type: VirtualDomElements.Div,
     },
     text(getCommentInitials(comment)),

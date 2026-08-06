@@ -1,22 +1,22 @@
-import type { TrelloApiCache } from '../TrelloApiCache/TrelloApiCache.ts'
-import type { FetchLike } from '../TrelloClientTypes/TrelloClientTypes.ts'
+import type { gpt-voiceApiCache } from '../gpt-voiceApiCache/gpt-voiceApiCache.ts'
+import type { FetchLike } from '../gpt-voiceClientTypes/gpt-voiceClientTypes.ts'
 import type {
-  TrelloBoard,
-  TrelloCredentials,
-  TrelloLabel,
-  TrelloLabelCreate,
-} from '../TrelloTypes/TrelloTypes.ts'
+  gpt-voiceBoard,
+  gpt-voiceCredentials,
+  gpt-voiceLabel,
+  gpt-voiceLabelCreate,
+} from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 import { deleteCachedBoardLabels } from '../ListBoardLabels/ListBoardLabels.ts'
 import { requestJson } from '../RequestJson/RequestJson.ts'
 
 export const createLabel = async (
   fetchLike: FetchLike,
-  board: TrelloBoard,
-  create: TrelloLabelCreate,
-  credentials: TrelloCredentials,
-  cache?: TrelloApiCache,
-): Promise<TrelloLabel> => {
-  const label = await requestJson<TrelloLabel>(
+  board: gpt-voiceBoard,
+  create: gpt-voiceLabelCreate,
+  credentials: gpt-voiceCredentials,
+  cache?: gpt-voiceApiCache,
+): Promise<gpt-voiceLabel> => {
+  const label = await requestJson<gpt-voiceLabel>(
     fetchLike,
     '/labels',
     credentials,

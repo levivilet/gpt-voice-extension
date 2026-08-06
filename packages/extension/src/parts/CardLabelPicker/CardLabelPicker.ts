@@ -1,13 +1,13 @@
-import type { TrelloLabel } from '../TrelloTypes/TrelloTypes.ts'
+import type { gpt-voiceLabel } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 import type {
-  TrelloViewActionContext,
-  TrelloViewState,
-} from '../TrelloViewState/TrelloViewState.ts'
+  gpt-voiceViewActionContext,
+  gpt-voiceViewState,
+} from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import { getErrorMessage } from '../GetErrorMessage/GetErrorMessage.ts'
 import { updateBoardDetailCard } from '../UpdateBoardDetailCard/UpdateBoardDetailCard.ts'
 
 const hasLabel = (
-  labels: readonly TrelloLabel[] | undefined,
+  labels: readonly gpt-voiceLabel[] | undefined,
   labelId: string,
 ): boolean => {
   return Boolean(
@@ -18,10 +18,10 @@ const hasLabel = (
 }
 
 const mergeLabels = (
-  currentLabels: readonly TrelloLabel[] | undefined,
-  updatedLabels: readonly TrelloLabel[] | undefined,
-  addedLabel: TrelloLabel,
-): readonly TrelloLabel[] => {
+  currentLabels: readonly gpt-voiceLabel[] | undefined,
+  updatedLabels: readonly gpt-voiceLabel[] | undefined,
+  addedLabel: gpt-voiceLabel,
+): readonly gpt-voiceLabel[] => {
   if (updatedLabels) {
     return updatedLabels
   }
@@ -32,10 +32,10 @@ const mergeLabels = (
 }
 
 export const openCardLabelPicker = async (
-  context: TrelloViewActionContext,
+  context: gpt-voiceViewActionContext,
 ): Promise<void> => {
   const { client, requestRerender } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   if (!state.credentials || !state.boardDetail || !state.selectedCardDetail) {
     return
   }
@@ -63,10 +63,10 @@ export const openCardLabelPicker = async (
 }
 
 export const closeCardLabelPicker = (
-  context: Readonly<TrelloViewActionContext>,
+  context: Readonly<gpt-voiceViewActionContext>,
 ): void => {
   const { requestRerender } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   state.cardLabelCreateOpen = false
   state.cardLabelPickerOpen = false
   state.draftLabelSearchQuery = ''
@@ -83,11 +83,11 @@ export const closeCardLabelPicker = (
 }
 
 export const addCardLabel = async (
-  context: TrelloViewActionContext,
+  context: gpt-voiceViewActionContext,
   labelId: string,
 ): Promise<void> => {
   const { client, requestRerender } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   if (
     !state.credentials ||
     !state.selectedCardDetail ||

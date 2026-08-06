@@ -1,16 +1,16 @@
 import type { ViewEvent } from '@lvce-editor/api'
 import type {
-  TrelloViewActionContext,
-  TrelloViewState,
-} from '../TrelloViewState/TrelloViewState.ts'
+  gpt-voiceViewActionContext,
+  gpt-voiceViewState,
+} from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import { moveCardToList } from '../MoveCardToList/MoveCardToList.ts'
 
 export const handleInputEvent = async (
-  context: TrelloViewActionContext,
+  context: gpt-voiceViewActionContext,
   event: Readonly<ViewEvent>,
 ): Promise<void> => {
   const { state } = context
-  const mutableState = state as TrelloViewState
+  const mutableState = state as gpt-voiceViewState
   const value = typeof event.value === 'string' ? event.value : ''
   if (event.name?.startsWith('cardList:')) {
     await moveCardToList(context, event.name.slice('cardList:'.length), value)

@@ -1,108 +1,126 @@
-.TrelloView,
-.TrelloBoardDetail {
-  --TrelloBackground: var(--MainBackground, var(--SideBarBackground, #1e2324));
-  --TrelloForeground: var(
+.gpt-voiceView,
+.gpt-voiceBoardDetail {
+  --gpt-voiceBackground: var(
+    --MainBackground,
+    var(--SideBarBackground, #1e2324)
+  );
+  --gpt-voiceForeground: var(
     --WorkbenchForeground,
     var(--ListForeground, var(--SideBarForeground, #cccccc))
   );
-  --TrelloForegroundStrong: var(--MarkdownForeground, var(--TrelloForeground));
-  --TrelloForegroundMuted: color-mix(
+  --gpt-voiceForegroundStrong: var(
+    --MarkdownForeground,
+    var(--gpt-voiceForeground)
+  );
+  --gpt-voiceForegroundMuted: color-mix(
     in srgb,
-    var(--TrelloForeground) 68%,
-    var(--TrelloBackground)
+    var(--gpt-voiceForeground) 68%,
+    var(--gpt-voiceBackground)
   );
-  --TrelloSurface: var(
+  --gpt-voiceSurface: var(
     --SideBarBackground,
-    var(--PanelBackground, var(--WidgetBackground, var(--TrelloBackground)))
+    var(--PanelBackground, var(--WidgetBackground, var(--gpt-voiceBackground)))
   );
-  --TrelloSurfaceAlt: var(
+  --gpt-voiceSurfaceAlt: var(
     --WidgetBackground,
     var(
       --InputBoxBackground,
-      color-mix(in srgb, var(--TrelloSurface) 88%, var(--TrelloForeground) 12%)
+      color-mix(
+        in srgb,
+        var(--gpt-voiceSurface) 88%,
+        var(--gpt-voiceForeground) 12%
+      )
     )
   );
-  --TrelloInputBackground: var(
+  --gpt-voiceInputBackground: var(
     --InputBackground,
-    var(--InputBoxBackground, var(--TrelloSurfaceAlt))
+    var(--InputBoxBackground, var(--gpt-voiceSurfaceAlt))
   );
-  --TrelloInputForeground: var(
+  --gpt-voiceInputForeground: var(
     --InputForeground,
-    var(--InputBoxForeground, var(--TrelloForegroundStrong))
+    var(--InputBoxForeground, var(--gpt-voiceForegroundStrong))
   );
-  --TrelloBorder: var(
+  --gpt-voiceBorder: var(
     --ContrastBorder,
     var(
       --SideBarBorder,
       var(
         --InputBoxBorder,
-        color-mix(in srgb, var(--TrelloForeground) 22%, transparent)
+        color-mix(in srgb, var(--gpt-voiceForeground) 22%, transparent)
       )
     )
   );
-  --TrelloBorderSubtle: color-mix(
+  --gpt-voiceBorderSubtle: color-mix(
     in srgb,
-    var(--TrelloForeground) 16%,
+    var(--gpt-voiceForeground) 16%,
     transparent
   );
-  --TrelloBorderStrong: color-mix(
+  --gpt-voiceBorderStrong: color-mix(
     in srgb,
-    var(--TrelloForeground) 32%,
+    var(--gpt-voiceForeground) 32%,
     transparent
   );
-  --TrelloHoverBackground: color-mix(
+  --gpt-voiceHoverBackground: color-mix(
     in srgb,
-    var(--TrelloSurface) 84%,
-    var(--TrelloForeground) 16%
+    var(--gpt-voiceSurface) 84%,
+    var(--gpt-voiceForeground) 16%
   );
-  --TrelloActiveBackground: color-mix(
+  --gpt-voiceActiveBackground: color-mix(
     in srgb,
-    var(--TrelloSurface) 76%,
-    var(--TrelloForeground) 24%
+    var(--gpt-voiceSurface) 76%,
+    var(--gpt-voiceForeground) 24%
   );
-  --TrelloFocus: var(
+  --gpt-voiceFocus: var(
     --FocusBorder,
     var(--SplitButtonBackground, var(--LinkForeground, #3794ff))
   );
-  --TrelloFocusSoft: color-mix(in srgb, var(--TrelloFocus) 30%, transparent);
-  --TrelloBadgeBackground: var(--BadgeBackground, var(--TrelloFocus));
-  --TrelloButtonBackground: var(
-    --SplitButtonBackground,
-    var(--ButtonBackground, var(--TrelloFocus))
+  --gpt-voiceFocusSoft: color-mix(
+    in srgb,
+    var(--gpt-voiceFocus) 30%,
+    transparent
   );
-  --TrelloButtonForeground: var(--SplitButtonForeground, #ffffff);
-  --TrelloButtonHoverBackground: var(
+  --gpt-voiceBadgeBackground: var(--BadgeBackground, var(--gpt-voiceFocus));
+  --gpt-voiceButtonBackground: var(
+    --SplitButtonBackground,
+    var(--ButtonBackground, var(--gpt-voiceFocus))
+  );
+  --gpt-voiceButtonForeground: var(--SplitButtonForeground, #ffffff);
+  --gpt-voiceButtonHoverBackground: var(
     --SplitButtonHoverBackground,
     color-mix(
       in srgb,
-      var(--TrelloButtonBackground) 82%,
-      var(--TrelloForeground) 18%
+      var(--gpt-voiceButtonBackground) 82%,
+      var(--gpt-voiceForeground) 18%
     )
   );
-  --TrelloLinkForeground: var(
+  --gpt-voiceLinkForeground: var(
     --LinkForeground,
-    var(--TextLinkForeground, var(--TrelloFocus))
+    var(--TextLinkForeground, var(--gpt-voiceFocus))
   );
-  --TrelloShadow: color-mix(in srgb, var(--TrelloBackground) 72%, transparent);
-  --TrelloScrollbarThumb: var(
+  --gpt-voiceShadow: color-mix(
+    in srgb,
+    var(--gpt-voiceBackground) 72%,
+    transparent
+  );
+  --gpt-voiceScrollbarThumb: var(
     --vscode-scrollbarSlider-background,
     var(
       --EditorScrollBarBackground,
-      color-mix(in srgb, var(--TrelloForeground) 35%, transparent)
+      color-mix(in srgb, var(--gpt-voiceForeground) 35%, transparent)
     )
   );
-  --TrelloScrollbarTrack: transparent;
-  --TrelloErrorBackground: var(
+  --gpt-voiceScrollbarTrack: transparent;
+  --gpt-voiceErrorBackground: var(
     --ErrorBackground,
-    color-mix(in srgb, #c9372c 22%, var(--TrelloBackground))
+    color-mix(in srgb, #c9372c 22%, var(--gpt-voiceBackground))
   );
-  --TrelloErrorForeground: var(
+  --gpt-voiceErrorForeground: var(
     --ErrorForeground,
-    var(--TrelloForegroundStrong)
+    var(--gpt-voiceForegroundStrong)
   );
 }
 
-.TrelloView {
+.gpt-voiceView {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -110,27 +128,27 @@
   height: 100%;
   /* contain: strict; */
   padding: 16px;
-  color: var(--TrelloForeground);
-  background: var(--TrelloBackground);
+  color: var(--gpt-voiceForeground);
+  background: var(--gpt-voiceBackground);
 }
 
-.TrelloTitle {
+.gpt-voiceTitle {
   margin: 0;
   contain: content;
   font-size: 20px;
   line-height: 1.3;
 }
 
-.TrelloListTitle {
+.gpt-voiceListTitle {
   margin: 0 0 8px;
   contain: content;
   font-size: 13px;
   line-height: 1.3;
-  color: var(--TrelloForegroundMuted);
+  color: var(--gpt-voiceForegroundMuted);
   text-transform: uppercase;
 }
 
-.TrelloListHeader {
+.gpt-voiceListHeader {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -138,12 +156,12 @@
   min-width: 0;
 }
 
-.TrelloListTitleInputWrapper {
+.gpt-voiceListTitleInputWrapper {
   flex: 1 1 auto;
   min-width: 0;
 }
 
-.TrelloListTitleInput {
+.gpt-voiceListTitleInput {
   box-sizing: border-box;
   width: 100%;
   min-height: 28px;
@@ -155,7 +173,7 @@
   font-size: 13px;
   font-weight: 600;
   line-height: 1.3;
-  color: var(--TrelloForegroundStrong);
+  color: var(--gpt-voiceForegroundStrong);
   text-overflow: ellipsis;
   background: transparent;
   border: 1px solid transparent;
@@ -166,24 +184,24 @@
     box-shadow 120ms ease;
 }
 
-.TrelloListTitleInput:focus {
-  color: var(--TrelloInputForeground);
-  background: var(--TrelloInputBackground);
-  border-color: var(--TrelloFocus);
+.gpt-voiceListTitleInput:focus {
+  color: var(--gpt-voiceInputForeground);
+  background: var(--gpt-voiceInputBackground);
+  border-color: var(--gpt-voiceFocus);
   outline: none;
-  box-shadow: inset 0 0 0 1px var(--TrelloFocus);
+  box-shadow: inset 0 0 0 1px var(--gpt-voiceFocus);
 }
 
-.TrelloListCardCount {
+.gpt-voiceListCardCount {
   flex: 0 0 auto;
   contain: content;
   font-size: 12px;
   line-height: 1.3;
-  color: var(--TrelloForegroundMuted);
+  color: var(--gpt-voiceForegroundMuted);
   white-space: nowrap;
 }
 
-.TrelloToolbar {
+.gpt-voiceToolbar {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -191,16 +209,16 @@
   contain: content;
 }
 
-.TrelloField {
+.gpt-voiceField {
   display: flex;
   flex-direction: column;
   gap: 5px;
   contain: content;
   font-size: 12px;
-  color: var(--TrelloForegroundMuted);
+  color: var(--gpt-voiceForegroundMuted);
 }
 
-.TrelloAuthForm {
+.gpt-voiceAuthForm {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -208,14 +226,14 @@
   max-width: 760px;
 }
 
-.TrelloAuthFields {
+.gpt-voiceAuthFields {
   display: flex;
   flex-direction: column;
   gap: 12px;
   contain: content;
 }
 
-.TrelloWelcome {
+.gpt-voiceWelcome {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -224,39 +242,39 @@
   max-width: 760px;
   margin-top: 8px;
   padding: 12px;
-  color: var(--TrelloForegroundMuted);
-  background: var(--TrelloSurface);
-  border: 1px solid var(--TrelloBorder);
+  color: var(--gpt-voiceForegroundMuted);
+  background: var(--gpt-voiceSurface);
+  border: 1px solid var(--gpt-voiceBorder);
   border-radius: 6px;
 }
 
-.TrelloWelcomeTitle {
+.gpt-voiceWelcomeTitle {
   margin: 0;
   contain: content;
   font-size: 14px;
   font-weight: 600;
   line-height: 1.3;
-  color: var(--TrelloForegroundStrong);
+  color: var(--gpt-voiceForegroundStrong);
 }
 
-.TrelloWelcomeText {
+.gpt-voiceWelcomeText {
   contain: content;
   max-width: 68ch;
   font-size: 12px;
   line-height: 1.55;
 }
 
-.TrelloWelcomeNote {
+.gpt-voiceWelcomeNote {
   contain: content;
   max-width: 68ch;
   padding-top: 8px;
   font-size: 12px;
   line-height: 1.55;
-  color: var(--TrelloForegroundMuted);
-  border-top: 1px solid var(--TrelloBorder);
+  color: var(--gpt-voiceForegroundMuted);
+  border-top: 1px solid var(--gpt-voiceBorder);
 }
 
-.TrelloWelcomeSteps {
+.gpt-voiceWelcomeSteps {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -266,7 +284,7 @@
   list-style: none;
 }
 
-.TrelloWelcomeStep {
+.gpt-voiceWelcomeStep {
   display: flex;
   gap: 8px;
   align-items: flex-start;
@@ -276,7 +294,7 @@
   line-height: 1.5;
 }
 
-.TrelloWelcomeStepNumber {
+.gpt-voiceWelcomeStepNumber {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -284,170 +302,170 @@
   width: 20px;
   height: 20px;
   contain: content;
-  color: var(--TrelloButtonForeground);
-  background: var(--TrelloButtonBackground);
+  color: var(--gpt-voiceButtonForeground);
+  background: var(--gpt-voiceButtonBackground);
   border-radius: 999px;
 }
 
-.TrelloWelcomeStepText {
+.gpt-voiceWelcomeStepText {
   min-width: 0;
   contain: content;
   overflow-wrap: anywhere;
 }
 
-.TrelloWelcomeLink {
-  color: var(--TrelloLinkForeground);
+.gpt-voiceWelcomeLink {
+  color: var(--gpt-voiceLinkForeground);
   text-decoration: none;
   overflow-wrap: anywhere;
 }
 
-.TrelloWelcomeLink:hover {
+.gpt-voiceWelcomeLink:hover {
   text-decoration: underline;
 }
 
-.TrelloTitle,
-.TrelloWelcome,
-.TrelloCardDescriptionPreview,
-.TrelloMarkdownParagraph,
-.TrelloMarkdownHeading,
-.TrelloMarkdownListItem,
-.TrelloCardCommentAuthor,
-.TrelloCardCommentDate,
-.TrelloCardCommentText,
-.TrelloCardDetailEmpty,
-.TrelloCardDetailLink {
+.gpt-voiceTitle,
+.gpt-voiceWelcome,
+.gpt-voiceCardDescriptionPreview,
+.gpt-voiceMarkdownParagraph,
+.gpt-voiceMarkdownHeading,
+.gpt-voiceMarkdownListItem,
+.gpt-voiceCardCommentAuthor,
+.gpt-voiceCardCommentDate,
+.gpt-voiceCardCommentText,
+.gpt-voiceCardDetailEmpty,
+.gpt-voiceCardDetailLink {
   user-select: text;
 }
 
 @media (max-width: 520px) {
-  .TrelloWelcome {
+  .gpt-voiceWelcome {
     gap: 8px;
     padding: 10px;
   }
 
-  .TrelloWelcomeStep {
+  .gpt-voiceWelcomeStep {
     flex-direction: column;
     gap: 4px;
   }
 }
 
-.TrelloInput,
-.TrelloTextArea {
+.gpt-voiceInput,
+.gpt-voiceTextArea {
   box-sizing: border-box;
   width: 100%;
   min-height: 28px;
   contain: content;
   padding: 4px 8px;
-  color: var(--TrelloInputForeground);
-  background: var(--TrelloInputBackground);
-  border: 1px solid var(--TrelloBorder);
+  color: var(--gpt-voiceInputForeground);
+  background: var(--gpt-voiceInputBackground);
+  border: 1px solid var(--gpt-voiceBorder);
   border-radius: 6px;
   transition:
     border-color 120ms ease,
     box-shadow 120ms ease;
 }
 
-.TrelloInput:focus,
-.TrelloTextArea:focus {
+.gpt-voiceInput:focus,
+.gpt-voiceTextArea:focus {
   outline: none;
-  border-color: var(--TrelloFocus);
-  box-shadow: inset 0 0 0 1px var(--TrelloFocus);
+  border-color: var(--gpt-voiceFocus);
+  box-shadow: inset 0 0 0 1px var(--gpt-voiceFocus);
 }
 
-.TrelloTextArea {
+.gpt-voiceTextArea {
   min-height: 96px;
   resize: vertical;
   line-height: 1.5;
 }
 
-.TrelloButton,
-.TrelloBoardButton {
+.gpt-voiceButton,
+.gpt-voiceBoardButton {
   min-height: 28px;
   contain: content;
   padding: 4px 10px;
-  color: var(--TrelloButtonForeground);
-  background: var(--TrelloButtonBackground);
+  color: var(--gpt-voiceButtonForeground);
+  background: var(--gpt-voiceButtonBackground);
   border: 1px solid transparent;
   border-radius: 6px;
 }
 
-.TrelloButton:hover,
-.TrelloBoardButton:hover {
-  background: var(--TrelloButtonHoverBackground);
+.gpt-voiceButton:hover,
+.gpt-voiceBoardButton:hover {
+  background: var(--gpt-voiceButtonHoverBackground);
 }
 
-.TrelloBoardButton {
+.gpt-voiceBoardButton {
   width: 100%;
   text-align: left;
 }
 
-.TrelloSearchForm {
+.gpt-voiceSearchForm {
   flex: 1 1 160px;
   contain: content;
 }
 
-.TrelloSection,
-.TrelloWorkspaces,
-.TrelloWorkspace {
+.gpt-voiceSection,
+.gpt-voiceWorkspaces,
+.gpt-voiceWorkspace {
   display: flex;
   flex-direction: column;
   gap: 8px;
   contain: content;
 }
 
-.TrelloWorkspaces {
+.gpt-voiceWorkspaces {
   margin-top: 4px;
 }
 
-.TrelloBoardGrid {
+.gpt-voiceBoardGrid {
   display: flex;
   flex-direction: column;
   gap: 8px;
   contain: content;
 }
 
-.TrelloSearchSection,
-.TrelloSearchResults {
+.gpt-voiceSearchSection,
+.gpt-voiceSearchResults {
   display: flex;
   flex-direction: column;
   gap: 8px;
   contain: content;
 }
 
-.TrelloSearchResult {
+.gpt-voiceSearchResult {
   min-height: 28px;
   contain: content;
   padding: 8px;
   text-align: left;
-  color: var(--TrelloForegroundStrong);
-  background: var(--TrelloSurfaceAlt);
-  border: 1px solid var(--TrelloBorder);
+  color: var(--gpt-voiceForegroundStrong);
+  background: var(--gpt-voiceSurfaceAlt);
+  border: 1px solid var(--gpt-voiceBorder);
   border-radius: 6px;
 }
 
-button.TrelloSearchResult:hover {
-  background: var(--TrelloHoverBackground);
+button.gpt-voiceSearchResult:hover {
+  background: var(--gpt-voiceHoverBackground);
 }
 
-.TrelloBoardDetail {
+.gpt-voiceBoardDetail {
   position: relative;
   min-height: 0;
   overflow: hidden;
 }
 
-.TrelloBoardFilterActionActive {
-  color: var(--TrelloButtonForeground);
-  background: var(--TrelloButtonBackground);
+.gpt-voiceBoardFilterActionActive {
+  color: var(--gpt-voiceButtonForeground);
+  background: var(--gpt-voiceButtonBackground);
   border-color: transparent;
 }
 
-.TrelloBoardFilterOverlay {
+.gpt-voiceBoardFilterOverlay {
   position: absolute;
   z-index: 9;
   inset: 0;
 }
 
-.TrelloBoardFilterPopup {
+.gpt-voiceBoardFilterPopup {
   position: absolute;
   z-index: 10;
   top: 16px;
@@ -459,31 +477,31 @@ button.TrelloSearchResult:hover {
   width: min(360px, calc(100% - 32px));
   contain: content;
   padding: 12px;
-  color: var(--TrelloForeground);
-  background: var(--TrelloSurface);
-  border: 1px solid var(--TrelloBorder);
+  color: var(--gpt-voiceForeground);
+  background: var(--gpt-voiceSurface);
+  border: 1px solid var(--gpt-voiceBorder);
   border-radius: 8px;
   box-shadow:
-    0 4px 8px var(--TrelloShadow),
-    0 12px 32px var(--TrelloShadow);
+    0 4px 8px var(--gpt-voiceShadow),
+    0 12px 32px var(--gpt-voiceShadow);
 }
 
-.TrelloBoardFilterPopupHeader {
+.gpt-voiceBoardFilterPopupHeader {
   display: flex;
   align-items: center;
   min-height: 28px;
   contain: content;
 }
 
-.TrelloBoardFilterPopupTitle {
+.gpt-voiceBoardFilterPopupTitle {
   flex: 1 1 auto;
   padding-left: 28px;
   text-align: center;
   font-weight: 600;
-  color: var(--TrelloForegroundStrong);
+  color: var(--gpt-voiceForegroundStrong);
 }
 
-.TrelloBoardFilterCloseButton {
+.gpt-voiceBoardFilterCloseButton {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
@@ -493,47 +511,50 @@ button.TrelloSearchResult:hover {
   height: 28px;
   min-height: 28px;
   padding: 0;
-  color: var(--TrelloForegroundMuted);
+  color: var(--gpt-voiceForegroundMuted);
   background: transparent;
   border-color: transparent;
 }
 
-.TrelloBoardFilterCloseButton:hover,
-.TrelloBoardFilterCloseButton:focus {
-  color: var(--TrelloForegroundStrong);
-  background: var(--TrelloHoverBackground);
+.gpt-voiceBoardFilterCloseButton:hover,
+.gpt-voiceBoardFilterCloseButton:focus {
+  color: var(--gpt-voiceForegroundStrong);
+  background: var(--gpt-voiceHoverBackground);
   outline: none;
 }
 
-.TrelloBoardFilterField {
+.gpt-voiceBoardFilterField {
   display: flex;
   flex-direction: column;
   gap: 6px;
   contain: content;
 }
 
-.TrelloBoardFilterLabel {
+.gpt-voiceBoardFilterLabel {
   font-size: 12px;
   font-weight: 600;
-  color: var(--TrelloForegroundStrong);
+  color: var(--gpt-voiceForegroundStrong);
 }
 
-.TrelloBoardFilterHint {
+.gpt-voiceBoardFilterHint {
   contain: content;
   font-size: 11px;
   line-height: 1.4;
-  color: var(--TrelloForegroundMuted);
+  color: var(--gpt-voiceForegroundMuted);
 }
 
-.TrelloBoardDetailWithBackground {
-  background-color: var(--TrelloBoardBackgroundColor, var(--TrelloBackground));
-  background-image: var(--TrelloBoardBackgroundImage, none);
+.gpt-voiceBoardDetailWithBackground {
+  background-color: var(
+    --gpt-voiceBoardBackgroundColor,
+    var(--gpt-voiceBackground)
+  );
+  background-image: var(--gpt-voiceBoardBackgroundImage, none);
   background-position: center;
-  background-repeat: var(--TrelloBoardBackgroundRepeat, no-repeat);
-  background-size: var(--TrelloBoardBackgroundSize, cover);
+  background-repeat: var(--gpt-voiceBoardBackgroundRepeat, no-repeat);
+  background-size: var(--gpt-voiceBoardBackgroundSize, cover);
 }
 
-.TrelloBoardDetailContent {
+.gpt-voiceBoardDetailContent {
   display: flex;
   flex: 1 1 auto;
   gap: 12px;
@@ -542,13 +563,13 @@ button.TrelloSearchResult:hover {
   overflow: hidden;
 }
 
-.TrelloLists,
-.TrelloCards,
-.TrelloCardDetailPanel {
-  scrollbar-color: var(--TrelloScrollbarThumb) var(--TrelloScrollbarTrack);
+.gpt-voiceLists,
+.gpt-voiceCards,
+.gpt-voiceCardDetailPanel {
+  scrollbar-color: var(--gpt-voiceScrollbarThumb) var(--gpt-voiceScrollbarTrack);
 }
 
-.TrelloLists {
+.gpt-voiceLists {
   display: flex;
   align-items: flex-start;
   flex: 1 1 auto;
@@ -560,7 +581,7 @@ button.TrelloSearchResult:hover {
   overflow-y: hidden;
 }
 
-.TrelloList {
+.gpt-voiceList {
   box-sizing: border-box;
   display: flex;
   flex: 0 0 280px;
@@ -571,21 +592,25 @@ button.TrelloSearchResult:hover {
   /* contain: strict; */
   overflow: hidden;
   padding: 8px;
-  background: var(--TrelloSurface);
+  background: var(--gpt-voiceSurface);
   border: none;
   border-radius: 8px;
   box-shadow:
-    0 1px 2px var(--TrelloShadow),
-    0 8px 24px var(--TrelloShadow);
+    0 1px 2px var(--gpt-voiceShadow),
+    0 8px 24px var(--gpt-voiceShadow);
 }
 
-.TrelloListDragTarget {
-  background: color-mix(in srgb, var(--TrelloFocus) 18%, var(--TrelloSurface));
-  outline: 1px solid var(--TrelloFocus);
+.gpt-voiceListDragTarget {
+  background: color-mix(
+    in srgb,
+    var(--gpt-voiceFocus) 18%,
+    var(--gpt-voiceSurface)
+  );
+  outline: 1px solid var(--gpt-voiceFocus);
   outline-offset: -1px;
 }
 
-.TrelloCards {
+.gpt-voiceCards {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
@@ -597,7 +622,7 @@ button.TrelloSearchResult:hover {
   overflow-y: auto;
 }
 
-.TrelloCard {
+.gpt-voiceCard {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -608,11 +633,11 @@ button.TrelloSearchResult:hover {
   overflow: hidden;
   padding: 0;
   text-align: left;
-  color: var(--TrelloForegroundStrong);
-  background: var(--TrelloSurfaceAlt);
-  border: 1px solid var(--TrelloBorderSubtle);
+  color: var(--gpt-voiceForegroundStrong);
+  background: var(--gpt-voiceSurfaceAlt);
+  border: 1px solid var(--gpt-voiceBorderSubtle);
   border-radius: 6px;
-  box-shadow: 0 1px 2px var(--TrelloShadow);
+  box-shadow: 0 1px 2px var(--gpt-voiceShadow);
   transition:
     background 120ms ease,
     border-color 120ms ease,
@@ -620,32 +645,32 @@ button.TrelloSearchResult:hover {
     transform 120ms ease;
 }
 
-.TrelloCard:hover {
-  background: var(--TrelloHoverBackground);
-  border-color: var(--TrelloFocus);
+.gpt-voiceCard:hover {
+  background: var(--gpt-voiceHoverBackground);
+  border-color: var(--gpt-voiceFocus);
   box-shadow:
-    0 2px 5px var(--TrelloShadow),
-    0 0 0 1px var(--TrelloFocusSoft);
+    0 2px 5px var(--gpt-voiceShadow),
+    0 0 0 1px var(--gpt-voiceFocusSoft);
   transform: translateY(-1px);
 }
 
-.TrelloCard:focus {
+.gpt-voiceCard:focus {
   outline: none;
-  border-color: var(--TrelloFocus);
+  border-color: var(--gpt-voiceFocus);
   box-shadow:
-    0 1px 2px var(--TrelloShadow),
-    0 0 0 1px var(--TrelloFocus);
+    0 1px 2px var(--gpt-voiceShadow),
+    0 0 0 1px var(--gpt-voiceFocus);
 }
 
-.TrelloCard * {
+.gpt-voiceCard * {
   pointer-events: none;
 }
 
-.TrelloCardWithCover {
+.gpt-voiceCardWithCover {
   gap: 0;
 }
 
-.TrelloCardBody {
+.gpt-voiceCardBody {
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -653,67 +678,67 @@ button.TrelloSearchResult:hover {
   padding: 8px 9px;
 }
 
-.TrelloCardCoverImage {
+.gpt-voiceCardCoverImage {
   display: block;
   width: 100%;
   aspect-ratio: 16 / 9;
   contain: content;
   object-fit: cover;
-  background: var(--TrelloSurfaceAlt);
-  border-bottom: 1px solid var(--TrelloBorderSubtle);
+  background: var(--gpt-voiceSurfaceAlt);
+  border-bottom: 1px solid var(--gpt-voiceBorderSubtle);
 }
 
-.TrelloCardTitle {
+.gpt-voiceCardTitle {
   contain: content;
   line-height: 1.4;
 }
 
-.TrelloCardMeta {
+.gpt-voiceCardMeta {
   display: inline-flex;
   align-items: center;
   gap: 4px;
   contain: content;
   font-size: 12px;
   line-height: 1.3;
-  color: var(--TrelloForegroundMuted);
+  color: var(--gpt-voiceForegroundMuted);
 }
 
-.TrelloAddListButton,
-.TrelloAddListForm {
+.gpt-voiceAddListButton,
+.gpt-voiceAddListForm {
   box-sizing: border-box;
   flex: 0 0 280px;
   contain: content;
 }
 
-.TrelloAddListButton {
+.gpt-voiceAddListButton {
   min-height: 40px;
   padding: 8px;
   text-align: left;
-  color: var(--TrelloForegroundStrong);
-  background: var(--TrelloSurface);
+  color: var(--gpt-voiceForegroundStrong);
+  background: var(--gpt-voiceSurface);
   border: none;
   border-radius: 8px;
   box-shadow:
-    0 1px 2px var(--TrelloShadow),
-    0 8px 24px var(--TrelloShadow);
+    0 1px 2px var(--gpt-voiceShadow),
+    0 8px 24px var(--gpt-voiceShadow);
 }
 
-.TrelloAddListButton:hover {
-  background: var(--TrelloSurfaceAlt);
+.gpt-voiceAddListButton:hover {
+  background: var(--gpt-voiceSurfaceAlt);
 }
 
-.TrelloAddListInput {
+.gpt-voiceAddListInput {
   box-sizing: border-box;
   width: 100%;
   min-height: 40px;
   padding: 8px;
-  color: var(--TrelloForegroundStrong);
-  background: var(--TrelloInputBackground);
-  border: 1px solid var(--TrelloFocus);
+  color: var(--gpt-voiceForegroundStrong);
+  background: var(--gpt-voiceInputBackground);
+  border: 1px solid var(--gpt-voiceFocus);
   border-radius: 8px;
 }
 
-.TrelloCardCommentIcon {
+.gpt-voiceCardCommentIcon {
   display: block;
   flex: none;
   width: 14px;
@@ -723,59 +748,59 @@ button.TrelloSearchResult:hover {
   object-fit: contain;
 }
 
-.TrelloCardCommentCount {
+.gpt-voiceCardCommentCount {
   font-size: 12px;
   line-height: 1;
 }
 
-.TrelloAddCardButton {
+.gpt-voiceAddCardButton {
   width: 100%;
   min-height: 32px;
   contain: content;
   padding: 6px 8px;
   text-align: left;
-  color: var(--TrelloForegroundMuted);
+  color: var(--gpt-voiceForegroundMuted);
   background: transparent;
   border: 1px solid transparent;
   border-radius: 6px;
 }
 
-.TrelloAddCardButton:hover {
-  color: var(--TrelloButtonForeground);
-  background: var(--TrelloButtonHoverBackground);
+.gpt-voiceAddCardButton:hover {
+  color: var(--gpt-voiceButtonForeground);
+  background: var(--gpt-voiceButtonHoverBackground);
 }
 
-.TrelloAddCardForm {
+.gpt-voiceAddCardForm {
   display: flex;
   flex-direction: column;
   gap: 8px;
   contain: content;
 }
 
-.TrelloAddCardActions {
+.gpt-voiceAddCardActions {
   display: flex;
   gap: 4px;
   align-items: center;
   contain: content;
 }
 
-.TrelloAddCardCloseButton {
+.gpt-voiceAddCardCloseButton {
   min-width: 32px;
   min-height: 28px;
   contain: content;
   padding: 4px 8px;
-  color: var(--TrelloForegroundMuted);
+  color: var(--gpt-voiceForegroundMuted);
   background: transparent;
   border: 1px solid transparent;
   border-radius: 6px;
 }
 
-.TrelloAddCardCloseButton:hover {
-  color: var(--TrelloForegroundStrong);
-  background: var(--TrelloButtonHoverBackground);
+.gpt-voiceAddCardCloseButton:hover {
+  color: var(--gpt-voiceForegroundStrong);
+  background: var(--gpt-voiceButtonHoverBackground);
 }
 
-.TrelloAddCardInput {
+.gpt-voiceAddCardInput {
   box-sizing: border-box;
   width: 100%;
   min-height: calc(2lh + 16px);
@@ -787,22 +812,22 @@ button.TrelloSearchResult:hover {
   line-height: 20px;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
-  color: var(--TrelloInputForeground);
+  color: var(--gpt-voiceInputForeground);
   resize: none;
-  background: var(--TrelloInputBackground);
-  border: 1px solid var(--TrelloFocus);
+  background: var(--gpt-voiceInputBackground);
+  border: 1px solid var(--gpt-voiceFocus);
   border-radius: 6px;
 }
 
-.TrelloAddCardInput:focus {
+.gpt-voiceAddCardInput:focus {
   outline: none;
-  box-shadow: 0 0 0 1px var(--TrelloFocus);
+  box-shadow: 0 0 0 1px var(--gpt-voiceFocus);
 }
 
-.TrelloCardDetailPanel {
+.gpt-voiceCardDetailPanel {
   box-sizing: border-box;
   display: flex;
-  flex: 0 0 var(--TrelloCardDetailWidth, 360px);
+  flex: 0 0 var(--gpt-voiceCardDetailWidth, 360px);
   flex-direction: column;
   gap: 12px;
   min-width: 200px;
@@ -810,12 +835,12 @@ button.TrelloSearchResult:hover {
   contain: strict;
   overflow-y: auto;
   padding: 14px;
-  background: var(--TrelloSurface);
-  border: 1px solid var(--TrelloBorder);
+  background: var(--gpt-voiceSurface);
+  border: 1px solid var(--gpt-voiceBorder);
   border-radius: 8px;
 }
 
-.TrelloCardDetailPopup {
+.gpt-voiceCardDetailPopup {
   position: absolute;
   z-index: 1;
   inset: 0;
@@ -828,26 +853,26 @@ button.TrelloSearchResult:hover {
   background: rgb(0 0 0 / 64%);
 }
 
-.TrelloCardDetailPanelPopup {
+.gpt-voiceCardDetailPanelPopup {
   flex: 0 1 900px;
   width: min(900px, 100%);
   height: min(720px, 100%);
   max-height: 100%;
   min-width: 0;
-  box-shadow: 0 16px 48px var(--TrelloShadow);
+  box-shadow: 0 16px 48px var(--gpt-voiceShadow);
 }
 
-.TrelloCardDetailResizeSash {
+.gpt-voiceCardDetailResizeSash {
   flex: 0 0 8px;
   contain: strict;
   cursor: ew-resize;
 }
 
-.TrelloCardDetailResizeSash:hover {
-  background: color-mix(in srgb, var(--TrelloFocus) 28%, transparent);
+.gpt-voiceCardDetailResizeSash:hover {
+  background: color-mix(in srgb, var(--gpt-voiceFocus) 28%, transparent);
 }
 
-.TrelloCardAttachmentDropArea {
+.gpt-voiceCardAttachmentDropArea {
   display: flex;
   flex: 1 1 auto;
   align-items: center;
@@ -856,27 +881,31 @@ button.TrelloSearchResult:hover {
   contain: strict;
   font-size: 16px;
   font-weight: 600;
-  color: var(--TrelloForegroundStrong);
-  background: color-mix(in srgb, var(--TrelloFocus) 8%, var(--TrelloSurface));
-  border: 2px dashed var(--TrelloFocus);
+  color: var(--gpt-voiceForegroundStrong);
+  background: color-mix(
+    in srgb,
+    var(--gpt-voiceFocus) 8%,
+    var(--gpt-voiceSurface)
+  );
+  border: 2px dashed var(--gpt-voiceFocus);
   border-radius: 6px;
   pointer-events: none;
 }
 
 @media (max-width: 520px) {
-  .TrelloCardDetailPopup {
+  .gpt-voiceCardDetailPopup {
     padding: 12px;
   }
 }
 
-.TrelloCardDetailHeader {
+.gpt-voiceCardDetailHeader {
   display: flex;
   gap: 8px;
   align-items: flex-start;
   contain: content;
 }
 
-.TrelloCardDetailTitleSizer {
+.gpt-voiceCardDetailTitleSizer {
   flex: 1 1 auto;
   position: relative;
   display: flex;
@@ -884,8 +913,8 @@ button.TrelloSearchResult:hover {
   min-width: 0;
 }
 
-.TrelloCardDetailTitleInput,
-.TrelloCardDetailTitleMirror {
+.gpt-voiceCardDetailTitleInput,
+.gpt-voiceCardDetailTitleMirror {
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
@@ -901,35 +930,35 @@ button.TrelloSearchResult:hover {
   border-radius: 4px;
 }
 
-.TrelloCardDetailTitleInput {
+.gpt-voiceCardDetailTitleInput {
   position: absolute;
   inset: 0;
   height: 100%;
   contain: content;
   overflow: hidden;
-  color: var(--TrelloForegroundStrong);
+  color: var(--gpt-voiceForegroundStrong);
   resize: none;
   background: transparent;
 }
 
-.TrelloCardDetailTitleMirror {
+.gpt-voiceCardDetailTitleMirror {
   visibility: hidden;
   pointer-events: none;
 }
 
-.TrelloCardDetailTitleInput:hover {
-  background: var(--TrelloSurfaceAlt);
+.gpt-voiceCardDetailTitleInput:hover {
+  background: var(--gpt-voiceSurfaceAlt);
 }
 
-.TrelloCardDetailTitleInput:focus,
-.TrelloCardDetailTitleInputEditing {
-  background: var(--TrelloInputBackground);
-  border-color: var(--TrelloFocus);
+.gpt-voiceCardDetailTitleInput:focus,
+.gpt-voiceCardDetailTitleInputEditing {
+  background: var(--gpt-voiceInputBackground);
+  border-color: var(--gpt-voiceFocus);
   outline: none;
-  box-shadow: inset 0 0 0 1px var(--TrelloFocus);
+  box-shadow: inset 0 0 0 1px var(--gpt-voiceFocus);
 }
 
-.TrelloCardDetailCloseButton {
+.gpt-voiceCardDetailCloseButton {
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
@@ -941,69 +970,69 @@ button.TrelloSearchResult:hover {
   margin-left: auto;
   padding: 0;
   line-height: 1;
-  color: var(--TrelloForegroundMuted);
+  color: var(--gpt-voiceForegroundMuted);
   background: transparent;
   border-color: transparent;
 }
 
-.TrelloCardDetailCloseButton:hover,
-.TrelloCardDetailCloseButton:focus {
-  color: var(--TrelloForegroundStrong);
-  background: var(--TrelloHoverBackground);
+.gpt-voiceCardDetailCloseButton:hover,
+.gpt-voiceCardDetailCloseButton:focus {
+  color: var(--gpt-voiceForegroundStrong);
+  background: var(--gpt-voiceHoverBackground);
   outline: none;
 }
 
-.TrelloCardListSection {
+.gpt-voiceCardListSection {
   display: flex;
   flex-direction: column;
   gap: 5px;
   contain: content;
 }
 
-.TrelloCardListLabel {
+.gpt-voiceCardListLabel {
   contain: content;
   font-size: 12px;
   line-height: 1.3;
-  color: var(--TrelloForegroundMuted);
+  color: var(--gpt-voiceForegroundMuted);
 }
 
-.TrelloCardListSelect {
+.gpt-voiceCardListSelect {
   min-height: 30px;
   padding: 5px 8px;
 }
 
-.TrelloCardDescriptionSection,
-.TrelloCardDescriptionEditor {
+.gpt-voiceCardDescriptionSection,
+.gpt-voiceCardDescriptionEditor {
   display: flex;
   flex-direction: column;
   gap: 8px;
   contain: content;
 }
 
-.TrelloCardDescriptionHeader {
+.gpt-voiceCardDescriptionHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
   contain: content;
 }
 
-.TrelloCardDetailSectionTitle {
+.gpt-voiceCardDetailSectionTitle {
   margin: 0;
   contain: content;
   font-size: 13px;
   font-weight: 600;
   line-height: 1.3;
-  color: var(--TrelloForegroundStrong);
+  color: var(--gpt-voiceForegroundStrong);
 }
 
-.TrelloCardDescriptionEditButton {
+.gpt-voiceCardDescriptionEditButton {
   min-height: 24px;
   padding: 3px 8px;
   font-size: 12px;
   line-height: 16px;
 }
 
-.TrelloCardDescriptionPreview {
+.gpt-voiceCardDescriptionPreview {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -1012,58 +1041,58 @@ button.TrelloSearchResult:hover {
   contain: content;
   padding: 8px;
   text-align: left;
-  color: var(--TrelloForegroundStrong);
+  color: var(--gpt-voiceForegroundStrong);
   cursor: pointer;
-  background: var(--TrelloInputBackground);
+  background: var(--gpt-voiceInputBackground);
   border: 1px solid transparent;
   border-radius: 6px;
 }
 
-.TrelloCardDescriptionPreview:hover {
-  background: var(--TrelloSurfaceAlt);
-  border-color: var(--TrelloBorder);
+.gpt-voiceCardDescriptionPreview:hover {
+  background: var(--gpt-voiceSurfaceAlt);
+  border-color: var(--gpt-voiceBorder);
 }
 
-.TrelloCardDescriptionPlaceholder {
+.gpt-voiceCardDescriptionPlaceholder {
   align-items: center;
   justify-content: center;
-  color: var(--TrelloForegroundMuted);
+  color: var(--gpt-voiceForegroundMuted);
 }
 
-.TrelloCardDescriptionTextArea {
+.gpt-voiceCardDescriptionTextArea {
   min-height: 132px;
 }
 
-.TrelloCardDetailActions {
+.gpt-voiceCardDetailActions {
   display: flex;
   gap: 8px;
   align-items: center;
   contain: content;
 }
 
-.TrelloCardDetailSaveButton,
-.TrelloCardDetailCancelButton {
+.gpt-voiceCardDetailSaveButton,
+.gpt-voiceCardDetailCancelButton {
   min-width: 72px;
 }
 
-.TrelloCardDetailCancelButton {
-  color: var(--TrelloForegroundStrong);
+.gpt-voiceCardDetailCancelButton {
+  color: var(--gpt-voiceForegroundStrong);
   background: transparent;
   border-color: transparent;
 }
 
-.TrelloCardDetailCancelButton:hover {
-  background: var(--TrelloHoverBackground);
+.gpt-voiceCardDetailCancelButton:hover {
+  background: var(--gpt-voiceHoverBackground);
 }
 
-.TrelloMarkdownParagraph {
+.gpt-voiceMarkdownParagraph {
   margin: 0;
   contain: content;
   line-height: 1.5;
   overflow-wrap: anywhere;
 }
 
-.TrelloMarkdownHeading {
+.gpt-voiceMarkdownHeading {
   margin: 0;
   contain: content;
   font-weight: 600;
@@ -1071,19 +1100,19 @@ button.TrelloSearchResult:hover {
   overflow-wrap: anywhere;
 }
 
-.TrelloMarkdownHeading1,
-.TrelloMarkdownHeading2 {
+.gpt-voiceMarkdownHeading1,
+.gpt-voiceMarkdownHeading2 {
   font-size: 16px;
 }
 
-.TrelloMarkdownHeading3,
-.TrelloMarkdownHeading4,
-.TrelloMarkdownHeading5,
-.TrelloMarkdownHeading6 {
+.gpt-voiceMarkdownHeading3,
+.gpt-voiceMarkdownHeading4,
+.gpt-voiceMarkdownHeading5,
+.gpt-voiceMarkdownHeading6 {
   font-size: 14px;
 }
 
-.TrelloMarkdownList {
+.gpt-voiceMarkdownList {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -1094,46 +1123,46 @@ button.TrelloSearchResult:hover {
   list-style-type: disc;
 }
 
-.TrelloMarkdownListItem {
+.gpt-voiceMarkdownListItem {
   contain: content;
   line-height: 1.5;
   overflow-wrap: anywhere;
 }
 
-.TrelloMarkdownCode {
+.gpt-voiceMarkdownCode {
   padding: 1px 4px;
   font-family: var(--EditorFontFamily, monospace);
   font-size: 0.92em;
-  color: var(--TrelloForegroundStrong);
-  background: var(--TrelloInputBackground);
+  color: var(--gpt-voiceForegroundStrong);
+  background: var(--gpt-voiceInputBackground);
   border-radius: 4px;
 }
 
-.TrelloMarkdownLink {
-  color: var(--TrelloLinkForeground);
+.gpt-voiceMarkdownLink {
+  color: var(--gpt-voiceLinkForeground);
   text-decoration: none;
   overflow-wrap: anywhere;
 }
 
-.TrelloMarkdownLink:hover {
+.gpt-voiceMarkdownLink:hover {
   text-decoration: underline;
 }
 
-.TrelloCardLabelSection {
+.gpt-voiceCardLabelSection {
   display: flex;
   flex-direction: column;
   gap: 8px;
   contain: content;
 }
 
-.TrelloCardLabelRow {
+.gpt-voiceCardLabelRow {
   display: flex;
   gap: 6px;
   align-items: flex-start;
   contain: content;
 }
 
-.TrelloCardLabels {
+.gpt-voiceCardLabels {
   display: flex;
   flex: 1 1 auto;
   flex-wrap: wrap;
@@ -1142,7 +1171,7 @@ button.TrelloSearchResult:hover {
   contain: content;
 }
 
-.TrelloCardLabel {
+.gpt-voiceCardLabel {
   box-sizing: border-box;
   max-width: 100%;
   padding: 3px 8px;
@@ -1156,20 +1185,20 @@ button.TrelloSearchResult:hover {
   border-radius: 4px;
 }
 
-.TrelloCardLabelButton {
+.gpt-voiceCardLabelButton {
   border: 0;
 }
 
-.TrelloCardLabelButton:hover {
+.gpt-voiceCardLabelButton:hover {
   filter: brightness(1.08);
 }
 
-.TrelloCardPreviewLabels {
+.gpt-voiceCardPreviewLabels {
   flex: 0 0 auto;
   gap: 4px;
 }
 
-.TrelloCardPreviewLabel {
+.gpt-voiceCardPreviewLabel {
   flex: 0 0 40px;
   width: 40px;
   height: 8px;
@@ -1181,11 +1210,11 @@ button.TrelloSearchResult:hover {
   border-radius: 999px;
 }
 
-.TrelloCardLabelAddButton {
+.gpt-voiceCardLabelAddButton {
   align-self: flex-start;
 }
 
-.TrelloCardLabelAddIconButton {
+.gpt-voiceCardLabelAddIconButton {
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
@@ -1199,18 +1228,18 @@ button.TrelloSearchResult:hover {
   line-height: 1;
 }
 
-.TrelloCardLabelPicker {
+.gpt-voiceCardLabelPicker {
   display: flex;
   flex-direction: column;
   gap: 8px;
   contain: content;
   padding: 8px;
-  background: var(--TrelloSurfaceAlt);
-  border: 1px solid var(--TrelloBorder);
+  background: var(--gpt-voiceSurfaceAlt);
+  border: 1px solid var(--gpt-voiceBorder);
   border-radius: 6px;
 }
 
-.TrelloCardLabelPickerHeader {
+.gpt-voiceCardLabelPickerHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1218,15 +1247,15 @@ button.TrelloSearchResult:hover {
   contain: content;
 }
 
-.TrelloCardLabelPickerTitle {
+.gpt-voiceCardLabelPickerTitle {
   contain: content;
   font-size: 12px;
   font-weight: 600;
   line-height: 18px;
-  color: var(--TrelloForeground);
+  color: var(--gpt-voiceForeground);
 }
 
-.TrelloCardLabelPickerCloseButton {
+.gpt-voiceCardLabelPickerCloseButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1239,7 +1268,7 @@ button.TrelloSearchResult:hover {
   line-height: 1;
 }
 
-.TrelloCardLabelPickerBackButton {
+.gpt-voiceCardLabelPickerBackButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1252,22 +1281,22 @@ button.TrelloSearchResult:hover {
   line-height: 1;
 }
 
-.TrelloCardLabelSearchInput {
+.gpt-voiceCardLabelSearchInput {
   width: 100%;
 }
 
-.TrelloCardLabelCreateButton {
+.gpt-voiceCardLabelCreateButton {
   width: 100%;
 }
 
-.TrelloCardLabelCreate {
+.gpt-voiceCardLabelCreate {
   display: flex;
   flex-direction: column;
   gap: 12px;
   contain: content;
 }
 
-.TrelloCardLabelCreatePreview {
+.gpt-voiceCardLabelCreatePreview {
   box-sizing: border-box;
   min-height: 32px;
   contain: content;
@@ -1282,29 +1311,29 @@ button.TrelloSearchResult:hover {
   border-radius: 4px;
 }
 
-.TrelloCardLabelCreateFields {
+.gpt-voiceCardLabelCreateFields {
   display: flex;
   flex-direction: column;
   gap: 8px;
   contain: content;
 }
 
-.TrelloCardLabelCreateFields label {
+.gpt-voiceCardLabelCreateFields label {
   contain: content;
   font-size: 12px;
   font-weight: 600;
   line-height: 18px;
-  color: var(--TrelloForeground);
+  color: var(--gpt-voiceForeground);
 }
 
-.TrelloCardLabelColorGrid {
+.gpt-voiceCardLabelColorGrid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 8px;
   contain: content;
 }
 
-.TrelloCardLabelColorChoice {
+.gpt-voiceCardLabelColorChoice {
   box-sizing: border-box;
   height: 32px;
   min-height: 32px;
@@ -1313,23 +1342,23 @@ button.TrelloSearchResult:hover {
   border-radius: 4px;
 }
 
-.TrelloCardLabelColorChoice:hover {
+.gpt-voiceCardLabelColorChoice:hover {
   filter: brightness(1.08);
 }
 
-.TrelloCardLabelColorChoiceSelected {
-  border-color: var(--TrelloForeground);
-  box-shadow: inset 0 0 0 1px var(--TrelloSurfaceAlt);
+.gpt-voiceCardLabelColorChoiceSelected {
+  border-color: var(--gpt-voiceForeground);
+  box-shadow: inset 0 0 0 1px var(--gpt-voiceSurfaceAlt);
 }
 
-.TrelloCardLabelPickerList {
+.gpt-voiceCardLabelPickerList {
   display: flex;
   flex-direction: column;
   gap: 6px;
   contain: content;
 }
 
-.TrelloCardLabelChoice {
+.gpt-voiceCardLabelChoice {
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -1342,7 +1371,7 @@ button.TrelloSearchResult:hover {
   font-size: 12px;
   font-weight: 500;
   line-height: 18px;
-  color: var(--TrelloForeground);
+  color: var(--gpt-voiceForeground);
   text-align: left;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1351,14 +1380,14 @@ button.TrelloSearchResult:hover {
   border-radius: 4px;
 }
 
-.TrelloCardLabelChoiceCheckbox {
+.gpt-voiceCardLabelChoiceCheckbox {
   flex: 0 0 auto;
   width: 14px;
   height: 14px;
   margin: 0;
 }
 
-.TrelloCardLabelChoiceText {
+.gpt-voiceCardLabelChoiceText {
   box-sizing: border-box;
   flex: 1 1 auto;
   min-width: 0;
@@ -1371,171 +1400,171 @@ button.TrelloSearchResult:hover {
   border-radius: 4px;
 }
 
-.TrelloCardLabelChoice:disabled {
+.gpt-voiceCardLabelChoice:disabled {
   cursor: default;
   opacity: 0.65;
 }
 
-.TrelloCardLabelPickerEmpty {
+.gpt-voiceCardLabelPickerEmpty {
   contain: content;
   padding: 4px 0;
-  color: var(--TrelloForegroundMuted);
+  color: var(--gpt-voiceForegroundMuted);
   font-size: 12px;
   line-height: 1.4;
 }
 
-.TrelloCardLabelColorGreen {
+.gpt-voiceCardLabelColorGreen {
   background: #1f845a;
 }
 
-.TrelloCardLabelColorGreenDark {
+.gpt-voiceCardLabelColorGreenDark {
   background: #216e4e;
 }
 
-.TrelloCardLabelColorGreenLight {
+.gpt-voiceCardLabelColorGreenLight {
   color: #172b4d;
   background: #baf3db;
 }
 
-.TrelloCardLabelColorYellow {
+.gpt-voiceCardLabelColorYellow {
   color: #172b4d;
   background: #f5cd47;
 }
 
-.TrelloCardLabelColorYellowDark {
+.gpt-voiceCardLabelColorYellowDark {
   background: #7f5f01;
 }
 
-.TrelloCardLabelColorYellowLight {
+.gpt-voiceCardLabelColorYellowLight {
   color: #172b4d;
   background: #f8e6a0;
 }
 
-.TrelloCardLabelColorOrange {
+.gpt-voiceCardLabelColorOrange {
   background: #c25100;
 }
 
-.TrelloCardLabelColorOrangeDark {
+.gpt-voiceCardLabelColorOrangeDark {
   background: #974f0c;
 }
 
-.TrelloCardLabelColorOrangeLight {
+.gpt-voiceCardLabelColorOrangeLight {
   color: #172b4d;
   background: #fedec8;
 }
 
-.TrelloCardLabelColorRed {
+.gpt-voiceCardLabelColorRed {
   background: #c9372c;
 }
 
-.TrelloCardLabelColorRedDark {
+.gpt-voiceCardLabelColorRedDark {
   background: #ae2e24;
 }
 
-.TrelloCardLabelColorRedLight {
+.gpt-voiceCardLabelColorRedLight {
   color: #172b4d;
   background: #ffd5d2;
 }
 
-.TrelloCardLabelColorPurple {
+.gpt-voiceCardLabelColorPurple {
   background: #6e5dc6;
 }
 
-.TrelloCardLabelColorPurpleDark {
+.gpt-voiceCardLabelColorPurpleDark {
   background: #5e4db2;
 }
 
-.TrelloCardLabelColorPurpleLight {
+.gpt-voiceCardLabelColorPurpleLight {
   color: #172b4d;
   background: #dfd8fd;
 }
 
-.TrelloCardLabelColorBlue {
+.gpt-voiceCardLabelColorBlue {
   background: #0c66e4;
 }
 
-.TrelloCardLabelColorBlueDark {
+.gpt-voiceCardLabelColorBlueDark {
   background: #0055cc;
 }
 
-.TrelloCardLabelColorBlueLight {
+.gpt-voiceCardLabelColorBlueLight {
   color: #172b4d;
   background: #cce0ff;
 }
 
-.TrelloCardLabelColorSky {
+.gpt-voiceCardLabelColorSky {
   color: #172b4d;
   background: #6cc3e0;
 }
 
-.TrelloCardLabelColorSkyDark {
+.gpt-voiceCardLabelColorSkyDark {
   background: #206a83;
 }
 
-.TrelloCardLabelColorSkyLight {
+.gpt-voiceCardLabelColorSkyLight {
   color: #172b4d;
   background: #c6edfb;
 }
 
-.TrelloCardLabelColorLime {
+.gpt-voiceCardLabelColorLime {
   color: #172b4d;
   background: #94c748;
 }
 
-.TrelloCardLabelColorLimeDark {
+.gpt-voiceCardLabelColorLimeDark {
   background: #5b7f24;
 }
 
-.TrelloCardLabelColorLimeLight {
+.gpt-voiceCardLabelColorLimeLight {
   color: #172b4d;
   background: #d3f1a7;
 }
 
-.TrelloCardLabelColorPink {
+.gpt-voiceCardLabelColorPink {
   background: #ae4787;
 }
 
-.TrelloCardLabelColorPinkDark {
+.gpt-voiceCardLabelColorPinkDark {
   background: #943d73;
 }
 
-.TrelloCardLabelColorPinkLight {
+.gpt-voiceCardLabelColorPinkLight {
   color: #172b4d;
   background: #fdd0ec;
 }
 
-.TrelloCardLabelColorBlack {
+.gpt-voiceCardLabelColorBlack {
   background: #626f86;
 }
 
-.TrelloCardLabelColorBlackDark {
+.gpt-voiceCardLabelColorBlackDark {
   background: #44546f;
 }
 
-.TrelloCardLabelColorBlackLight {
+.gpt-voiceCardLabelColorBlackLight {
   color: #172b4d;
   background: #dcdfe4;
 }
 
-.TrelloCardLabelColorNeutral {
-  background: var(--TrelloButtonBackground);
+.gpt-voiceCardLabelColorNeutral {
+  background: var(--gpt-voiceButtonBackground);
 }
 
-.TrelloCardComments {
+.gpt-voiceCardComments {
   display: flex;
   flex-direction: column;
   gap: 10px;
   contain: content;
 }
 
-.TrelloCardComment {
+.gpt-voiceCardComment {
   display: flex;
   gap: 8px;
   align-items: flex-start;
   contain: content;
 }
 
-.TrelloCardCommentAvatar {
+.gpt-voiceCardCommentAvatar {
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -1548,15 +1577,15 @@ button.TrelloSearchResult:hover {
   font-size: 12px;
   font-weight: 700;
   line-height: 1;
-  color: var(--TrelloButtonForeground);
+  color: var(--gpt-voiceButtonForeground);
   text-transform: uppercase;
-  background: var(--TrelloButtonBackground);
-  border: 1px solid var(--TrelloBorder);
+  background: var(--gpt-voiceButtonBackground);
+  border: 1px solid var(--gpt-voiceBorder);
   border-radius: 50%;
   object-fit: cover;
 }
 
-.TrelloCardCommentContent {
+.gpt-voiceCardCommentContent {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -1564,7 +1593,7 @@ button.TrelloSearchResult:hover {
   contain: content;
 }
 
-.TrelloCardCommentHeader {
+.gpt-voiceCardCommentHeader {
   display: flex;
   flex-wrap: wrap;
   gap: 4px 8px;
@@ -1573,100 +1602,100 @@ button.TrelloSearchResult:hover {
   min-width: 0;
 }
 
-.TrelloCardCommentAuthor {
+.gpt-voiceCardCommentAuthor {
   contain: content;
   overflow: hidden;
   font-size: 12px;
   font-weight: 600;
   line-height: 1.4;
-  color: var(--TrelloForegroundStrong);
+  color: var(--gpt-voiceForegroundStrong);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.TrelloCardCommentDate {
+.gpt-voiceCardCommentDate {
   contain: content;
   overflow: hidden;
   font-size: 11px;
   line-height: 1.4;
-  color: var(--TrelloForegroundMuted);
+  color: var(--gpt-voiceForegroundMuted);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.TrelloCardCommentText {
+.gpt-voiceCardCommentText {
   box-sizing: border-box;
   contain: content;
   padding: 8px;
   white-space: pre-wrap;
   line-height: 1.5;
-  color: var(--TrelloForegroundStrong);
+  color: var(--gpt-voiceForegroundStrong);
   overflow-wrap: anywhere;
-  background: var(--TrelloSurfaceAlt);
-  border: 1px solid var(--TrelloBorder);
+  background: var(--gpt-voiceSurfaceAlt);
+  border: 1px solid var(--gpt-voiceBorder);
   border-radius: 6px;
-  box-shadow: 0 1px 2px var(--TrelloShadow);
+  box-shadow: 0 1px 2px var(--gpt-voiceShadow);
 }
 
-.TrelloCardCommentWriteButton {
+.gpt-voiceCardCommentWriteButton {
   width: 100%;
   min-height: 34px;
   text-align: left;
 }
 
-.TrelloCardCommentComposer {
+.gpt-voiceCardCommentComposer {
   display: flex;
   flex-direction: column;
   gap: 8px;
   contain: content;
 }
 
-.TrelloCardCommentTextArea {
+.gpt-voiceCardCommentTextArea {
   min-height: 82px;
 }
 
-.TrelloCardCommentActions {
+.gpt-voiceCardCommentActions {
   display: flex;
   gap: 8px;
   align-items: center;
   contain: content;
 }
 
-.TrelloCardCommentSaveButton,
-.TrelloCardCommentCancelButton {
+.gpt-voiceCardCommentSaveButton,
+.gpt-voiceCardCommentCancelButton {
   min-width: 72px;
 }
 
-.TrelloCardCommentCancelButton {
-  color: var(--TrelloForegroundStrong);
+.gpt-voiceCardCommentCancelButton {
+  color: var(--gpt-voiceForegroundStrong);
   background: transparent;
   border-color: transparent;
 }
 
-.TrelloCardCommentCancelButton:hover {
-  background: var(--TrelloHoverBackground);
+.gpt-voiceCardCommentCancelButton:hover {
+  background: var(--gpt-voiceHoverBackground);
 }
 
-.TrelloCardDetailImages {
+.gpt-voiceCardDetailImages {
   display: flex;
   flex-direction: column;
   gap: 8px;
   contain: content;
 }
 
-.TrelloCardDetailImage {
+.gpt-voiceCardDetailImage {
   box-sizing: border-box;
   display: block;
   width: 100%;
   max-height: 220px;
   contain: content;
   object-fit: contain;
-  background: var(--TrelloSurfaceAlt);
-  border: 1px solid var(--TrelloBorder);
+  background: var(--gpt-voiceSurfaceAlt);
+  border: 1px solid var(--gpt-voiceBorder);
   border-radius: 6px;
 }
 
-.TrelloCardDetailImageError {
+.gpt-voiceCardDetailImageError {
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -1674,27 +1703,27 @@ button.TrelloSearchResult:hover {
   min-height: 104px;
   padding: 20px;
   contain: content;
-  color: var(--TrelloForegroundMuted);
+  color: var(--gpt-voiceForegroundMuted);
   text-align: center;
-  background: var(--TrelloSurfaceAlt);
-  border: 1px dashed var(--TrelloBorder);
+  background: var(--gpt-voiceSurfaceAlt);
+  border: 1px dashed var(--gpt-voiceBorder);
   border-radius: 6px;
 }
 
-.TrelloCardDetailEmpty {
+.gpt-voiceCardDetailEmpty {
   contain: content;
-  color: var(--TrelloForegroundMuted);
+  color: var(--gpt-voiceForegroundMuted);
 }
 
-.TrelloCardDetailLink {
+.gpt-voiceCardDetailLink {
   contain: content;
-  color: var(--TrelloLinkForeground);
+  color: var(--gpt-voiceLinkForeground);
 }
 
-.TrelloError {
+.gpt-voiceError {
   contain: content;
   padding: 8px;
-  color: var(--TrelloErrorForeground);
-  background: var(--TrelloErrorBackground);
+  color: var(--gpt-voiceErrorForeground);
+  background: var(--gpt-voiceErrorBackground);
   border-radius: 6px;
 }

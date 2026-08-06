@@ -1,18 +1,18 @@
-import type { TrelloAttachment } from '../TrelloTypes/TrelloTypes.ts'
+import type { gpt-voiceAttachment } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 import type {
-  TrelloViewActionContext,
-  TrelloViewState,
-} from '../TrelloViewState/TrelloViewState.ts'
+  gpt-voiceViewActionContext,
+  gpt-voiceViewState,
+} from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import { getErrorMessage } from '../GetErrorMessage/GetErrorMessage.ts'
 import { resolveCardAttachmentImages } from '../OpenCard/OpenCard.ts'
 
 interface UploadResult {
-  readonly attachment?: TrelloAttachment
+  readonly attachment?: gpt-voiceAttachment
   readonly error?: unknown
 }
 
 const uploadFile = async (
-  context: TrelloViewActionContext,
+  context: gpt-voiceViewActionContext,
   file: File,
 ): Promise<UploadResult> => {
   const { client, state } = context
@@ -33,10 +33,10 @@ const uploadFile = async (
 }
 
 export const uploadCardAttachments = async (
-  context: TrelloViewActionContext,
+  context: gpt-voiceViewActionContext,
   fileList: FileList | undefined,
 ): Promise<void> => {
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   const { credentials, selectedCardDetail } = state
   const files = fileList ? [...fileList] : []
   state.cardAttachmentDropActive = false

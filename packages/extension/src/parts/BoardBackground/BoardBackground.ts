@@ -1,9 +1,9 @@
 // cspell:ignore prefs
 
 import type {
-  TrelloBoard,
-  TrelloBoardBackgroundImage,
-} from '../TrelloTypes/TrelloTypes.ts'
+  gpt-voiceBoard,
+  gpt-voiceBoardBackgroundImage,
+} from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 
 const hexColorPattern = /^#[\da-f]{3}(?:[\da-f]{3})?(?:[\da-f]{2})?$/i
 
@@ -16,12 +16,12 @@ const escapeCssString = (value: string): string => {
     .replaceAll('\f', '\\c ')
 }
 
-const getImageSize = (image: Readonly<TrelloBoardBackgroundImage>): number => {
+const getImageSize = (image: Readonly<gpt-voiceBoardBackgroundImage>): number => {
   return (image.width || 0) * (image.height || 0)
 }
 
 const getLargestBackgroundImage = (
-  images: readonly TrelloBoardBackgroundImage[] | undefined,
+  images: readonly gpt-voiceBoardBackgroundImage[] | undefined,
 ): string => {
   if (!images || images.length === 0) {
     return ''
@@ -35,7 +35,7 @@ const getLargestBackgroundImage = (
   return largest.url || ''
 }
 
-const getBackgroundImage = (board: Readonly<TrelloBoard>): string => {
+const getBackgroundImage = (board: Readonly<gpt-voiceBoard>): string => {
   return (
     getLargestBackgroundImage(board.prefs?.backgroundImageScaled) ||
     board.prefs?.backgroundImage ||
@@ -43,7 +43,7 @@ const getBackgroundImage = (board: Readonly<TrelloBoard>): string => {
   )
 }
 
-const getBackgroundColor = (board: Readonly<TrelloBoard>): string => {
+const getBackgroundColor = (board: Readonly<gpt-voiceBoard>): string => {
   const color =
     board.prefs?.backgroundBottomColor ||
     board.prefs?.backgroundTopColor ||
@@ -55,22 +55,22 @@ const getBackgroundColor = (board: Readonly<TrelloBoard>): string => {
   return color
 }
 
-const hasBoardBackground = (board: Readonly<TrelloBoard>): boolean => {
+const hasBoardBackground = (board: Readonly<gpt-voiceBoard>): boolean => {
   return Boolean(getBackgroundImage(board) || getBackgroundColor(board))
 }
 
 export const getBoardBackgroundClassName = (
-  board: Readonly<TrelloBoard>,
+  board: Readonly<gpt-voiceBoard>,
   enabled: boolean,
 ): string => {
   if (!enabled || !hasBoardBackground(board)) {
-    return 'TrelloView TrelloBoardDetail'
+    return 'gpt-voiceView gpt-voiceBoardDetail'
   }
-  return 'TrelloView TrelloBoardDetail TrelloBoardDetailWithBackground'
+  return 'gpt-voiceView gpt-voiceBoardDetail gpt-voiceBoardDetailWithBackground'
 }
 
 export const getBoardBackgroundCss = (
-  board: Readonly<TrelloBoard>,
+  board: Readonly<gpt-voiceBoard>,
   enabled: boolean,
 ): string => {
   if (!enabled) {
@@ -81,26 +81,26 @@ export const getBoardBackgroundCss = (
   const color = getBackgroundColor(board)
   if (image) {
     properties.push(
-      `--TrelloBoardBackgroundImage: url("${escapeCssString(image)}")`,
+      `--gpt-voiceBoardBackgroundImage: url("${escapeCssString(image)}")`,
     )
     properties.push(
-      `--TrelloBoardBackgroundRepeat: ${
+      `--gpt-voiceBoardBackgroundRepeat: ${
         board.prefs?.backgroundTile ? 'repeat' : 'no-repeat'
       }`,
     )
     properties.push(
-      `--TrelloBoardBackgroundSize: ${
+      `--gpt-voiceBoardBackgroundSize: ${
         board.prefs?.backgroundTile ? 'auto' : 'cover'
       }`,
     )
   }
   if (color) {
-    properties.push(`--TrelloBoardBackgroundColor: ${color}`)
+    properties.push(`--gpt-voiceBoardBackgroundColor: ${color}`)
   }
   if (properties.length === 0) {
     return ''
   }
-  return `.TrelloBoardDetailWithBackground {
+  return `.gpt-voiceBoardDetailWithBackground {
   ${properties.join(';\n  ')};
 }`
 }

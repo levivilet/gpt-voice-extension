@@ -5,20 +5,20 @@ import {
 } from '@lvce-editor/virtual-dom-worker'
 import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import * as MergeClassNames from '../MergeClassNames/MergeClassNames.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 
 export const renderCardLabelCreateHeader = (): readonly VirtualDomNode[] => {
   return [
     {
       childCount: 3,
-      className: 'TrelloCardLabelPickerHeader',
+      className: 'gpt-voiceCardLabelPickerHeader',
       type: VirtualDomElements.Div,
     },
     {
       childCount: 1,
       className: MergeClassNames.mergeClassNames(
-        'TrelloButton',
-        'TrelloCardLabelPickerBackButton',
+        'gpt-voiceButton',
+        'gpt-voiceCardLabelPickerBackButton',
       ),
       name: 'closeCardLabelCreate',
       onClick: DomEventListenerFunctions.HandleClick,
@@ -27,15 +27,15 @@ export const renderCardLabelCreateHeader = (): readonly VirtualDomNode[] => {
     text('<'),
     {
       childCount: 1,
-      className: 'TrelloCardLabelPickerTitle',
+      className: 'gpt-voiceCardLabelPickerTitle',
       type: VirtualDomElements.Div,
     },
-    text(TrelloStrings.createLabel()),
+    text(gpt-voiceStrings.createLabel()),
     {
       childCount: 1,
       className: MergeClassNames.mergeClassNames(
-        'TrelloButton',
-        'TrelloCardLabelPickerCloseButton',
+        'gpt-voiceButton',
+        'gpt-voiceCardLabelPickerCloseButton',
       ),
       name: 'closeCardLabelPicker',
       onClick: DomEventListenerFunctions.HandleClick,

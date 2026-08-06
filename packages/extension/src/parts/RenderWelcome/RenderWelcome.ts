@@ -3,14 +3,14 @@ import {
   VirtualDomElements,
   type VirtualDomNode,
 } from '@lvce-editor/virtual-dom-worker'
-import { trelloPowerUpsUrl } from '../Constants/Constants.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import { gpt-voicePowerUpsUrl } from '../Constants/Constants.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 
 const renderWelcomeText = (value: string): readonly VirtualDomNode[] => {
   return [
     {
       childCount: 1,
-      className: 'TrelloWelcomeText',
+      className: 'gpt-voiceWelcomeText',
       type: VirtualDomElements.Div,
     },
     text(value),
@@ -21,7 +21,7 @@ const renderWelcomeNote = (value: string): readonly VirtualDomNode[] => {
   return [
     {
       childCount: 1,
-      className: 'TrelloWelcomeNote',
+      className: 'gpt-voiceWelcomeNote',
       type: VirtualDomElements.Div,
     },
     text(value),
@@ -32,13 +32,13 @@ const renderWelcomeLink = (): readonly VirtualDomNode[] => {
   return [
     {
       childCount: 1,
-      className: 'TrelloWelcomeLink',
-      href: trelloPowerUpsUrl,
+      className: 'gpt-voiceWelcomeLink',
+      href: gpt-voicePowerUpsUrl,
       rel: 'noopener noreferrer',
       target: '_blank',
       type: VirtualDomElements.A,
     },
-    text(trelloPowerUpsUrl),
+    text(gpt-voicePowerUpsUrl),
   ]
 }
 
@@ -50,18 +50,18 @@ const renderWelcomeStep = (
   return [
     {
       childCount: 2,
-      className: 'TrelloWelcomeStep',
+      className: 'gpt-voiceWelcomeStep',
       type: VirtualDomElements.Li,
     },
     {
       childCount: 1,
-      className: 'TrelloWelcomeStepNumber',
+      className: 'gpt-voiceWelcomeStepNumber',
       type: VirtualDomElements.Span,
     },
     text(number),
     {
       childCount,
-      className: 'TrelloWelcomeStepText',
+      className: 'gpt-voiceWelcomeStepText',
       type: VirtualDomElements.Span,
     },
     ...children,
@@ -72,16 +72,16 @@ const renderWelcomeSteps = (): readonly VirtualDomNode[] => {
   return [
     {
       childCount: 3,
-      className: 'TrelloWelcomeSteps',
+      className: 'gpt-voiceWelcomeSteps',
       type: VirtualDomElements.Ol,
     },
     ...renderWelcomeStep(
       '1',
-      [text(TrelloStrings.welcomePowerUp()), ...renderWelcomeLink(), text('.')],
+      [text(gpt-voiceStrings.welcomePowerUp()), ...renderWelcomeLink(), text('.')],
       3,
     ),
-    ...renderWelcomeStep('2', [text(TrelloStrings.welcomeApiKey())], 1),
-    ...renderWelcomeStep('3', [text(TrelloStrings.welcomeToken())], 1),
+    ...renderWelcomeStep('2', [text(gpt-voiceStrings.welcomeApiKey())], 1),
+    ...renderWelcomeStep('3', [text(gpt-voiceStrings.welcomeToken())], 1),
   ]
 }
 
@@ -89,17 +89,17 @@ export const renderWelcome = (): readonly VirtualDomNode[] => {
   return [
     {
       childCount: 4,
-      className: 'TrelloWelcome',
+      className: 'gpt-voiceWelcome',
       type: VirtualDomElements.Div,
     },
     {
       childCount: 1,
-      className: 'TrelloWelcomeTitle',
+      className: 'gpt-voiceWelcomeTitle',
       type: VirtualDomElements.H3,
     },
-    text(TrelloStrings.welcome()),
-    ...renderWelcomeText(TrelloStrings.welcomeDescription()),
+    text(gpt-voiceStrings.welcome()),
+    ...renderWelcomeText(gpt-voiceStrings.welcomeDescription()),
     ...renderWelcomeSteps(),
-    ...renderWelcomeNote(TrelloStrings.welcomeSecurity()),
+    ...renderWelcomeNote(gpt-voiceStrings.welcomeSecurity()),
   ]
 }

@@ -1,7 +1,7 @@
-import type { TrelloLabel } from '../TrelloTypes/TrelloTypes.ts'
+import type { gpt-voiceLabel } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 
 export const hasCardLabel = (
-  labels: readonly TrelloLabel[] | undefined,
+  labels: readonly gpt-voiceLabel[] | undefined,
   labelId: string,
 ): boolean => {
   return Boolean(

@@ -23,12 +23,12 @@ fs.copyFileSync(
   join(root, 'dist', 'extension.json'),
 )
 fs.copyFileSync(
-  join(media, 'trello.css'),
-  join(root, 'dist', 'media', 'trello.css'),
+  join(media, 'gpt-voice.css'),
+  join(root, 'dist', 'media', 'gpt-voice.css'),
 )
 fs.copyFileSync(
-  join(media, 'trello.svg'),
-  join(root, 'dist', 'media', 'trello.svg'),
+  join(media, 'gpt-voice.svg'),
+  join(root, 'dist', 'media', 'gpt-voice.svg'),
 )
 fs.copyFileSync(
   join(media, 'comments.svg'),
@@ -36,7 +36,7 @@ fs.copyFileSync(
 )
 
 const bundle = await rollup({
-  input: join(extension, 'src', 'trelloMain.ts'),
+  input: join(extension, 'src', 'gpt-voiceMain.ts'),
   external: ['electron', 'node:*'],
   plugins: [
     nodeResolve({
@@ -53,7 +53,7 @@ const bundle = await rollup({
 })
 
 await bundle.write({
-  file: join(root, 'dist', 'dist', 'trelloMain.js'),
+  file: join(root, 'dist', 'dist', 'gpt-voiceMain.js'),
   format: 'esm',
 })
 

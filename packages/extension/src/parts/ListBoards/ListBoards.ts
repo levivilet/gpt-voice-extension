@@ -1,11 +1,11 @@
 // cspell:ignore prefs
 
-import type { TrelloApiCache } from '../TrelloApiCache/TrelloApiCache.ts'
-import type { FetchLike } from '../TrelloClientTypes/TrelloClientTypes.ts'
+import type { gpt-voiceApiCache } from '../gpt-voiceApiCache/gpt-voiceApiCache.ts'
+import type { FetchLike } from '../gpt-voiceClientTypes/gpt-voiceClientTypes.ts'
 import type {
-  TrelloBoard,
-  TrelloCredentials,
-} from '../TrelloTypes/TrelloTypes.ts'
+  gpt-voiceBoard,
+  gpt-voiceCredentials,
+} from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 import { readCachedJson, requestJson } from '../RequestJson/RequestJson.ts'
 
 const listBoardsParams = {
@@ -15,10 +15,10 @@ const listBoardsParams = {
 } as const
 
 export const readCachedListBoards = (
-  cache: TrelloApiCache | undefined,
-  credentials: TrelloCredentials,
-): Promise<readonly TrelloBoard[] | undefined> => {
-  return readCachedJson<readonly TrelloBoard[]>(
+  cache: gpt-voiceApiCache | undefined,
+  credentials: gpt-voiceCredentials,
+): Promise<readonly gpt-voiceBoard[] | undefined> => {
+  return readCachedJson<readonly gpt-voiceBoard[]>(
     cache,
     '/members/me/boards',
     credentials,
@@ -28,10 +28,10 @@ export const readCachedListBoards = (
 
 export const listBoards = (
   fetchLike: FetchLike,
-  credentials: TrelloCredentials,
-  cache?: TrelloApiCache,
-): Promise<readonly TrelloBoard[]> => {
-  return requestJson<readonly TrelloBoard[]>(
+  credentials: gpt-voiceCredentials,
+  cache?: gpt-voiceApiCache,
+): Promise<readonly gpt-voiceBoard[]> => {
+  return requestJson<readonly gpt-voiceBoard[]>(
     fetchLike,
     '/members/me/boards',
     credentials,

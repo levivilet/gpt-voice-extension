@@ -1,17 +1,17 @@
 import type { ViewEvent } from '@lvce-editor/api'
 import { expect, test } from '@jest/globals'
-import type { TrelloClient } from '../src/parts/TrelloClient/TrelloClient.ts'
+import type { gpt-voiceClient } from '../src/parts/gpt-voiceClient/gpt-voiceClient.ts'
 import type {
-  TrelloBoard,
-  TrelloBoardDetail,
-  TrelloCard,
-  TrelloCredentials,
-  TrelloList,
-} from '../src/parts/TrelloTypes/TrelloTypes.ts'
+  gpt-voiceBoard,
+  gpt-voiceBoardDetail,
+  gpt-voiceCard,
+  gpt-voiceCredentials,
+  gpt-voiceList,
+} from '../src/parts/gpt-voiceTypes/gpt-voiceTypes.ts'
 import type {
-  TrelloViewActionContext,
-  TrelloViewState,
-} from '../src/parts/TrelloViewState/TrelloViewState.ts'
+  gpt-voiceViewActionContext,
+  gpt-voiceViewState,
+} from '../src/parts/gpt-voiceViewState/gpt-voiceViewState.ts'
 import { submitAddCard } from '../src/parts/AddCard/AddCard.ts'
 import {
   startWriteComment,
@@ -43,7 +43,7 @@ import { handleImageErrorEvent } from '../src/parts/HandleImageErrorEvent/Handle
 import { handleInputEvent } from '../src/parts/HandleInputEvent/HandleInputEvent.ts'
 import { handleKeyDownEvent } from '../src/parts/HandleKeyDownEvent/HandleKeyDownEvent.ts'
 import { loadBoards } from '../src/parts/LoadBoards/LoadBoards.ts'
-import { createMockTrelloClient } from '../src/parts/MockTrelloClient/MockTrelloClient.ts'
+import { createMockgpt-voiceClient } from '../src/parts/Mockgpt-voiceClient/Mockgpt-voiceClient.ts'
 import { createMemoryRecentBoardStorage } from '../src/parts/RecentBoardStorage/RecentBoardStorage.ts'
 import {
   resizeCardDetail,
@@ -54,42 +54,42 @@ import { restoreCurrentBoard } from '../src/parts/RestoreCurrentBoard/RestoreCur
 import { updateBoardDetailCard } from '../src/parts/UpdateBoardDetailCard/UpdateBoardDetailCard.ts'
 import { updateBoardDetailList } from '../src/parts/UpdateBoardDetailList/UpdateBoardDetailList.ts'
 
-const credentials: TrelloCredentials = {
+const credentials: gpt-voiceCredentials = {
   apiKey: 'abcdefghijklmnopqrstuvwxyz123456',
   token: 'abcdefghijklmnopqrstuvwxyz123456abcdefghijklmnopqrstuvwxyz123456',
 }
 
-const board: TrelloBoard = {
+const board: gpt-voiceBoard = {
   id: 'board-1',
   name: 'Roadmap',
 }
 
-const card: TrelloCard = {
+const card: gpt-voiceCard = {
   id: 'card-1',
   idList: 'list-1',
   name: 'Ship tests',
 }
 
-const list: TrelloList = {
+const list: gpt-voiceList = {
   cards: [card],
   id: 'list-1',
   name: 'Todo',
 }
 
-const boardDetail: TrelloBoardDetail = {
+const boardDetail: gpt-voiceBoardDetail = {
   board,
   lists: [list],
 }
 
 interface TestContext {
-  readonly context: TrelloViewActionContext
+  readonly context: gpt-voiceViewActionContext
   readonly getRerenderCount: () => number
-  readonly state: TrelloViewState
+  readonly state: gpt-voiceViewState
 }
 
 const createContext = (
-  overrides: Readonly<Partial<TrelloViewState>> = {},
-  client: TrelloClient = createMockTrelloClient({
+  overrides: Readonly<Partial<gpt-voiceViewState>> = {},
+  client: gpt-voiceClient = createMockgpt-voiceClient({
     boardDetails: {
       [board.id]: boardDetail,
     },
@@ -230,8 +230,8 @@ test('card label actions handle missing state, duplicate labels, and API fallbac
   }
   await addCardLabel(authenticated.context, label.id)
 
-  const baseClient = createMockTrelloClient({})
-  const noLabelsClient: TrelloClient = {
+  const baseClient = createMockgpt-voiceClient({})
+  const noLabelsClient: gpt-voiceClient = {
     ...baseClient,
     async addCardLabel() {
       return card
@@ -343,7 +343,7 @@ test('dropping files on an open card uploads every attachment', async () => {
 })
 
 test('attachment upload errors keep successful files and surface the error', async () => {
-  const client = createMockTrelloClient({
+  const client = createMockgpt-voiceClient({
     cardAttachmentAddErrors: {
       [card.id]: 'Attachment upload failed',
     },
@@ -487,8 +487,8 @@ test('loadBoards handles missing credentials and cached unchanged results', asyn
   await loadBoards(missingCredentials.context)
   expect(missingCredentials.getRerenderCount()).toBe(0)
 
-  const baseClient = createMockTrelloClient({})
-  const cachedClient: TrelloClient = {
+  const baseClient = createMockgpt-voiceClient({})
+  const cachedClient: gpt-voiceClient = {
     ...baseClient,
     async listBoardsCacheFirst() {
       return {
@@ -532,8 +532,8 @@ test('restoreCurrentBoard handles guards, missing boards, and cached data', asyn
     missingBoard.context.currentBoardStorage.read(),
   ).resolves.toBeUndefined()
 
-  const baseClient = createMockTrelloClient({})
-  const cachedClient: TrelloClient = {
+  const baseClient = createMockgpt-voiceClient({})
+  const cachedClient: gpt-voiceClient = {
     ...baseClient,
     async getBoardDetailCacheFirst() {
       return {

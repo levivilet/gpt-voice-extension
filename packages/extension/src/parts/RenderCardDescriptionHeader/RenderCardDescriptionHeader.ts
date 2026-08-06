@@ -5,31 +5,31 @@ import {
 } from '@lvce-editor/virtual-dom-worker'
 import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import * as MergeClassNames from '../MergeClassNames/MergeClassNames.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 
 export const renderCardDescriptionHeader = (): readonly VirtualDomNode[] => {
   return [
     {
       childCount: 2,
-      className: 'TrelloCardDescriptionHeader',
+      className: 'gpt-voiceCardDescriptionHeader',
       type: VirtualDomElements.Div,
     },
     {
       childCount: 1,
-      className: 'TrelloCardDetailSectionTitle',
+      className: 'gpt-voiceCardDetailSectionTitle',
       type: VirtualDomElements.H3,
     },
-    text(TrelloStrings.description()),
+    text(gpt-voiceStrings.description()),
     {
       childCount: 1,
       className: MergeClassNames.mergeClassNames(
-        'TrelloButton',
-        'TrelloCardDescriptionEditButton',
+        'gpt-voiceButton',
+        'gpt-voiceCardDescriptionEditButton',
       ),
       name: 'editCardDescription',
       onClick: DomEventListenerFunctions.HandleClick,
       type: VirtualDomElements.Button,
     },
-    text(TrelloStrings.edit()),
+    text(gpt-voiceStrings.edit()),
   ]
 }

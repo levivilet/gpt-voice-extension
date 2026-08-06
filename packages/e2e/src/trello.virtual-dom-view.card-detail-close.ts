@@ -7,10 +7,10 @@ import {
   createMockData,
   openBoard,
   openCard,
-  useMockDataAndShowTrello,
-} from './_trello.virtual-dom-view.shared.ts'
+  useMockDataAndShowgpt-voice,
+} from './_gpt-voice.virtual-dom-view.shared.ts'
 
-export const name = 'trello.virtual-dom-view.card-detail-close'
+export const name = 'gpt-voice.virtual-dom-view.card-detail-close'
 
 export const test: Test = async ({ Command, expect, Locator }) => {
   const boards = createBoards(1)
@@ -20,12 +20,12 @@ export const test: Test = async ({ Command, expect, Locator }) => {
       createList('list-1', 'Todo', [card]),
     ]),
   }
-  await useMockDataAndShowTrello(Command, createMockData(boards, boardDetails))
+  await useMockDataAndShowgpt-voice(Command, createMockData(boards, boardDetails))
   await connectWithCredentials({ Command, expect, Locator })
   await openBoard(Command, Locator, expect)
   await openCard(Command, Locator, expect)
 
-  const panel = Locator('.TrelloCardDetailPanel')
+  const panel = Locator('.gpt-voiceCardDetailPanel')
   const title = Locator('textarea[name="cardTitle"]')
   const close = Locator('button[name="closeCardDetail"]')
   const cardButton = Locator('button[name="card:card-1"]')

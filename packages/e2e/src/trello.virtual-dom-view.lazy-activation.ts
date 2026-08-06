@@ -1,19 +1,19 @@
 import type { Test } from '@lvce-editor/test-with-playwright'
 
-export const name = 'trello.virtual-dom-view.lazy-activation'
+export const name = 'gpt-voice.virtual-dom-view.lazy-activation'
 
 interface RunningExtension {
   readonly activationEvent: string
   readonly id: string
 }
 
-const extensionId = 'builtin.trello'
-const viewId = 'trello.views.boards'
+const extensionId = 'builtin.gpt-voice'
+const viewId = 'gpt-voice.views.boards'
 
 export const test: Test = async ({ Command, expect, Locator }) => {
   await Command.execute('ActivityBar.handleExtensionsChanged')
 
-  const item = Locator('.ActivityBarItem[title="Trello"]')
+  const item = Locator('.ActivityBarItem[title="gpt-voice"]')
   await expect(item).toBeVisible()
   await expect(item).toHaveAttribute('aria-selected', 'false')
 
@@ -34,7 +34,7 @@ export const test: Test = async ({ Command, expect, Locator }) => {
     0,
     0,
     0,
-    'trello.views.boards',
+    'gpt-voice.views.boards',
   )
 
   const apiKey = Locator('input[name="apiKey"]')

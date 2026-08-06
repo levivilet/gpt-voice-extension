@@ -1,5 +1,5 @@
 import type { ViewEvent } from '@lvce-editor/api'
-import type { TrelloViewActionContext } from '../TrelloViewState/TrelloViewState.ts'
+import type { gpt-voiceViewActionContext } from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import {
   cancelAddCard,
   startAddCard,
@@ -41,7 +41,7 @@ import { openCard } from '../OpenCard/OpenCard.ts'
 import { saveCardDetail } from '../SaveCardDetail/SaveCardDetail.ts'
 
 export const handleClickEvent = async (
-  context: TrelloViewActionContext,
+  context: gpt-voiceViewActionContext,
   event: Readonly<ViewEvent>,
 ): Promise<void> => {
   if (event.name === 'cardTitle' || event.name === 'editCardTitle') {

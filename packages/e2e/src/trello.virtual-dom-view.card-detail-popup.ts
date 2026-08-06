@@ -6,14 +6,14 @@ import {
   createList,
   openBoard,
   openCard,
-  useMockDataAndShowTrello,
-} from './_trello.virtual-dom-view.shared.ts'
+  useMockDataAndShowgpt-voice,
+} from './_gpt-voice.virtual-dom-view.shared.ts'
 
-export const name = 'trello.virtual-dom-view.card-detail-popup'
+export const name = 'gpt-voice.virtual-dom-view.card-detail-popup'
 
 export const test: Test = async ({ Command, expect, Locator }) => {
   await Command.execute('Preferences.update', {
-    'trello.cardDetailPopupEnabled': true,
+    'gpt-voice.cardDetailPopupEnabled': true,
   })
 
   const boards = createBoards(1)
@@ -23,7 +23,7 @@ export const test: Test = async ({ Command, expect, Locator }) => {
       createList('list-1', 'Todo', [card]),
     ]),
   }
-  await useMockDataAndShowTrello(Command, {
+  await useMockDataAndShowgpt-voice(Command, {
     boardDetails,
     boards,
     cardDetails: {
@@ -38,14 +38,14 @@ export const test: Test = async ({ Command, expect, Locator }) => {
   await openBoard(Command, Locator, expect)
   await openCard(Command, Locator, expect)
 
-  const popup = Locator('.TrelloCardDetailPopup')
-  const popupPanel = Locator('.TrelloCardDetailPanelPopup')
-  const resizeSash = Locator('.TrelloCardDetailResizeSash')
+  const popup = Locator('.gpt-voiceCardDetailPopup')
+  const popupPanel = Locator('.gpt-voiceCardDetailPanelPopup')
+  const resizeSash = Locator('.gpt-voiceCardDetailResizeSash')
   await expect(popup).toBeVisible()
   await expect(popupPanel).toBeVisible()
   await expect(resizeSash).toHaveCount(0)
 
   await Command.execute('Preferences.update', {
-    'trello.cardDetailPopupEnabled': false,
+    'gpt-voice.cardDetailPopupEnabled': false,
   })
 }

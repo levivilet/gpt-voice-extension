@@ -1,21 +1,21 @@
-import type { TrelloList } from '../TrelloTypes/TrelloTypes.ts'
+import type { gpt-voiceList } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 import type {
-  TrelloViewActionContext,
-  TrelloViewState,
-} from '../TrelloViewState/TrelloViewState.ts'
+  gpt-voiceViewActionContext,
+  gpt-voiceViewState,
+} from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import { getErrorMessage } from '../GetErrorMessage/GetErrorMessage.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 
 const addListFormName = 'addList'
 
 const appendList = (
-  state: Readonly<TrelloViewState>,
-  list: TrelloList,
+  state: Readonly<gpt-voiceViewState>,
+  list: gpt-voiceList,
 ): void => {
   if (!state.boardDetail) {
     return
   }
-  const mutableState = state as TrelloViewState
+  const mutableState = state as gpt-voiceViewState
   mutableState.boardDetail = {
     ...state.boardDetail,
     lists: [...state.boardDetail.lists, list],
@@ -23,10 +23,10 @@ const appendList = (
 }
 
 export const startAddList = (
-  context: Readonly<TrelloViewActionContext>,
+  context: Readonly<gpt-voiceViewActionContext>,
 ): void => {
   const { requestRerender } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   state.addingList = true
   state.draftNewListTitle = ''
   state.focusedName = 'newListTitle'
@@ -36,10 +36,10 @@ export const startAddList = (
 }
 
 export const cancelAddList = (
-  context: Readonly<TrelloViewActionContext>,
+  context: Readonly<gpt-voiceViewActionContext>,
 ): void => {
   const { requestRerender } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   state.addingList = false
   state.draftNewListTitle = ''
   state.savingNewList = false
@@ -48,21 +48,21 @@ export const cancelAddList = (
 }
 
 export const submitAddList = async (
-  context: Readonly<TrelloViewActionContext>,
+  context: Readonly<gpt-voiceViewActionContext>,
   formName: string | undefined,
 ): Promise<boolean> => {
   if (formName !== addListFormName) {
     return false
   }
   const { client, requestRerender } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   if (!state.credentials || !state.boardDetail || state.savingNewList) {
     return true
   }
   const name = state.draftNewListTitle.trim()
   state.addingList = true
   if (!name) {
-    state.error = TrelloStrings.listTitleRequired()
+    state.error = gpt-voiceStrings.listTitleRequired()
     requestRerender()
     return true
   }

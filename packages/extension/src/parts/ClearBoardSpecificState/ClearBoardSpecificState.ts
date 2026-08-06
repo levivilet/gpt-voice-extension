@@ -1,9 +1,9 @@
-import type { TrelloViewState } from '../TrelloViewState/TrelloViewState.ts'
+import type { gpt-voiceViewState } from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 
 export const clearBoardSpecificState = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
 ): void => {
-  const mutableState = state as TrelloViewState
+  const mutableState = state as gpt-voiceViewState
   mutableState.boardDetail = undefined
   mutableState.boardFilterOpen = false
   mutableState.selectedCardDetail = undefined

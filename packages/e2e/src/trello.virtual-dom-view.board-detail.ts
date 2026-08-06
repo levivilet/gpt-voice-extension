@@ -6,10 +6,10 @@ import {
   createList,
   createMockData,
   openBoard,
-  useMockDataAndShowTrello,
-} from './_trello.virtual-dom-view.shared.ts'
+  useMockDataAndShowgpt-voice,
+} from './_gpt-voice.virtual-dom-view.shared.ts'
 
-export const name = 'trello.virtual-dom-view.board-detail'
+export const name = 'gpt-voice.virtual-dom-view.board-detail'
 // export const skip = true
 
 export const test: Test = async ({ Command, expect, Locator }) => {
@@ -20,7 +20,7 @@ export const test: Test = async ({ Command, expect, Locator }) => {
       lists: [createList('list-1', 'Todo', createCards(1))],
     },
   })
-  await useMockDataAndShowTrello(Command, mockData)
+  await useMockDataAndShowgpt-voice(Command, mockData)
   await connectWithCredentials({ Command, expect, Locator })
   await openBoard(Command, Locator, expect)
 

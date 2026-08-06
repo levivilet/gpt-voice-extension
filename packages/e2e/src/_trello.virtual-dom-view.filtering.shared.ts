@@ -6,8 +6,8 @@ import {
   createList,
   createMockData,
   openBoard,
-  useMockDataAndShowTrello,
-} from './_trello.virtual-dom-view.shared.ts'
+  useMockDataAndShowgpt-voice,
+} from './_gpt-voice.virtual-dom-view.shared.ts'
 
 export const showFilteringBoard = async ({
   Command,
@@ -24,7 +24,7 @@ export const showFilteringBoard = async ({
         name: 'Implement filtering',
       },
       {
-        desc: 'Deploy the Trello extension to production',
+        desc: 'Deploy the gpt-voice extension to production',
         id: 'card-description',
         name: 'Release extension',
       },
@@ -59,7 +59,7 @@ export const showFilteringBoard = async ({
       },
     ]),
   ]
-  await useMockDataAndShowTrello(
+  await useMockDataAndShowgpt-voice(
     Command,
     createMockData(boards, {
       'board-1': createBoardDetail(boards[0], lists),
@@ -84,7 +84,7 @@ export const openBoardFilter = async ({
   await openFilter.click()
   await Command.execute('Timeout.sleep', 100)
 
-  const popup = Locator('.TrelloBoardFilterPopup')
+  const popup = Locator('.gpt-voiceBoardFilterPopup')
   const input = Locator('input[name="boardFilter"]')
   await expect(openFilter).toHaveAttribute('aria-expanded', 'true')
   await expect(popup).toBeVisible()

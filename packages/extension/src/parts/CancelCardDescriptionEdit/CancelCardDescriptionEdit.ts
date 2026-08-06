@@ -1,12 +1,12 @@
 import type {
-  TrelloViewActionContext,
-  TrelloViewState,
-} from '../TrelloViewState/TrelloViewState.ts'
+  gpt-voiceViewActionContext,
+  gpt-voiceViewState,
+} from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 
 export const cancelCardDescriptionEdit = (
-  context: TrelloViewActionContext,
+  context: gpt-voiceViewActionContext,
 ): void => {
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   state.draftCardDescription = state.selectedCardDetail?.card.desc || ''
   state.editingCardDescription = false
   state.focusedName = ''

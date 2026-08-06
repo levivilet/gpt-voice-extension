@@ -6,10 +6,10 @@ import {
   createList,
   createMockData,
   openBoard,
-  useMockDataAndShowTrello,
-} from './_trello.virtual-dom-view.shared.ts'
+  useMockDataAndShowgpt-voice,
+} from './_gpt-voice.virtual-dom-view.shared.ts'
 
-export const name = 'trello.virtual-dom-view.add-cards-consecutively'
+export const name = 'gpt-voice.virtual-dom-view.add-cards-consecutively'
 
 export const test: Test = async ({ Command, expect, Locator }) => {
   const boards = createBoards(1)
@@ -17,7 +17,7 @@ export const test: Test = async ({ Command, expect, Locator }) => {
     createList('list-1', 'Todo', [{ id: 'card-1', name: 'Plan work' }]),
     createList('list-2', 'Doing', []),
   ]
-  await useMockDataAndShowTrello(
+  await useMockDataAndShowgpt-voice(
     Command,
     createMockData(boards, {
       'board-1': createBoardDetail(boards[0], listsData),
@@ -34,7 +34,7 @@ export const test: Test = async ({ Command, expect, Locator }) => {
 
   const title = Locator('textarea[name="newCardTitle:list-1"]')
   const submit = Locator('button[name="submitAddCard:list-1"]')
-  const cards = Locator('.TrelloCard')
+  const cards = Locator('.gpt-voiceCard')
   await expect(title).toBeVisible()
   await expect(submit).toBeVisible()
   await expect(cards).toHaveCount(1)

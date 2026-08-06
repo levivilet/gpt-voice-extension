@@ -1,21 +1,21 @@
-import type { TrelloApiCache } from '../TrelloApiCache/TrelloApiCache.ts'
-import type { FetchLike } from '../TrelloClientTypes/TrelloClientTypes.ts'
+import type { gpt-voiceApiCache } from '../gpt-voiceApiCache/gpt-voiceApiCache.ts'
+import type { FetchLike } from '../gpt-voiceClientTypes/gpt-voiceClientTypes.ts'
 import type {
-  TrelloCard,
-  TrelloCardUpdate,
-  TrelloCredentials,
-} from '../TrelloTypes/TrelloTypes.ts'
+  gpt-voiceCard,
+  gpt-voiceCardUpdate,
+  gpt-voiceCredentials,
+} from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 import { deleteCachedCardDetail } from '../GetCardDetail/GetCardDetail.ts'
 import { requestJson } from '../RequestJson/RequestJson.ts'
 
 export const updateCard = async (
   fetchLike: FetchLike,
-  card: TrelloCard,
-  update: TrelloCardUpdate,
-  credentials: TrelloCredentials,
-  cache?: TrelloApiCache,
-): Promise<TrelloCard> => {
-  const updatedCard = await requestJson<TrelloCard>(
+  card: gpt-voiceCard,
+  update: gpt-voiceCardUpdate,
+  credentials: gpt-voiceCredentials,
+  cache?: gpt-voiceApiCache,
+): Promise<gpt-voiceCard> => {
+  const updatedCard = await requestJson<gpt-voiceCard>(
     fetchLike,
     `/cards/${card.id}`,
     credentials,

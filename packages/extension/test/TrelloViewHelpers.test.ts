@@ -55,14 +55,14 @@ test('validateCredentials returns the expected validation messages', () => {
   ).toBe('')
 })
 
-test('getRecentlyViewedBoards sorts by trello and local viewed dates', () => {
+test('getRecentlyViewedBoards sorts by gpt-voice and local viewed dates', () => {
   const state = {
     ...createInitialState(),
     boards: [
       {
         dateLastView: '2026-01-01T00:00:00.000Z',
         id: 'board-1',
-        name: 'Trello older',
+        name: 'gpt-voice older',
       },
       {
         id: 'board-2',
@@ -84,7 +84,7 @@ test('getRecentlyViewedBoards sorts by trello and local viewed dates', () => {
 
   expect(getRecentlyViewedBoards(state).map((board) => board.name)).toEqual([
     'Local newer',
-    'Trello older',
+    'gpt-voice older',
   ])
 })
 
@@ -268,33 +268,33 @@ test('error, menu, asset, and virtual dom helpers handle fallbacks', () => {
   const state = createInitialState()
   expect(getMenuEntries(state, MenuIdCard)).toEqual([
     {
-      command: 'trello.refreshBoards',
+      command: 'gpt-voice.refreshBoards',
       id: 'refreshBoards',
       label: 'Refresh Boards',
     },
     {
-      command: 'trello.backToBoards',
+      command: 'gpt-voice.backToBoards',
       id: 'backToBoards',
       label: 'Back to Boards',
     },
   ])
   expect(getMenuEntries(state, MenuIdList)).toEqual([
     {
-      command: 'trello.refreshBoards',
+      command: 'gpt-voice.refreshBoards',
       id: 'refreshBoards',
       label: 'Refresh Boards',
     },
     {
-      command: 'trello.backToBoards',
+      command: 'gpt-voice.backToBoards',
       id: 'backToBoards',
       label: 'Back to Boards',
     },
   ])
   expect(getMenuEntries(state, 'unknown')).toEqual([])
 
-  expect(getAssetBaseUrl('https://example.com/extension/trelloMain.js')).toBe(
-    'https://example.com/',
-  )
+  expect(
+    getAssetBaseUrl('https://example.com/extension/gpt-voiceMain.js'),
+  ).toBe('https://example.com/')
   expect(
     getAssetBaseUrl('file:///workspace/src/parts/AssetBaseUrl/AssetBaseUrl.ts'),
   ).toBe('/remote/workspace/')
@@ -328,7 +328,7 @@ test('markdown rendering treats incomplete and unsafe markup as text', () => {
   expect(renderMarkdown(markdown).childCount).toBeGreaterThan(0)
 })
 
-test('comment helpers use trello member metadata with fallbacks', () => {
+test('comment helpers use gpt-voice member metadata with fallbacks', () => {
   expect(
     getCommentAuthor({
       data: { text: 'Hello' },
@@ -386,28 +386,28 @@ test('comment helpers use trello member metadata with fallbacks', () => {
       data: { text: 'Hello' },
       id: 'comment-7',
       memberCreator: {
-        avatarUrl: 'https://trello-members.s3.amazonaws.com/member/hash',
+        avatarUrl: 'https://gpt-voice-members.s3.amazonaws.com/member/hash',
       },
     }),
-  ).toBe('https://trello-members.s3.amazonaws.com/member/hash/50.png')
+  ).toBe('https://gpt-voice-members.s3.amazonaws.com/member/hash/50.png')
   expect(
     getCommentAvatarUrl({
       data: { text: 'Hello' },
       id: 'comment-8',
       memberCreator: {
-        avatarUrl: 'https://trello-members.s3.amazonaws.com/member/hash/',
+        avatarUrl: 'https://gpt-voice-members.s3.amazonaws.com/member/hash/',
       },
     }),
-  ).toBe('https://trello-members.s3.amazonaws.com/member/hash/50.png')
+  ).toBe('https://gpt-voice-members.s3.amazonaws.com/member/hash/50.png')
   expect(
     getCommentAvatarUrl({
       data: { text: 'Hello' },
       id: 'comment-9',
       memberCreator: {
-        avatarUrl: 'https://trello-avatars.s3.amazonaws.com/hash/30.png',
+        avatarUrl: 'https://gpt-voice-avatars.s3.amazonaws.com/hash/30.png',
       },
     }),
-  ).toBe('https://trello-avatars.s3.amazonaws.com/hash/30.png')
+  ).toBe('https://gpt-voice-avatars.s3.amazonaws.com/hash/30.png')
   expect(
     getCommentAvatarUrl({
       data: { text: 'Hello' },
@@ -476,12 +476,14 @@ test('label helpers prefer label names and known color classes', () => {
       id: 'label-3',
     }),
   ).toBe('Label')
-  expect(getLabelColorClassName('blue')).toBe('TrelloCardLabelColorBlue')
+  expect(getLabelColorClassName('blue')).toBe('gpt-voiceCardLabelColorBlue')
   expect(getLabelColorClassName('green_dark')).toBe(
-    'TrelloCardLabelColorGreenDark',
+    'gpt-voiceCardLabelColorGreenDark',
   )
   expect(getLabelColorClassName('yellow_light')).toBe(
-    'TrelloCardLabelColorYellowLight',
+    'gpt-voiceCardLabelColorYellowLight',
   )
-  expect(getLabelColorClassName('unknown')).toBe('TrelloCardLabelColorNeutral')
+  expect(getLabelColorClassName('unknown')).toBe(
+    'gpt-voiceCardLabelColorNeutral',
+  )
 })

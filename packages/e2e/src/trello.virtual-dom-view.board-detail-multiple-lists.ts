@@ -6,10 +6,10 @@ import {
   createList,
   createMockData,
   openBoard,
-  useMockDataAndShowTrello,
-} from './_trello.virtual-dom-view.shared.ts'
+  useMockDataAndShowgpt-voice,
+} from './_gpt-voice.virtual-dom-view.shared.ts'
 
-export const name = 'trello.virtual-dom-view.board-detail-multiple-lists'
+export const name = 'gpt-voice.virtual-dom-view.board-detail-multiple-lists'
 // export const skip = true
 
 export const test: Test = async ({ Command, expect, Locator }) => {
@@ -19,7 +19,7 @@ export const test: Test = async ({ Command, expect, Locator }) => {
     createList('list-2', 'Doing', [{ id: 'card-2', name: 'Build work' }]),
     createList('list-3', 'Done', [{ id: 'card-3', name: 'Ship work' }]),
   ]
-  await useMockDataAndShowTrello(
+  await useMockDataAndShowgpt-voice(
     Command,
     createMockData(boards, {
       'board-1': createBoardDetail(boards[0], listsData),
@@ -28,8 +28,8 @@ export const test: Test = async ({ Command, expect, Locator }) => {
   await connectWithCredentials({ Command, expect, Locator })
   await openBoard(Command, Locator, expect)
 
-  const lists = Locator('.TrelloList')
-  const cards = Locator('.TrelloCard')
+  const lists = Locator('.gpt-voiceList')
+  const cards = Locator('.gpt-voiceCard')
   const todo = Locator('input[name="listTitle:list-1"]')
   const doing = Locator('input[name="listTitle:list-2"]')
   const done = Locator('input[name="listTitle:list-3"]')

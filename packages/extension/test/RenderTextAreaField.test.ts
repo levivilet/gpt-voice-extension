@@ -7,7 +7,7 @@ test('renders a labelled text area', () => {
   expect(renderTextAreaField('Description', 'description', 'Details')).toEqual([
     {
       childCount: 2,
-      className: 'TrelloField',
+      className: 'gpt-voiceField',
       type: VirtualDomElements.Div,
     },
     {
@@ -17,7 +17,7 @@ test('renders a labelled text area', () => {
     },
     {
       childCount: 0,
-      className: 'TrelloTextArea',
+      className: 'gpt-voiceTextArea',
       name: 'description',
       onBlur: DomEventListenerFunctions.HandleBlur,
       onFocus: DomEventListenerFunctions.HandleFocus,

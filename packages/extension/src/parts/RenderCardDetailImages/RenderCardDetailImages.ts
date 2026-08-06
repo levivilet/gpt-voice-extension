@@ -1,14 +1,14 @@
 import { text, VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
-import type { TrelloAttachment } from '../TrelloTypes/TrelloTypes.ts'
+import type { gpt-voiceAttachment } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 import type { VirtualDomSegment } from '../VirtualDomSegment/VirtualDomSegment.ts'
 import { isImageAttachment } from '../AttachmentHelpers/AttachmentHelpers.ts'
 import { renderImageAttachment } from '../RenderImageAttachment/RenderImageAttachment.ts'
 import { renderListTitle } from '../RenderListTitle/RenderListTitle.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 
 export const renderCardDetailImages = (
   loading: boolean,
-  attachments: readonly TrelloAttachment[],
+  attachments: readonly gpt-voiceAttachment[],
   attachmentImageUrls: Readonly<Record<string, string>>,
   failedImageIds: readonly string[],
 ): VirtualDomSegment => {
@@ -16,13 +16,13 @@ export const renderCardDetailImages = (
     return {
       childCount: 2,
       dom: [
-        ...renderListTitle(TrelloStrings.images()),
+        ...renderListTitle(gpt-voiceStrings.images()),
         {
           childCount: 1,
-          className: 'TrelloCardDetailEmpty',
+          className: 'gpt-voiceCardDetailEmpty',
           type: VirtualDomElements.Div,
         },
-        text(TrelloStrings.loadingImages()),
+        text(gpt-voiceStrings.loadingImages()),
       ],
     }
   }
@@ -33,10 +33,10 @@ export const renderCardDetailImages = (
   return {
     childCount: 2,
     dom: [
-      ...renderListTitle(TrelloStrings.images()),
+      ...renderListTitle(gpt-voiceStrings.images()),
       {
         childCount: imageAttachments.length,
-        className: 'TrelloCardDetailImages',
+        className: 'gpt-voiceCardDetailImages',
         type: VirtualDomElements.Div,
       },
       ...imageAttachments.flatMap((attachment) =>

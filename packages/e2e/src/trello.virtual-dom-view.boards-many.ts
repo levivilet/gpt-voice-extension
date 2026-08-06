@@ -3,18 +3,18 @@ import {
   connectWithCredentials,
   createBoards,
   createMockData,
-  useMockDataAndShowTrello,
-} from './_trello.virtual-dom-view.shared.ts'
+  useMockDataAndShowgpt-voice,
+} from './_gpt-voice.virtual-dom-view.shared.ts'
 
-export const name = 'trello.virtual-dom-view.boards-many'
+export const name = 'gpt-voice.virtual-dom-view.boards-many'
 // export const skip = true
 
 export const test: Test = async ({ Command, expect, Locator }) => {
   const boards = createBoards(100)
-  await useMockDataAndShowTrello(Command, createMockData(boards))
+  await useMockDataAndShowgpt-voice(Command, createMockData(boards))
   await connectWithCredentials({ Command, expect, Locator })
 
-  const boardButtons = Locator('.TrelloBoardButton')
+  const boardButtons = Locator('.gpt-voiceBoardButton')
   const roadmap = Locator('button[name="board:board-1"]')
   const lastBoard = Locator('button[name="board:board-100"]')
 

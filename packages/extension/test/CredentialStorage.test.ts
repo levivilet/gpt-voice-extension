@@ -327,9 +327,13 @@ test('cache storages use electron-safe https request urls', async () => {
     await createCacheRecentBoardStorage().delete()
   })
 
-  expect(credentialsRequestUrl).toBe('https://trello.com/credentials.json')
-  expect(currentBoardRequestUrl).toBe('https://trello.com/current-board.json')
-  expect(recentBoardsRequestUrl).toBe('https://trello.com/recent-boards.json')
+  expect(credentialsRequestUrl).toBe('https://gpt-voice.com/credentials.json')
+  expect(currentBoardRequestUrl).toBe(
+    'https://gpt-voice.com/current-board.json',
+  )
+  expect(recentBoardsRequestUrl).toBe(
+    'https://gpt-voice.com/recent-boards.json',
+  )
   expect(matched).toEqual([
     credentialsRequestUrl,
     '/credentials.json',

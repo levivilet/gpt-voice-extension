@@ -95,7 +95,7 @@ const findInlineCode = (value: string): InlineMatch | undefined => {
       dom: [
         {
           childCount: 1,
-          className: 'TrelloMarkdownCode',
+          className: 'gpt-voiceMarkdownCode',
           type: VirtualDomElements.Code,
         },
         text(value.slice(start + 1, end)),
@@ -122,7 +122,7 @@ const findItalic = (value: string): InlineMatch | undefined => {
         dom: [
           {
             childCount: children.childCount,
-            className: 'TrelloMarkdownEmphasis',
+            className: 'gpt-voiceMarkdownEmphasis',
             type: VirtualDomElements.Em,
           },
           ...children.dom,
@@ -181,7 +181,7 @@ const findLink = (value: string): InlineMatch | undefined => {
         dom: [
           {
             childCount: children.childCount,
-            className: 'TrelloMarkdownLink',
+            className: 'gpt-voiceMarkdownLink',
             href,
             rel: 'noopener noreferrer',
             target: '_blank',
@@ -204,7 +204,7 @@ const getFirstInlineMatch = (value: string): InlineMatch | undefined => {
       value,
       '**',
       VirtualDomElements.Strong,
-      'TrelloMarkdownStrong',
+      'gpt-voiceMarkdownStrong',
     ),
     findItalic(value),
   ].filter((match): match is InlineMatch => Boolean(match))
@@ -289,8 +289,8 @@ const renderHeading = (line: string): readonly VirtualDomNode[] => {
     {
       childCount: children.childCount,
       className: MergeClassNames.mergeClassNames(
-        'TrelloMarkdownHeading',
-        `TrelloMarkdownHeading${level}`,
+        'gpt-voiceMarkdownHeading',
+        `gpt-voiceMarkdownHeading${level}`,
       ),
       type: headingTypes[level - 1],
     },
@@ -303,7 +303,7 @@ const renderListItem = (line: string): readonly VirtualDomNode[] => {
   return [
     {
       childCount: children.childCount,
-      className: 'TrelloMarkdownListItem',
+      className: 'gpt-voiceMarkdownListItem',
       type: VirtualDomElements.Li,
     },
     ...children.dom,
@@ -317,7 +317,7 @@ const renderParagraph = (
   return [
     {
       childCount: children.childCount,
-      className: 'TrelloMarkdownParagraph',
+      className: 'gpt-voiceMarkdownParagraph',
       type: VirtualDomElements.P,
     },
     ...children.dom,
@@ -350,7 +350,7 @@ export const renderMarkdown = (markdown: string): VirtualDomSegment => {
       nodes.push(
         {
           childCount: itemCount,
-          className: 'TrelloMarkdownList',
+          className: 'gpt-voiceMarkdownList',
           type: VirtualDomElements.Ul,
         },
         ...items,

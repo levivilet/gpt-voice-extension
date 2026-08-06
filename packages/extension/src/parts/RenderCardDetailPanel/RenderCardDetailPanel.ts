@@ -3,7 +3,7 @@ import {
   VirtualDomElements,
   type VirtualDomNode,
 } from '@lvce-editor/virtual-dom-worker'
-import type { TrelloViewState } from '../TrelloViewState/TrelloViewState.ts'
+import type { gpt-voiceViewState } from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import { renderCardCommentComposer } from '../RenderCardCommentComposer/RenderCardCommentComposer.ts'
 import { renderCardDescription } from '../RenderCardDescription/RenderCardDescription.ts'
@@ -14,7 +14,7 @@ import { renderCardDetailLabels } from '../RenderCardDetailLabels/RenderCardDeta
 import { renderCardDetailLink } from '../RenderCardDetailLink/RenderCardDetailLink.ts'
 import { renderCardListSelect } from '../RenderCardListSelect/RenderCardListSelect.ts'
 import { renderListTitle } from '../RenderListTitle/RenderListTitle.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 
 const renderCardLink = (url: string | undefined): readonly VirtualDomNode[] => {
   if (!url) {
@@ -25,8 +25,8 @@ const renderCardLink = (url: string | undefined): readonly VirtualDomNode[] => {
 
 const getPanelClassName = (popupEnabled: boolean): string => {
   return popupEnabled
-    ? 'TrelloCardDetailPanel TrelloCardDetailPanelPopup'
-    : 'TrelloCardDetailPanel'
+    ? 'gpt-voiceCardDetailPanel gpt-voiceCardDetailPanelPopup'
+    : 'gpt-voiceCardDetailPanel'
 }
 
 const renderCardDetailPopup = (
@@ -35,7 +35,7 @@ const renderCardDetailPopup = (
   return [
     {
       childCount: 1,
-      className: 'TrelloCardDetailPopup',
+      className: 'gpt-voiceCardDetailPopup',
       type: VirtualDomElements.Div,
     },
     ...panel,
@@ -46,7 +46,7 @@ const renderCardDetailResizeSash = (): readonly VirtualDomNode[] => {
   return [
     {
       childCount: 0,
-      className: 'TrelloCardDetailResizeSash',
+      className: 'gpt-voiceCardDetailResizeSash',
       name: 'resizeCardDetail',
       onPointerDown: DomEventListenerFunctions.HandleSashPointerDown,
       type: VirtualDomElements.Div,
@@ -60,13 +60,13 @@ const renderCardAttachmentDropArea = (
   return [
     {
       childCount: 1,
-      className: 'TrelloCardAttachmentDropArea',
+      className: 'gpt-voiceCardAttachmentDropArea',
       type: VirtualDomElements.Div,
     },
     text(
       uploading
-        ? TrelloStrings.uploadingFiles()
-        : TrelloStrings.dropFilesToUpload(),
+        ? gpt-voiceStrings.uploadingFiles()
+        : gpt-voiceStrings.dropFilesToUpload(),
     ),
   ]
 }
@@ -84,7 +84,7 @@ const getCardDetailPanelChildCount = (
 }
 
 export const renderCardDetailPanel = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
 ): readonly VirtualDomNode[] => {
   const {
     attachmentImageUrls,
@@ -104,8 +104,8 @@ export const renderCardDetailPanel = (
         className: getPanelClassName(cardDetailPopupEnabled),
         type: VirtualDomElements.Div,
       },
-      ...renderListTitle(TrelloStrings.cardDetails()),
-      text(TrelloStrings.loadingCard()),
+      ...renderListTitle(gpt-voiceStrings.cardDetails()),
+      text(gpt-voiceStrings.loadingCard()),
     ]
     return cardDetailPopupEnabled ? renderCardDetailPopup(panel) : panel
   }
@@ -130,7 +130,7 @@ export const renderCardDetailPanel = (
     ...renderCardDetailLabels(state, card.labels),
     ...listSelect.dom,
     ...renderCardDescription(state, card.desc || ''),
-    ...renderListTitle(TrelloStrings.comments()),
+    ...renderListTitle(gpt-voiceStrings.comments()),
     ...renderCardDetailComments(cardCommentsLoading, comments),
     ...renderCardCommentComposer(state),
     ...images.dom,

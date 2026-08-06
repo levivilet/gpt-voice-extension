@@ -2,9 +2,9 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 import {
   openBoardFilter,
   showFilteringBoard,
-} from './_trello.virtual-dom-view.filtering.shared.ts'
+} from './_gpt-voice.virtual-dom-view.filtering.shared.ts'
 
-export const name = 'trello.virtual-dom-view.filter-whitespace'
+export const name = 'gpt-voice.virtual-dom-view.filter-whitespace'
 
 export const test: Test = async ({ Command, expect, Locator }) => {
   await showFilteringBoard({ Command, expect, Locator })
@@ -12,9 +12,9 @@ export const test: Test = async ({ Command, expect, Locator }) => {
 
   await Locator('input[name="boardFilter"]').type(' '.repeat(3))
 
-  const cards = Locator('.TrelloCard')
+  const cards = Locator('.gpt-voiceCard')
   await expect(cards).toHaveCount(5)
-  const counts = Locator('.TrelloListCardCount')
+  const counts = Locator('.gpt-voiceListCardCount')
   const firstCount = counts.nth(0)
   const secondCount = counts.nth(1)
   await expect(firstCount).toHaveText('3')

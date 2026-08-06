@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type, @typescript-eslint/prefer-readonly-parameter-types */
 import type { Test } from '@lvce-editor/test-with-playwright'
 
-export const name = 'trello.virtual-dom-view.list-create'
+export const name = 'gpt-voice.virtual-dom-view.list-create'
 // export const skip = true
 
 const createList = (id, name, cards) => {
@@ -20,9 +20,9 @@ const createBoardDetail = (board, lists) => {
   }
 }
 
-const useMockDataAndShowTrello = async (Command, mockData) => {
-  await Command.executeExtensionCommand('trello.test.useMockData', mockData)
-  await Command.executeExtensionCommand('trello.show')
+const useMockDataAndShowgpt-voice = async (Command, mockData) => {
+  await Command.executeExtensionCommand('gpt-voice.test.useMockData', mockData)
+  await Command.executeExtensionCommand('gpt-voice.show')
 }
 
 const connectWithCredentials = async ({ Command, expect, Locator }) => {
@@ -65,7 +65,7 @@ export const test: Test = async ({ Command, expect, Locator }) => {
 
   // TODO use createBoard function
 
-  await useMockDataAndShowTrello(Command, {
+  await useMockDataAndShowgpt-voice(Command, {
     boardDetails: {
       'board-1': createBoardDetail(board, []),
     },
@@ -76,10 +76,10 @@ export const test: Test = async ({ Command, expect, Locator }) => {
   await openBoard(Command, Locator, expect)
 
   // act
-  await Command.executeExtensionCommand('trello.addList', {
+  await Command.executeExtensionCommand('gpt-voice.addList', {
     name: 'abc',
   })
-  await Command.executeExtensionCommand('trello.addList', {
+  await Command.executeExtensionCommand('gpt-voice.addList', {
     name: 'def',
   })
 

@@ -3,24 +3,24 @@ import {
   VirtualDomElements,
   type VirtualDomNode,
 } from '@lvce-editor/virtual-dom-worker'
-import type { TrelloViewState } from '../TrelloViewState/TrelloViewState.ts'
+import type { gpt-voiceViewState } from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import * as MergeClassNames from '../MergeClassNames/MergeClassNames.ts'
 
 export const renderCardDetailTitle = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
 ): readonly VirtualDomNode[] => {
   const { draftCardTitle, editingCardTitle } = state
   const className = editingCardTitle
     ? MergeClassNames.mergeClassNames(
-        'TrelloCardDetailTitleInput',
-        'TrelloCardDetailTitleInputEditing',
+        'gpt-voiceCardDetailTitleInput',
+        'gpt-voiceCardDetailTitleInputEditing',
       )
-    : 'TrelloCardDetailTitleInput'
+    : 'gpt-voiceCardDetailTitleInput'
   return [
     {
       childCount: 2,
-      className: 'TrelloCardDetailTitleSizer',
+      className: 'gpt-voiceCardDetailTitleSizer',
       type: VirtualDomElements.Div,
     },
     {
@@ -38,7 +38,7 @@ export const renderCardDetailTitle = (
     {
       ariaHidden: true,
       childCount: 1,
-      className: 'TrelloCardDetailTitleMirror',
+      className: 'gpt-voiceCardDetailTitleMirror',
       type: VirtualDomElements.Div,
     },
     text(draftCardTitle || ' '),

@@ -1,11 +1,11 @@
 import type {
-  TrelloViewActionContext,
-  TrelloViewState,
-} from '../TrelloViewState/TrelloViewState.ts'
+  gpt-voiceViewActionContext,
+  gpt-voiceViewState,
+} from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import { createInitialState } from '../CreateInitialState/CreateInitialState.ts'
 
 export const logout = async (
-  context: TrelloViewActionContext,
+  context: gpt-voiceViewActionContext,
 ): Promise<void> => {
   const {
     currentBoardStorage,
@@ -14,7 +14,7 @@ export const logout = async (
     requestRerender,
     storage,
   } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   await storage.delete()
   await recentStorage.delete()
   await currentBoardStorage.delete()

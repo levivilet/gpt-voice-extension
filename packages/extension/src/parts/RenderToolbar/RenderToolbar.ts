@@ -9,7 +9,7 @@ export const renderToolbar = (
   return [
     {
       childCount: children.length,
-      className: 'TrelloToolbar',
+      className: 'gpt-voiceToolbar',
       type: VirtualDomElements.Div,
     },
     ...children.flat(),

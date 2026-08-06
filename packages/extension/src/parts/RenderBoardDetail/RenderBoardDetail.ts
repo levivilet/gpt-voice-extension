@@ -5,10 +5,10 @@ import {
   type VirtualDomNode,
 } from '@lvce-editor/virtual-dom-worker'
 import type {
-  TrelloBoardDetail,
-  TrelloList,
-} from '../TrelloTypes/TrelloTypes.ts'
-import type { TrelloViewState } from '../TrelloViewState/TrelloViewState.ts'
+  gpt-voiceBoardDetail,
+  gpt-voiceList,
+} from '../gpt-voiceTypes/gpt-voiceTypes.ts'
+import type { gpt-voiceViewState } from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import { getBoardBackgroundClassName } from '../BoardBackground/BoardBackground.ts'
 import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import { filterListCards } from '../FilterBoardCards/FilterBoardCards.ts'
@@ -17,22 +17,22 @@ import { renderBoardFilter } from '../RenderBoardFilter/RenderBoardFilter.ts'
 import { renderCardDetailPanel } from '../RenderCardDetailPanel/RenderCardDetailPanel.ts'
 import { renderCards } from '../RenderCards/RenderCards.ts'
 import { renderError } from '../RenderError/RenderError.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 
 const renderListTitleInput = (
-  state: Readonly<TrelloViewState>,
-  list: Readonly<TrelloList>,
+  state: Readonly<gpt-voiceViewState>,
+  list: Readonly<gpt-voiceList>,
 ): readonly VirtualDomNode[] => {
   const { draftListTitles } = state
   return [
     {
       childCount: 1,
-      className: 'TrelloListTitleInputWrapper',
+      className: 'gpt-voiceListTitleInputWrapper',
       type: VirtualDomElements.Div,
     },
     {
       childCount: 0,
-      className: 'TrelloListTitleInput',
+      className: 'gpt-voiceListTitleInput',
       name: `listTitle:${list.id}`,
       onBlur: DomEventListenerFunctions.HandleBlur,
       onFocus: DomEventListenerFunctions.HandleFocus,
@@ -44,19 +44,19 @@ const renderListTitleInput = (
 }
 
 const renderListHeader = (
-  state: Readonly<TrelloViewState>,
-  list: Readonly<TrelloList>,
+  state: Readonly<gpt-voiceViewState>,
+  list: Readonly<gpt-voiceList>,
 ): readonly VirtualDomNode[] => {
   return [
     {
       childCount: 2,
-      className: 'TrelloListHeader',
+      className: 'gpt-voiceListHeader',
       type: VirtualDomElements.Div,
     },
     ...renderListTitleInput(state, list),
     {
       childCount: 1,
-      className: 'TrelloListCardCount',
+      className: 'gpt-voiceListCardCount',
       type: VirtualDomElements.Div,
     },
     text(String(list.cards.length)),
@@ -64,36 +64,36 @@ const renderListHeader = (
 }
 
 const renderAddCardButton = (
-  list: Readonly<TrelloList>,
+  list: Readonly<gpt-voiceList>,
 ): readonly VirtualDomNode[] => {
   return [
     {
       childCount: 1,
-      className: 'TrelloAddCardButton',
+      className: 'gpt-voiceAddCardButton',
       name: `addCard:${list.id}`,
       onClick: DomEventListenerFunctions.HandleClick,
       type: VirtualDomElements.Button,
     },
-    text(TrelloStrings.addACard()),
+    text(gpt-voiceStrings.addACard()),
   ]
 }
 
 const renderAddCardActions = (
-  state: Readonly<TrelloViewState>,
-  list: Readonly<TrelloList>,
+  state: Readonly<gpt-voiceViewState>,
+  list: Readonly<gpt-voiceList>,
 ): readonly VirtualDomNode[] => {
   const { savingNewCard } = state
   return [
     {
       childCount: 2,
-      className: 'TrelloAddCardActions',
+      className: 'gpt-voiceAddCardActions',
       type: VirtualDomElements.Div,
     },
     {
       childCount: 1,
       className: MergeClassNames.mergeClassNames(
-        'TrelloButton',
-        'TrelloAddCardSubmitButton',
+        'gpt-voiceButton',
+        'gpt-voiceAddCardSubmitButton',
       ),
       disabled: savingNewCard,
       inputType: 'button',
@@ -102,16 +102,16 @@ const renderAddCardActions = (
       onPointerDown: DomEventListenerFunctions.HandleAddCardActionPointerDown,
       type: VirtualDomElements.Button,
     },
-    text(TrelloStrings.addCard()),
+    text(gpt-voiceStrings.addCard()),
     {
-      'aria-label': TrelloStrings.close(),
+      'aria-label': gpt-voiceStrings.close(),
       childCount: 1,
-      className: 'TrelloAddCardCloseButton',
+      className: 'gpt-voiceAddCardCloseButton',
       inputType: 'button',
       name: 'cancelAddCard',
       onClick: DomEventListenerFunctions.HandleClick,
       onPointerDown: DomEventListenerFunctions.HandleAddCardActionPointerDown,
-      title: TrelloStrings.close(),
+      title: gpt-voiceStrings.close(),
       type: VirtualDomElements.Button,
     },
     text('X'),
@@ -119,14 +119,14 @@ const renderAddCardActions = (
 }
 
 const renderAddCardInput = (
-  state: Readonly<TrelloViewState>,
-  list: Readonly<TrelloList>,
+  state: Readonly<gpt-voiceViewState>,
+  list: Readonly<gpt-voiceList>,
 ): readonly VirtualDomNode[] => {
   const { draftNewCardTitle, savingNewCard } = state
   return [
     {
       childCount: 2,
-      className: 'TrelloAddCardForm',
+      className: 'gpt-voiceAddCardForm',
       name: `addCard:${list.id}`,
       onSubmit: DomEventListenerFunctions.HandleSubmit,
       type: VirtualDomElements.Form,
@@ -134,14 +134,14 @@ const renderAddCardInput = (
     {
       autocomplete: 'off',
       childCount: 0,
-      className: 'TrelloAddCardInput',
+      className: 'gpt-voiceAddCardInput',
       disabled: savingNewCard,
       name: `newCardTitle:${list.id}`,
       onBlur: DomEventListenerFunctions.HandleBlur,
       onFocus: DomEventListenerFunctions.HandleFocus,
       onInput: DomEventListenerFunctions.HandleInput,
       onKeyDown: DomEventListenerFunctions.HandleKeyDown,
-      placeholder: TrelloStrings.enterCardTitle(),
+      placeholder: gpt-voiceStrings.enterCardTitle(),
       rows: 2,
       type: VirtualDomElements.TextArea,
       value: draftNewCardTitle,
@@ -151,8 +151,8 @@ const renderAddCardInput = (
 }
 
 const renderAddCardControl = (
-  state: Readonly<TrelloViewState>,
-  list: Readonly<TrelloList>,
+  state: Readonly<gpt-voiceViewState>,
+  list: Readonly<gpt-voiceList>,
 ): readonly VirtualDomNode[] => {
   const { addingCardListId } = state
   if (addingCardListId === list.id) {
@@ -162,14 +162,14 @@ const renderAddCardControl = (
 }
 
 const renderAddListControl = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
 ): readonly VirtualDomNode[] => {
   const { addingList, draftNewListTitle, savingNewList } = state
   if (addingList) {
     return [
       {
         childCount: 1,
-        className: 'TrelloAddListForm',
+        className: 'gpt-voiceAddListForm',
         name: 'addList',
         onSubmit: DomEventListenerFunctions.HandleSubmit,
         type: VirtualDomElements.Form,
@@ -177,14 +177,14 @@ const renderAddListControl = (
       {
         autocomplete: 'off',
         childCount: 0,
-        className: 'TrelloAddListInput',
+        className: 'gpt-voiceAddListInput',
         disabled: savingNewList,
         name: 'newListTitle',
         onBlur: DomEventListenerFunctions.HandleBlur,
         onFocus: DomEventListenerFunctions.HandleFocus,
         onInput: DomEventListenerFunctions.HandleInput,
         onKeyDown: DomEventListenerFunctions.HandleKeyDown,
-        placeholder: TrelloStrings.enterListTitle(),
+        placeholder: gpt-voiceStrings.enterListTitle(),
         type: VirtualDomElements.Input,
         value: draftNewListTitle,
       },
@@ -193,29 +193,29 @@ const renderAddListControl = (
   return [
     {
       childCount: 1,
-      className: 'TrelloAddListButton',
+      className: 'gpt-voiceAddListButton',
       name: 'startAddList',
       onClick: DomEventListenerFunctions.HandleClick,
       type: VirtualDomElements.Button,
     },
-    text(TrelloStrings.createNewList()),
+    text(gpt-voiceStrings.createNewList()),
   ]
 }
 
 const getListClassName = (
-  state: Readonly<TrelloViewState>,
-  list: Readonly<TrelloList>,
+  state: Readonly<gpt-voiceViewState>,
+  list: Readonly<gpt-voiceList>,
 ): string => {
   const { dragTargetListId } = state
   if (dragTargetListId === list.id) {
-    return MergeClassNames.mergeClassNames('TrelloList', 'TrelloListDragTarget')
+    return MergeClassNames.mergeClassNames('gpt-voiceList', 'gpt-voiceListDragTarget')
   }
-  return 'TrelloList'
+  return 'gpt-voiceList'
 }
 
 const renderList = (
-  state: Readonly<TrelloViewState>,
-  list: Readonly<TrelloList>,
+  state: Readonly<gpt-voiceViewState>,
+  list: Readonly<gpt-voiceList>,
 ): readonly VirtualDomNode[] => {
   const { baseUrl, coverImageUrls, draftBoardFilter } = state
   const filteredList = filterListCards(list, draftBoardFilter)
@@ -237,7 +237,7 @@ const renderList = (
     ...renderListHeader(state, filteredList),
     {
       childCount: Math.max(1, filteredList.cards.length),
-      className: 'TrelloCards',
+      className: 'gpt-voiceCards',
       type: VirtualDomElements.Div,
     },
     ...cards,
@@ -246,7 +246,7 @@ const renderList = (
 }
 
 const getCardDetailPanelChildCount = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
 ): number => {
   const { cardDetailLoading, cardDetailPopupEnabled, selectedCardDetail } =
     state
@@ -260,24 +260,24 @@ const getCardDetailPanelChildCount = (
 }
 
 const renderBoardDetailContent = (
-  state: Readonly<TrelloViewState>,
-  detail: Readonly<TrelloBoardDetail>,
+  state: Readonly<gpt-voiceViewState>,
+  detail: Readonly<gpt-voiceBoardDetail>,
 ): readonly VirtualDomNode[] => {
   const { loading } = state
   if (loading) {
-    return [text(TrelloStrings.loadingBoard())]
+    return [text(gpt-voiceStrings.loadingBoard())]
   }
   const cardDetailPanel = renderCardDetailPanel(state)
   const cardDetailPanelChildCount = getCardDetailPanelChildCount(state)
   return [
     {
       childCount: 1 + cardDetailPanelChildCount,
-      className: 'TrelloBoardDetailContent',
+      className: 'gpt-voiceBoardDetailContent',
       type: VirtualDomElements.Div,
     },
     {
       childCount: detail.lists.length + 1,
-      className: 'TrelloLists',
+      className: 'gpt-voiceLists',
       type: VirtualDomElements.Div,
     },
     ...detail.lists.flatMap((list) => renderList(state, list)),
@@ -287,8 +287,8 @@ const renderBoardDetailContent = (
 }
 
 export const renderBoardDetail = (
-  state: Readonly<TrelloViewState>,
-  detail: Readonly<TrelloBoardDetail>,
+  state: Readonly<gpt-voiceViewState>,
+  detail: Readonly<gpt-voiceBoardDetail>,
 ): readonly VirtualDomNode[] => {
   const { boardBackgroundEnabled, boardFilterOpen, error } = state
   const content = renderBoardDetailContent(state, detail)

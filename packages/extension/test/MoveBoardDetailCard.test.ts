@@ -1,24 +1,24 @@
 import { expect, test } from '@jest/globals'
 import type {
-  TrelloBoardDetail,
-  TrelloCard,
-} from '../src/parts/TrelloTypes/TrelloTypes.ts'
+  gpt-voiceBoardDetail,
+  gpt-voiceCard,
+} from '../src/parts/gpt-voiceTypes/gpt-voiceTypes.ts'
 import { createInitialState } from '../src/parts/CreateInitialState/CreateInitialState.ts'
 import { moveBoardDetailCard } from '../src/parts/MoveBoardDetailCard/MoveBoardDetailCard.ts'
 
-const card: TrelloCard = {
+const card: gpt-voiceCard = {
   id: 'card-1',
   idList: 'list-2',
   name: 'Plan work',
 }
 
-const otherCard: TrelloCard = {
+const otherCard: gpt-voiceCard = {
   id: 'card-2',
   idList: 'list-2',
   name: 'Build work',
 }
 
-const createBoardDetail = (): TrelloBoardDetail => {
+const createBoardDetail = (): gpt-voiceBoardDetail => {
   return {
     board: {
       id: 'board-1',

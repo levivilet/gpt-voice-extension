@@ -3,10 +3,10 @@ import {
   type VirtualDomNode,
   VirtualDomElements,
 } from '@lvce-editor/virtual-dom-worker'
-import type { TrelloViewState } from '../TrelloViewState/TrelloViewState.ts'
+import type { gpt-voiceViewState } from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import * as MergeClassNames from '../MergeClassNames/MergeClassNames.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 
 interface ViewAction {
   readonly command: string
@@ -15,21 +15,21 @@ interface ViewAction {
 }
 
 const actionBackToBoards: ViewAction = {
-  command: 'trello.backToBoards',
+  command: 'gpt-voice.backToBoards',
   icon: 'ArrowLeft',
-  title: TrelloStrings.backToBoards(),
+  title: gpt-voiceStrings.backToBoards(),
 }
 
 const actionRefreshBoards: ViewAction = {
-  command: 'trello.refreshBoards',
+  command: 'gpt-voice.refreshBoards',
   icon: 'Refresh',
-  title: TrelloStrings.refreshBoards(),
+  title: gpt-voiceStrings.refreshBoards(),
 }
 
 const actionSignOut: ViewAction = {
-  command: 'trello.logout',
+  command: 'gpt-voice.logout',
   icon: 'Account',
-  title: TrelloStrings.signOut(),
+  title: gpt-voiceStrings.signOut(),
 }
 
 const renderAction = (action: ViewAction): readonly VirtualDomNode[] => {
@@ -54,23 +54,23 @@ const renderAction = (action: ViewAction): readonly VirtualDomNode[] => {
 }
 
 const renderBoardFilterAction = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
 ): readonly VirtualDomNode[] => {
   const { boardFilterOpen, draftBoardFilter } = state
   return [
     {
       'aria-expanded': boardFilterOpen,
-      'aria-label': TrelloStrings.filterCards(),
+      'aria-label': gpt-voiceStrings.filterCards(),
       childCount: 1,
       className: draftBoardFilter
         ? MergeClassNames.mergeClassNames(
             'IconButton',
-            'TrelloBoardFilterActionActive',
+            'gpt-voiceBoardFilterActionActive',
           )
         : 'IconButton',
       name: 'openBoardFilter',
       onClick: DomEventListenerFunctions.HandleClick,
-      title: TrelloStrings.filterCards(),
+      title: gpt-voiceStrings.filterCards(),
       type: VirtualDomElements.Button,
     },
     {
@@ -83,7 +83,7 @@ const renderBoardFilterAction = (
 }
 
 export const renderActionsDom = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
 ): readonly VirtualDomNode[] => {
   const { boardDetail, credentials } = state
   if (!credentials) {

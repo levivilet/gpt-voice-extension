@@ -3,7 +3,7 @@ import {
   VirtualDomElements,
   type VirtualDomNode,
 } from '@lvce-editor/virtual-dom-worker'
-import type { TrelloLabel } from '../TrelloTypes/TrelloTypes.ts'
+import type { gpt-voiceLabel } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import {
   getLabelColorClassName,
@@ -12,14 +12,14 @@ import {
 import * as MergeClassNames from '../MergeClassNames/MergeClassNames.ts'
 
 export const renderCardDetailLabel = (
-  label: Readonly<TrelloLabel>,
+  label: Readonly<gpt-voiceLabel>,
 ): readonly VirtualDomNode[] => {
   return [
     {
       childCount: 1,
       className: MergeClassNames.mergeClassNames(
-        'TrelloCardLabel',
-        'TrelloCardLabelButton',
+        'gpt-voiceCardLabel',
+        'gpt-voiceCardLabelButton',
         getLabelColorClassName(label.color),
       ),
       name: 'openCardLabelPicker',

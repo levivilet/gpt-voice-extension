@@ -2,9 +2,9 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 import {
   createBoards,
   createMockData,
-} from './_trello.virtual-dom-view.shared.ts'
+} from './_gpt-voice.virtual-dom-view.shared.ts'
 
-export const name = 'trello.virtual-dom-view.credentials'
+export const name = 'gpt-voice.virtual-dom-view.credentials'
 // export const skip = true
 
 export const test: Test = async ({ Command, expect, Locator }) => {
@@ -15,9 +15,12 @@ export const test: Test = async ({ Command, expect, Locator }) => {
     const mockData = createMockData(boards)
     step = 'reset'
     step = 'use mock data'
-    await Command.executeExtensionCommand('trello.test.useMockData', mockData)
-    step = 'show trello'
-    await Command.executeExtensionCommand('trello.show')
+    await Command.executeExtensionCommand(
+      'gpt-voice.test.useMockData',
+      mockData,
+    )
+    step = 'show gpt-voice'
+    await Command.executeExtensionCommand('gpt-voice.show')
 
     step = 'locate inputs'
     const apiKeyInput = Locator('input[name="apiKey"]')
@@ -27,15 +30,15 @@ export const test: Test = async ({ Command, expect, Locator }) => {
     await expect(tokenInput).toBeVisible()
 
     step = 'expect auth form width'
-    const authForm = Locator('.TrelloAuthForm')
+    const authForm = Locator('.gpt-voiceAuthForm')
     await expect(authForm).toHaveCSS('max-width', '760px')
 
     step = 'expect auth inputs wrapper'
-    const authFields = Locator('.TrelloAuthFields > .TrelloField')
+    const authFields = Locator('.gpt-voiceAuthFields > .gpt-voiceField')
     await expect(authFields).toHaveCount(2)
 
     step = 'expect no duplicate title'
-    const authTitle = Locator('.TrelloAuthForm > .TrelloTitle')
+    const authTitle = Locator('.gpt-voiceAuthForm > .gpt-voiceTitle')
     await expect(authTitle).toHaveCount(0)
 
     step = 'locate labels'

@@ -1,9 +1,9 @@
 import { expect, test } from '@jest/globals'
-import * as TrelloStrings from '../src/parts/TrelloStrings/TrelloStrings.ts'
+import * as gpt-voiceStrings from '../src/parts/gpt-voiceStrings/gpt-voiceStrings.ts'
 
-test('renders every Trello string', () => {
+test('renders every gpt-voice string', () => {
   const stringFunctions = Object.values(
-    TrelloStrings as unknown as Readonly<
+    gpt-voiceStrings as unknown as Readonly<
       Record<string, (value?: string | number) => string>
     >,
   )
@@ -16,12 +16,12 @@ test('renders every Trello string', () => {
 })
 
 test('renders placeholders', () => {
-  expect(TrelloStrings.boardNotFound('board-1')).toBe(
+  expect(gpt-voiceStrings.boardNotFound('board-1')).toBe(
     'Board not found: board-1',
   )
-  expect(TrelloStrings.cardComments(2)).toBe('2 comments')
-  expect(TrelloStrings.searchResultsFor('roadmap')).toBe(
+  expect(gpt-voiceStrings.cardComments(2)).toBe('2 comments')
+  expect(gpt-voiceStrings.searchResultsFor('roadmap')).toBe(
     'Search results for "roadmap"',
   )
-  expect(TrelloStrings.trelloBoard('Roadmap')).toBe('Trello: Roadmap')
+  expect(gpt-voiceStrings.gpt-voiceBoard('Roadmap')).toBe('gpt-voice: Roadmap')
 })

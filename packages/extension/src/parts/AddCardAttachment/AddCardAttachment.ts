@@ -1,27 +1,27 @@
-import type { TrelloApiCache } from '../TrelloApiCache/TrelloApiCache.ts'
-import type { FetchLike } from '../TrelloClientTypes/TrelloClientTypes.ts'
+import type { gpt-voiceApiCache } from '../gpt-voiceApiCache/gpt-voiceApiCache.ts'
+import type { FetchLike } from '../gpt-voiceClientTypes/gpt-voiceClientTypes.ts'
 import type {
-  TrelloAttachment,
-  TrelloCard,
-  TrelloCredentials,
-} from '../TrelloTypes/TrelloTypes.ts'
+  gpt-voiceAttachment,
+  gpt-voiceCard,
+  gpt-voiceCredentials,
+} from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 import { deleteCachedCardAttachments } from '../GetCardDetail/GetCardDetail.ts'
 import { requestJson } from '../RequestJson/RequestJson.ts'
 
 export const addCardAttachment = async (
   fetchLike: FetchLike,
-  card: TrelloCard,
+  card: gpt-voiceCard,
   file: File,
-  credentials: TrelloCredentials,
-  cache?: TrelloApiCache,
-): Promise<TrelloAttachment> => {
+  credentials: gpt-voiceCredentials,
+  cache?: gpt-voiceApiCache,
+): Promise<gpt-voiceAttachment> => {
   const formData = new FormData()
   formData.set('file', file, file.name)
   formData.set('name', file.name)
   if (file.type) {
     formData.set('mimeType', file.type)
   }
-  const attachment = await requestJson<TrelloAttachment>(
+  const attachment = await requestJson<gpt-voiceAttachment>(
     fetchLike,
     `/cards/${card.id}/attachments`,
     credentials,

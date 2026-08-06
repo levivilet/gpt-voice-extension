@@ -6,7 +6,7 @@ test('renders the list title', () => {
   expect(renderListTitle('Recently viewed')).toEqual([
     {
       childCount: 1,
-      className: 'TrelloListTitle',
+      className: 'gpt-voiceListTitle',
       type: VirtualDomElements.H3,
     },
     {

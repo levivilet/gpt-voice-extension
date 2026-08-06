@@ -1,10 +1,10 @@
-import type { TrelloCard } from '../TrelloTypes/TrelloTypes.ts'
+import type { gpt-voiceCard } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 import {
   getAttachmentImageUrl,
   isImageAttachment,
 } from '../AttachmentHelpers/AttachmentHelpers.ts'
 
-const getCardAttachmentImageUrl = (card: Readonly<TrelloCard>): string => {
+const getCardAttachmentImageUrl = (card: Readonly<gpt-voiceCard>): string => {
   const attachment = card.attachments?.find(isImageAttachment)
   if (!attachment) {
     return ''
@@ -12,7 +12,7 @@ const getCardAttachmentImageUrl = (card: Readonly<TrelloCard>): string => {
   return getAttachmentImageUrl(attachment)
 }
 
-export const getCardCoverImageUrl = (card: Readonly<TrelloCard>): string => {
+export const getCardCoverImageUrl = (card: Readonly<gpt-voiceCard>): string => {
   const { cover } = card
   if (!cover) {
     return getCardAttachmentImageUrl(card)

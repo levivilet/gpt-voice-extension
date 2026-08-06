@@ -10,7 +10,7 @@ test('renders the error message', () => {
   expect(renderError('Request failed')).toEqual([
     {
       childCount: 1,
-      className: 'TrelloError',
+      className: 'gpt-voiceError',
       type: VirtualDomElements.Div,
     },
     {

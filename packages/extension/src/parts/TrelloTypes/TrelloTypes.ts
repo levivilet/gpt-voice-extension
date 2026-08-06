@@ -1,102 +1,102 @@
 // cspell:ignore prefs
 
-export interface TrelloCredentials {
+export interface gpt-voiceCredentials {
   readonly apiKey: string
   readonly token: string
 }
 
-export interface TrelloOrganization {
+export interface gpt-voiceOrganization {
   readonly displayName?: string
   readonly id: string
   readonly name: string
 }
 
-export interface TrelloBoardBackgroundImage {
+export interface gpt-voiceBoardBackgroundImage {
   readonly height?: number
   readonly url?: string
   readonly width?: number
 }
 
-export interface TrelloBoardPreferences {
+export interface gpt-voiceBoardPreferences {
   readonly backgroundBottomColor?: string
   readonly backgroundBrightness?: string
   readonly backgroundColor?: string
   readonly backgroundImage?: string | null
-  readonly backgroundImageScaled?: readonly TrelloBoardBackgroundImage[]
+  readonly backgroundImageScaled?: readonly gpt-voiceBoardBackgroundImage[]
   readonly backgroundTile?: boolean
   readonly backgroundTopColor?: string
 }
 
-export interface TrelloBoard {
+export interface gpt-voiceBoard {
   readonly dateLastView?: string
   readonly id: string
   readonly idOrganization?: string
   readonly name: string
-  readonly organization?: TrelloOrganization
-  readonly prefs?: TrelloBoardPreferences
+  readonly organization?: gpt-voiceOrganization
+  readonly prefs?: gpt-voiceBoardPreferences
   readonly url?: string
 }
 
-export interface TrelloLabel {
+export interface gpt-voiceLabel {
   readonly color?: string
   readonly id: string
   readonly idBoard?: string
   readonly name?: string
 }
 
-export interface TrelloLabelCreate {
+export interface gpt-voiceLabelCreate {
   readonly color: string
   readonly name: string
 }
 
-export interface TrelloCardBadges {
+export interface gpt-voiceCardBadges {
   readonly comments?: number
 }
 
-export interface TrelloCardCoverScaled {
+export interface gpt-voiceCardCoverScaled {
   readonly height?: number
   readonly url?: string
   readonly width?: number
 }
 
-export interface TrelloCardCover {
+export interface gpt-voiceCardCover {
   readonly color?: string | null
-  readonly scaled?: readonly TrelloCardCoverScaled[]
+  readonly scaled?: readonly gpt-voiceCardCoverScaled[]
   readonly sharedSourceUrl?: string | null
   readonly size?: string
   readonly url?: string | null
 }
 
-export interface TrelloCard {
-  readonly attachments?: readonly TrelloAttachment[]
-  readonly badges?: TrelloCardBadges
-  readonly cover?: TrelloCardCover | null
+export interface gpt-voiceCard {
+  readonly attachments?: readonly gpt-voiceAttachment[]
+  readonly badges?: gpt-voiceCardBadges
+  readonly cover?: gpt-voiceCardCover | null
   readonly desc?: string
   readonly id: string
   readonly idBoard?: string
   readonly idList?: string
-  readonly labels?: readonly TrelloLabel[]
+  readonly labels?: readonly gpt-voiceLabel[]
   readonly name: string
   readonly url?: string
 }
 
-export interface TrelloAttachmentPreview {
+export interface gpt-voiceAttachmentPreview {
   readonly url?: string
 }
 
-export interface TrelloAttachment {
+export interface gpt-voiceAttachment {
   readonly id: string
   readonly mimeType?: string
   readonly name?: string
-  readonly previews?: readonly TrelloAttachmentPreview[]
+  readonly previews?: readonly gpt-voiceAttachmentPreview[]
   readonly url?: string
 }
 
-export interface TrelloCommentData {
+export interface gpt-voiceCommentData {
   readonly text?: string
 }
 
-export interface TrelloCommentMember {
+export interface gpt-voiceCommentMember {
   readonly avatarHash?: string
   readonly avatarUrl?: string
   readonly fullName?: string
@@ -105,62 +105,62 @@ export interface TrelloCommentMember {
   readonly username?: string
 }
 
-export interface TrelloComment {
-  readonly data: TrelloCommentData
+export interface gpt-voiceComment {
+  readonly data: gpt-voiceCommentData
   readonly date?: string
   readonly id: string
-  readonly memberCreator?: TrelloCommentMember
+  readonly memberCreator?: gpt-voiceCommentMember
 }
 
-export interface TrelloCardDetail {
-  readonly attachments: readonly TrelloAttachment[]
-  readonly card: TrelloCard
-  readonly comments: readonly TrelloComment[]
+export interface gpt-voiceCardDetail {
+  readonly attachments: readonly gpt-voiceAttachment[]
+  readonly card: gpt-voiceCard
+  readonly comments: readonly gpt-voiceComment[]
 }
 
-export interface TrelloCardUpdate {
+export interface gpt-voiceCardUpdate {
   readonly desc: string
   readonly name: string
 }
 
-export interface TrelloCardCreate {
+export interface gpt-voiceCardCreate {
   readonly name: string
   readonly pos: 'bottom'
 }
 
-export interface TrelloCardMove {
+export interface gpt-voiceCardMove {
   readonly idList: string
   readonly pos: 'bottom' | 'top'
 }
 
-export interface TrelloList {
-  readonly cards: readonly TrelloCard[]
+export interface gpt-voiceList {
+  readonly cards: readonly gpt-voiceCard[]
   readonly id: string
   readonly name: string
 }
 
-export interface TrelloListCreate {
+export interface gpt-voiceListCreate {
   readonly name: string
   readonly pos: 'bottom'
 }
 
-export interface TrelloListUpdate {
+export interface gpt-voiceListUpdate {
   readonly name: string
 }
 
-export interface TrelloBoardDetail {
-  readonly board: TrelloBoard
-  readonly lists: readonly TrelloList[]
+export interface gpt-voiceBoardDetail {
+  readonly board: gpt-voiceBoard
+  readonly lists: readonly gpt-voiceList[]
 }
 
-export interface TrelloBoardSearchResult extends TrelloBoard {
+export interface gpt-voiceBoardSearchResult extends gpt-voiceBoard {
   readonly type: 'board'
 }
 
-export interface TrelloCardSearchResult extends TrelloCard {
+export interface gpt-voiceCardSearchResult extends gpt-voiceCard {
   readonly type: 'card'
 }
 
-export type TrelloSearchResult =
-  | TrelloBoardSearchResult
-  | TrelloCardSearchResult
+export type gpt-voiceSearchResult =
+  | gpt-voiceBoardSearchResult
+  | gpt-voiceCardSearchResult

@@ -2,10 +2,10 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 import {
   connectWithCredentials,
   createBoards,
-  useMockDataAndShowTrello,
-} from './_trello.virtual-dom-view.shared.ts'
+  useMockDataAndShowgpt-voice,
+} from './_gpt-voice.virtual-dom-view.shared.ts'
 
-export const name = 'trello.virtual-dom-view.refresh-boards'
+export const name = 'gpt-voice.virtual-dom-view.refresh-boards'
 export const skip = true
 
 export const test: Test = async ({ Command, expect, Locator }) => {
@@ -16,7 +16,7 @@ export const test: Test = async ({ Command, expect, Locator }) => {
       name: 'Board 2',
     },
   ]
-  await useMockDataAndShowTrello(Command, {
+  await useMockDataAndShowgpt-voice(Command, {
     boards: refreshedBoards,
     listBoardsResponses: [firstBoards, refreshedBoards],
   })

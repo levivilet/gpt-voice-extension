@@ -1,25 +1,25 @@
-import type { TrelloBoard } from '../TrelloTypes/TrelloTypes.ts'
+import type { gpt-voiceBoard } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 import type {
-  TrelloViewActionContext,
-  TrelloViewState,
-} from '../TrelloViewState/TrelloViewState.ts'
+  gpt-voiceViewActionContext,
+  gpt-voiceViewState,
+} from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import { isSameJson } from '../CacheFirstHelpers/CacheFirstHelpers.ts'
 import { getErrorMessage } from '../GetErrorMessage/GetErrorMessage.ts'
 
 const findBoard = (
-  boards: readonly TrelloBoard[],
+  boards: readonly gpt-voiceBoard[],
   boardId: string,
-): TrelloBoard | undefined => {
+): gpt-voiceBoard | undefined => {
   return boards.find((board) => {
     return board.id === boardId
   })
 }
 
 export const restoreCurrentBoard = async (
-  context: Readonly<TrelloViewActionContext>,
+  context: Readonly<gpt-voiceViewActionContext>,
 ): Promise<void> => {
   const { client, currentBoardStorage } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   if (!state.credentials || state.error) {
     return
   }

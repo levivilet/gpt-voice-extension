@@ -1,16 +1,16 @@
 import type {
-  TrelloViewActionContext,
-  TrelloViewState,
-} from '../TrelloViewState/TrelloViewState.ts'
+  gpt-voiceViewActionContext,
+  gpt-voiceViewState,
+} from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import { addCardLabel } from '../CardLabelPicker/CardLabelPicker.ts'
 import { getErrorMessage } from '../GetErrorMessage/GetErrorMessage.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 
 export const openCardLabelCreate = (
-  context: Readonly<TrelloViewActionContext>,
+  context: Readonly<gpt-voiceViewActionContext>,
 ): void => {
   const { requestRerender } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   const name = state.draftLabelSearchQuery.trim()
   if (!name) {
     return
@@ -23,10 +23,10 @@ export const openCardLabelCreate = (
 }
 
 export const closeCardLabelCreate = (
-  context: Readonly<TrelloViewActionContext>,
+  context: Readonly<gpt-voiceViewActionContext>,
 ): void => {
   const { requestRerender } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   state.cardLabelCreateOpen = false
   state.draftNewLabelColor = 'green'
   state.draftNewLabelName = ''
@@ -35,20 +35,20 @@ export const closeCardLabelCreate = (
 }
 
 export const selectCardLabelColor = (
-  context: Readonly<TrelloViewActionContext>,
+  context: Readonly<gpt-voiceViewActionContext>,
   color: string,
 ): void => {
   const { requestRerender } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   state.draftNewLabelColor = color
   requestRerender()
 }
 
 export const createCardLabel = async (
-  context: TrelloViewActionContext,
+  context: gpt-voiceViewActionContext,
 ): Promise<void> => {
   const { client, requestRerender } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   const name = state.draftNewLabelName.trim()
   if (
     !state.credentials ||
@@ -60,7 +60,7 @@ export const createCardLabel = async (
     return
   }
   if (!name) {
-    state.error = TrelloStrings.labelTitleRequired()
+    state.error = gpt-voiceStrings.labelTitleRequired()
     requestRerender()
     return
   }

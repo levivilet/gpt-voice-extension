@@ -10,7 +10,7 @@ test('renders an empty toolbar', () => {
   expect(renderToolbar([])).toEqual([
     {
       childCount: 0,
-      className: 'TrelloToolbar',
+      className: 'gpt-voiceToolbar',
       type: VirtualDomElements.Div,
     },
   ])
@@ -34,7 +34,7 @@ test('renders and flattens toolbar children', () => {
   expect(renderToolbar([first, second])).toEqual([
     {
       childCount: 2,
-      className: 'TrelloToolbar',
+      className: 'gpt-voiceToolbar',
       type: VirtualDomElements.Div,
     },
     ...first,

@@ -1,8 +1,8 @@
 import type { ViewEvent } from '@lvce-editor/api'
 import type {
-  TrelloViewActionContext,
-  TrelloViewState,
-} from '../TrelloViewState/TrelloViewState.ts'
+  gpt-voiceViewActionContext,
+  gpt-voiceViewState,
+} from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 
 const minCardDetailWidth = 200
 
@@ -15,11 +15,11 @@ const getEventNumber = (event: Readonly<ViewEvent>, key: string): number => {
 }
 
 export const startResizeCardDetail = (
-  context: Readonly<TrelloViewActionContext>,
+  context: Readonly<gpt-voiceViewActionContext>,
   event: Readonly<ViewEvent>,
 ): void => {
   const { requestRerender } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   state.resizingCardDetail = true
   state.cardDetailResizeStartX = getEventNumber(event, 'clientX')
   state.cardDetailResizeStartWidth = state.cardDetailWidth
@@ -27,11 +27,11 @@ export const startResizeCardDetail = (
 }
 
 export const resizeCardDetail = (
-  context: Readonly<TrelloViewActionContext>,
+  context: Readonly<gpt-voiceViewActionContext>,
   event: Readonly<ViewEvent>,
 ): void => {
   const { requestRerender } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   if (!state.resizingCardDetail) {
     return
   }
@@ -45,10 +45,10 @@ export const resizeCardDetail = (
 }
 
 export const stopResizeCardDetail = (
-  context: Readonly<TrelloViewActionContext>,
+  context: Readonly<gpt-voiceViewActionContext>,
 ): void => {
   const { requestRerender } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   if (!state.resizingCardDetail) {
     return
   }

@@ -7,43 +7,43 @@ import type {
 } from '@lvce-editor/api'
 import { expect, test } from '@jest/globals'
 import { AriaRoles, VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
-import type { ActiveTrelloViewInstance } from '../src/parts/CreateInstance/CreateInstance.ts'
-import type { TrelloClient } from '../src/parts/TrelloClient/TrelloClient.ts'
-import type { TrelloImageCache } from '../src/parts/TrelloImageCache/TrelloImageCache.ts'
+import type { Activegpt-voiceViewInstance } from '../src/parts/CreateInstance/CreateInstance.ts'
+import type { gpt-voiceClient } from '../src/parts/gpt-voiceClient/gpt-voiceClient.ts'
+import type { gpt-voiceImageCache } from '../src/parts/gpt-voiceImageCache/gpt-voiceImageCache.ts'
 import type {
-  TrelloAttachment,
-  TrelloBoard,
-  TrelloBoardDetail,
-  TrelloCard,
-  TrelloCardDetail,
-  TrelloCardMove,
-  TrelloCardUpdate,
-  TrelloComment,
-  TrelloCredentials,
-  TrelloLabel,
-  TrelloSearchResult,
-  TrelloList,
-  TrelloListCreate,
-  TrelloListUpdate,
-} from '../src/parts/TrelloTypes/TrelloTypes.ts'
+  gpt-voiceAttachment,
+  gpt-voiceBoard,
+  gpt-voiceBoardDetail,
+  gpt-voiceCard,
+  gpt-voiceCardDetail,
+  gpt-voiceCardMove,
+  gpt-voiceCardUpdate,
+  gpt-voiceComment,
+  gpt-voiceCredentials,
+  gpt-voiceLabel,
+  gpt-voiceSearchResult,
+  gpt-voiceList,
+  gpt-voiceListCreate,
+  gpt-voiceListUpdate,
+} from '../src/parts/gpt-voiceTypes/gpt-voiceTypes.ts'
 import { createMemoryCredentialStorage } from '../src/parts/CredentialStorage/CredentialStorage.ts'
 import { createMemoryCurrentBoardStorage } from '../src/parts/CurrentBoardStorage/CurrentBoardStorage.ts'
-import { createMockTrelloClient } from '../src/parts/MockTrelloClient/MockTrelloClient.ts'
+import { createMockgpt-voiceClient } from '../src/parts/Mockgpt-voiceClient/Mockgpt-voiceClient.ts'
 import {
   createMemoryRecentBoardStorage,
   type RecentBoardView,
 } from '../src/parts/RecentBoardStorage/RecentBoardStorage.ts'
 import {
-  backToBoardsActiveTrelloViewInstance,
-  cancelNewCardActiveTrelloViewInstance,
-  closeCardDetailActiveTrelloViewInstance,
-  reloadActiveTrelloViewInstances,
-  resetTrelloViewDependencyFactory,
-  saveCardDetailActiveTrelloViewInstance,
-  setTrelloViewDependencyFactory,
-  submitNewCardActiveTrelloViewInstance,
+  backToBoardsActivegpt-voiceViewInstance,
+  cancelNewCardActivegpt-voiceViewInstance,
+  closeCardDetailActivegpt-voiceViewInstance,
+  reloadActivegpt-voiceViewInstances,
+  resetgpt-voiceViewDependencyFactory,
+  saveCardDetailActivegpt-voiceViewInstance,
+  setgpt-voiceViewDependencyFactory,
+  submitNewCardActivegpt-voiceViewInstance,
   view,
-} from '../src/parts/TrelloView/TrelloView.ts'
+} from '../src/parts/gpt-voiceView/gpt-voiceView.ts'
 
 const validApiKey = 'abcdefghijklmnopqrstuvwxyz123456'
 const validToken =
@@ -56,9 +56,9 @@ const getExpectedAssetBaseUrl = (): string => {
   return `/remote${url.pathname}`
 }
 
-const createMockTrelloImageCache = (
+const createMockgpt-voiceImageCache = (
   urls: Readonly<Record<string, string>> = {},
-): TrelloImageCache => {
+): gpt-voiceImageCache => {
   return {
     dispose(): void {},
     async resolveImageUrl(url: string): Promise<string> {
@@ -245,19 +245,19 @@ const getBoardButtonLabels = (dom: readonly any[]): readonly string[] => {
 }
 
 const createAuthenticatedInstance = async (
-  boards: readonly TrelloBoard[],
+  boards: readonly gpt-voiceBoard[],
   recentBoardViews: readonly RecentBoardView[] = [],
   options: {
     readonly boardBackgroundEnabled?: boolean
-    readonly boardDetails?: Readonly<Record<string, TrelloBoardDetail>>
-    readonly boardLabels?: Readonly<Record<string, readonly TrelloLabel[]>>
+    readonly boardDetails?: Readonly<Record<string, gpt-voiceBoardDetail>>
+    readonly boardLabels?: Readonly<Record<string, readonly gpt-voiceLabel[]>>
     readonly cardDetailPopupEnabled?: boolean
     readonly cardCreateErrors?: Readonly<Record<string, string>>
-    readonly cardDetails?: Readonly<Record<string, TrelloCardDetail>>
+    readonly cardDetails?: Readonly<Record<string, gpt-voiceCardDetail>>
     readonly cardLabelAddErrors?: Readonly<Record<string, string>>
     readonly cardMoveErrors?: Readonly<Record<string, string>>
-    readonly client?: TrelloClient
-    readonly imageCache?: TrelloImageCache
+    readonly client?: gpt-voiceClient
+    readonly imageCache?: gpt-voiceImageCache
     readonly listUpdateErrors?: Readonly<Record<string, string>>
     readonly showContextMenu?: (
       menuId: string,
@@ -265,7 +265,7 @@ const createAuthenticatedInstance = async (
       y: number,
     ) => Promise<void>
   } = {},
-): Promise<ActiveTrelloViewInstance> => {
+): Promise<Activegpt-voiceViewInstance> => {
   const {
     boardDetails,
     boardLabels,
@@ -276,10 +276,10 @@ const createAuthenticatedInstance = async (
     imageCache,
     listUpdateErrors,
   } = options
-  setTrelloViewDependencyFactory(() => ({
+  setgpt-voiceViewDependencyFactory(() => ({
     client:
       options.client ||
-      createMockTrelloClient({
+      createMockgpt-voiceClient({
         boards,
         ...(boardDetails && { boardDetails }),
         ...(boardLabels && { boardLabels }),
@@ -322,11 +322,11 @@ const createAuthenticatedInstance = async (
 }
 
 interface SearchInstanceData {
-  readonly boardDetails?: Readonly<Record<string, TrelloBoardDetail>>
-  readonly boards?: readonly TrelloBoard[]
-  readonly cardDetails?: Readonly<Record<string, TrelloCardDetail>>
+  readonly boardDetails?: Readonly<Record<string, gpt-voiceBoardDetail>>
+  readonly boards?: readonly gpt-voiceBoard[]
+  readonly cardDetails?: Readonly<Record<string, gpt-voiceCardDetail>>
   readonly searchError?: string
-  readonly searchResults?: readonly TrelloSearchResult[]
+  readonly searchResults?: readonly gpt-voiceSearchResult[]
 }
 
 const createSearchEnabledInstance = async (
@@ -334,9 +334,9 @@ const createSearchEnabledInstance = async (
   options: {
     readonly boardBackgroundEnabled?: boolean
   } = {},
-): Promise<ActiveTrelloViewInstance> => {
-  setTrelloViewDependencyFactory(() => ({
-    client: createMockTrelloClient(data),
+): Promise<Activegpt-voiceViewInstance> => {
+  setgpt-voiceViewDependencyFactory(() => ({
+    client: createMockgpt-voiceClient(data),
     readBoardBackgroundEnabled: async (): Promise<boolean> => {
       return options.boardBackgroundEnabled === true
     },
@@ -370,36 +370,36 @@ const waitForCoverImages = async (): Promise<void> => {
 }
 
 const getFreshAttachments = async (
-  fresh: Readonly<Promise<TrelloCardDetail>>,
-): Promise<TrelloCardDetail['attachments']> => {
+  fresh: Readonly<Promise<gpt-voiceCardDetail>>,
+): Promise<gpt-voiceCardDetail['attachments']> => {
   const detail = await fresh
   return detail.attachments
 }
 
 const getFreshCard = async (
-  fresh: Readonly<Promise<TrelloCardDetail>>,
-): Promise<TrelloCard> => {
+  fresh: Readonly<Promise<gpt-voiceCardDetail>>,
+): Promise<gpt-voiceCard> => {
   const detail = await fresh
   return detail.card
 }
 
 const getFreshComments = async (
-  fresh: Readonly<Promise<TrelloCardDetail>>,
-): Promise<TrelloCardDetail['comments']> => {
+  fresh: Readonly<Promise<gpt-voiceCardDetail>>,
+): Promise<gpt-voiceCardDetail['comments']> => {
   const detail = await fresh
   return detail.comments
 }
 
 const createStagedCardClient = (options: {
-  readonly boardDetail: TrelloBoardDetail
-  readonly boards: readonly TrelloBoard[]
-  readonly getCardDetailPartsCacheFirst: TrelloClient['getCardDetailPartsCacheFirst']
-}): TrelloClient => {
+  readonly boardDetail: gpt-voiceBoardDetail
+  readonly boards: readonly gpt-voiceBoard[]
+  readonly getCardDetailPartsCacheFirst: gpt-voiceClient['getCardDetailPartsCacheFirst']
+}): gpt-voiceClient => {
   return {
     async addCardAttachment(
-      _card: Readonly<TrelloCard>,
+      _card: Readonly<gpt-voiceCard>,
       file: File,
-    ): Promise<TrelloAttachment> {
+    ): Promise<gpt-voiceAttachment> {
       return {
         id: 'created-attachment-1',
         mimeType: file.type,
@@ -407,25 +407,25 @@ const createStagedCardClient = (options: {
       }
     },
     async addCardComment(
-      _card: Readonly<TrelloCard>,
+      _card: Readonly<gpt-voiceCard>,
       text: string,
-    ): Promise<TrelloComment> {
+    ): Promise<gpt-voiceComment> {
       return {
         data: { text },
         id: 'created-comment-1',
       }
     },
-    async addCardLabel(card: Readonly<TrelloCard>): Promise<TrelloCard> {
+    async addCardLabel(card: Readonly<gpt-voiceCard>): Promise<gpt-voiceCard> {
       return card
     },
-    async createCard(list: Readonly<TrelloList>): Promise<TrelloCard> {
+    async createCard(list: Readonly<gpt-voiceList>): Promise<gpt-voiceCard> {
       return {
         id: 'created-card-1',
         idList: list.id,
         name: 'Created card',
       }
     },
-    async createLabel(board, create): Promise<TrelloLabel> {
+    async createLabel(board, create): Promise<gpt-voiceLabel> {
       return {
         color: create.color,
         id: 'created-label-1',
@@ -434,20 +434,20 @@ const createStagedCardClient = (options: {
       }
     },
     async createList(
-      _board: Readonly<TrelloBoard>,
-      create: Readonly<TrelloListCreate>,
-    ): Promise<TrelloList> {
+      _board: Readonly<gpt-voiceBoard>,
+      create: Readonly<gpt-voiceListCreate>,
+    ): Promise<gpt-voiceList> {
       return {
         cards: [],
         id: 'created-list-1',
         name: create.name,
       }
     },
-    async getBoardDetail(): Promise<TrelloBoardDetail> {
+    async getBoardDetail(): Promise<gpt-voiceBoardDetail> {
       return options.boardDetail
     },
     async getBoardDetailCacheFirst(): ReturnType<
-      TrelloClient['getBoardDetailCacheFirst']
+      gpt-voiceClient['getBoardDetailCacheFirst']
     > {
       return {
         cached: undefined,
@@ -455,9 +455,9 @@ const createStagedCardClient = (options: {
       }
     },
     async getCardDetail(
-      card: Readonly<TrelloCard>,
-      credentials: Readonly<TrelloCredentials>,
-    ): Promise<TrelloCardDetail> {
+      card: Readonly<gpt-voiceCard>,
+      credentials: Readonly<gpt-voiceCredentials>,
+    ): Promise<gpt-voiceCardDetail> {
       const result = await options.getCardDetailPartsCacheFirst(
         card,
         credentials,
@@ -474,14 +474,14 @@ const createStagedCardClient = (options: {
       }
     },
     async getCardDetailCacheFirst(
-      card: Readonly<TrelloCard>,
-      credentials: Readonly<TrelloCredentials>,
-    ): ReturnType<TrelloClient['getCardDetailCacheFirst']> {
+      card: Readonly<gpt-voiceCard>,
+      credentials: Readonly<gpt-voiceCredentials>,
+    ): ReturnType<gpt-voiceClient['getCardDetailCacheFirst']> {
       const result = await options.getCardDetailPartsCacheFirst(
         card,
         credentials,
       )
-      const fresh = async (): Promise<TrelloCardDetail> => {
+      const fresh = async (): Promise<gpt-voiceCardDetail> => {
         const [detailCard, attachments, comments] = await Promise.all([
           result.fresh.card,
           result.fresh.attachments,
@@ -499,14 +499,14 @@ const createStagedCardClient = (options: {
       }
     },
     getCardDetailPartsCacheFirst: options.getCardDetailPartsCacheFirst,
-    async listBoardLabels(): Promise<readonly TrelloLabel[]> {
+    async listBoardLabels(): Promise<readonly gpt-voiceLabel[]> {
       return []
     },
-    async listBoards(): Promise<readonly TrelloBoard[]> {
+    async listBoards(): Promise<readonly gpt-voiceBoard[]> {
       return options.boards
     },
     async listBoardsCacheFirst(): ReturnType<
-      TrelloClient['listBoardsCacheFirst']
+      gpt-voiceClient['listBoardsCacheFirst']
     > {
       return {
         cached: undefined,
@@ -514,36 +514,36 @@ const createStagedCardClient = (options: {
       }
     },
     async moveCard(
-      card: Readonly<TrelloCard>,
-      move: Readonly<TrelloCardMove>,
-    ): Promise<TrelloCard> {
+      card: Readonly<gpt-voiceCard>,
+      move: Readonly<gpt-voiceCardMove>,
+    ): Promise<gpt-voiceCard> {
       return {
         ...card,
         idList: move.idList,
       }
     },
-    async search(): Promise<readonly TrelloSearchResult[]> {
+    async search(): Promise<readonly gpt-voiceSearchResult[]> {
       return []
     },
-    async searchCacheFirst(): ReturnType<TrelloClient['searchCacheFirst']> {
+    async searchCacheFirst(): ReturnType<gpt-voiceClient['searchCacheFirst']> {
       return {
         cached: undefined,
         fresh: Promise.resolve([]),
       }
     },
     async updateCard(
-      card: Readonly<TrelloCard>,
-      update: Readonly<TrelloCardUpdate>,
-    ): Promise<TrelloCard> {
+      card: Readonly<gpt-voiceCard>,
+      update: Readonly<gpt-voiceCardUpdate>,
+    ): Promise<gpt-voiceCard> {
       return {
         ...card,
         ...update,
       }
     },
     async updateList(
-      list: Readonly<TrelloList>,
-      update: Readonly<TrelloListUpdate>,
-    ): Promise<TrelloList> {
+      list: Readonly<gpt-voiceList>,
+      update: Readonly<gpt-voiceListUpdate>,
+    ): Promise<gpt-voiceList> {
       return {
         ...list,
         ...update,
@@ -553,8 +553,8 @@ const createStagedCardClient = (options: {
 }
 
 test('renders auth inputs when unauthenticated', async () => {
-  setTrelloViewDependencyFactory(() => ({
-    client: createMockTrelloClient({}),
+  setgpt-voiceViewDependencyFactory(() => ({
+    client: createMockgpt-voiceClient({}),
     recentStorage: createMemoryRecentBoardStorage(),
     storage: createMemoryCredentialStorage(),
   }))
@@ -565,15 +565,15 @@ test('renders auth inputs when unauthenticated', async () => {
 
   expect(text).toContain('API key')
   expect(text).toContain('Token')
-  expect(text).toContain('Welcome to Trello')
-  expect(text).toContain('https://trello.com/power-ups/admin')
-  expect(text).toContain('The token grants access to your Trello account')
+  expect(text).toContain('Welcome to gpt-voice')
+  expect(text).toContain('https://gpt-voice.com/power-ups/admin')
+  expect(text).toContain('The token grants access to your gpt-voice account')
   expect(hasLabelText(dom, 'API key')).toBe(true)
   expect(hasLabelText(dom, 'Token')).toBe(true)
-  expect(getNodeByClass(dom, 'TrelloAuthForm')).toBeDefined()
-  expect(hasDirectChildClass(dom, 'TrelloAuthFields', 'TrelloField')).toBe(true)
-  expect(hasDirectChildClass(dom, 'TrelloAuthForm', 'TrelloField')).toBe(false)
-  expect(getNodeByClass(dom, 'TrelloTitle')).toBeUndefined()
+  expect(getNodeByClass(dom, 'gpt-voiceAuthForm')).toBeDefined()
+  expect(hasDirectChildClass(dom, 'gpt-voiceAuthFields', 'gpt-voiceField')).toBe(true)
+  expect(hasDirectChildClass(dom, 'gpt-voiceAuthForm', 'gpt-voiceField')).toBe(false)
+  expect(getNodeByClass(dom, 'gpt-voiceTitle')).toBeUndefined()
   const apiKeyInput = dom.find((node) => node.name === 'apiKey')
   const tokenInput = dom.find((node) => node.name === 'token')
   if (!apiKeyInput || !tokenInput) {
@@ -584,13 +584,13 @@ test('renders auth inputs when unauthenticated', async () => {
   expect(
     hasNode(dom, (node) => {
       return (
-        node.className === 'TrelloWelcomeLink' &&
-        node.href === 'https://trello.com/power-ups/admin' &&
+        node.className === 'gpt-voiceWelcomeLink' &&
+        node.href === 'https://gpt-voice.com/power-ups/admin' &&
         node.target === '_blank'
       )
     }),
   ).toBe(true)
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('dependency reload resets authenticated user state without clearing user credentials in test mode', async () => {
@@ -598,8 +598,8 @@ test('dependency reload resets authenticated user state without clearing user cr
     apiKey: validApiKey,
     token: validToken,
   })
-  setTrelloViewDependencyFactory(() => ({
-    client: createMockTrelloClient({
+  setgpt-voiceViewDependencyFactory(() => ({
+    client: createMockgpt-voiceClient({
       boards: [{ id: 'user-board', name: 'User Board' }],
     }),
     recentStorage: createMemoryRecentBoardStorage(),
@@ -609,15 +609,15 @@ test('dependency reload resets authenticated user state without clearing user cr
   const instance = (await view.create()) as VirtualDomViewInstance
   expect(getText(await instance.render())).toContain('User Board')
 
-  setTrelloViewDependencyFactory(() => ({
-    client: createMockTrelloClient({
+  setgpt-voiceViewDependencyFactory(() => ({
+    client: createMockgpt-voiceClient({
       boards: [{ id: 'board-1', name: 'Roadmap' }],
     }),
     isTest: true,
     recentStorage: createMemoryRecentBoardStorage(),
     storage: createMemoryCredentialStorage(),
   }))
-  await reloadActiveTrelloViewInstances()
+  await reloadActivegpt-voiceViewInstances()
 
   const authText = getText(await instance.render())
   expect(authText).toContain('API key')
@@ -641,7 +641,7 @@ test('dependency reload resets authenticated user state without clearing user cr
     token: validToken,
   })
   await instance.dispose?.()
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('saves and restores the board filter through view state', async () => {
@@ -662,8 +662,8 @@ test('saves and restores the board filter through view state', async () => {
       ],
     },
   }
-  setTrelloViewDependencyFactory(() => ({
-    client: createMockTrelloClient({ boardDetails, boards }),
+  setgpt-voiceViewDependencyFactory(() => ({
+    client: createMockgpt-voiceClient({ boardDetails, boards }),
     currentBoardStorage,
     recentStorage: createMemoryRecentBoardStorage(),
     storage: createMemoryCredentialStorage({
@@ -699,12 +699,12 @@ test('saves and restores the board filter through view state', async () => {
     'Document commands',
   )
   await restoredInstance.dispose?.()
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('connect loads boards and clicking board loads detail', async () => {
-  setTrelloViewDependencyFactory(() => ({
-    client: createMockTrelloClient({
+  setgpt-voiceViewDependencyFactory(() => ({
+    client: createMockgpt-voiceClient({
       boardDetails: {
         'board-1': {
           board: { id: 'board-1', name: 'Roadmap' },
@@ -730,7 +730,7 @@ test('connect loads boards and clicking board loads detail', async () => {
                       name: 'Backend',
                     },
                   ],
-                  name: 'Ship Trello view',
+                  name: 'Ship gpt-voice view',
                 },
                 {
                   badges: {
@@ -770,7 +770,7 @@ test('connect loads boards and clicking board loads detail', async () => {
       },
       boards: [{ id: 'board-1', name: 'Roadmap' }],
     }),
-    imageCache: createMockTrelloImageCache({
+    imageCache: createMockgpt-voiceImageCache({
       'https://example.com/attachment-card.png': 'blob:attachment-card-cover',
       'https://example.com/quiet-card-large.png': 'blob:quiet-card-large-cover',
     }),
@@ -793,8 +793,8 @@ test('connect loads boards and clicking board loads detail', async () => {
 
   const boardsText = getText(await instance.render())
   expect(boardsText).toContain('Roadmap')
-  expect(boardsText).not.toContain('Welcome to Trello')
-  expect(boardsText).not.toContain('https://trello.com/power-ups/admin')
+  expect(boardsText).not.toContain('Welcome to gpt-voice')
+  expect(boardsText).not.toContain('https://gpt-voice.com/power-ups/admin')
 
   await instance.handleEvent?.({ name: 'board:board-1', type: 'click' })
   await waitForCoverImages()
@@ -803,18 +803,18 @@ test('connect loads boards and clicking board loads detail', async () => {
   const detailText = getText(detailDom)
   const detailClassNames = getClassNames(detailDom)
   expect(getListTitleInput(detailDom, 'list-1')?.value).toBe('Todo')
-  expect(detailText).toContain('Ship Trello view')
+  expect(detailText).toContain('Ship gpt-voice view')
   const labeledCardDom = getSubtreeByNodeName(detailDom, 'card:card-1')
   expect(
     hasNode(labeledCardDom, (node) => {
-      return node.className === 'TrelloCardLabels TrelloCardPreviewLabels'
+      return node.className === 'gpt-voiceCardLabels gpt-voiceCardPreviewLabels'
     }),
   ).toBe(true)
   expect(
     hasNode(labeledCardDom, (node) => {
       return (
-        hasClass(node, 'TrelloCardPreviewLabel') &&
-        hasClass(node, 'TrelloCardLabelColorBlue') &&
+        hasClass(node, 'gpt-voiceCardPreviewLabel') &&
+        hasClass(node, 'gpt-voiceCardLabelColorBlue') &&
         node['aria-label'] === 'Extension Api' &&
         node.title === 'Extension Api'
       )
@@ -823,8 +823,8 @@ test('connect loads boards and clicking board loads detail', async () => {
   expect(
     hasNode(labeledCardDom, (node) => {
       return (
-        hasClass(node, 'TrelloCardPreviewLabel') &&
-        hasClass(node, 'TrelloCardLabelColorGreenDark') &&
+        hasClass(node, 'gpt-voiceCardPreviewLabel') &&
+        hasClass(node, 'gpt-voiceCardLabelColorGreenDark') &&
         node['aria-label'] === 'Backend' &&
         node.title === 'Backend'
       )
@@ -838,38 +838,38 @@ test('connect loads boards and clicking board loads detail', async () => {
   const attachmentCardDom = getSubtreeByNodeName(detailDom, 'card:card-3')
   expect(
     hasNode(attachmentCardDom, (node) => {
-      return hasClass(node, 'TrelloCardPreviewLabels')
+      return hasClass(node, 'gpt-voiceCardPreviewLabels')
     }),
   ).toBe(false)
   expect(detailText).not.toContain('0 comments')
-  expect(getNodeByClass(detailDom, 'TrelloCardMeta')).toMatchObject({
+  expect(getNodeByClass(detailDom, 'gpt-voiceCardMeta')).toMatchObject({
     'aria-label': '3 comments',
     title: '3 comments',
   })
-  expect(detailClassNames).toContain('TrelloLists')
-  expect(detailClassNames).toContain('TrelloList')
-  expect(detailClassNames).toContain('TrelloListHeader')
-  expect(detailClassNames).toContain('TrelloListCardCount')
-  expect(detailClassNames).toContain('TrelloCards')
-  expect(detailClassNames).toContain('TrelloCardTitle')
-  expect(detailClassNames).toContain('TrelloCardMeta')
-  expect(detailClassNames).toContain('TrelloCardCommentIcon')
-  expect(getNodeByClass(detailDom, 'TrelloCardCommentIcon')).toMatchObject({
+  expect(detailClassNames).toContain('gpt-voiceLists')
+  expect(detailClassNames).toContain('gpt-voiceList')
+  expect(detailClassNames).toContain('gpt-voiceListHeader')
+  expect(detailClassNames).toContain('gpt-voiceListCardCount')
+  expect(detailClassNames).toContain('gpt-voiceCards')
+  expect(detailClassNames).toContain('gpt-voiceCardTitle')
+  expect(detailClassNames).toContain('gpt-voiceCardMeta')
+  expect(detailClassNames).toContain('gpt-voiceCardCommentIcon')
+  expect(getNodeByClass(detailDom, 'gpt-voiceCardCommentIcon')).toMatchObject({
     alt: '',
     'aria-hidden': true,
     src: `${getExpectedAssetBaseUrl()}media/comments.svg`,
   })
-  expect(detailClassNames).toContain('TrelloCardCommentCount')
-  expect(detailClassNames).toContain('TrelloCardCoverImage')
+  expect(detailClassNames).toContain('gpt-voiceCardCommentCount')
+  expect(detailClassNames).toContain('gpt-voiceCardCoverImage')
   expect(
     hasNode(detailDom, (node) => {
-      return hasClass(node, 'TrelloCardWithCover')
+      return hasClass(node, 'gpt-voiceCardWithCover')
     }),
   ).toBe(true)
   expect(
     hasNode(detailDom, (node) => {
       return (
-        node.className === 'TrelloCardCoverImage' &&
+        node.className === 'gpt-voiceCardCoverImage' &&
         node.src === 'blob:quiet-card-large-cover' &&
         node.alt === 'Quiet card cover'
       )
@@ -878,7 +878,7 @@ test('connect loads boards and clicking board loads detail', async () => {
   expect(
     hasNode(attachmentCardDom, (node) => {
       return (
-        node.className === 'TrelloCardCoverImage' &&
+        node.className === 'gpt-voiceCardCoverImage' &&
         node.src === 'blob:attachment-card-cover' &&
         node.alt === 'Attachment card cover'
       )
@@ -886,47 +886,47 @@ test('connect loads boards and clicking board loads detail', async () => {
   ).toBe(true)
   const quietCardDom = getSubtreeByNodeName(detailDom, 'card:card-2')
   expect(getDirectChildClassNamesByName(quietCardDom, 'card:card-2')).toEqual([
-    'TrelloCardCoverImage',
-    'TrelloCardBody',
+    'gpt-voiceCardCoverImage',
+    'gpt-voiceCardBody',
   ])
-  const listCardCount = getNodeByClass(detailDom, 'TrelloListCardCount')
+  const listCardCount = getNodeByClass(detailDom, 'gpt-voiceListCardCount')
   const listCardCountIndex = detailDom.indexOf(listCardCount)
   expect(detailDom[listCardCountIndex + 1]?.text).toBe('3')
   expect(
     hasDirectChildClass(
       detailDom,
-      'TrelloListHeader',
-      'TrelloListTitleInputWrapper',
+      'gpt-voiceListHeader',
+      'gpt-voiceListTitleInputWrapper',
     ),
   ).toBe(true)
   expect(
     hasDirectChildClass(
       detailDom,
-      'TrelloListTitleInputWrapper',
-      'TrelloListTitleInput',
+      'gpt-voiceListTitleInputWrapper',
+      'gpt-voiceListTitleInput',
     ),
   ).toBe(true)
   expect(
-    hasDirectChildClass(detailDom, 'TrelloListHeader', 'TrelloListCardCount'),
+    hasDirectChildClass(detailDom, 'gpt-voiceListHeader', 'gpt-voiceListCardCount'),
   ).toBe(true)
-  expect(hasDirectChildClass(detailDom, 'TrelloList', 'TrelloCards')).toBe(true)
+  expect(hasDirectChildClass(detailDom, 'gpt-voiceList', 'gpt-voiceCards')).toBe(true)
   expect(
-    hasDirectChildClass(detailDom, 'TrelloList', 'TrelloAddCardButton'),
+    hasDirectChildClass(detailDom, 'gpt-voiceList', 'gpt-voiceAddCardButton'),
   ).toBe(true)
-  expect(hasDirectChildClass(detailDom, 'TrelloCards', 'TrelloCard')).toBe(true)
+  expect(hasDirectChildClass(detailDom, 'gpt-voiceCards', 'gpt-voiceCard')).toBe(true)
   expect(getDirectChildClassNamesByName(detailDom, 'list:list-1')).toEqual([
-    'TrelloListHeader',
-    'TrelloCards',
-    'TrelloAddCardButton',
+    'gpt-voiceListHeader',
+    'gpt-voiceCards',
+    'gpt-voiceAddCardButton',
   ])
   expect(getNodeByName(detailDom, 'addCard:list-1')).toEqual(
     expect.objectContaining({
-      className: 'TrelloAddCardButton',
+      className: 'gpt-voiceAddCardButton',
       name: 'addCard:list-1',
       onClick: 'handleClick',
     }),
   )
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('card cover image is not rendered when blob resolution fails', async () => {
@@ -958,7 +958,7 @@ test('card cover image is not rendered when blob resolution fails', async () => 
           ],
         },
       },
-      imageCache: createMockTrelloImageCache(),
+      imageCache: createMockgpt-voiceImageCache(),
     },
   )
 
@@ -967,9 +967,9 @@ test('card cover image is not rendered when blob resolution fails', async () => 
 
   const dom = await instance.render()
   expect(getText(dom)).toContain('Card with missing cover')
-  expect(getClassNames(dom)).not.toContain('TrelloCardCoverImage')
-  expect(getClassNames(dom)).not.toContain('TrelloCardWithCover')
-  resetTrelloViewDependencyFactory()
+  expect(getClassNames(dom)).not.toContain('gpt-voiceCardCoverImage')
+  expect(getClassNames(dom)).not.toContain('gpt-voiceCardWithCover')
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('list title renders as editable input', async () => {
@@ -997,7 +997,7 @@ test('list title renders as editable input', async () => {
   const title = getListTitleInput(dom, 'list-1')
   expect(title).toEqual(
     expect.objectContaining({
-      className: 'TrelloListTitleInput',
+      className: 'gpt-voiceListTitleInput',
       name: 'listTitle:list-1',
       onBlur: 'handleBlur',
       onInput: 'handleInput',
@@ -1006,17 +1006,17 @@ test('list title renders as editable input', async () => {
   )
   expect(getText(dom)).toContain('No cards')
   expect(getText(dom)).toContain('+ Add a card')
-  const listCardCount = getNodeByClass(dom, 'TrelloListCardCount')
+  const listCardCount = getNodeByClass(dom, 'gpt-voiceListCardCount')
   const listCardCountIndex = dom.indexOf(listCardCount)
   expect(dom[listCardCountIndex + 1]?.text).toBe('0')
   expect(getNodeByName(dom, 'addCard:list-1')).toEqual(
     expect.objectContaining({
-      className: 'TrelloAddCardButton',
+      className: 'gpt-voiceAddCardButton',
       name: 'addCard:list-1',
       onClick: 'handleClick',
     }),
   )
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('cards and lists render drag and drop attributes', async () => {
@@ -1116,7 +1116,7 @@ test('cards and lists render drag and drop attributes', async () => {
   const dom = await instance.render()
   expect(getNodeByName(dom, 'card:card-1')).toEqual(
     expect.objectContaining({
-      className: 'TrelloCard',
+      className: 'gpt-voiceCard',
       draggable: true,
       name: 'card:card-1',
       onContextMenu: 'handleContextMenu',
@@ -1131,7 +1131,7 @@ test('cards and lists render drag and drop attributes', async () => {
   )
   expect(getNodeByName(dom, 'list:list-1')).toEqual(
     expect.objectContaining({
-      className: 'TrelloList',
+      className: 'gpt-voiceList',
       'data-id': 'list:list-1',
       name: 'list:list-1',
       onClick: 'handleClick',
@@ -1143,27 +1143,27 @@ test('cards and lists render drag and drop attributes', async () => {
   )
 
   await instance.handleEvent?.(createContextMenuEvent('list:list-1', 100, 200))
-  expect(contextMenuInvocations).toEqual([['trello.list', 100, 200]])
-  expect((instance as any).getMenuEntries('trello.list')).toEqual([
+  expect(contextMenuInvocations).toEqual([['gpt-voice.list', 100, 200]])
+  expect((instance as any).getMenuEntries('gpt-voice.list')).toEqual([
     {
       args: ['list-1'],
-      command: 'trello.startAddCard',
+      command: 'gpt-voice.startAddCard',
       id: 'addCard',
       label: 'Add Card',
     },
     {
-      command: 'trello.refreshBoards',
+      command: 'gpt-voice.refreshBoards',
       id: 'refreshBoards',
       label: 'Refresh Boards',
     },
     {
-      command: 'trello.backToBoards',
+      command: 'gpt-voice.backToBoards',
       id: 'backToBoards',
       label: 'Back to Boards',
     },
   ])
   expect(await instance.render()).toEqual(dom)
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('clicking add card renders action controls that submit or close the form', async () => {
@@ -1197,7 +1197,7 @@ test('clicking add card renders action controls that submit or close the form', 
   expect(getNodeByName(dom, 'newCardTitle:list-1')).toEqual(
     expect.objectContaining({
       autocomplete: 'off',
-      className: 'TrelloAddCardInput',
+      className: 'gpt-voiceAddCardInput',
       name: 'newCardTitle:list-1',
       onBlur: 'handleBlur',
       onInput: 'handleInput',
@@ -1209,7 +1209,7 @@ test('clicking add card renders action controls that submit or close the form', 
   expect(getNodeByName(dom, 'newCardTitle:list-2')).toBeUndefined()
   expect(getNodeByName(dom, 'submitAddCard:list-1')).toEqual(
     expect.objectContaining({
-      className: 'TrelloButton TrelloAddCardSubmitButton',
+      className: 'gpt-voiceButton gpt-voiceAddCardSubmitButton',
       disabled: false,
       inputType: 'button',
       name: 'submitAddCard:list-1',
@@ -1220,7 +1220,7 @@ test('clicking add card renders action controls that submit or close the form', 
   expect(getNodeByName(dom, 'cancelAddCard')).toEqual(
     expect.objectContaining({
       'aria-label': 'Close',
-      className: 'TrelloAddCardCloseButton',
+      className: 'gpt-voiceAddCardCloseButton',
       inputType: 'button',
       name: 'cancelAddCard',
       onClick: 'handleClick',
@@ -1232,7 +1232,7 @@ test('clicking add card renders action controls that submit or close the form', 
     hasNode(dom, (node) => {
       return (
         node.name === 'addCard:list-2' &&
-        node.className === 'TrelloAddCardButton'
+        node.className === 'gpt-voiceAddCardButton'
       )
     }),
   ).toBe(true)
@@ -1253,7 +1253,7 @@ test('clicking add card renders action controls that submit or close the form', 
     type: 'click',
   })
   expect(getText(await instance.render())).toContain('Build add card')
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('board overview context menu opens board menu', async () => {
@@ -1278,25 +1278,25 @@ test('board overview context menu opens board menu', async () => {
 
   await instance.handleEvent?.(createContextMenuEvent('boards', 11, 22))
 
-  expect(contextMenuInvocations).toEqual([['trello.board', 11, 22]])
-  expect((instance as any).getMenuEntries('trello.board')).toEqual([
+  expect(contextMenuInvocations).toEqual([['gpt-voice.board', 11, 22]])
+  expect((instance as any).getMenuEntries('gpt-voice.board')).toEqual([
     {
-      command: 'trello.refreshBoards',
+      command: 'gpt-voice.refreshBoards',
       id: 'refreshBoards',
       label: 'Refresh Boards',
     },
     {
-      command: 'trello.logout',
+      command: 'gpt-voice.logout',
       id: 'signOut',
       label: 'Sign Out',
     },
   ])
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('renderActionsDom returns no actions before authentication', async () => {
-  setTrelloViewDependencyFactory(() => ({
-    client: createMockTrelloClient({ boards: [] }),
+  setgpt-voiceViewDependencyFactory(() => ({
+    client: createMockgpt-voiceClient({ boards: [] }),
     recentStorage: createMemoryRecentBoardStorage(),
     storage: createMemoryCredentialStorage(),
   }))
@@ -1305,7 +1305,7 @@ test('renderActionsDom returns no actions before authentication', async () => {
   }
 
   expect(instance.renderActionsDom()).toEqual([])
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('renderActionsDom returns board list actions', async () => {
@@ -1325,7 +1325,7 @@ test('renderActionsDom returns board list actions', async () => {
     {
       childCount: 1,
       className: 'IconButton',
-      'data-command': 'trello.refreshBoards',
+      'data-command': 'gpt-voice.refreshBoards',
       title: 'Refresh Boards',
       type: VirtualDomElements.Button,
     },
@@ -1338,7 +1338,7 @@ test('renderActionsDom returns board list actions', async () => {
     {
       childCount: 1,
       className: 'IconButton',
-      'data-command': 'trello.logout',
+      'data-command': 'gpt-voice.logout',
       title: 'Sign Out',
       type: VirtualDomElements.Button,
     },
@@ -1349,7 +1349,7 @@ test('renderActionsDom returns board list actions', async () => {
       type: VirtualDomElements.Div,
     },
   ])
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('renderActionsDom returns board detail actions', async () => {
@@ -1380,7 +1380,7 @@ test('renderActionsDom returns board detail actions', async () => {
     {
       childCount: 1,
       className: 'IconButton',
-      'data-command': 'trello.backToBoards',
+      'data-command': 'gpt-voice.backToBoards',
       title: 'Back to Boards',
       type: VirtualDomElements.Button,
     },
@@ -1393,7 +1393,7 @@ test('renderActionsDom returns board detail actions', async () => {
     {
       childCount: 1,
       className: 'IconButton',
-      'data-command': 'trello.refreshBoards',
+      'data-command': 'gpt-voice.refreshBoards',
       title: 'Refresh Boards',
       type: VirtualDomElements.Button,
     },
@@ -1422,7 +1422,7 @@ test('renderActionsDom returns board detail actions', async () => {
     {
       childCount: 1,
       className: 'IconButton',
-      'data-command': 'trello.logout',
+      'data-command': 'gpt-voice.logout',
       title: 'Sign Out',
       type: VirtualDomElements.Button,
     },
@@ -1438,7 +1438,7 @@ test('renderActionsDom returns board detail actions', async () => {
 
   const viewDom = await instance.render()
   expect(
-    viewDom.some((node) => node.className === 'TrelloBoardFilterPopup'),
+    viewDom.some((node) => node.className === 'gpt-voiceBoardFilterPopup'),
   ).toBe(true)
   expect(
     instance
@@ -1463,10 +1463,10 @@ test('renderActionsDom returns board detail actions', async () => {
       .find((node: any) => node.name === 'openBoardFilter'),
   ).toEqual(
     expect.objectContaining({
-      className: 'IconButton TrelloBoardFilterActionActive',
+      className: 'IconButton gpt-voiceBoardFilterActionActive',
     }),
   )
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('renderTitle moves the current board name into the sidebar title', async () => {
@@ -1485,16 +1485,16 @@ test('renderTitle moves the current board name into the sidebar title', async ()
     readonly renderTitle: () => string
   }
 
-  expect(instance.renderTitle()).toBe('Trello')
+  expect(instance.renderTitle()).toBe('gpt-voice')
 
   await instance.handleEvent?.({ name: 'board:board-1', type: 'click' })
 
-  expect(instance.renderTitle()).toBe('Trello: Roadmap')
-  expect(getClassNames(await instance.render())).not.toContain('TrelloTitle')
+  expect(instance.renderTitle()).toBe('gpt-voice: Roadmap')
+  expect(getClassNames(await instance.render())).not.toContain('gpt-voiceTitle')
 
-  await backToBoardsActiveTrelloViewInstance()
-  expect(instance.renderTitle()).toBe('Trello')
-  resetTrelloViewDependencyFactory()
+  await backToBoardsActivegpt-voiceViewInstance()
+  expect(instance.renderTitle()).toBe('gpt-voice')
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('back sidebar action returns to the boards view', async () => {
@@ -1512,14 +1512,14 @@ test('back sidebar action returns to the boards view', async () => {
   )
   await instance.handleEvent?.({ name: 'board:board-1', type: 'click' })
 
-  const command = view.commands['trello.backToBoards']
+  const command = view.commands['gpt-voice.backToBoards']
   const newInstance = await command(instance)
   const dom = await newInstance.render()
 
   expect(newInstance).toBe(instance)
   expect(getNodeByName(dom, 'board:board-1')).toBeDefined()
-  expect(getClassNames(dom)).not.toContain('TrelloBoardDetail')
-  resetTrelloViewDependencyFactory()
+  expect(getClassNames(dom)).not.toContain('gpt-voiceBoardDetail')
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('boards view does not render sidebar actions inside content', async () => {
@@ -1531,7 +1531,7 @@ test('boards view does not render sidebar actions inside content', async () => {
 
   expect(getNodeByName(dom, 'refreshBoards')).toBeUndefined()
   expect(getNodeByName(dom, 'logout')).toBeUndefined()
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('board detail view does not render sidebar actions inside content', async () => {
@@ -1553,7 +1553,7 @@ test('board detail view does not render sidebar actions inside content', async (
 
   expect(getNodeByName(dom, 'backToBoards')).toBeUndefined()
   expect(getNodeByName(dom, 'logout')).toBeUndefined()
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('card context menu opens card menu with target args', async () => {
@@ -1583,32 +1583,32 @@ test('card context menu opens card menu with target args', async () => {
 
   await instance.handleEvent?.(createContextMenuEvent('card:card-1', 33, 44))
 
-  expect(contextMenuInvocations).toEqual([['trello.card', 33, 44]])
-  expect((instance as any).getMenuEntries('trello.card')).toEqual([
+  expect(contextMenuInvocations).toEqual([['gpt-voice.card', 33, 44]])
+  expect((instance as any).getMenuEntries('gpt-voice.card')).toEqual([
     {
       args: ['card-1'],
-      command: 'trello.openCard',
+      command: 'gpt-voice.openCard',
       id: 'openCard',
       label: 'Open Card',
     },
     {
       args: ['list-1'],
-      command: 'trello.startAddCard',
+      command: 'gpt-voice.startAddCard',
       id: 'addCard',
       label: 'Add Card',
     },
     {
-      command: 'trello.refreshBoards',
+      command: 'gpt-voice.refreshBoards',
       id: 'refreshBoards',
       label: 'Refresh Boards',
     },
     {
-      command: 'trello.backToBoards',
+      command: 'gpt-voice.backToBoards',
       id: 'backToBoards',
       label: 'Back to Boards',
     },
   ])
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('card detail context menu opens card detail menu', async () => {
@@ -1647,30 +1647,30 @@ test('card detail context menu opens card detail menu', async () => {
 
   await instance.handleEvent?.(createContextMenuEvent('cardDetail', 55, 66))
 
-  expect(contextMenuInvocations).toEqual([['trello.cardDetail', 55, 66]])
-  expect((instance as any).getMenuEntries('trello.cardDetail')).toEqual([
+  expect(contextMenuInvocations).toEqual([['gpt-voice.cardDetail', 55, 66]])
+  expect((instance as any).getMenuEntries('gpt-voice.cardDetail')).toEqual([
     {
-      command: 'trello.saveCardDetail',
+      command: 'gpt-voice.saveCardDetail',
       id: 'saveCard',
       label: 'Save Card',
     },
     {
-      command: 'trello.closeCardDetail',
+      command: 'gpt-voice.closeCardDetail',
       id: 'closeCard',
       label: 'Close Card',
     },
     {
-      command: 'trello.refreshBoards',
+      command: 'gpt-voice.refreshBoards',
       id: 'refreshBoards',
       label: 'Refresh Boards',
     },
     {
-      command: 'trello.backToBoards',
+      command: 'gpt-voice.backToBoards',
       id: 'backToBoards',
       label: 'Back to Boards',
     },
   ])
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('view context tracks board and new-card input focus', async () => {
@@ -1701,24 +1701,24 @@ test('view context tracks board and new-card input focus', async () => {
   }
 
   expect(withContext.getContext()).toEqual({
-    'trello.boardsFocus': true,
+    'gpt-voice.boardsFocus': true,
   })
 
   await instance.handleEvent?.({ name: 'board:board-1', type: 'click' })
   expect(withContext.getContext()).toEqual({
-    'trello.boardDetailFocus': true,
+    'gpt-voice.boardDetailFocus': true,
   })
 
   await instance.handleEvent?.({ name: 'addCard:list-1', type: 'click' })
   const addCardContext = withContext.getContext()
   expect(addCardContext).toEqual({
-    'trello.boardDetailFocus': true,
-    'trello.newCardInputFocus': true,
+    'gpt-voice.boardDetailFocus': true,
+    'gpt-voice.newCardInputFocus': true,
   })
   expect(
     withContext.renderFocus(
       {
-        'trello.boardDetailFocus': true,
+        'gpt-voice.boardDetailFocus': true,
       },
       addCardContext,
     ),
@@ -1729,8 +1729,8 @@ test('view context tracks board and new-card input focus', async () => {
     type: 'focus',
   })
   expect(withContext.getContext()).toEqual({
-    'trello.boardDetailFocus': true,
-    'trello.newCardInputFocus': true,
+    'gpt-voice.boardDetailFocus': true,
+    'gpt-voice.newCardInputFocus': true,
   })
 
   await instance.handleEvent?.({
@@ -1738,10 +1738,10 @@ test('view context tracks board and new-card input focus', async () => {
     type: 'blur',
   })
   expect(withContext.getContext()).toEqual({
-    'trello.boardDetailFocus': true,
+    'gpt-voice.boardDetailFocus': true,
   })
 
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('renderSelections selects the whole list title once on focus', async () => {
@@ -1793,7 +1793,7 @@ test('renderSelections selects the whole list title once on focus', async () => 
     },
   ])
 
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('renderFocus returns card description selector when editing description starts', async () => {
@@ -1842,15 +1842,15 @@ test('renderFocus returns card description selector when editing description sta
   const descriptionContext = withFocus.getContext()
 
   expect(descriptionContext).toEqual({
-    'trello.boardDetailFocus': true,
-    'trello.cardDescriptionFocus': true,
-    'trello.cardDetailFocus': true,
+    'gpt-voice.boardDetailFocus': true,
+    'gpt-voice.cardDescriptionFocus': true,
+    'gpt-voice.cardDetailFocus': true,
   })
   expect(withFocus.renderFocus(cardContext, descriptionContext)).toBe(
     '[name="cardDescription"]',
   )
 
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('active keybinding commands submit and cancel new card input', async () => {
@@ -1880,16 +1880,16 @@ test('active keybinding commands submit and cancel new card input', async () => 
     type: 'input',
     value: 'Build shortcuts',
   })
-  await submitNewCardActiveTrelloViewInstance()
+  await submitNewCardActivegpt-voiceViewInstance()
   expect(getText(await instance.render())).toContain('Build shortcuts')
 
   await instance.handleEvent?.({ name: 'addCard:list-1', type: 'click' })
-  cancelNewCardActiveTrelloViewInstance()
+  cancelNewCardActivegpt-voiceViewInstance()
   expect(
     getNodeByName(await instance.render(), 'newCardTitle:list-1'),
   ).toBeUndefined()
 
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('escape closes new card input and preserves its draft for another list', async () => {
@@ -1936,7 +1936,7 @@ test('escape closes new card input and preserves its draft for another list', as
     }),
   )
 
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('blur closes new card input and preserves its draft', async () => {
@@ -1981,7 +1981,7 @@ test('blur closes new card input and preserves its draft', async () => {
     }),
   )
 
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('active keybinding commands navigate board and close card detail', async () => {
@@ -2008,15 +2008,15 @@ test('active keybinding commands navigate board and close card detail', async ()
   await instance.handleEvent?.({ name: 'card:card-1', type: 'click' })
   expect(getText(await instance.render())).toContain('Plan work')
 
-  closeCardDetailActiveTrelloViewInstance()
+  closeCardDetailActivegpt-voiceViewInstance()
   expect(
     getNodeByName(await instance.render(), 'closeCardDetail'),
   ).toBeUndefined()
 
-  await backToBoardsActiveTrelloViewInstance()
+  await backToBoardsActivegpt-voiceViewInstance()
   expect(getBoardButtonLabels(await instance.render())).toContain('Roadmap')
 
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('active keybinding command saves card description', async () => {
@@ -2053,16 +2053,16 @@ test('active keybinding command saves card description', async () => {
   })
 
   expect(withContext.getContext()).toEqual({
-    'trello.boardDetailFocus': true,
-    'trello.cardDescriptionFocus': true,
-    'trello.cardDetailFocus': true,
+    'gpt-voice.boardDetailFocus': true,
+    'gpt-voice.cardDescriptionFocus': true,
+    'gpt-voice.cardDetailFocus': true,
   })
 
-  await saveCardDetailActiveTrelloViewInstance()
+  await saveCardDetailActivegpt-voiceViewInstance()
   const text = getText(await instance.render())
   expect(text).toContain('Shortcut saved description')
 
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('submitting add card appends card and focuses an empty input for the next card', async () => {
@@ -2139,18 +2139,18 @@ test('submitting add card appends card and focuses an empty input for the next c
   }
   const nextCardContext = withContext.getContext()
   expect(nextCardContext).toEqual({
-    'trello.boardDetailFocus': true,
-    'trello.newCardInputFocus': true,
+    'gpt-voice.boardDetailFocus': true,
+    'gpt-voice.newCardInputFocus': true,
   })
   expect(
     withContext.renderFocus(
       {
-        'trello.boardDetailFocus': true,
+        'gpt-voice.boardDetailFocus': true,
       },
       nextCardContext,
     ),
   ).toBe('[name="newCardTitle:list-1"]')
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('add card stays open when saving blurs the input', async () => {
@@ -2167,12 +2167,12 @@ test('add card stays open when saving blurs the input', async () => {
       ],
     },
   }
-  const card = createDeferred<TrelloCard>()
-  const mockClient = createMockTrelloClient({
+  const card = createDeferred<gpt-voiceCard>()
+  const mockClient = createMockgpt-voiceClient({
     boardDetails,
     boards,
   })
-  const client: TrelloClient = {
+  const client: gpt-voiceClient = {
     ...mockClient,
     createCard: async () => card.promise,
   }
@@ -2222,7 +2222,7 @@ test('add card stays open when saving blurs the input', async () => {
       value: '',
     }),
   )
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('submitting blank add card keeps input open with error', async () => {
@@ -2259,7 +2259,7 @@ test('submitting blank add card keeps input open with error', async () => {
   expect(getSubtreeTextByNodeName(dom, 'list:list-1')).not.toContain(
     'created-card',
   )
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('add card failure keeps input open and preserves draft', async () => {
@@ -2301,7 +2301,7 @@ test('add card failure keeps input open and preserves draft', async () => {
   expect(getSubtreeTextByNodeName(dom, 'list:list-1')).not.toContain(
     'Build add card',
   )
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('drag over marks list as drag target', async () => {
@@ -2331,14 +2331,14 @@ test('drag over marks list as drag target', async () => {
   expect(
     hasClass(
       getNodeByName(dragTargetDom, 'list:list-1'),
-      'TrelloListDragTarget',
+      'gpt-voiceListDragTarget',
     ),
   ).toBe(true)
 
   await instance.handleDragLeave()
   const clearedDom = await instance.render()
   expect(
-    hasClass(getNodeByName(clearedDom, 'list:list-1'), 'TrelloListDragTarget'),
+    hasClass(getNodeByName(clearedDom, 'list:list-1'), 'gpt-voiceListDragTarget'),
   ).toBe(false)
 
   await instance.handleDragStart('card:card-1')
@@ -2346,9 +2346,9 @@ test('drag over marks list as drag target', async () => {
   await instance.handleDragEnd()
   const dragEndDom = await instance.render()
   expect(
-    hasClass(getNodeByName(dragEndDom, 'list:list-1'), 'TrelloListDragTarget'),
+    hasClass(getNodeByName(dragEndDom, 'list:list-1'), 'gpt-voiceListDragTarget'),
   ).toBe(false)
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('dropping card on another list moves card to top', async () => {
@@ -2388,7 +2388,7 @@ test('dropping card on another list moves card to top', async () => {
   expect(doingText.indexOf('Plan work')).toBeLessThan(
     doingText.indexOf('Build work'),
   )
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('dropping card on the same list is a no-op', async () => {
@@ -2428,7 +2428,7 @@ test('dropping card on the same list is a no-op', async () => {
     'Plan work',
   )
   expect(getText(dom)).not.toContain('Move should not be called')
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('failed card drop preserves placement and shows error', async () => {
@@ -2468,7 +2468,7 @@ test('failed card drop preserves placement and shows error', async () => {
     'Plan work',
   )
   expect(getText(dom)).toContain('Cannot move card')
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('editing list title saves on blur', async () => {
@@ -2503,7 +2503,7 @@ test('editing list title saves on blur', async () => {
   expect(getText(await instance.render())).not.toContain(
     'List title is required.',
   )
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('board detail creates another list from the trailing list control', async () => {
@@ -2565,7 +2565,7 @@ test('board detail creates another list from the trailing list control', async (
   const updatedDom = await instance.render()
   expect(getListTitleInput(updatedDom, 'created-list-1')?.value).toBe('Done')
   expect(getNodeByName(updatedDom, 'newListTitle')).toBeUndefined()
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('empty list title restores old title on blur', async () => {
@@ -2598,7 +2598,7 @@ test('empty list title restores old title on blur', async () => {
   const dom = await instance.render()
   expect(getListTitleInput(dom, 'list-1')?.value).toBe('Todo')
   expect(getText(dom)).toContain('List title is required.')
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('failed list title update restores old title on blur', async () => {
@@ -2619,7 +2619,7 @@ test('failed list title update restores old title on blur', async () => {
         },
       },
       listUpdateErrors: {
-        'list-1': 'Trello request failed: 500 unavailable',
+        'list-1': 'gpt-voice request failed: 500 unavailable',
       },
     },
   )
@@ -2633,18 +2633,18 @@ test('failed list title update restores old title on blur', async () => {
 
   const dom = await instance.render()
   expect(getListTitleInput(dom, 'list-1')?.value).toBe('Todo')
-  expect(getText(dom)).toContain('Trello request failed: 500 unavailable')
-  resetTrelloViewDependencyFactory()
+  expect(getText(dom)).toContain('gpt-voice request failed: 500 unavailable')
+  resetgpt-voiceViewDependencyFactory()
 })
 test('clicking card renders card detail and close dismisses it', async () => {
-  setTrelloViewDependencyFactory(() => ({
-    client: createMockTrelloClient({
+  setgpt-voiceViewDependencyFactory(() => ({
+    client: createMockgpt-voiceClient({
       boardDetails: {
         'board-1': {
           board: { id: 'board-1', name: 'Roadmap' },
           lists: [
             {
-              cards: [{ id: 'card-1', name: 'Ship Trello view' }],
+              cards: [{ id: 'card-1', name: 'Ship gpt-voice view' }],
               id: 'list-1',
               name: 'Todo',
             },
@@ -2673,8 +2673,8 @@ test('clicking card renders card detail and close dismisses it', async () => {
                 name: 'Extension Api',
               },
             ],
-            name: 'Ship Trello view',
-            url: 'https://trello.com/c/card-1',
+            name: 'Ship gpt-voice view',
+            url: 'https://gpt-voice.com/c/card-1',
           },
           comments: [
             {
@@ -2692,7 +2692,7 @@ test('clicking card renders card detail and close dismisses it', async () => {
         },
       },
     }),
-    imageCache: createMockTrelloImageCache({
+    imageCache: createMockgpt-voiceImageCache({
       'https://example.com/screenshot.png': 'blob:private-screenshot',
     }),
     recentStorage: createMemoryRecentBoardStorage(),
@@ -2721,7 +2721,7 @@ test('clicking card renders card detail and close dismisses it', async () => {
     hasNode(detailDom, (node) => {
       return (
         node.name === 'editCardDescription' &&
-        node.className === 'TrelloButton TrelloCardDescriptionEditButton'
+        node.className === 'gpt-voiceButton gpt-voiceCardDescriptionEditButton'
       )
     }),
   ).toBe(true)
@@ -2731,7 +2731,7 @@ test('clicking card renders card detail and close dismisses it', async () => {
   expect(text).toContain('Jul 3, 2026, 12:11 PM')
   expect(text).toContain('This should show under the description.')
   expect(text).toContain('Extension Api')
-  expect(text).toContain('Open in Trello')
+  expect(text).toContain('Open in gpt-voice')
   expect(text.indexOf('Detailed card description')).toBeLessThan(
     text.indexOf('Comments'),
   )
@@ -2744,7 +2744,7 @@ test('clicking card renders card detail and close dismisses it', async () => {
   expect(text.indexOf('This should show under the description.')).toBeLessThan(
     text.indexOf('Images'),
   )
-  expect(getClassNames(detailDom)).toContain('TrelloCardDetailPanel')
+  expect(getClassNames(detailDom)).toContain('gpt-voiceCardDetailPanel')
 
   await instance.handleEvent?.({ name: 'editCardDescription', type: 'click' })
 
@@ -2752,20 +2752,20 @@ test('clicking card renders card detail and close dismisses it', async () => {
   expect(getNodeByName(editingDom, 'cardDescription')?.value).toBe(
     'Detailed card description',
   )
-  expect(getClassNames(detailDom)).toContain('TrelloCardDetailImage')
-  expect(getClassNames(detailDom)).toContain('TrelloCardComments')
-  expect(getClassNames(detailDom)).toContain('TrelloCardComment')
-  expect(getClassNames(detailDom)).toContain('TrelloCardCommentAvatar')
-  expect(getClassNames(detailDom)).toContain('TrelloCardCommentContent')
-  expect(getClassNames(detailDom)).toContain('TrelloCardCommentHeader')
-  expect(getClassNames(detailDom)).toContain('TrelloCardCommentAuthor')
-  expect(getClassNames(detailDom)).toContain('TrelloCardCommentDate')
-  expect(getClassNames(detailDom)).toContain('TrelloCardCommentText')
-  expect(hasDirectChildClass(detailDom, 'TrelloCards', 'TrelloCard')).toBe(true)
+  expect(getClassNames(detailDom)).toContain('gpt-voiceCardDetailImage')
+  expect(getClassNames(detailDom)).toContain('gpt-voiceCardComments')
+  expect(getClassNames(detailDom)).toContain('gpt-voiceCardComment')
+  expect(getClassNames(detailDom)).toContain('gpt-voiceCardCommentAvatar')
+  expect(getClassNames(detailDom)).toContain('gpt-voiceCardCommentContent')
+  expect(getClassNames(detailDom)).toContain('gpt-voiceCardCommentHeader')
+  expect(getClassNames(detailDom)).toContain('gpt-voiceCardCommentAuthor')
+  expect(getClassNames(detailDom)).toContain('gpt-voiceCardCommentDate')
+  expect(getClassNames(detailDom)).toContain('gpt-voiceCardCommentText')
+  expect(hasDirectChildClass(detailDom, 'gpt-voiceCards', 'gpt-voiceCard')).toBe(true)
   expect(
     hasNode(detailDom, (node) => {
       return (
-        node.className === 'TrelloCardDetailImage' &&
+        node.className === 'gpt-voiceCardDetailImage' &&
         node.name === 'attachment-1' &&
         node.onError === 'handleImageError' &&
         node.src === 'blob:private-screenshot'
@@ -2776,23 +2776,23 @@ test('clicking card renders card detail and close dismisses it', async () => {
   await instance.handleImageError('attachment-1')
 
   const imageErrorDom = await instance.render()
-  expect(getClassNames(imageErrorDom)).not.toContain('TrelloCardDetailImage')
-  expect(getClassNames(imageErrorDom)).toContain('TrelloCardDetailImageError')
+  expect(getClassNames(imageErrorDom)).not.toContain('gpt-voiceCardDetailImage')
+  expect(getClassNames(imageErrorDom)).toContain('gpt-voiceCardDetailImageError')
   expect(getText(imageErrorDom)).toContain('Image could not be loaded.')
   expect(
     hasNode(detailDom, (node) => {
       return (
         typeof node.className === 'string' &&
-        node.className.includes('TrelloCardLabel') &&
-        node.className.includes('TrelloCardLabelColorBlue')
+        node.className.includes('gpt-voiceCardLabel') &&
+        node.className.includes('gpt-voiceCardLabelColorBlue')
       )
     }),
   ).toBe(true)
   expect(
     hasNode(detailDom, (node) => {
       return (
-        node.className === 'TrelloCardDetailLink' &&
-        node.href === 'https://trello.com/c/card-1'
+        node.className === 'gpt-voiceCardDetailLink' &&
+        node.href === 'https://gpt-voice.com/c/card-1'
       )
     }),
   ).toBe(true)
@@ -2802,7 +2802,7 @@ test('clicking card renders card detail and close dismisses it', async () => {
       return (
         node.name === 'closeCardDetail' &&
         typeof node.className === 'string' &&
-        node.className.includes('TrelloCardDetailCloseButton')
+        node.className.includes('gpt-voiceCardDetailCloseButton')
       )
     }),
   ).toBe(true)
@@ -2811,9 +2811,9 @@ test('clicking card renders card detail and close dismisses it', async () => {
 
   const closedDom = await instance.render()
   expect(getListTitleInput(closedDom, 'list-1')?.value).toBe('Todo')
-  expect(getText(closedDom)).toContain('Ship Trello view')
-  expect(getClassNames(closedDom)).not.toContain('TrelloCardDetailPanel')
-  resetTrelloViewDependencyFactory()
+  expect(getText(closedDom)).toContain('Ship gpt-voice view')
+  expect(getClassNames(closedDom)).not.toContain('gpt-voiceCardDetailPanel')
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('clicking already opened card does nothing', async () => {
@@ -2822,23 +2822,23 @@ test('clicking already opened card does nothing', async () => {
     board: boards[0],
     lists: [
       {
-        cards: [{ id: 'card-1', name: 'Ship Trello view' }],
+        cards: [{ id: 'card-1', name: 'Ship gpt-voice view' }],
         id: 'list-1',
         name: 'Todo',
       },
     ],
   }
-  const cardDetail: TrelloCardDetail = {
+  const cardDetail: gpt-voiceCardDetail = {
     attachments: [],
     card: {
       desc: 'Detailed card description',
       id: 'card-1',
-      name: 'Ship Trello view',
+      name: 'Ship gpt-voice view',
     },
     comments: [],
   }
   let getCardDetailCallCount = 0
-  setTrelloViewDependencyFactory(() => ({
+  setgpt-voiceViewDependencyFactory(() => ({
     client: createStagedCardClient({
       boardDetail,
       boards,
@@ -2881,7 +2881,7 @@ test('clicking already opened card does nothing', async () => {
   await instance.handleEvent?.({ name: 'card:card-1', type: 'click' })
 
   expect(getCardDetailCallCount).toBe(1)
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('card detail panel resizes from the left sash', async () => {
@@ -2894,7 +2894,7 @@ test('card detail panel resizes from the left sash', async () => {
           board: { id: 'board-1', name: 'Roadmap' },
           lists: [
             {
-              cards: [{ id: 'card-1', name: 'Ship Trello view' }],
+              cards: [{ id: 'card-1', name: 'Ship gpt-voice view' }],
               id: 'list-1',
               name: 'Todo',
             },
@@ -2907,7 +2907,7 @@ test('card detail panel resizes from the left sash', async () => {
           card: {
             desc: '',
             id: 'card-1',
-            name: 'Ship Trello view',
+            name: 'Ship gpt-voice view',
           },
           comments: [],
         },
@@ -2919,29 +2919,29 @@ test('card detail panel resizes from the left sash', async () => {
 
   const initialDom = await instance.render()
   expect(getNodeByName(initialDom, 'resizeCardDetail')).toMatchObject({
-    className: 'TrelloCardDetailResizeSash',
+    className: 'gpt-voiceCardDetailResizeSash',
     onPointerDown: 'handleSashPointerDown',
   })
   expect(
-    getDirectChildClassNamesByClassName(initialDom, 'TrelloBoardDetailContent'),
+    getDirectChildClassNamesByClassName(initialDom, 'gpt-voiceBoardDetailContent'),
   ).toEqual([
-    'TrelloLists',
-    'TrelloCardDetailResizeSash',
-    'TrelloCardDetailPanel',
+    'gpt-voiceLists',
+    'gpt-voiceCardDetailResizeSash',
+    'gpt-voiceCardDetailPanel',
   ])
   expect(getNodeByName(initialDom, 'cardDetail')?.style).toBeUndefined()
-  expect(instance.getCss()).toContain('--TrelloCardDetailWidth: 360px')
+  expect(instance.getCss()).toContain('--gpt-voiceCardDetailWidth: 360px')
 
   await instance.handleSashPointerDown(100)
   await instance.handleSashPointerMove(60)
 
-  expect(instance.getCss()).toContain('--TrelloCardDetailWidth: 400px')
+  expect(instance.getCss()).toContain('--gpt-voiceCardDetailWidth: 400px')
 
   await instance.handleSashPointerMove(500)
   await instance.handleSashPointerUp()
 
-  expect(instance.getCss()).toContain('--TrelloCardDetailWidth: 200px')
-  resetTrelloViewDependencyFactory()
+  expect(instance.getCss()).toContain('--gpt-voiceCardDetailWidth: 200px')
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('card detail opens in a popup when enabled', async () => {
@@ -2954,7 +2954,7 @@ test('card detail opens in a popup when enabled', async () => {
           board: { id: 'board-1', name: 'Roadmap' },
           lists: [
             {
-              cards: [{ id: 'card-1', name: 'Ship Trello view' }],
+              cards: [{ id: 'card-1', name: 'Ship gpt-voice view' }],
               id: 'list-1',
               name: 'Todo',
             },
@@ -2968,7 +2968,7 @@ test('card detail opens in a popup when enabled', async () => {
           card: {
             desc: '',
             id: 'card-1',
-            name: 'Ship Trello view',
+            name: 'Ship gpt-voice view',
           },
           comments: [],
         },
@@ -2981,12 +2981,12 @@ test('card detail opens in a popup when enabled', async () => {
   const dom = await instance.render()
   expect(getNodeByName(dom, 'resizeCardDetail')).toBeUndefined()
   expect(
-    getDirectChildClassNamesByClassName(dom, 'TrelloBoardDetailContent'),
-  ).toEqual(['TrelloLists', 'TrelloCardDetailPopup'])
+    getDirectChildClassNamesByClassName(dom, 'gpt-voiceBoardDetailContent'),
+  ).toEqual(['gpt-voiceLists', 'gpt-voiceCardDetailPopup'])
   expect(
-    getDirectChildClassNamesByClassName(dom, 'TrelloCardDetailPopup'),
-  ).toEqual(['TrelloCardDetailPanel TrelloCardDetailPanelPopup'])
-  resetTrelloViewDependencyFactory()
+    getDirectChildClassNamesByClassName(dom, 'gpt-voiceCardDetailPopup'),
+  ).toEqual(['gpt-voiceCardDetailPanel gpt-voiceCardDetailPanelPopup'])
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('card detail comment controls and shortcuts save and cancel comments', async () => {
@@ -2999,7 +2999,7 @@ test('card detail comment controls and shortcuts save and cancel comments', asyn
           board: { id: 'board-1', name: 'Roadmap' },
           lists: [
             {
-              cards: [{ id: 'card-1', name: 'Ship Trello view' }],
+              cards: [{ id: 'card-1', name: 'Ship gpt-voice view' }],
               id: 'list-1',
               name: 'Todo',
             },
@@ -3012,7 +3012,7 @@ test('card detail comment controls and shortcuts save and cancel comments', asyn
           card: {
             desc: '',
             id: 'card-1',
-            name: 'Ship Trello view',
+            name: 'Ship gpt-voice view',
           },
           comments: [],
         },
@@ -3072,7 +3072,7 @@ test('card detail comment controls and shortcuts save and cancel comments', asyn
   })
   await instance.handleKeyDown('cardComment', 'Enter', true)
   expect(getText(await instance.render())).toContain('Saved with the keyboard')
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('card detail omits empty images section', async () => {
@@ -3085,7 +3085,7 @@ test('card detail omits empty images section', async () => {
           board: { id: 'board-1', name: 'Roadmap' },
           lists: [
             {
-              cards: [{ id: 'card-1', name: 'Ship Trello view' }],
+              cards: [{ id: 'card-1', name: 'Ship gpt-voice view' }],
               id: 'list-1',
               name: 'Todo',
             },
@@ -3098,7 +3098,7 @@ test('card detail omits empty images section', async () => {
           card: {
             desc: 'Detailed card description',
             id: 'card-1',
-            name: 'Ship Trello view',
+            name: 'Ship gpt-voice view',
           },
           comments: [],
         },
@@ -3113,8 +3113,8 @@ test('card detail omits empty images section', async () => {
   expect(text).toContain('Detailed card description')
   expect(text).not.toContain('Images')
   expect(text).not.toContain('No images')
-  expect(getClassNames(detailDom)).not.toContain('TrelloCardDetailImages')
-  resetTrelloViewDependencyFactory()
+  expect(getClassNames(detailDom)).not.toContain('gpt-voiceCardDetailImages')
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('card detail renders current list selector with board lists', async () => {
@@ -3149,7 +3149,7 @@ test('card detail renders current list selector with board lists', async () => {
   const selectSubtree = getSubtreeByNodeName(dom, 'cardList:card-1')
   expect(select).toEqual(
     expect.objectContaining({
-      className: 'TrelloInput TrelloCardListSelect',
+      className: 'gpt-voiceInput gpt-voiceCardListSelect',
       name: 'cardList:card-1',
       onInput: 'handleInput',
       type: VirtualDomElements.Select,
@@ -3167,7 +3167,7 @@ test('card detail renders current list selector with board lists', async () => {
       )
     }),
   ).toBe(true)
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('changing card detail list selector moves card to bottom of selected list', async () => {
@@ -3212,7 +3212,7 @@ test('changing card detail list selector moves card to bottom of selected list',
     doingText.indexOf('Plan work'),
   )
   expect(getNodeByName(dom, 'cardList:card-1')?.value).toBe('list-2')
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('changing card detail list selector to same list is a no-op', async () => {
@@ -3256,7 +3256,7 @@ test('changing card detail list selector to same list is a no-op', async () => {
     'Plan work',
   )
   expect(getText(dom)).not.toContain('Move should not be called')
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('failed card detail list selector move preserves placement and shows error', async () => {
@@ -3301,11 +3301,11 @@ test('failed card detail list selector move preserves placement and shows error'
   )
   expect(getNodeByName(dom, 'cardList:card-1')?.value).toBe('list-1')
   expect(getText(dom)).toContain('Cannot move card')
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('card detail label picker adds an existing board label', async () => {
-  const labels: readonly TrelloLabel[] = [
+  const labels: readonly gpt-voiceLabel[] = [
     {
       color: 'blue',
       id: 'label-1',
@@ -3328,7 +3328,7 @@ test('card detail label picker adds an existing board label', async () => {
           board: { id: 'board-1', name: 'Roadmap' },
           lists: [
             {
-              cards: [{ id: 'card-1', name: 'Ship Trello view' }],
+              cards: [{ id: 'card-1', name: 'Ship gpt-voice view' }],
               id: 'list-1',
               name: 'Todo',
             },
@@ -3345,7 +3345,7 @@ test('card detail label picker adds an existing board label', async () => {
             desc: '',
             id: 'card-1',
             labels: [],
-            name: 'Ship Trello view',
+            name: 'Ship gpt-voice view',
           },
           comments: [],
         },
@@ -3380,7 +3380,7 @@ test('card detail label picker adds an existing board label', async () => {
   })
   const labelPickerContext = withFocus.getContext()
   expect(labelPickerContext).toMatchObject({
-    'trello.cardLabelPickerFocus': true,
+    'gpt-voice.cardLabelPickerFocus': true,
   })
   expect(withFocus.renderFocus(cardContext, labelPickerContext)).toBe(
     '[name="cardLabelSearch"]',
@@ -3398,13 +3398,13 @@ test('card detail label picker adds an existing board label', async () => {
     inputType: 'checkbox',
   })
   expect(getNodeByName(openDom, 'addCardLabel:label-1')).toMatchObject({
-    className: 'TrelloCardLabelChoice',
+    className: 'gpt-voiceCardLabelChoice',
   })
   expect(
     getDirectChildClassNamesByName(openDom, 'addCardLabel:label-1'),
   ).toEqual([
-    'TrelloCardLabelChoiceCheckbox',
-    'TrelloCardLabelChoiceText TrelloCardLabelColorBlue',
+    'gpt-voiceCardLabelChoiceCheckbox',
+    'gpt-voiceCardLabelChoiceText gpt-voiceCardLabelColorBlue',
   ])
 
   await instance.handleEvent?.({ name: 'closeCardLabelPicker', type: 'click' })
@@ -3444,7 +3444,7 @@ test('card detail label picker adds an existing board label', async () => {
 
   const blurredDom = await instance.render()
   expect(getNodeByName(blurredDom, 'cardLabelPicker')).toBeUndefined()
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('card detail label picker creates and assigns a new label', async () => {
@@ -3457,7 +3457,7 @@ test('card detail label picker creates and assigns a new label', async () => {
           board: { id: 'board-1', name: 'Roadmap' },
           lists: [
             {
-              cards: [{ id: 'card-1', labels: [], name: 'Ship Trello view' }],
+              cards: [{ id: 'card-1', labels: [], name: 'Ship gpt-voice view' }],
               id: 'list-1',
               name: 'Todo',
             },
@@ -3474,7 +3474,7 @@ test('card detail label picker creates and assigns a new label', async () => {
             desc: '',
             id: 'card-1',
             labels: [],
-            name: 'Ship Trello view',
+            name: 'Ship gpt-voice view',
           },
           comments: [],
         },
@@ -3532,15 +3532,15 @@ test('card detail label picker creates and assigns a new label', async () => {
     hasNode(createdDom, (node) => {
       return (
         node.name === 'openCardLabelPicker' &&
-        hasClass(node, 'TrelloCardLabelColorPurple')
+        hasClass(node, 'gpt-voiceCardLabelColorPurple')
       )
     }),
   ).toBe(true)
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('card detail label picker checks assigned labels and keeps open on failure', async () => {
-  const labels: readonly TrelloLabel[] = [
+  const labels: readonly gpt-voiceLabel[] = [
     {
       color: 'blue',
       id: 'label-1',
@@ -3568,7 +3568,7 @@ test('card detail label picker checks assigned labels and keeps open on failure'
                 {
                   id: 'card-1',
                   labels: [appliedLabel],
-                  name: 'Ship Trello view',
+                  name: 'Ship gpt-voice view',
                 },
               ],
               id: 'list-1',
@@ -3587,13 +3587,13 @@ test('card detail label picker checks assigned labels and keeps open on failure'
             desc: '',
             id: 'card-1',
             labels: [appliedLabel],
-            name: 'Ship Trello view',
+            name: 'Ship gpt-voice view',
           },
           comments: [],
         },
       },
       cardLabelAddErrors: {
-        'card-1': 'Trello request failed: 500 unavailable',
+        'card-1': 'gpt-voice request failed: 500 unavailable',
       },
     },
   )
@@ -3608,8 +3608,8 @@ test('card detail label picker checks assigned labels and keeps open on failure'
       return (
         node.name === 'openCardLabelPicker' &&
         node.onClick === 'handleClick' &&
-        hasClass(node, 'TrelloCardLabelButton') &&
-        hasClass(node, 'TrelloCardLabelColorBlue')
+        hasClass(node, 'gpt-voiceCardLabelButton') &&
+        hasClass(node, 'gpt-voiceCardLabelColorBlue')
       )
     }),
   ).toBe(true)
@@ -3628,15 +3628,15 @@ test('card detail label picker checks assigned labels and keeps open on failure'
   await instance.handleEvent?.({ name: 'addCardLabel:label-2', type: 'click' })
 
   const failedDom = await instance.render()
-  expect(getText(failedDom)).toContain('Trello request failed: 500 unavailable')
+  expect(getText(failedDom)).toContain('gpt-voice request failed: 500 unavailable')
   expect(getNodeByName(failedDom, 'cardLabelPicker')).toBeDefined()
   expect(getText(failedDom)).not.toContain('No labels available')
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('card detail title renders as wrapping textarea with full long title', async () => {
   const longTitle =
-    'trello: input fields on firefox look not so good when the card detail title needs more than one line'
+    'gpt-voice: input fields on firefox look not so good when the card detail title needs more than one line'
   const instance = await createAuthenticatedInstance(
     [{ id: 'board-1', name: 'Roadmap' }],
     [],
@@ -3670,8 +3670,8 @@ test('card detail title renders as wrapping textarea with full long title', asyn
   await instance.handleEvent?.({ name: 'card:card-1', type: 'click' })
 
   const detailDom = await instance.render()
-  expect(getClassNames(detailDom)).toContain('TrelloCardDetailTitleSizer')
-  expect(getClassNames(detailDom)).toContain('TrelloCardDetailTitleMirror')
+  expect(getClassNames(detailDom)).toContain('gpt-voiceCardDetailTitleSizer')
+  expect(getClassNames(detailDom)).toContain('gpt-voiceCardDetailTitleMirror')
   expect(getText(detailDom)).toContain(longTitle)
   expect(
     hasNode(detailDom, (node) => {
@@ -3680,30 +3680,30 @@ test('card detail title renders as wrapping textarea with full long title', asyn
         node.type === VirtualDomElements.TextArea &&
         node.rows === 1 &&
         node.value === longTitle &&
-        hasClass(node, 'TrelloCardDetailTitleInput')
+        hasClass(node, 'gpt-voiceCardDetailTitleInput')
       )
     }),
   ).toBe(true)
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('clicking card renders cached detail before fresh detail resolves', async () => {
-  const boardDetail: TrelloBoardDetail = {
+  const boardDetail: gpt-voiceBoardDetail = {
     board: { id: 'board-1', name: 'Roadmap' },
     lists: [
       {
-        cards: [{ id: 'card-1', name: 'Ship Trello view' }],
+        cards: [{ id: 'card-1', name: 'Ship gpt-voice view' }],
         id: 'list-1',
         name: 'Todo',
       },
     ],
   }
-  const cachedCardDetail: TrelloCardDetail = {
+  const cachedCardDetail: gpt-voiceCardDetail = {
     attachments: [],
     card: {
       desc: 'Cached description',
       id: 'card-1',
-      name: 'Ship Trello view',
+      name: 'Ship gpt-voice view',
     },
     comments: [],
   }
@@ -3714,33 +3714,33 @@ test('clicking card renders cached detail before fresh detail resolves', async (
       desc: 'Fresh description',
     },
   }
-  const freshCardDeferred = createDeferred<TrelloCardDetail>()
+  const freshCardDeferred = createDeferred<gpt-voiceCardDetail>()
   const boards = [{ id: 'board-1', name: 'Roadmap' }]
-  const client: TrelloClient = {
-    async addCardAttachment(_card: TrelloCard, file: File) {
+  const client: gpt-voiceClient = {
+    async addCardAttachment(_card: gpt-voiceCard, file: File) {
       return {
         id: 'created-attachment-1',
         mimeType: file.type,
         name: file.name,
       }
     },
-    async addCardComment(_card: TrelloCard, text: string) {
+    async addCardComment(_card: gpt-voiceCard, text: string) {
       return {
         data: { text },
         id: 'created-comment-1',
       }
     },
-    async addCardLabel(card: TrelloCard) {
+    async addCardLabel(card: gpt-voiceCard) {
       return card
     },
-    async createCard(list: TrelloList) {
+    async createCard(list: gpt-voiceList) {
       return {
         id: 'created-card-1',
         idList: list.id,
         name: 'Created card',
       }
     },
-    async createLabel(board, create): Promise<TrelloLabel> {
+    async createLabel(board, create): Promise<gpt-voiceLabel> {
       return {
         color: create.color,
         id: 'created-label-1',
@@ -3748,7 +3748,7 @@ test('clicking card renders cached detail before fresh detail resolves', async (
         name: create.name,
       }
     },
-    async createList(_board: TrelloBoard, create: TrelloListCreate) {
+    async createList(_board: gpt-voiceBoard, create: gpt-voiceListCreate) {
       return {
         cards: [],
         id: 'created-list-1',
@@ -3795,7 +3795,7 @@ test('clicking card renders cached detail before fresh detail resolves', async (
         fresh: Promise.resolve(boards),
       }
     },
-    async moveCard(card: TrelloCard, move: TrelloCardMove) {
+    async moveCard(card: gpt-voiceCard, move: gpt-voiceCardMove) {
       return {
         ...card,
         idList: move.idList,
@@ -3810,20 +3810,20 @@ test('clicking card renders cached detail before fresh detail resolves', async (
         fresh: Promise.resolve([]),
       }
     },
-    async updateCard(card: TrelloCard, update: TrelloCardUpdate) {
+    async updateCard(card: gpt-voiceCard, update: gpt-voiceCardUpdate) {
       return {
         ...card,
         ...update,
       }
     },
-    async updateList(list: TrelloList, update: TrelloListUpdate) {
+    async updateList(list: gpt-voiceList, update: gpt-voiceListUpdate) {
       return {
         ...list,
         ...update,
       }
     },
   }
-  setTrelloViewDependencyFactory(() => ({
+  setgpt-voiceViewDependencyFactory(() => ({
     client,
     recentStorage: createMemoryRecentBoardStorage(),
     storage: createMemoryCredentialStorage(),
@@ -3856,33 +3856,33 @@ test('clicking card renders cached detail before fresh detail resolves', async (
   const refreshedText = getText(await instance.render())
   expect(refreshedText).toContain('Fresh description')
   expect(refreshedText).not.toContain('Cached description')
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('fresh comments replace cached comments before fresh card resolves', async () => {
-  const cardDeferred = createDeferred<TrelloCard>()
-  const commentsDeferred = createDeferred<TrelloCardDetail['comments']>()
+  const cardDeferred = createDeferred<gpt-voiceCard>()
+  const commentsDeferred = createDeferred<gpt-voiceCardDetail['comments']>()
   const boards = [{ id: 'board-1', name: 'Roadmap' }]
-  const boardDetail: TrelloBoardDetail = {
+  const boardDetail: gpt-voiceBoardDetail = {
     board: { id: 'board-1', name: 'Roadmap' },
     lists: [
       {
-        cards: [{ id: 'card-1', name: 'Ship Trello view' }],
+        cards: [{ id: 'card-1', name: 'Ship gpt-voice view' }],
         id: 'list-1',
         name: 'Todo',
       },
     ],
   }
-  const cachedCardDetail: TrelloCardDetail = {
+  const cachedCardDetail: gpt-voiceCardDetail = {
     attachments: [],
     card: {
       desc: 'Cached description',
       id: 'card-1',
-      name: 'Ship Trello view',
+      name: 'Ship gpt-voice view',
     },
     comments: [],
   }
-  setTrelloViewDependencyFactory(() => ({
+  setgpt-voiceViewDependencyFactory(() => ({
     client: createStagedCardClient({
       boardDetail,
       boards,
@@ -3938,28 +3938,28 @@ test('fresh comments replace cached comments before fresh card resolves', async 
   cardDeferred.resolve({
     desc: 'Fresh description',
     id: 'card-1',
-    name: 'Ship Trello view',
+    name: 'Ship gpt-voice view',
   })
   await openCardPromise
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('card detail renders title and description before comments finish loading', async () => {
-  const cardDeferred = createDeferred<TrelloCard>()
-  const commentsDeferred = createDeferred<TrelloCardDetail['comments']>()
-  const attachmentsDeferred = createDeferred<TrelloCardDetail['attachments']>()
+  const cardDeferred = createDeferred<gpt-voiceCard>()
+  const commentsDeferred = createDeferred<gpt-voiceCardDetail['comments']>()
+  const attachmentsDeferred = createDeferred<gpt-voiceCardDetail['attachments']>()
   const boards = [{ id: 'board-1', name: 'Roadmap' }]
   const boardDetail = {
     board: { id: 'board-1', name: 'Roadmap' },
     lists: [
       {
-        cards: [{ id: 'card-1', name: 'Ship Trello view' }],
+        cards: [{ id: 'card-1', name: 'Ship gpt-voice view' }],
         id: 'list-1',
         name: 'Todo',
       },
     ],
   }
-  setTrelloViewDependencyFactory(() => ({
+  setgpt-voiceViewDependencyFactory(() => ({
     client: createStagedCardClient({
       boardDetail,
       boards,
@@ -4025,25 +4025,25 @@ test('card detail renders title and description before comments finish loading',
   const finishedText = getText(await instance.render())
   expect(finishedText).toContain('A staged comment')
   expect(finishedText).not.toContain('Loading comments...')
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('late comments do not reset edited card description draft', async () => {
-  const cardDeferred = createDeferred<TrelloCard>()
-  const commentsDeferred = createDeferred<TrelloCardDetail['comments']>()
-  const attachmentsDeferred = createDeferred<TrelloCardDetail['attachments']>()
+  const cardDeferred = createDeferred<gpt-voiceCard>()
+  const commentsDeferred = createDeferred<gpt-voiceCardDetail['comments']>()
+  const attachmentsDeferred = createDeferred<gpt-voiceCardDetail['attachments']>()
   const boards = [{ id: 'board-1', name: 'Roadmap' }]
   const boardDetail = {
     board: { id: 'board-1', name: 'Roadmap' },
     lists: [
       {
-        cards: [{ id: 'card-1', name: 'Ship Trello view' }],
+        cards: [{ id: 'card-1', name: 'Ship gpt-voice view' }],
         id: 'list-1',
         name: 'Todo',
       },
     ],
   }
-  setTrelloViewDependencyFactory(() => ({
+  setgpt-voiceViewDependencyFactory(() => ({
     client: createStagedCardClient({
       boardDetail,
       boards,
@@ -4109,18 +4109,18 @@ test('late comments do not reset edited card description draft', async () => {
     'Draft while comments load',
   )
   expect(getText(dom)).toContain('Late comment')
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('stale staged card detail results are ignored after opening another card', async () => {
-  const cardOneDeferred = createDeferred<TrelloCard>()
-  const cardTwoDeferred = createDeferred<TrelloCard>()
-  const commentsOneDeferred = createDeferred<TrelloCardDetail['comments']>()
-  const commentsTwoDeferred = createDeferred<TrelloCardDetail['comments']>()
+  const cardOneDeferred = createDeferred<gpt-voiceCard>()
+  const cardTwoDeferred = createDeferred<gpt-voiceCard>()
+  const commentsOneDeferred = createDeferred<gpt-voiceCardDetail['comments']>()
+  const commentsTwoDeferred = createDeferred<gpt-voiceCardDetail['comments']>()
   const attachmentsOneDeferred =
-    createDeferred<TrelloCardDetail['attachments']>()
+    createDeferred<gpt-voiceCardDetail['attachments']>()
   const attachmentsTwoDeferred =
-    createDeferred<TrelloCardDetail['attachments']>()
+    createDeferred<gpt-voiceCardDetail['attachments']>()
   const boards = [{ id: 'board-1', name: 'Roadmap' }]
   const boardDetail = {
     board: { id: 'board-1', name: 'Roadmap' },
@@ -4135,7 +4135,7 @@ test('stale staged card detail results are ignored after opening another card', 
       },
     ],
   }
-  setTrelloViewDependencyFactory(() => ({
+  setgpt-voiceViewDependencyFactory(() => ({
     client: createStagedCardClient({
       boardDetail,
       boards,
@@ -4217,18 +4217,18 @@ test('stale staged card detail results are ignored after opening another card', 
   expect(text).toContain('Second current comment')
   expect(text).not.toContain('First stale description')
   expect(text).not.toContain('First stale comment')
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('editing card title and description saves card detail', async () => {
-  setTrelloViewDependencyFactory(() => ({
-    client: createMockTrelloClient({
+  setgpt-voiceViewDependencyFactory(() => ({
+    client: createMockgpt-voiceClient({
       boardDetails: {
         'board-1': {
           board: { id: 'board-1', name: 'Roadmap' },
           lists: [
             {
-              cards: [{ id: 'card-1', name: 'Ship Trello view' }],
+              cards: [{ id: 'card-1', name: 'Ship gpt-voice view' }],
               id: 'list-1',
               name: 'Todo',
             },
@@ -4242,7 +4242,7 @@ test('editing card title and description saves card detail', async () => {
           card: {
             desc: 'Original description',
             id: 'card-1',
-            name: 'Ship Trello view',
+            name: 'Ship gpt-voice view',
           },
           comments: [],
         },
@@ -4270,7 +4270,7 @@ test('editing card title and description saves card detail', async () => {
   const initialDom = await instance.render()
   expect(
     hasNode(initialDom, (node) => {
-      return node.name === 'cardTitle' && node.value === 'Ship Trello view'
+      return node.name === 'cardTitle' && node.value === 'Ship gpt-voice view'
     }),
   ).toBe(true)
   expect(
@@ -4354,18 +4354,18 @@ test('editing card title and description saves card detail', async () => {
       return node.name === 'cardDescription'
     }),
   ).toBe(false)
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('unchanged card description blur closes editor without saving', async () => {
   let updateCardCallCount = 0
-  const client = createMockTrelloClient({
+  const client = createMockgpt-voiceClient({
     boardDetails: {
       'board-1': {
         board: { id: 'board-1', name: 'Roadmap' },
         lists: [
           {
-            cards: [{ id: 'card-1', name: 'Ship Trello view' }],
+            cards: [{ id: 'card-1', name: 'Ship gpt-voice view' }],
             id: 'list-1',
             name: 'Todo',
           },
@@ -4379,20 +4379,20 @@ test('unchanged card description blur closes editor without saving', async () =>
         card: {
           desc: 'Original description',
           id: 'card-1',
-          name: 'Ship Trello view',
+          name: 'Ship gpt-voice view',
         },
         comments: [],
       },
     },
   })
-  setTrelloViewDependencyFactory(() => ({
+  setgpt-voiceViewDependencyFactory(() => ({
     client: {
       ...client,
       async updateCard(
-        card: TrelloCard,
-        update: TrelloCardUpdate,
-        credentials: TrelloCredentials,
-      ): Promise<TrelloCard> {
+        card: gpt-voiceCard,
+        update: gpt-voiceCardUpdate,
+        credentials: gpt-voiceCredentials,
+      ): Promise<gpt-voiceCard> {
         updateCardCallCount++
         return client.updateCard(card, update, credentials)
       },
@@ -4427,18 +4427,18 @@ test('unchanged card description blur closes editor without saving', async () =>
       return node.name === 'cardDescription'
     }),
   ).toBe(false)
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('card description preview renders safe markdown subset', async () => {
-  setTrelloViewDependencyFactory(() => ({
-    client: createMockTrelloClient({
+  setgpt-voiceViewDependencyFactory(() => ({
+    client: createMockgpt-voiceClient({
       boardDetails: {
         'board-1': {
           board: { id: 'board-1', name: 'Roadmap' },
           lists: [
             {
-              cards: [{ id: 'card-1', name: 'Ship Trello view' }],
+              cards: [{ id: 'card-1', name: 'Ship gpt-voice view' }],
               id: 'list-1',
               name: 'Todo',
             },
@@ -4452,7 +4452,7 @@ test('card description preview renders safe markdown subset', async () => {
           card: {
             desc: '# Heading\n\n- **Bold** item\n- [Link](https://example.com)\n\nUse `code` and *emphasis*\n\nEscaped \\- hyphen',
             id: 'card-1',
-            name: 'Ship Trello view',
+            name: 'Ship gpt-voice view',
           },
           comments: [],
         },
@@ -4483,32 +4483,32 @@ test('card description preview renders safe markdown subset', async () => {
   expect(text).toContain('Escaped - hyphen')
   expect(text).not.toContain('Escaped \\- hyphen')
   expect(getClassNames(detailDom)).toContain(
-    'TrelloMarkdownHeading TrelloMarkdownHeading1',
+    'gpt-voiceMarkdownHeading gpt-voiceMarkdownHeading1',
   )
-  expect(getClassNames(detailDom)).toContain('TrelloMarkdownList')
-  expect(getClassNames(detailDom)).toContain('TrelloMarkdownStrong')
-  expect(getClassNames(detailDom)).toContain('TrelloMarkdownCode')
+  expect(getClassNames(detailDom)).toContain('gpt-voiceMarkdownList')
+  expect(getClassNames(detailDom)).toContain('gpt-voiceMarkdownStrong')
+  expect(getClassNames(detailDom)).toContain('gpt-voiceMarkdownCode')
   expect(
     hasNode(detailDom, (node) => {
       return (
-        node.className === 'TrelloMarkdownLink' &&
+        node.className === 'gpt-voiceMarkdownLink' &&
         node.href === 'https://example.com' &&
         node.target === '_blank'
       )
     }),
   ).toBe(true)
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('empty card title on blur restores saved title and shows validation error', async () => {
-  setTrelloViewDependencyFactory(() => ({
-    client: createMockTrelloClient({
+  setgpt-voiceViewDependencyFactory(() => ({
+    client: createMockgpt-voiceClient({
       boardDetails: {
         'board-1': {
           board: { id: 'board-1', name: 'Roadmap' },
           lists: [
             {
-              cards: [{ id: 'card-1', name: 'Ship Trello view' }],
+              cards: [{ id: 'card-1', name: 'Ship gpt-voice view' }],
               id: 'list-1',
               name: 'Todo',
             },
@@ -4522,7 +4522,7 @@ test('empty card title on blur restores saved title and shows validation error',
           card: {
             desc: '',
             id: 'card-1',
-            name: 'Ship Trello view',
+            name: 'Ship gpt-voice view',
           },
           comments: [],
         },
@@ -4557,15 +4557,15 @@ test('empty card title on blur restores saved title and shows validation error',
   expect(getText(detailDom)).toContain('Card title is required.')
   expect(
     hasNode(detailDom, (node) => {
-      return node.name === 'cardTitle' && node.value === 'Ship Trello view'
+      return node.name === 'cardTitle' && node.value === 'Ship gpt-voice view'
     }),
   ).toBe(true)
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('connect shows validation error for missing credentials', async () => {
-  setTrelloViewDependencyFactory(() => ({
-    client: createMockTrelloClient({}),
+  setgpt-voiceViewDependencyFactory(() => ({
+    client: createMockgpt-voiceClient({}),
     recentStorage: createMemoryRecentBoardStorage(),
     storage: createMemoryCredentialStorage(),
   }))
@@ -4576,12 +4576,12 @@ test('connect shows validation error for missing credentials', async () => {
   expect(getText(await instance.render())).toContain(
     'Enter an API key and token.',
   )
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('connect shows validation error for invalid api key shape', async () => {
-  setTrelloViewDependencyFactory(() => ({
-    client: createMockTrelloClient({
+  setgpt-voiceViewDependencyFactory(() => ({
+    client: createMockgpt-voiceClient({
       boards: [{ id: 'board-1', name: 'Roadmap' }],
     }),
     recentStorage: createMemoryRecentBoardStorage(),
@@ -4605,12 +4605,12 @@ test('connect shows validation error for invalid api key shape', async () => {
   expect(text).toContain('API key must be 32 alphanumeric characters.')
   expect(text).toContain('API key')
   expect(text).not.toContain('Roadmap')
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('connect accepts 76 character token and loads boards', async () => {
-  setTrelloViewDependencyFactory(() => ({
-    client: createMockTrelloClient({
+  setgpt-voiceViewDependencyFactory(() => ({
+    client: createMockgpt-voiceClient({
       boards: [{ id: 'board-1', name: 'Roadmap' }],
     }),
     recentStorage: createMemoryRecentBoardStorage(),
@@ -4632,15 +4632,15 @@ test('connect accepts 76 character token and loads boards', async () => {
 
   const text = getText(await instance.render())
   expect(text).toContain('Roadmap')
-  expect(text).not.toContain('Welcome to Trello')
-  resetTrelloViewDependencyFactory()
+  expect(text).not.toContain('Welcome to gpt-voice')
+  resetgpt-voiceViewDependencyFactory()
 })
 
-test('connect shows trello error on auth form when credentials fail', async () => {
+test('connect shows gpt-voice error on auth form when credentials fail', async () => {
   const storage = createMemoryCredentialStorage()
-  setTrelloViewDependencyFactory(() => ({
-    client: createMockTrelloClient({
-      listBoardsError: 'Trello request failed: 401 invalid key',
+  setgpt-voiceViewDependencyFactory(() => ({
+    client: createMockgpt-voiceClient({
+      listBoardsError: 'gpt-voice request failed: 401 invalid key',
     }),
     recentStorage: createMemoryRecentBoardStorage(),
     storage,
@@ -4660,10 +4660,10 @@ test('connect shows trello error on auth form when credentials fail', async () =
   await instance.handleEvent?.({ name: 'connect', type: 'click' })
 
   const text = getText(await instance.render())
-  expect(text).toContain('Trello request failed: 401 invalid key')
+  expect(text).toContain('gpt-voice request failed: 401 invalid key')
   expect(text).toContain('API key')
   await expect(storage.read()).resolves.toBeUndefined()
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('renders recently viewed before workspaces', async () => {
@@ -4684,10 +4684,10 @@ test('renders recently viewed before workspaces', async () => {
   expect(text.indexOf('Recently viewed')).toBeLessThan(
     text.indexOf('Your workspaces'),
   )
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
-test('orders recently viewed boards by trello dateLastView', async () => {
+test('orders recently viewed boards by gpt-voice dateLastView', async () => {
   const instance = await createAuthenticatedInstance([
     {
       dateLastView: '2026-01-01T00:00:00.000Z',
@@ -4705,10 +4705,10 @@ test('orders recently viewed boards by trello dateLastView', async () => {
     'Newer',
     'Older',
   ])
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
-test('local recent board views override missing trello dates', async () => {
+test('local recent board views override missing gpt-voice dates', async () => {
   const instance = await createAuthenticatedInstance([
     {
       dateLastView: '2026-01-01T00:00:00.000Z',
@@ -4728,7 +4728,7 @@ test('local recent board views override missing trello dates', async () => {
     'Opened locally',
     'Previously viewed',
   ])
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('groups boards by workspace with personal fallback', async () => {
@@ -4751,17 +4751,17 @@ test('groups boards by workspace with personal fallback', async () => {
   const text = getText(await instance.render())
   expect(text).toContain('Product')
   expect(text).toContain('Personal boards')
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('renders empty board state', async () => {
   const instance = await createAuthenticatedInstance([])
 
   expect(getText(await instance.render())).toContain('No boards found')
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
-test('does not use trello board background when flag is disabled', async () => {
+test('does not use gpt-voice board background when flag is disabled', async () => {
   const instance = await createAuthenticatedInstance([
     {
       id: 'board-1',
@@ -4776,14 +4776,14 @@ test('does not use trello board background when flag is disabled', async () => {
 
   const boardDetail = getNodeByClass(
     await instance.render(),
-    'TrelloBoardDetail',
+    'gpt-voiceBoardDetail',
   )
-  expect(hasClass(boardDetail, 'TrelloBoardDetailWithBackground')).toBe(false)
+  expect(hasClass(boardDetail, 'gpt-voiceBoardDetailWithBackground')).toBe(false)
   expect(boardDetail.style).toBeUndefined()
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
-test('uses largest trello board background image when flag is enabled', async () => {
+test('uses largest gpt-voice board background image when flag is enabled', async () => {
   const instance = await createAuthenticatedInstance(
     [
       {
@@ -4816,20 +4816,20 @@ test('uses largest trello board background image when flag is enabled', async ()
 
   const boardDetail = getNodeByClass(
     await instance.render(),
-    'TrelloBoardDetail',
+    'gpt-voiceBoardDetail',
   )
-  expect(hasClass(boardDetail, 'TrelloBoardDetailWithBackground')).toBe(true)
+  expect(hasClass(boardDetail, 'gpt-voiceBoardDetailWithBackground')).toBe(true)
   expect(boardDetail.style).toBeUndefined()
   const css = instance.getCss()
   expect(css).toContain(
-    '--TrelloBoardBackgroundImage: url("https://example.com/large.jpg")',
+    '--gpt-voiceBoardBackgroundImage: url("https://example.com/large.jpg")',
   )
-  expect(css).toContain('--TrelloBoardBackgroundRepeat: no-repeat')
-  expect(css).toContain('--TrelloBoardBackgroundSize: cover')
-  resetTrelloViewDependencyFactory()
+  expect(css).toContain('--gpt-voiceBoardBackgroundRepeat: no-repeat')
+  expect(css).toContain('--gpt-voiceBoardBackgroundSize: cover')
+  resetgpt-voiceViewDependencyFactory()
 })
 
-test('uses trello board background color when no image exists', async () => {
+test('uses gpt-voice board background color when no image exists', async () => {
   const instance = await createAuthenticatedInstance(
     [
       {
@@ -4850,12 +4850,12 @@ test('uses trello board background color when no image exists', async () => {
 
   const boardDetail = getNodeByClass(
     await instance.render(),
-    'TrelloBoardDetail',
+    'gpt-voiceBoardDetail',
   )
-  expect(hasClass(boardDetail, 'TrelloBoardDetailWithBackground')).toBe(true)
+  expect(hasClass(boardDetail, 'gpt-voiceBoardDetailWithBackground')).toBe(true)
   expect(boardDetail.style).toBeUndefined()
-  expect(instance.getCss()).toContain('--TrelloBoardBackgroundColor: #0c66e4')
-  resetTrelloViewDependencyFactory()
+  expect(instance.getCss()).toContain('--gpt-voiceBoardBackgroundColor: #0c66e4')
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('does not render search when flag is disabled', async () => {
@@ -4864,9 +4864,9 @@ test('does not render search when flag is disabled', async () => {
   ])
 
   expect(getClassNames(await instance.render())).not.toContain(
-    'TrelloSearchForm',
+    'gpt-voiceSearchForm',
   )
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('renders search when flag is enabled', async () => {
@@ -4874,9 +4874,9 @@ test('renders search when flag is enabled', async () => {
     boards: [{ id: 'board-1', name: 'Roadmap' }],
   })
 
-  expect(getClassNames(await instance.render())).toContain('TrelloSearchForm')
+  expect(getClassNames(await instance.render())).toContain('gpt-voiceSearchForm')
   expect(getText(await instance.render())).toContain('Roadmap')
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('submitting search renders card and board results', async () => {
@@ -4886,7 +4886,7 @@ test('submitting search renders card and board results', async () => {
       {
         id: 'card-1',
         idBoard: 'board-1',
-        name: 'Ship Trello search',
+        name: 'Ship gpt-voice search',
         type: 'card',
       },
       {
@@ -4906,9 +4906,9 @@ test('submitting search renders card and board results', async () => {
 
   const text = getText(await instance.render())
   expect(text).toContain('Search results for "ship"')
-  expect(text).toContain('Card: Ship Trello search')
+  expect(text).toContain('Card: Ship gpt-voice search')
   expect(text).toContain('Board: Search Board')
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('submitting empty search clears search results', async () => {
@@ -4917,7 +4917,7 @@ test('submitting empty search clears search results', async () => {
     searchResults: [
       {
         id: 'card-1',
-        name: 'Ship Trello search',
+        name: 'Ship gpt-voice search',
         type: 'card',
       },
     ],
@@ -4939,13 +4939,13 @@ test('submitting empty search clears search results', async () => {
   const text = getText(await instance.render())
   expect(text).toContain('Roadmap')
   expect(text).not.toContain('Search results for "ship"')
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
-test('search errors reuse trello error rendering', async () => {
+test('search errors reuse gpt-voice error rendering', async () => {
   const instance = await createSearchEnabledInstance({
     boards: [{ id: 'board-1', name: 'Roadmap' }],
-    searchError: 'Trello request failed: 401 unauthorized',
+    searchError: 'gpt-voice request failed: 401 unauthorized',
   })
 
   await instance.handleEvent?.({
@@ -4956,9 +4956,9 @@ test('search errors reuse trello error rendering', async () => {
   await instance.handleEvent?.({ name: 'search', type: 'submit' })
 
   expect(getText(await instance.render())).toContain(
-    'Trello request failed: 401 unauthorized',
+    'gpt-voice request failed: 401 unauthorized',
   )
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
 test('clicking board search result opens board detail', async () => {
@@ -4997,10 +4997,10 @@ test('clicking board search result opens board detail', async () => {
   const text = getText(dom)
   expect(getListTitleInput(dom, 'list-1')?.value).toBe('Todo')
   expect(text).toContain('Found card')
-  resetTrelloViewDependencyFactory()
+  resetgpt-voiceViewDependencyFactory()
 })
 
-test('uses trello background for board opened from search', async () => {
+test('uses gpt-voice background for board opened from search', async () => {
   const instance = await createSearchEnabledInstance(
     {
       boards: [{ id: 'board-1', name: 'Roadmap' }],
@@ -5031,15 +5031,15 @@ test('uses trello background for board opened from search', async () => {
 
   const boardDetail = getNodeByClass(
     await instance.render(),
-    'TrelloBoardDetail',
+    'gpt-voiceBoardDetail',
   )
-  expect(hasClass(boardDetail, 'TrelloBoardDetailWithBackground')).toBe(true)
+  expect(hasClass(boardDetail, 'gpt-voiceBoardDetailWithBackground')).toBe(true)
   expect(boardDetail.style).toBeUndefined()
   const css = instance.getCss()
   expect(css).toContain(
-    '--TrelloBoardBackgroundImage: url("https://example.com/search-board.jpg")',
+    '--gpt-voiceBoardBackgroundImage: url("https://example.com/search-board.jpg")',
   )
-  expect(css).toContain('--TrelloBoardBackgroundRepeat: repeat')
-  expect(css).toContain('--TrelloBoardBackgroundSize: auto')
-  resetTrelloViewDependencyFactory()
+  expect(css).toContain('--gpt-voiceBoardBackgroundRepeat: repeat')
+  expect(css).toContain('--gpt-voiceBoardBackgroundSize: auto')
+  resetgpt-voiceViewDependencyFactory()
 })

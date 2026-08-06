@@ -4,15 +4,15 @@ import {
   createBoards,
   createMockData,
   openBoard,
-  useMockDataAndShowTrello,
-} from './_trello.virtual-dom-view.shared.ts'
+  useMockDataAndShowgpt-voice,
+} from './_gpt-voice.virtual-dom-view.shared.ts'
 
-export const name = 'trello.virtual-dom-view.error-board-detail'
+export const name = 'gpt-voice.virtual-dom-view.error-board-detail'
 export const skip = true
 
 export const test: Test = async ({ Command, expect, Locator }) => {
   const boards = createBoards(1)
-  await useMockDataAndShowTrello(Command, {
+  await useMockDataAndShowgpt-voice(Command, {
     ...createMockData(boards),
     boardDetailErrors: {
       'board-1': 'Cannot load board',
@@ -23,7 +23,7 @@ export const test: Test = async ({ Command, expect, Locator }) => {
 
   const error = Locator('text=Cannot load board')
   const board = Locator('button[name="board:board-1"]')
-  const cards = Locator('.TrelloCard')
+  const cards = Locator('.gpt-voiceCard')
 
   await expect(error).toBeVisible()
   await expect(board).toBeVisible()

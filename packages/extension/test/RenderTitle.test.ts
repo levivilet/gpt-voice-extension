@@ -6,7 +6,7 @@ test('renders the title', () => {
   expect(renderTitle('Boards')).toEqual([
     {
       childCount: 1,
-      className: 'TrelloTitle',
+      className: 'gpt-voiceTitle',
       type: VirtualDomElements.H2,
     },
     {

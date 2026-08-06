@@ -1,11 +1,11 @@
-import type { TrelloList } from '../TrelloTypes/TrelloTypes.ts'
-import type { TrelloViewState } from '../TrelloViewState/TrelloViewState.ts'
+import type { gpt-voiceList } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
+import type { gpt-voiceViewState } from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 
 export const updateBoardDetailList = (
-  state: Readonly<TrelloViewState>,
-  list: Readonly<TrelloList>,
+  state: Readonly<gpt-voiceViewState>,
+  list: Readonly<gpt-voiceList>,
 ): void => {
-  const mutableState = state as TrelloViewState
+  const mutableState = state as gpt-voiceViewState
   if (!mutableState.boardDetail) {
     return
   }

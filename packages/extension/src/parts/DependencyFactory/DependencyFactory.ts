@@ -1,5 +1,5 @@
 import * as ExtensionApi from '@lvce-editor/api'
-import type { TrelloViewDependencies } from '../TrelloViewState/TrelloViewState.ts'
+import type { gpt-voiceViewDependencies } from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import {
   batchRequestsEnabledPreference,
   boardBackgroundEnabledPreference,
@@ -9,10 +9,10 @@ import {
 import { createSecretCredentialStorage } from '../CredentialStorage/CredentialStorage.ts'
 import { createCacheCurrentBoardStorage } from '../CurrentBoardStorage/CurrentBoardStorage.ts'
 import { createCacheRecentBoardStorage } from '../RecentBoardStorage/RecentBoardStorage.ts'
-import { createTrelloClient } from '../TrelloClient/TrelloClient.ts'
-import { createTrelloImageCache } from '../TrelloImageCache/TrelloImageCache.ts'
+import { creategpt-voiceClient } from '../gpt-voiceClient/gpt-voiceClient.ts'
+import { creategpt-voiceImageCache } from '../gpt-voiceImageCache/gpt-voiceImageCache.ts'
 
-type DependencyFactory = () => TrelloViewDependencies
+type DependencyFactory = () => gpt-voiceViewDependencies
 
 const readSearchEnabledPreference = async (): Promise<boolean> => {
   const api = ExtensionApi as unknown as {
@@ -45,12 +45,12 @@ const readBatchRequestsEnabledPreference = async (): Promise<boolean> => {
   return (await api.getPreference?.(batchRequestsEnabledPreference)) === true
 }
 
-const defaultDependencyFactory = (): TrelloViewDependencies => ({
-  client: createTrelloClient(undefined, undefined, {
+const defaultDependencyFactory = (): gpt-voiceViewDependencies => ({
+  client: creategpt-voiceClient(undefined, undefined, {
     readBatchRequestsEnabled: readBatchRequestsEnabledPreference,
   }),
   currentBoardStorage: createCacheCurrentBoardStorage(),
-  imageCache: createTrelloImageCache(),
+  imageCache: creategpt-voiceImageCache(),
   readBoardBackgroundEnabled: readBoardBackgroundEnabledPreference,
   readCardDetailPopupEnabled: readCardDetailPopupEnabledPreference,
   readSearchEnabled: readSearchEnabledPreference,
@@ -62,12 +62,12 @@ export const dependencyState: { factory: DependencyFactory } = {
   factory: defaultDependencyFactory,
 }
 
-export const setTrelloViewDependencyFactory = (
+export const setgpt-voiceViewDependencyFactory = (
   factory: DependencyFactory,
 ): void => {
   dependencyState.factory = factory
 }
 
-export const resetTrelloViewDependencyFactory = (): void => {
+export const resetgpt-voiceViewDependencyFactory = (): void => {
   dependencyState.factory = defaultDependencyFactory
 }

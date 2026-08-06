@@ -7,7 +7,7 @@ import {
 import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import * as MergeClassNames from '../MergeClassNames/MergeClassNames.ts'
 import { renderMarkdown } from '../RenderMarkdown/RenderMarkdown.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 
 export const renderCardDescriptionPreview = (
   description: string,
@@ -18,22 +18,22 @@ export const renderCardDescriptionPreview = (
       {
         childCount: 1,
         className: MergeClassNames.mergeClassNames(
-          'TrelloCardDescriptionPreview',
-          'TrelloCardDescriptionPlaceholder',
+          'gpt-voiceCardDescriptionPreview',
+          'gpt-voiceCardDescriptionPlaceholder',
         ),
         name: 'editCardDescription',
         onClick: DomEventListenerFunctions.HandleClick,
         role: AriaRoles.None,
         type: VirtualDomElements.Div,
       },
-      text(TrelloStrings.addDetailedDescription()),
+      text(gpt-voiceStrings.addDetailedDescription()),
     ]
   }
   const markdown = renderMarkdown(description)
   return [
     {
       childCount: markdown.childCount,
-      className: 'TrelloCardDescriptionPreview',
+      className: 'gpt-voiceCardDescriptionPreview',
       name: 'editCardDescription',
       onClick: DomEventListenerFunctions.HandleClick,
       role: AriaRoles.None,

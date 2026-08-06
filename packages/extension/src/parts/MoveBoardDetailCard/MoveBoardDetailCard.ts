@@ -1,13 +1,13 @@
-import type { TrelloCard, TrelloCardMove } from '../TrelloTypes/TrelloTypes.ts'
-import type { TrelloViewState } from '../TrelloViewState/TrelloViewState.ts'
+import type { gpt-voiceCard, gpt-voiceCardMove } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
+import type { gpt-voiceViewState } from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 
 export const moveBoardDetailCard = (
-  state: Readonly<TrelloViewState>,
-  card: Readonly<TrelloCard>,
+  state: Readonly<gpt-voiceViewState>,
+  card: Readonly<gpt-voiceCard>,
   targetListId: string,
-  position: TrelloCardMove['pos'],
+  position: gpt-voiceCardMove['pos'],
 ): void => {
-  const mutableState = state as TrelloViewState
+  const mutableState = state as gpt-voiceViewState
   if (!mutableState.boardDetail) {
     return
   }

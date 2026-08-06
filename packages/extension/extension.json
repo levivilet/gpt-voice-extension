@@ -1,129 +1,129 @@
 {
-  "id": "builtin.trello",
-  "name": "Trello",
-  "workerName": "Trello Worker",
-  "description": "Browse Trello boards from Lvce Editor",
-  "repository": "https://github.com/levivilet/trello",
-  "browser": "dist/trelloMain.js",
+  "id": "builtin.gpt-voice",
+  "name": "gpt-voice",
+  "workerName": "gpt-voice Worker",
+  "description": "Browse gpt-voice boards from Lvce Editor",
+  "repository": "https://github.com/levivilet/gpt-voice",
+  "browser": "dist/gpt-voiceMain.js",
   "isolated": true,
   "contentSecurityPolicy": [
     "default-src 'none'",
-    "connect-src https://api.trello.com https://trello.com",
+    "connect-src https://api.gpt-voice.com https://gpt-voice.com",
     "script-src 'self'"
   ],
   "categories": ["Other"],
   "configuration": {
-    "trello.searchEnabled": {
+    "gpt-voice.searchEnabled": {
       "type": "boolean",
       "default": false
     },
-    "trello.boardBackgroundEnabled": {
+    "gpt-voice.boardBackgroundEnabled": {
       "type": "boolean",
       "default": false
     },
-    "trello.cardDetailPopupEnabled": {
+    "gpt-voice.cardDetailPopupEnabled": {
       "type": "boolean",
       "default": false,
       "description": "Open card details in a centered popup instead of a right-side panel."
     },
-    "trello.batchRequestsEnabled": {
+    "gpt-voice.batchRequestsEnabled": {
       "type": "boolean",
       "default": false,
-      "description": "Use Trello's batch API for supported read requests."
+      "description": "Use gpt-voice's batch API for supported read requests."
     }
   },
   "activation": [
-    "onView:trello.views.boards",
-    "onCommand:trello.backToBoards",
-    "onCommand:trello.cancelNewCard",
-    "onCommand:trello.closeBoardFilter",
-    "onCommand:trello.closeCardDetail",
-    "onCommand:trello.logout",
-    "onCommand:trello.openCard",
-    "onCommand:trello.refreshBoards",
-    "onCommand:trello.saveCardDetail",
-    "onCommand:trello.show",
-    "onCommand:trello.startAddCard",
-    "onCommand:trello.submitNewCard",
-    "onCommand:trello.test.useMockData",
-    "onCommand:trello.test.reset",
-    "onCommand:trello.addList",
-    "onCommand:trello.openMockBoard",
-    "onCommand:trello.addCard"
+    "onView:gpt-voice.views.boards",
+    "onCommand:gpt-voice.backToBoards",
+    "onCommand:gpt-voice.cancelNewCard",
+    "onCommand:gpt-voice.closeBoardFilter",
+    "onCommand:gpt-voice.closeCardDetail",
+    "onCommand:gpt-voice.logout",
+    "onCommand:gpt-voice.openCard",
+    "onCommand:gpt-voice.refreshBoards",
+    "onCommand:gpt-voice.saveCardDetail",
+    "onCommand:gpt-voice.show",
+    "onCommand:gpt-voice.startAddCard",
+    "onCommand:gpt-voice.submitNewCard",
+    "onCommand:gpt-voice.test.useMockData",
+    "onCommand:gpt-voice.test.reset",
+    "onCommand:gpt-voice.addList",
+    "onCommand:gpt-voice.openMockBoard",
+    "onCommand:gpt-voice.addCard"
   ],
   "commands": [
     {
-      "id": "trello.show",
-      "label": "Trello: Show"
+      "id": "gpt-voice.show",
+      "label": "gpt-voice: Show"
     },
     {
-      "id": "trello.addList",
-      "label": "Trello: Add List"
+      "id": "gpt-voice.addList",
+      "label": "gpt-voice: Add List"
     },
     {
-      "id": "trello.openMockBoard",
-      "label": "Trello: Open Mock Board"
+      "id": "gpt-voice.openMockBoard",
+      "label": "gpt-voice: Open Mock Board"
     },
     {
-      "id": "trello.addCard",
-      "label": "Trello: Add Card"
+      "id": "gpt-voice.addCard",
+      "label": "gpt-voice: Add Card"
     },
     {
-      "id": "trello.backToBoards",
-      "label": "Trello: Back to Boards"
+      "id": "gpt-voice.backToBoards",
+      "label": "gpt-voice: Back to Boards"
     },
     {
-      "id": "trello.cancelNewCard",
-      "label": "Trello: Cancel New Card"
+      "id": "gpt-voice.cancelNewCard",
+      "label": "gpt-voice: Cancel New Card"
     },
     {
-      "id": "trello.closeBoardFilter",
-      "label": "Trello: Close Board Filter"
+      "id": "gpt-voice.closeBoardFilter",
+      "label": "gpt-voice: Close Board Filter"
     },
     {
-      "id": "trello.closeCardDetail",
-      "label": "Trello: Close Card Detail"
+      "id": "gpt-voice.closeCardDetail",
+      "label": "gpt-voice: Close Card Detail"
     },
     {
-      "id": "trello.logout",
-      "label": "Trello: Sign Out"
+      "id": "gpt-voice.logout",
+      "label": "gpt-voice: Sign Out"
     },
     {
-      "id": "trello.openCard",
-      "label": "Trello: Open Card"
+      "id": "gpt-voice.openCard",
+      "label": "gpt-voice: Open Card"
     },
     {
-      "id": "trello.refreshBoards",
-      "label": "Trello: Refresh Boards"
+      "id": "gpt-voice.refreshBoards",
+      "label": "gpt-voice: Refresh Boards"
     },
     {
-      "id": "trello.saveCardDetail",
-      "label": "Trello: Save Card Detail"
+      "id": "gpt-voice.saveCardDetail",
+      "label": "gpt-voice: Save Card Detail"
     },
     {
-      "id": "trello.startAddCard",
-      "label": "Trello: Add Card"
+      "id": "gpt-voice.startAddCard",
+      "label": "gpt-voice: Add Card"
     },
     {
-      "id": "trello.submitNewCard",
-      "label": "Trello: Submit New Card"
+      "id": "gpt-voice.submitNewCard",
+      "label": "gpt-voice: Submit New Card"
     },
     {
-      "id": "trello.test.useMockData",
-      "label": "Trello Test: Use Mock Data"
+      "id": "gpt-voice.test.useMockData",
+      "label": "gpt-voice Test: Use Mock Data"
     },
     {
-      "id": "trello.test.reset",
-      "label": "Trello Test: Reset"
+      "id": "gpt-voice.test.reset",
+      "label": "gpt-voice Test: Reset"
     }
   ],
   "views": [
     {
-      "css": "media/trello.css",
-      "displayName": "Trello",
-      "id": "trello.views.boards",
-      "title": "Trello",
-      "icon": "media/trello.svg",
+      "css": "media/gpt-voice.css",
+      "displayName": "gpt-voice",
+      "id": "gpt-voice.views.boards",
+      "title": "gpt-voice",
+      "icon": "media/gpt-voice.svg",
       "kind": "virtualDom",
       "preferredLocation": "preview"
     }
@@ -131,38 +131,38 @@
   "keybindings": [
     {
       "key": "Alt+Left",
-      "command": "trello.backToBoards",
-      "when": "trello.boardDetailFocus"
+      "command": "gpt-voice.backToBoards",
+      "when": "gpt-voice.boardDetailFocus"
     },
     {
       "key": "Ctrl+R",
-      "command": "trello.refreshBoards",
-      "when": "trello.boardsFocus"
+      "command": "gpt-voice.refreshBoards",
+      "when": "gpt-voice.boardsFocus"
     },
     {
       "key": "Escape",
-      "command": "trello.closeBoardFilter",
-      "when": "trello.boardFilterFocus"
+      "command": "gpt-voice.closeBoardFilter",
+      "when": "gpt-voice.boardFilterFocus"
     },
     {
       "key": "Escape",
-      "command": "trello.closeCardDetail",
-      "when": "trello.cardDetailFocus"
+      "command": "gpt-voice.closeCardDetail",
+      "when": "gpt-voice.cardDetailFocus"
     },
     {
       "key": "Enter",
-      "command": "trello.submitNewCard",
-      "when": "trello.newCardInputFocus"
+      "command": "gpt-voice.submitNewCard",
+      "when": "gpt-voice.newCardInputFocus"
     },
     {
       "key": "Escape",
-      "command": "trello.cancelNewCard",
-      "when": "trello.newCardInputFocus"
+      "command": "gpt-voice.cancelNewCard",
+      "when": "gpt-voice.newCardInputFocus"
     },
     {
       "key": "Ctrl+S",
-      "command": "trello.saveCardDetail",
-      "when": "trello.cardDescriptionFocus"
+      "command": "gpt-voice.saveCardDetail",
+      "when": "gpt-voice.cardDescriptionFocus"
     }
   ]
 }

@@ -3,7 +3,7 @@ import {
   VirtualDomElements,
   type VirtualDomNode,
 } from '@lvce-editor/virtual-dom-worker'
-import type { TrelloComment } from '../TrelloTypes/TrelloTypes.ts'
+import type { gpt-voiceComment } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 import {
   getCommentAuthor,
   getCommentAvatarUrl,
@@ -19,7 +19,7 @@ const renderCommentDate = (dateText: string): readonly VirtualDomNode[] => {
   return [
     {
       childCount: 1,
-      className: 'TrelloCardCommentDate',
+      className: 'gpt-voiceCardCommentDate',
       type: VirtualDomElements.Div,
     },
     text(dateText),
@@ -27,7 +27,7 @@ const renderCommentDate = (dateText: string): readonly VirtualDomNode[] => {
 }
 
 export const renderCardDetailComment = (
-  comment: Readonly<TrelloComment>,
+  comment: Readonly<gpt-voiceComment>,
 ): readonly VirtualDomNode[] => {
   const author = getCommentAuthor(comment)
   const avatarUrl = getCommentAvatarUrl(comment)
@@ -37,30 +37,30 @@ export const renderCardDetailComment = (
   return [
     {
       childCount: 2,
-      className: 'TrelloCardComment',
+      className: 'gpt-voiceCardComment',
       type: VirtualDomElements.Div,
     },
     ...renderCardDetailAvatar(comment, author, avatarUrl),
     {
       childCount: 2,
-      className: 'TrelloCardCommentContent',
+      className: 'gpt-voiceCardCommentContent',
       type: VirtualDomElements.Div,
     },
     {
       childCount: 1 + (dateDom.length > 0 ? 1 : 0),
-      className: 'TrelloCardCommentHeader',
+      className: 'gpt-voiceCardCommentHeader',
       type: VirtualDomElements.Div,
     },
     {
       childCount: 1,
-      className: 'TrelloCardCommentAuthor',
+      className: 'gpt-voiceCardCommentAuthor',
       type: VirtualDomElements.Div,
     },
     text(author),
     ...dateDom,
     {
       childCount: 1,
-      className: 'TrelloCardCommentText',
+      className: 'gpt-voiceCardCommentText',
       type: VirtualDomElements.Div,
     },
     text(commentText),

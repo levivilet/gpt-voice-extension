@@ -4,13 +4,13 @@ import {
   VirtualDomElements,
   type VirtualDomNode,
 } from '@lvce-editor/virtual-dom-worker'
-import type { TrelloViewState } from '../TrelloViewState/TrelloViewState.ts'
+import type { gpt-voiceViewState } from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import * as MergeClassNames from '../MergeClassNames/MergeClassNames.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 
 const renderBoardFilterPopup = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
 ): readonly VirtualDomNode[] => {
   const { boardFilterOpen, draftBoardFilter } = state
   if (!boardFilterOpen) {
@@ -18,74 +18,74 @@ const renderBoardFilterPopup = (
   }
   return [
     {
-      'aria-label': TrelloStrings.filterCards(),
+      'aria-label': gpt-voiceStrings.filterCards(),
       childCount: 3,
-      className: 'TrelloBoardFilterPopup',
+      className: 'gpt-voiceBoardFilterPopup',
       onKeyDown: DomEventListenerFunctions.HandleKeyDown,
       type: VirtualDomElements.Div,
     },
     {
       childCount: 2,
-      className: 'TrelloBoardFilterPopupHeader',
+      className: 'gpt-voiceBoardFilterPopupHeader',
       type: VirtualDomElements.Div,
     },
     {
       childCount: 1,
-      className: 'TrelloBoardFilterPopupTitle',
+      className: 'gpt-voiceBoardFilterPopupTitle',
       type: VirtualDomElements.Div,
     },
-    text(TrelloStrings.filter()),
+    text(gpt-voiceStrings.filter()),
     {
-      'aria-label': TrelloStrings.close(),
+      'aria-label': gpt-voiceStrings.close(),
       childCount: 1,
       className: MergeClassNames.mergeClassNames(
-        'TrelloButton',
-        'TrelloBoardFilterCloseButton',
+        'gpt-voiceButton',
+        'gpt-voiceBoardFilterCloseButton',
       ),
       name: 'closeBoardFilter',
       onClick: DomEventListenerFunctions.HandleClick,
-      title: TrelloStrings.close(),
+      title: gpt-voiceStrings.close(),
       type: VirtualDomElements.Button,
     },
     text('x'),
     {
       childCount: 2,
-      className: 'TrelloBoardFilterField',
+      className: 'gpt-voiceBoardFilterField',
       type: VirtualDomElements.Label,
     },
     {
       childCount: 1,
-      className: 'TrelloBoardFilterLabel',
+      className: 'gpt-voiceBoardFilterLabel',
       type: VirtualDomElements.Span,
     },
-    text(TrelloStrings.keyword()),
+    text(gpt-voiceStrings.keyword()),
     {
       autocomplete: 'off',
       childCount: 0,
       className: MergeClassNames.mergeClassNames(
-        'TrelloInput',
-        'TrelloBoardFilterInput',
+        'gpt-voiceInput',
+        'gpt-voiceBoardFilterInput',
       ),
       name: 'boardFilter',
       onBlur: DomEventListenerFunctions.HandleBlur,
       onFocus: DomEventListenerFunctions.HandleFocus,
       onInput: DomEventListenerFunctions.HandleInput,
       onKeyDown: DomEventListenerFunctions.HandleKeyDown,
-      placeholder: TrelloStrings.filterCards(),
+      placeholder: gpt-voiceStrings.filterCards(),
       type: VirtualDomElements.Input,
       value: draftBoardFilter,
     },
     {
       childCount: 1,
-      className: 'TrelloBoardFilterHint',
+      className: 'gpt-voiceBoardFilterHint',
       type: VirtualDomElements.Div,
     },
-    text(TrelloStrings.filterCardsHint()),
+    text(gpt-voiceStrings.filterCardsHint()),
   ]
 }
 
 const renderBoardFilterOverlay = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
 ): readonly VirtualDomNode[] => {
   const { boardFilterOpen } = state
   if (!boardFilterOpen) {
@@ -94,7 +94,7 @@ const renderBoardFilterOverlay = (
   return [
     {
       childCount: 0,
-      className: 'TrelloBoardFilterOverlay',
+      className: 'gpt-voiceBoardFilterOverlay',
       name: 'closeBoardFilter',
       onClick: DomEventListenerFunctions.HandleClick,
       role: AriaRoles.None,
@@ -104,7 +104,7 @@ const renderBoardFilterOverlay = (
 }
 
 export const renderBoardFilter = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
 ): readonly VirtualDomNode[] => {
   const overlay = renderBoardFilterOverlay(state)
   const popup = renderBoardFilterPopup(state)

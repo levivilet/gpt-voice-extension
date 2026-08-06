@@ -1,16 +1,16 @@
 import type {
-  TrelloViewActionContext,
-  TrelloViewState,
-} from '../TrelloViewState/TrelloViewState.ts'
+  gpt-voiceViewActionContext,
+  gpt-voiceViewState,
+} from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import { clearBoardSpecificState } from '../ClearBoardSpecificState/ClearBoardSpecificState.ts'
 import { getErrorMessage } from '../GetErrorMessage/GetErrorMessage.ts'
 import { validateCredentials } from '../ValidateCredentials/ValidateCredentials.ts'
 
 export const connect = async (
-  context: TrelloViewActionContext,
+  context: gpt-voiceViewActionContext,
 ): Promise<void> => {
   const { client, requestRerender, storage } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   const credentials = {
     apiKey: state.draftApiKey.trim(),
     token: state.draftToken.trim(),

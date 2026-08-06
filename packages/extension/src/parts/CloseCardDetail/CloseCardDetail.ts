@@ -1,11 +1,11 @@
 import type {
-  TrelloViewActionContext,
-  TrelloViewState,
-} from '../TrelloViewState/TrelloViewState.ts'
+  gpt-voiceViewActionContext,
+  gpt-voiceViewState,
+} from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 
-export const closeCardDetail = (context: TrelloViewActionContext): void => {
+export const closeCardDetail = (context: gpt-voiceViewActionContext): void => {
   const { requestRerender } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   state.selectedCardDetail = undefined
   state.cardAttachmentDropActive = false
   state.cardAttachmentsLoading = false

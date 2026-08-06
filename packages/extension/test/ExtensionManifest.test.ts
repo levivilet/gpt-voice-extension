@@ -12,16 +12,16 @@ test('extension has expected metadata, connect sources, and opt-in settings', as
     readonly repository: string
   }
 
-  expect(manifest.repository).toBe('https://github.com/levivilet/trello')
+  expect(manifest.repository).toBe('https://github.com/levivilet/gpt-voice')
   expect(manifest.contentSecurityPolicy).toContain(
-    'connect-src https://api.trello.com https://trello.com',
+    'connect-src https://api.gpt-voice.com https://gpt-voice.com',
   )
-  expect(manifest.configuration['trello.batchRequestsEnabled']).toEqual({
+  expect(manifest.configuration['gpt-voice.batchRequestsEnabled']).toEqual({
     default: false,
-    description: "Use Trello's batch API for supported read requests.",
+    description: "Use gpt-voice's batch API for supported read requests.",
     type: 'boolean',
   })
-  expect(manifest.configuration['trello.cardDetailPopupEnabled']).toEqual({
+  expect(manifest.configuration['gpt-voice.cardDetailPopupEnabled']).toEqual({
     default: false,
     description:
       'Open card details in a centered popup instead of a right-side panel.',

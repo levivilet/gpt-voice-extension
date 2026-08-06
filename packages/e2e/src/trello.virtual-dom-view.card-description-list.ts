@@ -7,10 +7,10 @@ import {
   createMockData,
   openBoard,
   openCard,
-  useMockDataAndShowTrello,
-} from './_trello.virtual-dom-view.shared.ts'
+  useMockDataAndShowgpt-voice,
+} from './_gpt-voice.virtual-dom-view.shared.ts'
 
-export const name = 'trello.virtual-dom-view.card-description-list'
+export const name = 'gpt-voice.virtual-dom-view.card-description-list'
 
 export const test: Test = async ({ Command, expect, Locator }) => {
   const boards = createBoards(1)
@@ -24,7 +24,7 @@ export const test: Test = async ({ Command, expect, Locator }) => {
       createList('list-1', 'Todo', [card]),
     ]),
   }
-  await useMockDataAndShowTrello(Command, {
+  await useMockDataAndShowgpt-voice(Command, {
     ...createMockData(boards, boardDetails),
     cardDetails: {
       'card-1': {
@@ -38,8 +38,8 @@ export const test: Test = async ({ Command, expect, Locator }) => {
   await openBoard(Command, Locator, expect)
   await openCard(Command, Locator, expect)
 
-  const list = Locator('.TrelloMarkdownList')
-  const items = Locator('.TrelloMarkdownListItem')
+  const list = Locator('.gpt-voiceMarkdownList')
+  const items = Locator('.gpt-voiceMarkdownListItem')
   await expect(list).toBeVisible()
   await expect(list).toHaveCSS('list-style-position', 'inside')
   await expect(list).toHaveCSS('list-style-type', 'disc')

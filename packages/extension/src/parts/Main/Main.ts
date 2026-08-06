@@ -13,15 +13,15 @@ import {
   testCacheName as testCurrentBoardCacheName,
 } from '../CurrentBoardStorage/CurrentBoardStorage.ts'
 import {
-  createMockTrelloClient,
-  type MockTrelloData,
-} from '../MockTrelloClient/MockTrelloClient.ts'
+  createMockgpt-voiceClient,
+  type Mockgpt-voiceData,
+} from '../Mockgpt-voiceClient/Mockgpt-voiceClient.ts'
 import {
   createCacheRecentBoardStorage,
   testCacheName as testRecentBoardCacheName,
 } from '../RecentBoardStorage/RecentBoardStorage.ts'
-import { clearTrelloTestCaches } from '../TestStorage/TestStorage.ts'
-import * as TrelloView from '../TrelloView/TrelloView.ts'
+import { cleargpt-voiceTestCaches } from '../TestStorage/TestStorage.ts'
+import * as gpt-voiceView from '../gpt-voiceView/gpt-voiceView.ts'
 
 const state = {
   isActivated: false,
@@ -33,99 +33,99 @@ export const activate = async (): Promise<void> => {
   }
   state.isActivated = true
   await activateExtensionApi()
-  registerView(TrelloView.view)
+  registerView(gpt-voiceView.view)
   registerCommand({
     execute() {
-      return executeCommand('Layout.toggleSideBarView', TrelloView.viewId)
+      return executeCommand('Layout.toggleSideBarView', gpt-voiceView.viewId)
     },
-    id: 'trello.show',
+    id: 'gpt-voice.show',
   })
   registerCommand({
     execute() {
-      return TrelloView.cancelNewCardActiveTrelloViewInstance()
+      return gpt-voiceView.cancelNewCardActivegpt-voiceViewInstance()
     },
-    id: 'trello.cancelNewCard',
+    id: 'gpt-voice.cancelNewCard',
   })
   registerCommand({
     execute() {
-      return TrelloView.closeCardDetailActiveTrelloViewInstance()
+      return gpt-voiceView.closeCardDetailActivegpt-voiceViewInstance()
     },
-    id: 'trello.closeCardDetail',
+    id: 'gpt-voice.closeCardDetail',
   })
   registerCommand({
     execute() {
-      return TrelloView.closeBoardFilterActiveTrelloViewInstance()
+      return gpt-voiceView.closeBoardFilterActivegpt-voiceViewInstance()
     },
-    id: 'trello.closeBoardFilter',
+    id: 'gpt-voice.closeBoardFilter',
   })
   registerCommand({
     execute(cardId: string) {
-      return TrelloView.openCardActiveTrelloViewInstance(cardId)
+      return gpt-voiceView.openCardActivegpt-voiceViewInstance(cardId)
     },
-    id: 'trello.openCard',
+    id: 'gpt-voice.openCard',
   })
   registerCommand({
     execute() {
-      return TrelloView.saveCardDetailActiveTrelloViewInstance()
+      return gpt-voiceView.saveCardDetailActivegpt-voiceViewInstance()
     },
-    id: 'trello.saveCardDetail',
+    id: 'gpt-voice.saveCardDetail',
   })
   registerCommand({
     execute(listId: string) {
-      return TrelloView.startAddCardActiveTrelloViewInstance(listId)
+      return gpt-voiceView.startAddCardActivegpt-voiceViewInstance(listId)
     },
-    id: 'trello.startAddCard',
+    id: 'gpt-voice.startAddCard',
   })
   registerCommand({
     execute() {
-      return TrelloView.submitNewCardActiveTrelloViewInstance()
+      return gpt-voiceView.submitNewCardActivegpt-voiceViewInstance()
     },
-    id: 'trello.submitNewCard',
+    id: 'gpt-voice.submitNewCard',
   })
   registerCommand({
     execute(options: any) {
-      return TrelloView.addList(options)
+      return gpt-voiceView.addList(options)
     },
-    id: 'trello.addList',
+    id: 'gpt-voice.addList',
   })
   registerCommand({
     execute(options: any) {
-      return TrelloView.openMockBoard(options)
+      return gpt-voiceView.openMockBoard(options)
     },
-    id: 'trello.openMockBoard',
+    id: 'gpt-voice.openMockBoard',
   })
   registerCommand({
     execute(options: any) {
-      return TrelloView.addCard(options)
+      return gpt-voiceView.addCard(options)
     },
-    id: 'trello.addCard',
+    id: 'gpt-voice.addCard',
   })
   registerCommand({
-    async execute(data: Readonly<MockTrelloData>) {
-      await clearTrelloTestCaches()
-      TrelloView.setTrelloViewDependencyFactory(() => ({
-        client: createMockTrelloClient(data),
+    async execute(data: Readonly<Mockgpt-voiceData>) {
+      await cleargpt-voiceTestCaches()
+      gpt-voiceView.setgpt-voiceViewDependencyFactory(() => ({
+        client: createMockgpt-voiceClient(data),
         currentBoardStorage: createCacheCurrentBoardStorage(
           testCurrentBoardCacheName,
         ),
         isTest: true,
         readCardDetailPopupEnabled:
-          TrelloView.readCardDetailPopupEnabledPreference,
+          gpt-voiceView.readCardDetailPopupEnabledPreference,
         recentStorage: createCacheRecentBoardStorage(testRecentBoardCacheName),
         storage: createCacheCredentialStorage(testCredentialCacheName),
       }))
-      await TrelloView.reloadActiveTrelloViewInstances()
+      await gpt-voiceView.reloadActivegpt-voiceViewInstances()
       return { ok: true }
     },
-    id: 'trello.test.useMockData',
+    id: 'gpt-voice.test.useMockData',
   })
   registerCommand({
     async execute() {
-      TrelloView.resetTrelloViewDependencyFactory()
-      await TrelloView.reloadActiveTrelloViewInstances()
+      gpt-voiceView.resetgpt-voiceViewDependencyFactory()
+      await gpt-voiceView.reloadActivegpt-voiceViewInstances()
       return { ok: true }
     },
-    id: 'trello.test.reset',
+    id: 'gpt-voice.test.reset',
   })
 }
 

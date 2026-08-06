@@ -3,14 +3,14 @@ import {
   VirtualDomElements,
   type VirtualDomNode,
 } from '@lvce-editor/virtual-dom-worker'
-import type { TrelloViewState } from '../TrelloViewState/TrelloViewState.ts'
+import type { gpt-voiceViewState } from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import * as MergeClassNames from '../MergeClassNames/MergeClassNames.ts'
 import { renderCardCommentButton } from '../RenderCardCommentButton/RenderCardCommentButton.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 
 export const renderCardCommentComposer = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
 ): readonly VirtualDomNode[] => {
   const { draftComment, savingComment, writingComment } = state
   if (!writingComment) {
@@ -18,57 +18,57 @@ export const renderCardCommentComposer = (
       {
         childCount: 1,
         className: MergeClassNames.mergeClassNames(
-          'TrelloButton',
-          'TrelloCardCommentWriteButton',
+          'gpt-voiceButton',
+          'gpt-voiceCardCommentWriteButton',
         ),
         name: 'startWriteComment',
         onClick: DomEventListenerFunctions.HandleClick,
         type: VirtualDomElements.Button,
       },
-      text(TrelloStrings.writeAComment()),
+      text(gpt-voiceStrings.writeAComment()),
     ]
   }
   return [
     {
       childCount: 2,
-      className: 'TrelloCardCommentComposer',
+      className: 'gpt-voiceCardCommentComposer',
       type: VirtualDomElements.Div,
     },
     {
       autofocus: true,
       childCount: 0,
       className: MergeClassNames.mergeClassNames(
-        'TrelloTextArea',
-        'TrelloCardCommentTextArea',
+        'gpt-voiceTextArea',
+        'gpt-voiceCardCommentTextArea',
       ),
       disabled: savingComment,
       name: 'cardComment',
       onInput: DomEventListenerFunctions.HandleInput,
       onKeyDown: DomEventListenerFunctions.HandleKeyDown,
-      placeholder: TrelloStrings.writeACommentPlaceholder(),
+      placeholder: gpt-voiceStrings.writeACommentPlaceholder(),
       type: VirtualDomElements.TextArea,
       value: draftComment,
     },
     {
       childCount: 2,
-      className: 'TrelloCardCommentActions',
+      className: 'gpt-voiceCardCommentActions',
       type: VirtualDomElements.Div,
     },
     ...renderCardCommentButton(
       'submitComment',
-      savingComment ? TrelloStrings.saving() : TrelloStrings.save(),
+      savingComment ? gpt-voiceStrings.saving() : gpt-voiceStrings.save(),
       MergeClassNames.mergeClassNames(
-        'TrelloButton',
-        'TrelloCardCommentSaveButton',
+        'gpt-voiceButton',
+        'gpt-voiceCardCommentSaveButton',
       ),
       savingComment,
     ),
     ...renderCardCommentButton(
       'cancelWriteComment',
-      TrelloStrings.cancel(),
+      gpt-voiceStrings.cancel(),
       MergeClassNames.mergeClassNames(
-        'TrelloButton',
-        'TrelloCardCommentCancelButton',
+        'gpt-voiceButton',
+        'gpt-voiceCardCommentCancelButton',
       ),
       savingComment,
     ),

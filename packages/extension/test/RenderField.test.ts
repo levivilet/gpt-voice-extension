@@ -6,7 +6,7 @@ import { renderField } from '../src/parts/RenderField/RenderField.ts'
 const expectedField = [
   {
     childCount: 2,
-    className: 'TrelloField',
+    className: 'gpt-voiceField',
     type: VirtualDomElements.Div,
   },
   {
@@ -20,7 +20,7 @@ const expectedField = [
   },
   {
     childCount: 0,
-    className: 'TrelloInput',
+    className: 'gpt-voiceInput',
     name: 'apiKey',
     onBlur: DomEventListenerFunctions.HandleBlur,
     onFocus: DomEventListenerFunctions.HandleFocus,

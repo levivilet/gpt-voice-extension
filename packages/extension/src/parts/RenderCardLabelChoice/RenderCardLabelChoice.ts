@@ -3,8 +3,8 @@ import {
   VirtualDomElements,
   type VirtualDomNode,
 } from '@lvce-editor/virtual-dom-worker'
-import type { TrelloLabel } from '../TrelloTypes/TrelloTypes.ts'
-import type { TrelloViewState } from '../TrelloViewState/TrelloViewState.ts'
+import type { gpt-voiceLabel } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
+import type { gpt-voiceViewState } from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import { hasCardLabel } from '../HasCardLabel/HasCardLabel.ts'
 import {
@@ -14,16 +14,16 @@ import {
 import * as MergeClassNames from '../MergeClassNames/MergeClassNames.ts'
 
 export const renderCardLabelChoice = (
-  state: Readonly<TrelloViewState>,
-  labels: readonly TrelloLabel[] | undefined,
-  label: Readonly<TrelloLabel>,
+  state: Readonly<gpt-voiceViewState>,
+  labels: readonly gpt-voiceLabel[] | undefined,
+  label: Readonly<gpt-voiceLabel>,
 ): readonly VirtualDomNode[] => {
   const { addingCardLabelId } = state
   const checked = hasCardLabel(labels, label.id)
   return [
     {
       childCount: 2,
-      className: 'TrelloCardLabelChoice',
+      className: 'gpt-voiceCardLabelChoice',
       disabled: Boolean(addingCardLabelId),
       name: `addCardLabel:${label.id}`,
       onClick: DomEventListenerFunctions.HandleClick,
@@ -32,7 +32,7 @@ export const renderCardLabelChoice = (
     {
       checked,
       childCount: 0,
-      className: 'TrelloCardLabelChoiceCheckbox',
+      className: 'gpt-voiceCardLabelChoiceCheckbox',
       inputType: 'checkbox',
       name: `cardLabelCheckbox:${label.id}`,
       tabIndex: -1,
@@ -41,7 +41,7 @@ export const renderCardLabelChoice = (
     {
       childCount: 1,
       className: MergeClassNames.mergeClassNames(
-        'TrelloCardLabelChoiceText',
+        'gpt-voiceCardLabelChoiceText',
         getLabelColorClassName(label.color),
       ),
       type: VirtualDomElements.Span,

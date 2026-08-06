@@ -1,16 +1,16 @@
-import type { TrelloCredentials } from '../TrelloTypes/TrelloTypes.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import type { gpt-voiceCredentials } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 
 const apiKeyPattern = /^[A-Za-z0-9]{32}$/
 
 export const validateCredentials = (
-  credentials: Readonly<TrelloCredentials>,
+  credentials: Readonly<gpt-voiceCredentials>,
 ): string => {
   if (!credentials.apiKey.trim() || !credentials.token.trim()) {
-    return TrelloStrings.apiKeyAndTokenRequired()
+    return gpt-voiceStrings.apiKeyAndTokenRequired()
   }
   if (!apiKeyPattern.test(credentials.apiKey)) {
-    return TrelloStrings.apiKeyInvalid()
+    return gpt-voiceStrings.apiKeyInvalid()
   }
   return ''
 }

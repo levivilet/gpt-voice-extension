@@ -1,16 +1,16 @@
 import type { ViewEvent } from '@lvce-editor/api'
 import type {
-  TrelloViewActionContext,
-  TrelloViewState,
-} from '../TrelloViewState/TrelloViewState.ts'
+  gpt-voiceViewActionContext,
+  gpt-voiceViewState,
+} from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 
 const listTitlePrefix = 'listTitle:'
 
 export const handleFocusEvent = (
-  context: Readonly<TrelloViewActionContext>,
+  context: Readonly<gpt-voiceViewActionContext>,
   event: Readonly<ViewEvent>,
 ): void => {
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   state.focusedName = event.name || ''
   if (!event.name?.startsWith(listTitlePrefix)) {
     return

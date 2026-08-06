@@ -2,9 +2,9 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 import {
   openBoardFilter,
   showFilteringBoard,
-} from './_trello.virtual-dom-view.filtering.shared.ts'
+} from './_gpt-voice.virtual-dom-view.filtering.shared.ts'
 
-export const name = 'trello.virtual-dom-view.filter-description'
+export const name = 'gpt-voice.virtual-dom-view.filter-description'
 
 export const test: Test = async ({ Command, expect, Locator }) => {
   await showFilteringBoard({ Command, expect, Locator })
@@ -14,7 +14,7 @@ export const test: Test = async ({ Command, expect, Locator }) => {
   await input.type('PRODUCTION')
   await Command.execute('Timeout.sleep', 100)
 
-  const cards = Locator('.TrelloCard')
+  const cards = Locator('.gpt-voiceCard')
   const matchingCard = Locator('button[name="card:card-description"]')
   const hiddenCard = Locator('button[name="card:card-title"]')
   const firstList = Locator('input[name="listTitle:list-1"]')

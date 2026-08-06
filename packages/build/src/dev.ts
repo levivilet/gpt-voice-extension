@@ -4,8 +4,8 @@ import path from 'node:path'
 import { root } from './root.ts'
 
 const extension = path.join(root, 'packages', 'extension')
-const entryPoint = path.join(extension, 'src', 'trelloMain.ts')
-const outfile = path.join(extension, 'dist', 'trelloMain.js')
+const entryPoint = path.join(extension, 'src', 'gpt-voiceMain.ts')
+const outfile = path.join(extension, 'dist', 'gpt-voiceMain.js')
 
 const context = await esbuild.context({
   bundle: true,

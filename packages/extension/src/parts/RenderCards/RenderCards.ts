@@ -3,7 +3,7 @@ import {
   VirtualDomElements,
   type VirtualDomNode,
 } from '@lvce-editor/virtual-dom-worker'
-import type { TrelloCard } from '../TrelloTypes/TrelloTypes.ts'
+import type { gpt-voiceCard } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 import { getAssetUrl } from '../AssetBaseUrl/AssetBaseUrl.ts'
 import { getCardCoverImageUrl } from '../CardCoverHelpers/CardCoverHelpers.ts'
 import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
@@ -12,17 +12,17 @@ import {
   getLabelText,
 } from '../LabelHelpers/LabelHelpers.ts'
 import * as MergeClassNames from '../MergeClassNames/MergeClassNames.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 
-const getCardCommentCount = (card: Readonly<TrelloCard>): number => {
+const getCardCommentCount = (card: Readonly<gpt-voiceCard>): number => {
   return card.badges?.comments || 0
 }
 
 const getCardCommentLabel = (count: number): string => {
   if (count === 1) {
-    return TrelloStrings.cardComment()
+    return gpt-voiceStrings.cardComment()
   }
-  return TrelloStrings.cardComments(count)
+  return gpt-voiceStrings.cardComments(count)
 }
 
 const renderCardCommentIcon = (baseUrl: string): VirtualDomNode => {
@@ -30,7 +30,7 @@ const renderCardCommentIcon = (baseUrl: string): VirtualDomNode => {
     alt: '',
     'aria-hidden': true,
     childCount: 0,
-    className: 'TrelloCardCommentIcon',
+    className: 'gpt-voiceCardCommentIcon',
     src: getAssetUrl(baseUrl, 'media/comments.svg'),
     type: VirtualDomElements.Img,
   }
@@ -38,7 +38,7 @@ const renderCardCommentIcon = (baseUrl: string): VirtualDomNode => {
 
 const renderCardCommentCount = (
   baseUrl: string,
-  card: Readonly<TrelloCard>,
+  card: Readonly<gpt-voiceCard>,
 ): readonly VirtualDomNode[] => {
   const commentCount = getCardCommentCount(card)
   if (commentCount <= 0) {
@@ -49,14 +49,14 @@ const renderCardCommentCount = (
     {
       'aria-label': commentLabel,
       childCount: 2,
-      className: 'TrelloCardMeta',
+      className: 'gpt-voiceCardMeta',
       title: commentLabel,
       type: VirtualDomElements.Div,
     },
     renderCardCommentIcon(baseUrl),
     {
       childCount: 1,
-      className: 'TrelloCardCommentCount',
+      className: 'gpt-voiceCardCommentCount',
       type: VirtualDomElements.Span,
     },
     text(String(commentCount)),
@@ -64,15 +64,15 @@ const renderCardCommentCount = (
 }
 
 const renderCardLabel = (
-  label: NonNullable<TrelloCard['labels']>[number],
+  label: NonNullable<gpt-voiceCard['labels']>[number],
 ): VirtualDomNode => {
   const labelText = getLabelText(label)
   return {
     'aria-label': labelText,
     childCount: 0,
     className: MergeClassNames.mergeClassNames(
-      'TrelloCardLabel',
-      'TrelloCardPreviewLabel',
+      'gpt-voiceCardLabel',
+      'gpt-voiceCardPreviewLabel',
       getLabelColorClassName(label.color),
     ),
     title: labelText,
@@ -81,7 +81,7 @@ const renderCardLabel = (
 }
 
 const renderCardLabels = (
-  card: Readonly<TrelloCard>,
+  card: Readonly<gpt-voiceCard>,
 ): readonly VirtualDomNode[] => {
   const { labels } = card
   if (!labels || labels.length === 0) {
@@ -91,8 +91,8 @@ const renderCardLabels = (
     {
       childCount: labels.length,
       className: MergeClassNames.mergeClassNames(
-        'TrelloCardLabels',
-        'TrelloCardPreviewLabels',
+        'gpt-voiceCardLabels',
+        'gpt-voiceCardPreviewLabels',
       ),
       type: VirtualDomElements.Div,
     },
@@ -109,9 +109,9 @@ const renderCardCover = (
   }
   return [
     {
-      alt: TrelloStrings.cardCover(cardName),
+      alt: gpt-voiceStrings.cardCover(cardName),
       childCount: 0,
-      className: 'TrelloCardCoverImage',
+      className: 'gpt-voiceCardCoverImage',
       src: coverImageUrl,
       type: VirtualDomElements.Img,
     },
@@ -121,7 +121,7 @@ const renderCardCover = (
 const renderCard = (
   baseUrl: string,
   coverImageUrls: Readonly<Record<string, string>>,
-  card: Readonly<TrelloCard>,
+  card: Readonly<gpt-voiceCard>,
 ): readonly VirtualDomNode[] => {
   const coverSourceUrl = getCardCoverImageUrl(card)
   const coverImageUrl = coverSourceUrl ? coverImageUrls[coverSourceUrl] : ''
@@ -134,8 +134,8 @@ const renderCard = (
     {
       childCount: coverDom.length > 0 ? 2 : 1,
       className: coverImageUrl
-        ? MergeClassNames.mergeClassNames('TrelloCard', 'TrelloCardWithCover')
-        : 'TrelloCard',
+        ? MergeClassNames.mergeClassNames('gpt-voiceCard', 'gpt-voiceCardWithCover')
+        : 'gpt-voiceCard',
       draggable: true,
       name: `card:${card.id}`,
       onContextMenu: DomEventListenerFunctions.HandleContextMenu,
@@ -146,13 +146,13 @@ const renderCard = (
     ...coverDom,
     {
       childCount: bodyChildCount,
-      className: 'TrelloCardBody',
+      className: 'gpt-voiceCardBody',
       type: VirtualDomElements.Div,
     },
     ...labelDom,
     {
       childCount: 1,
-      className: 'TrelloCardTitle',
+      className: 'gpt-voiceCardTitle',
       type: VirtualDomElements.Div,
     },
     text(card.name),
@@ -163,10 +163,10 @@ const renderCard = (
 export const renderCards = (
   baseUrl: string,
   coverImageUrls: Readonly<Record<string, string>>,
-  cards: readonly TrelloCard[],
+  cards: readonly gpt-voiceCard[],
 ): readonly VirtualDomNode[] => {
   if (cards.length === 0) {
-    return [text(TrelloStrings.noCards())]
+    return [text(gpt-voiceStrings.noCards())]
   }
   return cards.flatMap((card) => renderCard(baseUrl, coverImageUrls, card))
 }

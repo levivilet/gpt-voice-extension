@@ -3,7 +3,7 @@ import {
   VirtualDomElements,
   type VirtualDomNode,
 } from '@lvce-editor/virtual-dom-worker'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 
 export const renderCardDetailLink = (
   url: string,
@@ -11,12 +11,12 @@ export const renderCardDetailLink = (
   return [
     {
       childCount: 1,
-      className: 'TrelloCardDetailLink',
+      className: 'gpt-voiceCardDetailLink',
       href: url,
       rel: 'noopener noreferrer',
       target: '_blank',
       type: VirtualDomElements.A,
     },
-    text(TrelloStrings.openInTrello()),
+    text(gpt-voiceStrings.openIngpt-voice()),
   ]
 }

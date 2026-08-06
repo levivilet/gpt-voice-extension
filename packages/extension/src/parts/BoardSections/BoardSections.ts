@@ -1,10 +1,10 @@
 import type { RecentBoardView } from '../RecentBoardStorage/RecentBoardStorage.ts'
-import type { TrelloBoard } from '../TrelloTypes/TrelloTypes.ts'
-import type { TrelloViewState } from '../TrelloViewState/TrelloViewState.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import type { gpt-voiceBoard } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
+import type { gpt-voiceViewState } from '../gpt-voiceViewState/gpt-voiceViewState.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 
 export interface WorkspaceSection {
-  readonly boards: readonly TrelloBoard[]
+  readonly boards: readonly gpt-voiceBoard[]
   readonly name: string
 }
 
@@ -30,8 +30,8 @@ export const getLocalViewedAt = (
 }
 
 export const getBoardViewedAt = (
-  state: Readonly<TrelloViewState>,
-  board: TrelloBoard,
+  state: Readonly<gpt-voiceViewState>,
+  board: gpt-voiceBoard,
 ): number => {
   return Math.max(
     parseDate(board.dateLastView),
@@ -40,9 +40,9 @@ export const getBoardViewedAt = (
 }
 
 export const sortBoardsByViewedAt = (
-  state: Readonly<TrelloViewState>,
-  boards: readonly TrelloBoard[],
-): readonly TrelloBoard[] => {
+  state: Readonly<gpt-voiceViewState>,
+  boards: readonly gpt-voiceBoard[],
+): readonly gpt-voiceBoard[] => {
   const originalIndexes = new Map(
     state.boards.map((board, index) => [board.id, index]),
   )
@@ -56,25 +56,25 @@ export const sortBoardsByViewedAt = (
 }
 
 export const getRecentlyViewedBoards = (
-  state: Readonly<TrelloViewState>,
-): readonly TrelloBoard[] => {
+  state: Readonly<gpt-voiceViewState>,
+): readonly gpt-voiceBoard[] => {
   return sortBoardsByViewedAt(state, state.boards)
     .filter((board) => getBoardViewedAt(state, board) > 0)
     .slice(0, 4)
 }
 
-export const getWorkspaceName = (board: TrelloBoard): string => {
+export const getWorkspaceName = (board: gpt-voiceBoard): string => {
   return (
     board.organization?.displayName ||
     board.organization?.name ||
-    TrelloStrings.personalBoards()
+    gpt-voiceStrings.personalBoards()
   )
 }
 
 export const getWorkspaceSections = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
 ): readonly WorkspaceSection[] => {
-  const sections = new Map<string, TrelloBoard[]>()
+  const sections = new Map<string, gpt-voiceBoard[]>()
   for (const board of state.boards) {
     const name = getWorkspaceName(board)
     const boards = sections.get(name) || []
@@ -83,7 +83,7 @@ export const getWorkspaceSections = (
   }
   return Array.from(
     sections,
-    (entry: readonly [string, readonly TrelloBoard[]]): WorkspaceSection => {
+    (entry: readonly [string, readonly gpt-voiceBoard[]]): WorkspaceSection => {
       const [name, boards] = entry
       return {
         boards: sortBoardsByViewedAt(state, boards),

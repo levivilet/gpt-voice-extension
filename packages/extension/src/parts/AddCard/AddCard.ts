@@ -1,31 +1,31 @@
-import type { TrelloCard, TrelloList } from '../TrelloTypes/TrelloTypes.ts'
+import type { gpt-voiceCard, gpt-voiceList } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 import type {
-  TrelloViewActionContext,
-  TrelloViewState,
-} from '../TrelloViewState/TrelloViewState.ts'
+  gpt-voiceViewActionContext,
+  gpt-voiceViewState,
+} from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import { getErrorMessage } from '../GetErrorMessage/GetErrorMessage.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 
 const addCardPrefix = 'addCard:'
 
 const findList = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
   listId: string,
-): TrelloList | undefined => {
+): gpt-voiceList | undefined => {
   return state.boardDetail?.lists.find((list) => {
     return list.id === listId
   })
 }
 
 const appendCardToList = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
   listId: string,
-  card: TrelloCard,
+  card: gpt-voiceCard,
 ): void => {
   if (!state.boardDetail) {
     return
   }
-  const mutableState = state as TrelloViewState
+  const mutableState = state as gpt-voiceViewState
   mutableState.boardDetail = {
     ...state.boardDetail,
     lists: state.boardDetail.lists.map((list) => {
@@ -41,11 +41,11 @@ const appendCardToList = (
 }
 
 export const startAddCard = (
-  context: Readonly<TrelloViewActionContext>,
+  context: Readonly<gpt-voiceViewActionContext>,
   listId: string,
 ): void => {
   const { requestRerender } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   state.addingCardListId = listId
   state.focusedName = `newCardTitle:${listId}`
   state.savingNewCard = false
@@ -54,10 +54,10 @@ export const startAddCard = (
 }
 
 export const cancelAddCard = (
-  context: Readonly<TrelloViewActionContext>,
+  context: Readonly<gpt-voiceViewActionContext>,
 ): void => {
   const { requestRerender } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   state.addingCardListId = ''
   state.savingNewCard = false
   state.error = ''
@@ -65,14 +65,14 @@ export const cancelAddCard = (
 }
 
 export const submitAddCard = async (
-  context: Readonly<TrelloViewActionContext>,
+  context: Readonly<gpt-voiceViewActionContext>,
   formName: string | undefined,
 ): Promise<void> => {
   if (!formName?.startsWith(addCardPrefix)) {
     return
   }
   const { client, requestRerender } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   if (!state.credentials || !state.boardDetail || state.savingNewCard) {
     return
   }
@@ -84,7 +84,7 @@ export const submitAddCard = async (
   const name = state.draftNewCardTitle.trim()
   state.addingCardListId = listId
   if (!name) {
-    state.error = TrelloStrings.cardTitleRequired()
+    state.error = gpt-voiceStrings.cardTitleRequired()
     requestRerender()
     return
   }

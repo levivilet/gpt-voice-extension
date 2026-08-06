@@ -1,8 +1,8 @@
-import type { TrelloCardMove } from '../TrelloTypes/TrelloTypes.ts'
+import type { gpt-voiceCardMove } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 import type {
-  TrelloViewActionContext,
-  TrelloViewState,
-} from '../TrelloViewState/TrelloViewState.ts'
+  gpt-voiceViewActionContext,
+  gpt-voiceViewState,
+} from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import { isSameJson } from '../CacheFirstHelpers/CacheFirstHelpers.ts'
 import { findBoardCard } from '../FindBoardCard/FindBoardCard.ts'
 import { getCardListId } from '../GetCardListId/GetCardListId.ts'
@@ -11,13 +11,13 @@ import { moveBoardDetailCard } from '../MoveBoardDetailCard/MoveBoardDetailCard.
 import { updateSelectedCard } from '../UpdateSelectedCard/UpdateSelectedCard.ts'
 
 export const moveCardToList = async (
-  context: TrelloViewActionContext,
+  context: gpt-voiceViewActionContext,
   cardId: string,
   targetListId: string,
-  position: TrelloCardMove['pos'] = 'bottom',
+  position: gpt-voiceCardMove['pos'] = 'bottom',
 ): Promise<void> => {
   const { client, requestRerender } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   const card = findBoardCard(state, cardId)
   if (!state.credentials || !targetListId || !card || state.movingCardId) {
     return

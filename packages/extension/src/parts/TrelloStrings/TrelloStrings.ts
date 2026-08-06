@@ -95,7 +95,7 @@ export const noLabelsAvailable = (): string =>
 export const noSearchResults = (): string =>
   getString(UiStrings.NoSearchResults)
 export const openCard = (): string => getString(UiStrings.OpenCard)
-export const openInTrello = (): string => getString(UiStrings.OpenInTrello)
+export const openIngpt-voice = (): string => getString(UiStrings.OpenIngpt-voice)
 export const personalBoards = (): string => getString(UiStrings.PersonalBoards)
 export const recentlyViewed = (): string => getString(UiStrings.RecentlyViewed)
 export const refreshBoards = (): string => getString(UiStrings.RefreshBoards)
@@ -105,7 +105,7 @@ export const saving = (): string => getString(UiStrings.Saving)
 export const searchLabels = (): string => getString(UiStrings.SearchLabels)
 export const searchResultsFor = (query: string): string =>
   getStringWithPlaceholder(UiStrings.SearchResultsFor, query)
-export const searchTrello = (): string => getString(UiStrings.SearchTrello)
+export const searchgpt-voice = (): string => getString(UiStrings.Searchgpt-voice)
 export const searching = (): string => getString(UiStrings.Searching)
 export const selectAColor = (): string => getString(UiStrings.SelectAColor)
 export const selectLabelColor = (color: string): string =>
@@ -113,9 +113,9 @@ export const selectLabelColor = (color: string): string =>
 export const signOut = (): string => getString(UiStrings.SignOut)
 export const title = (): string => getString(UiStrings.Title)
 export const token = (): string => getString(UiStrings.Token)
-export const trello = (): string => getString(UiStrings.Trello)
-export const trelloBoard = (name: string): string =>
-  getStringWithPlaceholder(UiStrings.TrelloBoard, name)
+export const gpt-voice = (): string => getString(UiStrings.gpt-voice)
+export const gpt-voiceBoard = (name: string): string =>
+  getStringWithPlaceholder(UiStrings.gpt-voiceBoard, name)
 export const unknownMember = (): string => getString(UiStrings.UnknownMember)
 export const uploadingFiles = (): string => getString(UiStrings.UploadingFiles)
 export const welcome = (): string => getString(UiStrings.Welcome)

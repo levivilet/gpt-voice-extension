@@ -3,10 +3,10 @@ import {
   VirtualDomElements,
   type VirtualDomNode,
 } from '@lvce-editor/virtual-dom-worker'
-import type { TrelloList } from '../TrelloTypes/TrelloTypes.ts'
+import type { gpt-voiceList } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 
 export const renderCardListOption = (
-  list: Readonly<TrelloList>,
+  list: Readonly<gpt-voiceList>,
   selectedListId: string,
 ): readonly VirtualDomNode[] => {
   return [

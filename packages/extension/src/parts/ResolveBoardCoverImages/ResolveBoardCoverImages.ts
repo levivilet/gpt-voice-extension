@@ -1,12 +1,12 @@
-import type { TrelloBoardDetail } from '../TrelloTypes/TrelloTypes.ts'
+import type { gpt-voiceBoardDetail } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 import type {
-  TrelloViewActionContext,
-  TrelloViewState,
-} from '../TrelloViewState/TrelloViewState.ts'
+  gpt-voiceViewActionContext,
+  gpt-voiceViewState,
+} from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import { getCardCoverImageUrl } from '../CardCoverHelpers/CardCoverHelpers.ts'
 
 const getBoardCoverImageUrls = (
-  detail: Readonly<TrelloBoardDetail>,
+  detail: Readonly<gpt-voiceBoardDetail>,
 ): readonly string[] => {
   const urls = new Set<string>()
   for (const list of detail.lists) {
@@ -21,10 +21,10 @@ const getBoardCoverImageUrls = (
 }
 
 const resolveCoverImageUrl = async (
-  context: TrelloViewActionContext,
+  context: gpt-voiceViewActionContext,
   url: string,
 ): Promise<readonly [string, string]> => {
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   if (!state.credentials) {
     return [url, '']
   }
@@ -39,10 +39,10 @@ const resolveCoverImageUrl = async (
 }
 
 export const resolveBoardCoverImages = async (
-  context: TrelloViewActionContext,
+  context: gpt-voiceViewActionContext,
   boardId: string,
 ): Promise<void> => {
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   const detail = state.boardDetail
   if (!detail || detail.board.id !== boardId) {
     return

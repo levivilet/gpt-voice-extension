@@ -1,5 +1,5 @@
-import type { TrelloComment } from '../TrelloTypes/TrelloTypes.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import type { gpt-voiceComment } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 
 const getCommentDateFormatter = (() => {
   let commentDateFormatter: Intl.DateTimeFormat | undefined
@@ -14,9 +14,9 @@ const getCommentDateFormatter = (() => {
 })()
 
 const whitespaceRegex = /\s+/
-const trelloAvatarHosts = new Set([
-  'trello-avatars.s3.amazonaws.com',
-  'trello-members.s3.amazonaws.com',
+const gpt-voiceAvatarHosts = new Set([
+  'gpt-voice-avatars.s3.amazonaws.com',
+  'gpt-voice-members.s3.amazonaws.com',
 ])
 const avatarImageExtensionRegex = /\.(?:avif|gif|jpe?g|png|svg|webp)$/i
 
@@ -34,20 +34,20 @@ const getDerivedInitials = (name: string): string => {
   return `${parts[0][0]}${parts.at(-1)?.[0]}`.toUpperCase()
 }
 
-export const getCommentAuthor = (comment: Readonly<TrelloComment>): string => {
+export const getCommentAuthor = (comment: Readonly<gpt-voiceComment>): string => {
   return (
     comment.memberCreator?.fullName?.trim() ||
     comment.memberCreator?.username?.trim() ||
-    TrelloStrings.unknownMember()
+    gpt-voiceStrings.unknownMember()
   )
 }
 
-export const getCommentText = (comment: Readonly<TrelloComment>): string => {
-  return comment.data.text?.trim() || TrelloStrings.noCommentText()
+export const getCommentText = (comment: Readonly<gpt-voiceComment>): string => {
+  return comment.data.text?.trim() || gpt-voiceStrings.noCommentText()
 }
 
 export const getCommentInitials = (
-  comment: Readonly<TrelloComment>,
+  comment: Readonly<gpt-voiceComment>,
 ): string => {
   const memberName =
     comment.memberCreator?.fullName?.trim() ||
@@ -61,7 +61,7 @@ export const getCommentInitials = (
 }
 
 export const getCommentDateText = (
-  comment: Readonly<TrelloComment>,
+  comment: Readonly<gpt-voiceComment>,
 ): string => {
   if (!comment.date) {
     return ''
@@ -74,7 +74,7 @@ export const getCommentDateText = (
 }
 
 export const getCommentAvatarUrl = (
-  comment: Readonly<TrelloComment>,
+  comment: Readonly<gpt-voiceComment>,
 ): string => {
   const avatarUrl = comment.memberCreator?.avatarUrl?.trim() || ''
   if (!avatarUrl) {
@@ -87,7 +87,7 @@ export const getCommentAvatarUrl = (
     return avatarUrl
   }
   if (
-    !trelloAvatarHosts.has(url.hostname) ||
+    !gpt-voiceAvatarHosts.has(url.hostname) ||
     avatarImageExtensionRegex.test(url.pathname)
   ) {
     return avatarUrl

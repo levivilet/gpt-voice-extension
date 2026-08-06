@@ -1,8 +1,8 @@
-import type { TrelloLabel } from '../TrelloTypes/TrelloTypes.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import type { gpt-voiceLabel } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 
-export const getLabelText = (label: Readonly<TrelloLabel>): string => {
-  return label.name?.trim() || label.color?.trim() || TrelloStrings.label()
+export const getLabelText = (label: Readonly<gpt-voiceLabel>): string => {
+  return label.name?.trim() || label.color?.trim() || gpt-voiceStrings.label()
 }
 
 export const labelColors = [
@@ -51,7 +51,7 @@ const toLabelColorClassSuffix = (color: string): string => {
 
 export const getLabelColorClassName = (color: string | undefined): string => {
   if (!color || !knownLabelColors.has(color)) {
-    return 'TrelloCardLabelColorNeutral'
+    return 'gpt-voiceCardLabelColorNeutral'
   }
-  return `TrelloCardLabelColor${toLabelColorClassSuffix(color)}`
+  return `gpt-voiceCardLabelColor${toLabelColorClassSuffix(color)}`
 }

@@ -6,7 +6,7 @@ import {
 
 const titleNode: VirtualDomNode = {
   childCount: 1,
-  className: 'TrelloTitle',
+  className: 'gpt-voiceTitle',
   type: VirtualDomElements.H2,
 }
 

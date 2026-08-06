@@ -1,8 +1,8 @@
 import type { ViewEvent } from '@lvce-editor/api'
 import type {
-  TrelloViewActionContext,
-  TrelloViewState,
-} from '../TrelloViewState/TrelloViewState.ts'
+  gpt-voiceViewActionContext,
+  gpt-voiceViewState,
+} from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import { findBoardCard } from '../FindBoardCard/FindBoardCard.ts'
 import {
   MenuIdBoard,
@@ -28,16 +28,16 @@ type ContextMenuEvent = Readonly<
 >
 
 const setContextMenuTarget = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
   listId: string,
   cardId = '',
 ): void => {
-  const mutableState = state as TrelloViewState
+  const mutableState = state as gpt-voiceViewState
   mutableState.contextMenuListId = listId
   mutableState.contextMenuCardId = cardId
 }
 
-const getCardDetailMenuId = (state: Readonly<TrelloViewState>): string => {
+const getCardDetailMenuId = (state: Readonly<gpt-voiceViewState>): string => {
   const card = state.selectedCardDetail?.card
   if (!card) {
     return ''
@@ -47,7 +47,7 @@ const getCardDetailMenuId = (state: Readonly<TrelloViewState>): string => {
 }
 
 const getMenuId = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
   name: string | undefined,
 ): string => {
   if (!name || name === 'boards') {
@@ -74,7 +74,7 @@ const getMenuId = (
 }
 
 export const handleContextMenuEvent = async (
-  context: Readonly<TrelloViewActionContext>,
+  context: Readonly<gpt-voiceViewActionContext>,
   event: ContextMenuEvent,
 ): Promise<void> => {
   if (typeof event.x !== 'number' || typeof event.y !== 'number') {

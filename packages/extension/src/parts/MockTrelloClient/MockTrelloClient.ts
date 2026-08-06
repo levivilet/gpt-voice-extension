@@ -1,86 +1,86 @@
-import type { TrelloClient } from '../TrelloClient/TrelloClient.ts'
-import type { TrelloCacheFirstResult } from '../TrelloClientTypes/TrelloClientTypes.ts'
+import type { gpt-voiceClient } from '../gpt-voiceClient/gpt-voiceClient.ts'
+import type { gpt-voiceCacheFirstResult } from '../gpt-voiceClientTypes/gpt-voiceClientTypes.ts'
 import type {
-  TrelloAttachment,
-  TrelloBoard,
-  TrelloBoardDetail,
-  TrelloCard,
-  TrelloCardCreate,
-  TrelloCardDetail,
-  TrelloCardMove,
-  TrelloCardUpdate,
-  TrelloComment,
-  TrelloCredentials,
-  TrelloLabel,
-  TrelloLabelCreate,
-  TrelloList,
-  TrelloListCreate,
-  TrelloListUpdate,
-  TrelloSearchResult,
-} from '../TrelloTypes/TrelloTypes.ts'
+  gpt-voiceAttachment,
+  gpt-voiceBoard,
+  gpt-voiceBoardDetail,
+  gpt-voiceCard,
+  gpt-voiceCardCreate,
+  gpt-voiceCardDetail,
+  gpt-voiceCardMove,
+  gpt-voiceCardUpdate,
+  gpt-voiceComment,
+  gpt-voiceCredentials,
+  gpt-voiceLabel,
+  gpt-voiceLabelCreate,
+  gpt-voiceList,
+  gpt-voiceListCreate,
+  gpt-voiceListUpdate,
+  gpt-voiceSearchResult,
+} from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 
-export interface MockTrelloData {
+export interface Mockgpt-voiceData {
   readonly boardDetailErrors?: Readonly<Record<string, string>>
-  readonly boardDetails?: Readonly<Record<string, TrelloBoardDetail>>
-  readonly boardLabels?: Readonly<Record<string, readonly TrelloLabel[]>>
-  readonly boards?: readonly TrelloBoard[]
+  readonly boardDetails?: Readonly<Record<string, gpt-voiceBoardDetail>>
+  readonly boardLabels?: Readonly<Record<string, readonly gpt-voiceLabel[]>>
+  readonly boards?: readonly gpt-voiceBoard[]
   readonly cardAttachmentAddErrors?: Readonly<Record<string, string>>
   readonly cardCommentAddErrors?: Readonly<Record<string, string>>
   readonly cardCreateErrors?: Readonly<Record<string, string>>
   readonly cardDetailErrors?: Readonly<Record<string, string>>
-  readonly cardDetails?: Readonly<Record<string, TrelloCardDetail>>
+  readonly cardDetails?: Readonly<Record<string, gpt-voiceCardDetail>>
   readonly cardLabelAddErrors?: Readonly<Record<string, string>>
   readonly cardMoveErrors?: Readonly<Record<string, string>>
   readonly cardUpdateErrors?: Readonly<Record<string, string>>
   readonly error?: string
   readonly listBoardsError?: string
-  readonly listBoardsResponses?: readonly (readonly TrelloBoard[])[]
+  readonly listBoardsResponses?: readonly (readonly gpt-voiceBoard[])[]
   readonly listCreateErrors?: Readonly<Record<string, string>>
   readonly listUpdateErrors?: Readonly<Record<string, string>>
   readonly searchError?: string
-  readonly searchResults?: readonly TrelloSearchResult[]
+  readonly searchResults?: readonly gpt-voiceSearchResult[]
 }
 
 const getFreshAttachments = async (
-  fresh: Readonly<Promise<TrelloCardDetail>>,
-): Promise<TrelloCardDetail['attachments']> => {
+  fresh: Readonly<Promise<gpt-voiceCardDetail>>,
+): Promise<gpt-voiceCardDetail['attachments']> => {
   const detail = await fresh
   return detail.attachments
 }
 
 const getFreshCard = async (
-  fresh: Readonly<Promise<TrelloCardDetail>>,
-): Promise<TrelloCard> => {
+  fresh: Readonly<Promise<gpt-voiceCardDetail>>,
+): Promise<gpt-voiceCard> => {
   const detail = await fresh
   return detail.card
 }
 
 const getFreshComments = async (
-  fresh: Readonly<Promise<TrelloCardDetail>>,
-): Promise<TrelloCardDetail['comments']> => {
+  fresh: Readonly<Promise<gpt-voiceCardDetail>>,
+): Promise<gpt-voiceCardDetail['comments']> => {
   const detail = await fresh
   return detail.comments
 }
 
-export const createMockTrelloClient = (
-  data: Readonly<MockTrelloData>,
-): TrelloClient => {
+export const createMockgpt-voiceClient = (
+  data: Readonly<Mockgpt-voiceData>,
+): gpt-voiceClient => {
   let listBoardsCallCount = 0
   let addAttachmentCallCount = 0
   let addCommentCallCount = 0
   let createCardCallCount = 0
   let createLabelCallCount = 0
   let createListCallCount = 0
-  const cardDetails: Record<string, TrelloCardDetail> = {
+  const cardDetails: Record<string, gpt-voiceCardDetail> = {
     ...data.cardDetails,
   }
-  const boardDetails: Record<string, TrelloBoardDetail> = {
+  const boardDetails: Record<string, gpt-voiceBoardDetail> = {
     ...data.boardDetails,
   }
-  const boardLabels: Record<string, readonly TrelloLabel[]> = {
+  const boardLabels: Record<string, readonly gpt-voiceLabel[]> = {
     ...data.boardLabels,
   }
-  const findCard = (cardId: string): TrelloCard | undefined => {
+  const findCard = (cardId: string): gpt-voiceCard | undefined => {
     const details = Object.values(boardDetails)
     for (const detail of details) {
       for (const list of detail.lists) {
@@ -93,11 +93,11 @@ export const createMockTrelloClient = (
     return undefined
   }
 
-  const client: TrelloClient = {
+  const client: gpt-voiceClient = {
     async addCardAttachment(
-      card: TrelloCard,
+      card: gpt-voiceCard,
       file: File,
-    ): Promise<TrelloAttachment> {
+    ): Promise<gpt-voiceAttachment> {
       if (data.error) {
         throw new Error(data.error)
       }
@@ -106,7 +106,7 @@ export const createMockTrelloClient = (
         throw new Error(addError)
       }
       addAttachmentCallCount++
-      const attachment: TrelloAttachment = {
+      const attachment: gpt-voiceAttachment = {
         id: `created-attachment-${addAttachmentCallCount}`,
         mimeType: file.type,
         name: file.name,
@@ -121,9 +121,9 @@ export const createMockTrelloClient = (
       return attachment
     },
     async addCardComment(
-      card: TrelloCard,
+      card: gpt-voiceCard,
       text: string,
-    ): Promise<TrelloComment> {
+    ): Promise<gpt-voiceComment> {
       if (data.error) {
         throw new Error(data.error)
       }
@@ -132,7 +132,7 @@ export const createMockTrelloClient = (
         throw new Error(addError)
       }
       addCommentCallCount++
-      const comment: TrelloComment = {
+      const comment: gpt-voiceComment = {
         data: {
           text,
         },
@@ -153,10 +153,10 @@ export const createMockTrelloClient = (
       return comment
     },
     async addCardLabel(
-      card: TrelloCard,
-      label: TrelloLabel,
-      _credentials: TrelloCredentials,
-    ): Promise<TrelloCard> {
+      card: gpt-voiceCard,
+      label: gpt-voiceLabel,
+      _credentials: gpt-voiceCredentials,
+    ): Promise<gpt-voiceCard> {
       if (data.error) {
         throw new Error(data.error)
       }
@@ -196,9 +196,9 @@ export const createMockTrelloClient = (
       return updatedCard
     },
     async createCard(
-      list: TrelloList,
-      create: TrelloCardCreate,
-    ): Promise<TrelloCard> {
+      list: gpt-voiceList,
+      create: gpt-voiceCardCreate,
+    ): Promise<gpt-voiceCard> {
       if (data.error) {
         throw new Error(data.error)
       }
@@ -207,7 +207,7 @@ export const createMockTrelloClient = (
         throw new Error(createError)
       }
       createCardCallCount++
-      const createdCard: TrelloCard = {
+      const createdCard: gpt-voiceCard = {
         badges: {
           comments: 0,
         },
@@ -243,14 +243,14 @@ export const createMockTrelloClient = (
       return createdCard
     },
     async createLabel(
-      board: TrelloBoard,
-      create: TrelloLabelCreate,
-    ): Promise<TrelloLabel> {
+      board: gpt-voiceBoard,
+      create: gpt-voiceLabelCreate,
+    ): Promise<gpt-voiceLabel> {
       if (data.error) {
         throw new Error(data.error)
       }
       createLabelCallCount++
-      const createdLabel: TrelloLabel = {
+      const createdLabel: gpt-voiceLabel = {
         color: create.color,
         id: `created-label-${createLabelCallCount}`,
         idBoard: board.id,
@@ -260,9 +260,9 @@ export const createMockTrelloClient = (
       return createdLabel
     },
     async createList(
-      board: TrelloBoard,
-      create: TrelloListCreate,
-    ): Promise<TrelloList> {
+      board: gpt-voiceBoard,
+      create: gpt-voiceListCreate,
+    ): Promise<gpt-voiceList> {
       if (data.error) {
         throw new Error(data.error)
       }
@@ -271,7 +271,7 @@ export const createMockTrelloClient = (
         throw new Error(createError)
       }
       createListCallCount++
-      const createdList: TrelloList = {
+      const createdList: gpt-voiceList = {
         cards: [],
         id: `created-list-${createListCallCount}`,
         name: create.name,
@@ -285,7 +285,7 @@ export const createMockTrelloClient = (
       }
       return createdList
     },
-    async getBoardDetail(board: TrelloBoard): Promise<TrelloBoardDetail> {
+    async getBoardDetail(board: gpt-voiceBoard): Promise<gpt-voiceBoardDetail> {
       if (data.error) {
         throw new Error(data.error)
       }
@@ -303,8 +303,8 @@ export const createMockTrelloClient = (
       return detail
     },
     async getBoardDetailCacheFirst(
-      board: TrelloBoard,
-    ): Promise<TrelloCacheFirstResult<TrelloBoardDetail>> {
+      board: gpt-voiceBoard,
+    ): Promise<gpt-voiceCacheFirstResult<gpt-voiceBoardDetail>> {
       return {
         cached: undefined,
         fresh: client.getBoardDetail(board, {
@@ -313,7 +313,7 @@ export const createMockTrelloClient = (
         }),
       }
     },
-    async getCardDetail(card: TrelloCard): Promise<TrelloCardDetail> {
+    async getCardDetail(card: gpt-voiceCard): Promise<gpt-voiceCardDetail> {
       if (data.error) {
         throw new Error(data.error)
       }
@@ -335,8 +335,8 @@ export const createMockTrelloClient = (
       }
     },
     async getCardDetailCacheFirst(
-      card: TrelloCard,
-    ): Promise<TrelloCacheFirstResult<TrelloCardDetail>> {
+      card: gpt-voiceCard,
+    ): Promise<gpt-voiceCacheFirstResult<gpt-voiceCardDetail>> {
       return {
         cached: undefined,
         fresh: client.getCardDetail(card, {
@@ -345,7 +345,7 @@ export const createMockTrelloClient = (
         }),
       }
     },
-    async getCardDetailPartsCacheFirst(card: TrelloCard) {
+    async getCardDetailPartsCacheFirst(card: gpt-voiceCard) {
       const fresh = client.getCardDetail(card, {
         apiKey: '',
         token: '',
@@ -359,13 +359,13 @@ export const createMockTrelloClient = (
         },
       }
     },
-    async listBoardLabels(board: TrelloBoard): Promise<readonly TrelloLabel[]> {
+    async listBoardLabels(board: gpt-voiceBoard): Promise<readonly gpt-voiceLabel[]> {
       if (data.error) {
         throw new Error(data.error)
       }
       return boardLabels[board.id] || []
     },
-    async listBoards(): Promise<readonly TrelloBoard[]> {
+    async listBoards(): Promise<readonly gpt-voiceBoard[]> {
       if (data.error) {
         throw new Error(data.error)
       }
@@ -380,7 +380,7 @@ export const createMockTrelloClient = (
       return data.boards || []
     },
     async listBoardsCacheFirst(): Promise<
-      TrelloCacheFirstResult<readonly TrelloBoard[]>
+      gpt-voiceCacheFirstResult<readonly gpt-voiceBoard[]>
     > {
       return {
         cached: undefined,
@@ -391,9 +391,9 @@ export const createMockTrelloClient = (
       }
     },
     async moveCard(
-      card: TrelloCard,
-      move: TrelloCardMove,
-    ): Promise<TrelloCard> {
+      card: gpt-voiceCard,
+      move: gpt-voiceCardMove,
+    ): Promise<gpt-voiceCard> {
       if (data.error) {
         throw new Error(data.error)
       }
@@ -447,7 +447,7 @@ export const createMockTrelloClient = (
       }
       return movedCard
     },
-    async search(): Promise<readonly TrelloSearchResult[]> {
+    async search(): Promise<readonly gpt-voiceSearchResult[]> {
       if (data.error) {
         throw new Error(data.error)
       }
@@ -457,7 +457,7 @@ export const createMockTrelloClient = (
       return data.searchResults || []
     },
     async searchCacheFirst(): Promise<
-      TrelloCacheFirstResult<readonly TrelloSearchResult[]>
+      gpt-voiceCacheFirstResult<readonly gpt-voiceSearchResult[]>
     > {
       return {
         cached: undefined,
@@ -468,9 +468,9 @@ export const createMockTrelloClient = (
       }
     },
     async updateCard(
-      card: TrelloCard,
-      update: TrelloCardUpdate,
-    ): Promise<TrelloCard> {
+      card: gpt-voiceCard,
+      update: gpt-voiceCardUpdate,
+    ): Promise<gpt-voiceCard> {
       if (data.error) {
         throw new Error(data.error)
       }
@@ -493,9 +493,9 @@ export const createMockTrelloClient = (
       return updatedCard
     },
     async updateList(
-      list: TrelloList,
-      update: TrelloListUpdate,
-    ): Promise<TrelloList> {
+      list: gpt-voiceList,
+      update: gpt-voiceListUpdate,
+    ): Promise<gpt-voiceList> {
       if (data.error) {
         throw new Error(data.error)
       }

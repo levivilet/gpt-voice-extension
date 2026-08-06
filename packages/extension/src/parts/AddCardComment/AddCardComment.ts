@@ -1,21 +1,21 @@
-import type { TrelloApiCache } from '../TrelloApiCache/TrelloApiCache.ts'
-import type { FetchLike } from '../TrelloClientTypes/TrelloClientTypes.ts'
+import type { gpt-voiceApiCache } from '../gpt-voiceApiCache/gpt-voiceApiCache.ts'
+import type { FetchLike } from '../gpt-voiceClientTypes/gpt-voiceClientTypes.ts'
 import type {
-  TrelloCard,
-  TrelloComment,
-  TrelloCredentials,
-} from '../TrelloTypes/TrelloTypes.ts'
+  gpt-voiceCard,
+  gpt-voiceComment,
+  gpt-voiceCredentials,
+} from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 import { deleteCachedCardComments } from '../GetCardDetail/GetCardDetail.ts'
 import { requestJson } from '../RequestJson/RequestJson.ts'
 
 export const addCardComment = async (
   fetchLike: FetchLike,
-  card: TrelloCard,
+  card: gpt-voiceCard,
   text: string,
-  credentials: TrelloCredentials,
-  cache?: TrelloApiCache,
-): Promise<TrelloComment> => {
-  const comment = await requestJson<TrelloComment>(
+  credentials: gpt-voiceCredentials,
+  cache?: gpt-voiceApiCache,
+): Promise<gpt-voiceComment> => {
+  const comment = await requestJson<gpt-voiceComment>(
     fetchLike,
     `/cards/${card.id}/actions/comments`,
     credentials,

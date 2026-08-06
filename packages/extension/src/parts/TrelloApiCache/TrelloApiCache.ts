@@ -1,33 +1,33 @@
-import type { TrelloCredentials } from '../TrelloTypes/TrelloTypes.ts'
+import type { gpt-voiceCredentials } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 
-export interface TrelloApiCache {
+export interface gpt-voiceApiCache {
   readonly delete: (
     requestUrl: string,
-    credentials: TrelloCredentials,
+    credentials: gpt-voiceCredentials,
   ) => Promise<void>
   readonly read: <T>(
     requestUrl: string,
-    credentials: TrelloCredentials,
+    credentials: gpt-voiceCredentials,
   ) => Promise<T | undefined>
   readonly write: <T>(
     requestUrl: string,
-    credentials: TrelloCredentials,
+    credentials: gpt-voiceCredentials,
     value: T,
   ) => Promise<void>
 }
 
-export interface MemoryTrelloApiCache extends TrelloApiCache {
+export interface Memorygpt-voiceApiCache extends gpt-voiceApiCache {
   readonly keys: () => readonly string[]
 }
 
-export const trelloApiCacheName = 'builtin.trello.api-responses'
-export const testTrelloApiCacheName = 'test.builtin.trello.api-responses'
+export const gpt-voiceApiCacheName = 'builtin.gpt-voice.api-responses'
+export const testgpt-voiceApiCacheName = 'test.builtin.gpt-voice.api-responses'
 export const credentialFingerprintSearchParam = 'credential'
 
 const textEncoder = new TextEncoder()
 
 export const getCredentialFingerprint = async (
-  credentials: TrelloCredentials,
+  credentials: gpt-voiceCredentials,
 ): Promise<string | undefined> => {
   const subtle = globalThis.crypto?.subtle
   if (!subtle) {
@@ -40,9 +40,9 @@ export const getCredentialFingerprint = async (
   }).join('')
 }
 
-export const createTrelloApiCacheRequestUrl = async (
+export const creategpt-voiceApiCacheRequestUrl = async (
   requestUrl: string,
-  credentials: TrelloCredentials,
+  credentials: gpt-voiceCredentials,
 ): Promise<string | undefined> => {
   const credentialFingerprint = await getCredentialFingerprint(credentials)
   if (!credentialFingerprint) {
@@ -56,19 +56,19 @@ export const createTrelloApiCacheRequestUrl = async (
   return url.href
 }
 
-export const createCacheStorageTrelloApiCache = (
+export const createCacheStoragegpt-voiceApiCache = (
   cacheStorage: Readonly<CacheStorage> | undefined = globalThis.caches,
-  selectedCacheName = trelloApiCacheName,
-): TrelloApiCache | undefined => {
+  selectedCacheName = gpt-voiceApiCacheName,
+): gpt-voiceApiCache | undefined => {
   if (!cacheStorage) {
     return undefined
   }
   return {
     async delete(
       requestUrl: string,
-      credentials: TrelloCredentials,
+      credentials: gpt-voiceCredentials,
     ): Promise<void> {
-      const cacheRequestUrl = await createTrelloApiCacheRequestUrl(
+      const cacheRequestUrl = await creategpt-voiceApiCacheRequestUrl(
         requestUrl,
         credentials,
       )
@@ -80,9 +80,9 @@ export const createCacheStorageTrelloApiCache = (
     },
     async read<T>(
       requestUrl: string,
-      credentials: TrelloCredentials,
+      credentials: gpt-voiceCredentials,
     ): Promise<T | undefined> {
-      const cacheRequestUrl = await createTrelloApiCacheRequestUrl(
+      const cacheRequestUrl = await creategpt-voiceApiCacheRequestUrl(
         requestUrl,
         credentials,
       )
@@ -98,10 +98,10 @@ export const createCacheStorageTrelloApiCache = (
     },
     async write<T>(
       requestUrl: string,
-      credentials: TrelloCredentials,
+      credentials: gpt-voiceCredentials,
       value: T,
     ): Promise<void> {
-      const cacheRequestUrl = await createTrelloApiCacheRequestUrl(
+      const cacheRequestUrl = await creategpt-voiceApiCacheRequestUrl(
         requestUrl,
         credentials,
       )
@@ -114,14 +114,14 @@ export const createCacheStorageTrelloApiCache = (
   }
 }
 
-export const createMemoryTrelloApiCache = (): MemoryTrelloApiCache => {
+export const createMemorygpt-voiceApiCache = (): Memorygpt-voiceApiCache => {
   const values = new Map<string, unknown>()
   return {
     async delete(
       requestUrl: string,
-      credentials: TrelloCredentials,
+      credentials: gpt-voiceCredentials,
     ): Promise<void> {
-      const cacheRequestUrl = await createTrelloApiCacheRequestUrl(
+      const cacheRequestUrl = await creategpt-voiceApiCacheRequestUrl(
         requestUrl,
         credentials,
       )
@@ -134,9 +134,9 @@ export const createMemoryTrelloApiCache = (): MemoryTrelloApiCache => {
     },
     async read<T>(
       requestUrl: string,
-      credentials: TrelloCredentials,
+      credentials: gpt-voiceCredentials,
     ): Promise<T | undefined> {
-      const cacheRequestUrl = await createTrelloApiCacheRequestUrl(
+      const cacheRequestUrl = await creategpt-voiceApiCacheRequestUrl(
         requestUrl,
         credentials,
       )
@@ -147,10 +147,10 @@ export const createMemoryTrelloApiCache = (): MemoryTrelloApiCache => {
     },
     async write<T>(
       requestUrl: string,
-      credentials: TrelloCredentials,
+      credentials: gpt-voiceCredentials,
       value: T,
     ): Promise<void> {
-      const cacheRequestUrl = await createTrelloApiCacheRequestUrl(
+      const cacheRequestUrl = await creategpt-voiceApiCacheRequestUrl(
         requestUrl,
         credentials,
       )

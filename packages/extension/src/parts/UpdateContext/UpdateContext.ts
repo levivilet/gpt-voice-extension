@@ -1,15 +1,15 @@
-import type { TrelloViewState } from '../TrelloViewState/TrelloViewState.ts'
+import type { gpt-voiceViewState } from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 
-export const contextKeyBoardDetailFocus = 'trello.boardDetailFocus'
-export const contextKeyBoardFilterFocus = 'trello.boardFilterFocus'
-export const contextKeyBoardsFocus = 'trello.boardsFocus'
-export const contextKeyCardDescriptionFocus = 'trello.cardDescriptionFocus'
-export const contextKeyCardDetailFocus = 'trello.cardDetailFocus'
-export const contextKeyCardLabelPickerFocus = 'trello.cardLabelPickerFocus'
-export const contextKeyNewCardInputFocus = 'trello.newCardInputFocus'
-export const contextKeyNewListInputFocus = 'trello.newListInputFocus'
+export const contextKeyBoardDetailFocus = 'gpt-voice.boardDetailFocus'
+export const contextKeyBoardFilterFocus = 'gpt-voice.boardFilterFocus'
+export const contextKeyBoardsFocus = 'gpt-voice.boardsFocus'
+export const contextKeyCardDescriptionFocus = 'gpt-voice.cardDescriptionFocus'
+export const contextKeyCardDetailFocus = 'gpt-voice.cardDetailFocus'
+export const contextKeyCardLabelPickerFocus = 'gpt-voice.cardLabelPickerFocus'
+export const contextKeyNewCardInputFocus = 'gpt-voice.newCardInputFocus'
+export const contextKeyNewListInputFocus = 'gpt-voice.newListInputFocus'
 
-export const updateContext = (state: Readonly<TrelloViewState>): void => {
+export const updateContext = (state: Readonly<gpt-voiceViewState>): void => {
   const context: Record<string, boolean> = {}
   if (state.credentials && state.boardDetail) {
     context[contextKeyBoardDetailFocus] = true
@@ -42,6 +42,6 @@ export const updateContext = (state: Readonly<TrelloViewState>): void => {
   if (state.addingList && state.focusedName === 'newListTitle') {
     context[contextKeyNewListInputFocus] = true
   }
-  const mutableState = state as TrelloViewState
+  const mutableState = state as gpt-voiceViewState
   mutableState.context = context
 }

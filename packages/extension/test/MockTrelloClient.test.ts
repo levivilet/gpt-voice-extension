@@ -1,51 +1,51 @@
 import { expect, test } from '@jest/globals'
-import type { TrelloClient } from '../src/parts/TrelloClient/TrelloClient.ts'
+import type { gpt-voiceClient } from '../src/parts/gpt-voiceClient/gpt-voiceClient.ts'
 import type {
-  TrelloBoard,
-  TrelloCard,
-  TrelloCardDetail,
-  TrelloCredentials,
-  TrelloLabel,
-  TrelloList,
-} from '../src/parts/TrelloTypes/TrelloTypes.ts'
+  gpt-voiceBoard,
+  gpt-voiceCard,
+  gpt-voiceCardDetail,
+  gpt-voiceCredentials,
+  gpt-voiceLabel,
+  gpt-voiceList,
+} from '../src/parts/gpt-voiceTypes/gpt-voiceTypes.ts'
 import {
-  createMockTrelloClient,
-  type MockTrelloData,
-} from '../src/parts/MockTrelloClient/MockTrelloClient.ts'
+  createMockgpt-voiceClient,
+  type Mockgpt-voiceData,
+} from '../src/parts/Mockgpt-voiceClient/Mockgpt-voiceClient.ts'
 
-const credentials: TrelloCredentials = {
+const credentials: gpt-voiceCredentials = {
   apiKey: 'abcdefghijklmnopqrstuvwxyz123456',
   token: 'abcdefghijklmnopqrstuvwxyz123456abcdefghijklmnopqrstuvwxyz123456',
 }
 
-const board: TrelloBoard = {
+const board: gpt-voiceBoard = {
   id: 'board-1',
   name: 'Roadmap',
 }
 
-const card: TrelloCard = {
+const card: gpt-voiceCard = {
   id: 'card-1',
   idList: 'list-1',
   name: 'Ship tests',
 }
 
-const label: TrelloLabel = {
+const label: gpt-voiceLabel = {
   color: 'blue',
   id: 'label-1',
   idBoard: board.id,
   name: 'Testing',
 }
 
-const list: TrelloList = {
+const list: gpt-voiceList = {
   cards: [card],
   id: 'list-1',
   name: 'Todo',
 }
 
 const createClient = (
-  overrides: Readonly<MockTrelloData> = {},
-): TrelloClient => {
-  return createMockTrelloClient({
+  overrides: Readonly<Mockgpt-voiceData> = {},
+): gpt-voiceClient => {
+  return createMockgpt-voiceClient({
     boardDetails: {
       [board.id]: {
         board,
@@ -65,8 +65,8 @@ const createClient = (
 }
 
 test('mock client reports its shared error from every operation', async () => {
-  const client = createMockTrelloClient({
-    error: 'Trello unavailable',
+  const client = createMockgpt-voiceClient({
+    error: 'gpt-voice unavailable',
   })
   const calls = [
     client.addCardComment(card, 'Hello', credentials),
@@ -89,7 +89,7 @@ test('mock client reports its shared error from every operation', async () => {
   ]
 
   for (const call of calls) {
-    await expect(call).rejects.toThrow('Trello unavailable')
+    await expect(call).rejects.toThrow('gpt-voice unavailable')
   }
 })
 
@@ -142,8 +142,8 @@ test('mock client reports operation-specific errors', async () => {
 })
 
 test('mock client supports empty data and cache-first fallbacks', async () => {
-  const client = createMockTrelloClient({})
-  const externalCard: TrelloCard = {
+  const client = createMockgpt-voiceClient({})
+  const externalCard: gpt-voiceCard = {
     id: 'external-card',
     name: 'External card',
   }
@@ -194,7 +194,7 @@ test('mock client uses scripted board responses before its fallback boards', asy
     id: 'board-scripted',
     name: 'Scripted',
   }
-  const client = createMockTrelloClient({
+  const client = createMockgpt-voiceClient({
     boards: [board],
     listBoardsResponses: [[scriptedBoard]],
   })
@@ -204,7 +204,7 @@ test('mock client uses scripted board responses before its fallback boards', asy
 })
 
 test('mock client creates records when their parent data is absent', async () => {
-  const client = createMockTrelloClient({
+  const client = createMockgpt-voiceClient({
     boardDetails: {
       unrelated: {
         board: {
@@ -244,7 +244,7 @@ test('mock client creates records when their parent data is absent', async () =>
 })
 
 test('mock client adds a label once and updates matching board cards', async () => {
-  const client = createMockTrelloClient({
+  const client = createMockgpt-voiceClient({
     boardDetails: {
       [board.id]: {
         board,
@@ -305,8 +305,8 @@ test('mock client adds a label once and updates matching board cards', async () 
 test('mock client preserves card details while moving and updating cards', async () => {
   const detailWithoutCollections = {
     card,
-  } as unknown as TrelloCardDetail
-  const client = createMockTrelloClient({
+  } as unknown as gpt-voiceCardDetail
+  const client = createMockgpt-voiceClient({
     boardDetails: {
       [board.id]: {
         board,

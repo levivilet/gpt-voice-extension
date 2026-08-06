@@ -1,12 +1,12 @@
 import type { VirtualDomNode } from '@lvce-editor/virtual-dom-worker'
 import { expect, test } from '@jest/globals'
 import type {
-  TrelloAttachment,
-  TrelloCard,
-  TrelloComment,
-  TrelloLabel,
-  TrelloList,
-} from '../src/parts/TrelloTypes/TrelloTypes.ts'
+  gpt-voiceAttachment,
+  gpt-voiceCard,
+  gpt-voiceComment,
+  gpt-voiceLabel,
+  gpt-voiceList,
+} from '../src/parts/gpt-voiceTypes/gpt-voiceTypes.ts'
 import { createInitialState } from '../src/parts/CreateInitialState/CreateInitialState.ts'
 import * as DomEventListenerFunctions from '../src/parts/DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import { getCardListId } from '../src/parts/GetCardListId/GetCardListId.ts'
@@ -42,14 +42,14 @@ import { renderImageAttachment } from '../src/parts/RenderImageAttachment/Render
 
 const attachmentUrl = 'https://example.com/image.png'
 
-const attachment: TrelloAttachment = {
+const attachment: gpt-voiceAttachment = {
   id: 'attachment-1',
   mimeType: 'image/png',
   name: 'Screenshot',
   url: attachmentUrl,
 }
 
-const comment: TrelloComment = {
+const comment: gpt-voiceComment = {
   data: {
     text: 'Ready to ship',
   },
@@ -62,22 +62,22 @@ const comment: TrelloComment = {
   },
 }
 
-const label: TrelloLabel = {
+const label: gpt-voiceLabel = {
   color: 'green',
   id: 'label-1',
   name: 'Done',
 }
 
-const card: TrelloCard = {
+const card: gpt-voiceCard = {
   desc: 'Card **description**',
   id: 'card-1',
   idList: 'list-1',
   labels: [label],
   name: 'Ship it',
-  url: 'https://trello.com/c/card-1',
+  url: 'https://gpt-voice.com/c/card-1',
 }
 
-const list: TrelloList = {
+const list: gpt-voiceList = {
   cards: [card],
   id: 'list-1',
   name: 'Doing',
@@ -144,7 +144,7 @@ test('renderCardDetailComment renders author, date, and text', () => {
   const dom = renderCardDetailComment(comment)
   expect(hasText(dom, 'Test User')).toBe(true)
   expect(hasText(dom, 'Ready to ship')).toBe(true)
-  expect(dom.some((node) => node.className === 'TrelloCardCommentDate')).toBe(
+  expect(dom.some((node) => node.className === 'gpt-voiceCardCommentDate')).toBe(
     true,
   )
 })
@@ -155,7 +155,7 @@ test('renderCardDetailComments handles loading, empty, and populated states', ()
   ).toBe(true)
   expect(hasText(renderCardDetailComments(false, []), 'No comments')).toBe(true)
   expect(renderCardDetailComments(false, [comment])[0].className).toBe(
-    'TrelloCardComments',
+    'gpt-voiceCardComments',
   )
 })
 
@@ -189,7 +189,7 @@ test('renderCardCommentComposer renders collapsed and saving states', () => {
 
 test('renderCardDetailLabel renders label text and color', () => {
   const dom = renderCardDetailLabel(label)
-  expect(dom[0].className).toContain('TrelloCardLabelColorGreen')
+  expect(dom[0].className).toContain('gpt-voiceCardLabelColorGreen')
   expect(hasText(dom, 'Done')).toBe(true)
 })
 
@@ -253,7 +253,7 @@ test('renderCardLabelPickerContent handles all content states', () => {
     renderCardLabelPickerContent({ ...initial, boardLabels: [label] }, [
       label,
     ])[0].className,
-  ).toBe('TrelloCardLabelPickerList')
+  ).toBe('gpt-voiceCardLabelPickerList')
 })
 
 test('label picker headers render their controls', () => {
@@ -349,7 +349,7 @@ test('renderCardDetailTitle renders placeholder and editing styles', () => {
     editingCardTitle: true,
   })
   expect(findByName(editing, 'cardTitle')).toMatchObject({
-    className: 'TrelloCardDetailTitleInput TrelloCardDetailTitleInputEditing',
+    className: 'gpt-voiceCardDetailTitleInput gpt-voiceCardDetailTitleInputEditing',
     value: 'Updated',
   })
 })
@@ -358,12 +358,12 @@ test('getCardListId uses the card value or finds its containing list', () => {
   const initial = createInitialState()
   expect(getCardListId(initial, card)).toBe('list-1')
 
-  const cardWithoutList: TrelloCard = {
+  const cardWithoutList: gpt-voiceCard = {
     desc: 'Card **description**',
     id: 'card-1',
     labels: [label],
     name: 'Ship it',
-    url: 'https://trello.com/c/card-1',
+    url: 'https://gpt-voice.com/c/card-1',
   }
   expect(
     getCardListId(
@@ -465,9 +465,9 @@ test('renderCardDetailHeader renders title and close action', () => {
   expect(findByName(dom, 'closeCardDetail')).toBeDefined()
 })
 
-test('renderCardDetailLink renders an external Trello link', () => {
-  expect(renderCardDetailLink('https://trello.com/c/card-1')[0]).toMatchObject({
-    href: 'https://trello.com/c/card-1',
+test('renderCardDetailLink renders an external gpt-voice link', () => {
+  expect(renderCardDetailLink('https://gpt-voice.com/c/card-1')[0]).toMatchObject({
+    href: 'https://gpt-voice.com/c/card-1',
     target: '_blank',
   })
 })
@@ -505,7 +505,7 @@ test('renderCardDetailPanel handles loading, absent, and complete details', () =
     onDrop: DomEventListenerFunctions.HandleDrop,
   })
   expect(findByName(dom, 'cardList:card-1')).toBeDefined()
-  expect(hasText(dom, 'Open in Trello')).toBe(true)
+  expect(hasText(dom, 'Open in gpt-voice')).toBe(true)
 })
 
 test('renderCardDetailPanel renders popup mode without a resize sash', () => {
@@ -521,10 +521,10 @@ test('renderCardDetailPanel renders popup mode without a resize sash', () => {
 
   expect(dom[0]).toMatchObject({
     childCount: 1,
-    className: 'TrelloCardDetailPopup',
+    className: 'gpt-voiceCardDetailPopup',
   })
   expect(findByName(dom, 'resizeCardDetail')).toBeUndefined()
   expect(findByName(dom, 'cardDetail')).toMatchObject({
-    className: 'TrelloCardDetailPanel TrelloCardDetailPanelPopup',
+    className: 'gpt-voiceCardDetailPanel gpt-voiceCardDetailPanelPopup',
   })
 })

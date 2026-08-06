@@ -1,18 +1,18 @@
-import type { FetchLike } from '../TrelloClientTypes/TrelloClientTypes.ts'
+import type { FetchLike } from '../gpt-voiceClientTypes/gpt-voiceClientTypes.ts'
 import type {
-  TrelloCredentials,
-  TrelloList,
-  TrelloListUpdate,
-} from '../TrelloTypes/TrelloTypes.ts'
+  gpt-voiceCredentials,
+  gpt-voiceList,
+  gpt-voiceListUpdate,
+} from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 import { requestJson } from '../RequestJson/RequestJson.ts'
 
 export const updateList = async (
   fetchLike: FetchLike,
-  list: TrelloList,
-  update: TrelloListUpdate,
-  credentials: TrelloCredentials,
-): Promise<TrelloList> => {
-  const updatedList = await requestJson<Omit<TrelloList, 'cards'>>(
+  list: gpt-voiceList,
+  update: gpt-voiceListUpdate,
+  credentials: gpt-voiceCredentials,
+): Promise<gpt-voiceList> => {
+  const updatedList = await requestJson<Omit<gpt-voiceList, 'cards'>>(
     fetchLike,
     `/lists/${list.id}`,
     credentials,

@@ -3,13 +3,13 @@ import {
   VirtualDomElements,
   type VirtualDomNode,
 } from '@lvce-editor/virtual-dom-worker'
-import type { TrelloAttachment } from '../TrelloTypes/TrelloTypes.ts'
+import type { gpt-voiceAttachment } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 import { getAttachmentImageUrl } from '../AttachmentHelpers/AttachmentHelpers.ts'
 import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 
 export const renderImageAttachment = (
-  attachment: Readonly<TrelloAttachment>,
+  attachment: Readonly<gpt-voiceAttachment>,
   attachmentImageUrls: Readonly<Record<string, string>>,
   failed: boolean,
 ): readonly VirtualDomNode[] => {
@@ -19,17 +19,17 @@ export const renderImageAttachment = (
     return [
       {
         childCount: 1,
-        className: 'TrelloCardDetailImageError',
+        className: 'gpt-voiceCardDetailImageError',
         type: VirtualDomElements.Div,
       },
-      text(TrelloStrings.imageCouldNotBeLoaded()),
+      text(gpt-voiceStrings.imageCouldNotBeLoaded()),
     ]
   }
   return [
     {
-      alt: attachment.name || TrelloStrings.cardAttachment(),
+      alt: attachment.name || gpt-voiceStrings.cardAttachment(),
       childCount: 0,
-      className: 'TrelloCardDetailImage',
+      className: 'gpt-voiceCardDetailImage',
       name: attachment.id,
       onError: DomEventListenerFunctions.HandleImageError,
       src: imageUrl,

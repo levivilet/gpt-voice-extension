@@ -1,10 +1,10 @@
-import type { TrelloApiCache } from '../TrelloApiCache/TrelloApiCache.ts'
-import type { FetchLike } from '../TrelloClientTypes/TrelloClientTypes.ts'
+import type { gpt-voiceApiCache } from '../gpt-voiceApiCache/gpt-voiceApiCache.ts'
+import type { FetchLike } from '../gpt-voiceClientTypes/gpt-voiceClientTypes.ts'
 import type {
-  TrelloCard,
-  TrelloCardDetail,
-  TrelloCredentials,
-} from '../TrelloTypes/TrelloTypes.ts'
+  gpt-voiceCard,
+  gpt-voiceCardDetail,
+  gpt-voiceCredentials,
+} from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 import {
   deleteCachedJson,
   readCachedJson,
@@ -27,52 +27,52 @@ const commentsParams = {
   memberCreator_fields: 'avatarHash,avatarUrl,fullName,initials,username',
 } as const
 
-type TrelloCardDetailBatchResult = readonly [
-  TrelloCard,
-  TrelloCardDetail['attachments'],
-  TrelloCardDetail['comments'],
+type gpt-voiceCardDetailBatchResult = readonly [
+  gpt-voiceCard,
+  gpt-voiceCardDetail['attachments'],
+  gpt-voiceCardDetail['comments'],
 ]
 
 const getBatchCard = async (
-  result: Readonly<Promise<TrelloCardDetailBatchResult>>,
-): Promise<TrelloCard> => {
+  result: Readonly<Promise<gpt-voiceCardDetailBatchResult>>,
+): Promise<gpt-voiceCard> => {
   const values = await result
   return values[0]
 }
 
 const getBatchAttachments = async (
-  result: Readonly<Promise<TrelloCardDetailBatchResult>>,
-): Promise<TrelloCardDetail['attachments']> => {
+  result: Readonly<Promise<gpt-voiceCardDetailBatchResult>>,
+): Promise<gpt-voiceCardDetail['attachments']> => {
   const values = await result
   return values[1]
 }
 
 const getBatchComments = async (
-  result: Readonly<Promise<TrelloCardDetailBatchResult>>,
-): Promise<TrelloCardDetail['comments']> => {
+  result: Readonly<Promise<gpt-voiceCardDetailBatchResult>>,
+): Promise<gpt-voiceCardDetail['comments']> => {
   const values = await result
   return values[2]
 }
 
 export const readCachedCardDetail = async (
-  cache: TrelloApiCache | undefined,
-  card: TrelloCard,
-  credentials: TrelloCredentials,
-): Promise<TrelloCardDetail | undefined> => {
+  cache: gpt-voiceApiCache | undefined,
+  card: gpt-voiceCard,
+  credentials: gpt-voiceCredentials,
+): Promise<gpt-voiceCardDetail | undefined> => {
   const [detailCard, attachments, comments] = await Promise.all([
-    readCachedJson<TrelloCard>(
+    readCachedJson<gpt-voiceCard>(
       cache,
       `/cards/${card.id}`,
       credentials,
       cardParams,
     ),
-    readCachedJson<TrelloCardDetail['attachments']>(
+    readCachedJson<gpt-voiceCardDetail['attachments']>(
       cache,
       `/cards/${card.id}/attachments`,
       credentials,
       attachmentsParams,
     ),
-    readCachedJson<TrelloCardDetail['comments']>(
+    readCachedJson<gpt-voiceCardDetail['comments']>(
       cache,
       `/cards/${card.id}/actions`,
       credentials,
@@ -90,17 +90,17 @@ export const readCachedCardDetail = async (
 }
 
 export const deleteCachedCardDetail = async (
-  cache: TrelloApiCache | undefined,
-  card: TrelloCard,
-  credentials: TrelloCredentials,
+  cache: gpt-voiceApiCache | undefined,
+  card: gpt-voiceCard,
+  credentials: gpt-voiceCredentials,
 ): Promise<void> => {
   await deleteCachedJson(cache, `/cards/${card.id}`, credentials, cardParams)
 }
 
 export const deleteCachedCardComments = async (
-  cache: TrelloApiCache | undefined,
-  card: TrelloCard,
-  credentials: TrelloCredentials,
+  cache: gpt-voiceApiCache | undefined,
+  card: gpt-voiceCard,
+  credentials: gpt-voiceCredentials,
 ): Promise<void> => {
   await deleteCachedJson(
     cache,
@@ -111,9 +111,9 @@ export const deleteCachedCardComments = async (
 }
 
 export const deleteCachedCardAttachments = async (
-  cache: TrelloApiCache | undefined,
-  card: TrelloCard,
-  credentials: TrelloCredentials,
+  cache: gpt-voiceApiCache | undefined,
+  card: gpt-voiceCard,
+  credentials: gpt-voiceCredentials,
 ): Promise<void> => {
   await deleteCachedJson(
     cache,
@@ -125,11 +125,11 @@ export const deleteCachedCardAttachments = async (
 
 export const getCardDetailCard = (
   fetchLike: FetchLike,
-  card: TrelloCard,
-  credentials: TrelloCredentials,
-  cache?: TrelloApiCache,
-): Promise<TrelloCard> => {
-  return requestJson<TrelloCard>(
+  card: gpt-voiceCard,
+  credentials: gpt-voiceCredentials,
+  cache?: gpt-voiceApiCache,
+): Promise<gpt-voiceCard> => {
+  return requestJson<gpt-voiceCard>(
     fetchLike,
     `/cards/${card.id}`,
     credentials,
@@ -141,11 +141,11 @@ export const getCardDetailCard = (
 
 export const getCardDetailAttachments = (
   fetchLike: FetchLike,
-  card: TrelloCard,
-  credentials: TrelloCredentials,
-  cache?: TrelloApiCache,
-): Promise<TrelloCardDetail['attachments']> => {
-  return requestJson<TrelloCardDetail['attachments']>(
+  card: gpt-voiceCard,
+  credentials: gpt-voiceCredentials,
+  cache?: gpt-voiceApiCache,
+): Promise<gpt-voiceCardDetail['attachments']> => {
+  return requestJson<gpt-voiceCardDetail['attachments']>(
     fetchLike,
     `/cards/${card.id}/attachments`,
     credentials,
@@ -157,11 +157,11 @@ export const getCardDetailAttachments = (
 
 export const getCardDetailComments = (
   fetchLike: FetchLike,
-  card: TrelloCard,
-  credentials: TrelloCredentials,
-  cache?: TrelloApiCache,
-): Promise<TrelloCardDetail['comments']> => {
-  return requestJson<TrelloCardDetail['comments']>(
+  card: gpt-voiceCard,
+  credentials: gpt-voiceCredentials,
+  cache?: gpt-voiceApiCache,
+): Promise<gpt-voiceCardDetail['comments']> => {
+  return requestJson<gpt-voiceCardDetail['comments']>(
     fetchLike,
     `/cards/${card.id}/actions`,
     credentials,
@@ -173,11 +173,11 @@ export const getCardDetailComments = (
 
 export const getCardDetail = async (
   fetchLike: FetchLike,
-  card: TrelloCard,
-  credentials: TrelloCredentials,
-  cache?: TrelloApiCache,
+  card: gpt-voiceCard,
+  credentials: gpt-voiceCredentials,
+  cache?: gpt-voiceApiCache,
   batchRequestsEnabled = false,
-): Promise<TrelloCardDetail> => {
+): Promise<gpt-voiceCardDetail> => {
   const {
     attachments,
     card: detailCard,
@@ -200,14 +200,14 @@ export const getCardDetail = async (
 
 export const getCardDetailParts = (
   fetchLike: FetchLike,
-  card: TrelloCard,
-  credentials: TrelloCredentials,
-  cache?: TrelloApiCache,
+  card: gpt-voiceCard,
+  credentials: gpt-voiceCredentials,
+  cache?: gpt-voiceApiCache,
   batchRequestsEnabled = false,
 ): {
-  readonly attachments: Promise<TrelloCardDetail['attachments']>
-  readonly card: Promise<TrelloCard>
-  readonly comments: Promise<TrelloCardDetail['comments']>
+  readonly attachments: Promise<gpt-voiceCardDetail['attachments']>
+  readonly card: Promise<gpt-voiceCard>
+  readonly comments: Promise<gpt-voiceCardDetail['comments']>
 } => {
   if (!batchRequestsEnabled) {
     const detailCard = getCardDetailCard(fetchLike, card, credentials, cache)
@@ -224,7 +224,7 @@ export const getCardDetailParts = (
       comments,
     }
   }
-  const result = requestJsonBatch<TrelloCardDetailBatchResult>(
+  const result = requestJsonBatch<gpt-voiceCardDetailBatchResult>(
     fetchLike,
     [
       {

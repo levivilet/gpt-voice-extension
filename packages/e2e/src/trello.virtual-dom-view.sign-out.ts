@@ -3,15 +3,15 @@ import {
   connectWithCredentials,
   createBoards,
   createMockData,
-  useMockDataAndShowTrello,
-} from './_trello.virtual-dom-view.shared.ts'
+  useMockDataAndShowgpt-voice,
+} from './_gpt-voice.virtual-dom-view.shared.ts'
 
-export const name = 'trello.virtual-dom-view.sign-out'
+export const name = 'gpt-voice.virtual-dom-view.sign-out'
 export const skip = true
 
 export const test: Test = async ({ Command, expect, Locator }) => {
   const boards = createBoards(1)
-  await useMockDataAndShowTrello(Command, createMockData(boards))
+  await useMockDataAndShowgpt-voice(Command, createMockData(boards))
   await connectWithCredentials({ Command, expect, Locator })
 
   const logout = Locator('button[title="Sign Out"]')

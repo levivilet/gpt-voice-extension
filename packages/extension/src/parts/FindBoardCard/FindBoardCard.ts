@@ -1,10 +1,10 @@
-import type { TrelloCard } from '../TrelloTypes/TrelloTypes.ts'
-import type { TrelloViewState } from '../TrelloViewState/TrelloViewState.ts'
+import type { gpt-voiceCard } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
+import type { gpt-voiceViewState } from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 
 export const findBoardCard = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
   cardId: string,
-): TrelloCard | undefined => {
+): gpt-voiceCard | undefined => {
   const lists = state.boardDetail?.lists || []
   for (const list of lists) {
     const card = list.cards.find((item) => item.id === cardId)

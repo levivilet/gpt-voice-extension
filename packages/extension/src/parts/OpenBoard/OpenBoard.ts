@@ -1,23 +1,23 @@
-import type { TrelloBoard } from '../TrelloTypes/TrelloTypes.ts'
+import type { gpt-voiceBoard } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 import type {
-  TrelloViewActionContext,
-  TrelloViewState,
-} from '../TrelloViewState/TrelloViewState.ts'
+  gpt-voiceViewActionContext,
+  gpt-voiceViewState,
+} from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import { isSameJson } from '../CacheFirstHelpers/CacheFirstHelpers.ts'
 import { getErrorMessage } from '../GetErrorMessage/GetErrorMessage.ts'
 import { updateRecentBoardViews } from '../RecentBoardStorage/RecentBoardStorage.ts'
 import { resolveBoardCoverImages } from '../ResolveBoardCoverImages/ResolveBoardCoverImages.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 
 const findBoard = (
-  context: TrelloViewActionContext,
+  context: gpt-voiceViewActionContext,
   boardId: string,
-): TrelloBoard | undefined => {
+): gpt-voiceBoard | undefined => {
   const { state } = context
   return (
     state.boards.find((item) => item.id === boardId) ||
     state.searchResults.find(
-      (item): item is TrelloBoard & { readonly type: 'board' } => {
+      (item): item is gpt-voiceBoard & { readonly type: 'board' } => {
         return item.type === 'board' && item.id === boardId
       },
     )
@@ -25,18 +25,18 @@ const findBoard = (
 }
 
 export const openBoard = async (
-  context: TrelloViewActionContext,
+  context: gpt-voiceViewActionContext,
   boardId: string,
 ): Promise<void> => {
   const { client, currentBoardStorage, recentStorage, requestRerender } =
     context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   if (!state.credentials) {
     return
   }
   const board = findBoard(context, boardId)
   if (!board) {
-    state.error = TrelloStrings.boardNotFound(boardId)
+    state.error = gpt-voiceStrings.boardNotFound(boardId)
     requestRerender()
     return
   }

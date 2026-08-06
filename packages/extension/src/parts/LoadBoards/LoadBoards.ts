@@ -1,17 +1,17 @@
 import type {
-  TrelloViewActionContext,
-  TrelloViewState,
-} from '../TrelloViewState/TrelloViewState.ts'
+  gpt-voiceViewActionContext,
+  gpt-voiceViewState,
+} from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import { isSameJson } from '../CacheFirstHelpers/CacheFirstHelpers.ts'
 import { clearBoardSpecificState } from '../ClearBoardSpecificState/ClearBoardSpecificState.ts'
 import { getErrorMessage } from '../GetErrorMessage/GetErrorMessage.ts'
 
 export const loadBoards = async (
-  context: TrelloViewActionContext,
+  context: gpt-voiceViewActionContext,
   rerender = true,
 ): Promise<void> => {
   const { client, requestRerender } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   if (!state.credentials) {
     return
   }

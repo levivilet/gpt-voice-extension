@@ -7,10 +7,10 @@ import {
   createList,
   createMockData,
   openBoard,
-  useMockDataAndShowTrello,
-} from './_trello.virtual-dom-view.shared.ts'
+  useMockDataAndShowgpt-voice,
+} from './_gpt-voice.virtual-dom-view.shared.ts'
 
-export const name = 'trello.virtual-dom-view.card-drag-drop'
+export const name = 'gpt-voice.virtual-dom-view.card-drag-drop'
 export const skip = true
 
 export const test: Test = async ({ Command, expect, Locator }) => {
@@ -24,12 +24,12 @@ export const test: Test = async ({ Command, expect, Locator }) => {
   const boardDetails = {
     'board-1': createBoardDetail(boards[0], [todo, doing]),
   }
-  await useMockDataAndShowTrello(Command, createMockData(boards, boardDetails))
+  await useMockDataAndShowgpt-voice(Command, createMockData(boards, boardDetails))
   await connectWithCredentials({ Command, expect, Locator })
   await openBoard(Command, Locator, expect)
 
   const planWork = Locator('button[name="card:card-1"]')
-  const doingList = Locator('.TrelloList[name="list:list-2"]')
+  const doingList = Locator('.gpt-voiceList[name="list:list-2"]')
   const buildWork = doingList.locator('button[name="card:card-2"]')
   await expect(planWork).toBeVisible()
   await expect(doingList).toBeVisible()
@@ -37,10 +37,10 @@ export const test: Test = async ({ Command, expect, Locator }) => {
 
   await planWork.dispatchEvent('dragstart', '{}')
   await buildWork.dispatchEvent('dragover', '{}')
-  await expect(doingList).toHaveClass('TrelloList TrelloListDragTarget')
+  await expect(doingList).toHaveClass('gpt-voiceList gpt-voiceListDragTarget')
   await buildWork.dispatchEvent('drop', '{"value":"card-1"}')
 
-  const cards = doingList.locator('button.TrelloCard')
+  const cards = doingList.locator('button.gpt-voiceCard')
   const movedCard = cards.nth(0)
   await expect(movedCard).toBeVisible()
   await expect(movedCard).toHaveText('Plan work')

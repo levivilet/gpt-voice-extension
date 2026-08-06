@@ -1,10 +1,10 @@
-import type { TrelloLabel } from '../TrelloTypes/TrelloTypes.ts'
-import type { TrelloViewState } from '../TrelloViewState/TrelloViewState.ts'
+import type { gpt-voiceLabel } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
+import type { gpt-voiceViewState } from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import { getLabelText } from '../LabelHelpers/LabelHelpers.ts'
 
 export const getMatchingLabels = (
-  state: Readonly<TrelloViewState>,
-): readonly TrelloLabel[] => {
+  state: Readonly<gpt-voiceViewState>,
+): readonly gpt-voiceLabel[] => {
   const { boardLabels, draftLabelSearchQuery } = state
   const query = draftLabelSearchQuery.trim().toLowerCase()
   return boardLabels.filter((label) => {

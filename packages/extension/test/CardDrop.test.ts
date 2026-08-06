@@ -1,14 +1,14 @@
 import { expect, test } from '@jest/globals'
-import type { TrelloClient } from '../src/parts/TrelloClient/TrelloClient.ts'
+import type { gpt-voiceClient } from '../src/parts/gpt-voiceClient/gpt-voiceClient.ts'
 import type {
-  TrelloBoardDetail,
-  TrelloCard,
-  TrelloCardMove,
-} from '../src/parts/TrelloTypes/TrelloTypes.ts'
+  gpt-voiceBoardDetail,
+  gpt-voiceCard,
+  gpt-voiceCardMove,
+} from '../src/parts/gpt-voiceTypes/gpt-voiceTypes.ts'
 import type {
-  TrelloViewActionContext,
-  TrelloViewState,
-} from '../src/parts/TrelloViewState/TrelloViewState.ts'
+  gpt-voiceViewActionContext,
+  gpt-voiceViewState,
+} from '../src/parts/gpt-voiceViewState/gpt-voiceViewState.ts'
 import { createInitialState } from '../src/parts/CreateInitialState/CreateInitialState.ts'
 import { handleDropEvent } from '../src/parts/HandleDragEvent/HandleDragEvent.ts'
 
@@ -17,7 +17,7 @@ const credentials = {
   token: 'token',
 }
 
-const initialBoardDetail: TrelloBoardDetail = {
+const initialBoardDetail: gpt-voiceBoardDetail = {
   board: { id: 'board-1', name: 'Roadmap' },
   lists: [
     {
@@ -33,7 +33,7 @@ const initialBoardDetail: TrelloBoardDetail = {
   ],
 }
 
-const movedBoardDetail: TrelloBoardDetail = {
+const movedBoardDetail: gpt-voiceBoardDetail = {
   board: initialBoardDetail.board,
   lists: [
     {
@@ -54,14 +54,14 @@ const movedBoardDetail: TrelloBoardDetail = {
 
 const createDropContext = (
   moveCard: (
-    card: Readonly<TrelloCard>,
-    move: Readonly<TrelloCardMove>,
-  ) => Promise<TrelloCard>,
-  getBoardDetail: () => Promise<TrelloBoardDetail>,
+    card: Readonly<gpt-voiceCard>,
+    move: Readonly<gpt-voiceCardMove>,
+  ) => Promise<gpt-voiceCard>,
+  getBoardDetail: () => Promise<gpt-voiceBoardDetail>,
 ): {
-  readonly context: TrelloViewActionContext
+  readonly context: gpt-voiceViewActionContext
   readonly getRerenderCount: () => number
-  readonly state: TrelloViewState
+  readonly state: gpt-voiceViewState
 } => {
   const state = createInitialState()
   state.boardDetail = initialBoardDetail
@@ -72,14 +72,14 @@ const createDropContext = (
   const client = {
     getBoardDetail,
     moveCard,
-  } as unknown as TrelloClient
+  } as unknown as gpt-voiceClient
   const context = {
     client,
     requestRerender(): void {
       rerenderCount++
     },
     state,
-  } as unknown as TrelloViewActionContext
+  } as unknown as gpt-voiceViewActionContext
   return {
     context,
     getRerenderCount(): number {
@@ -90,7 +90,7 @@ const createDropContext = (
 }
 
 const getListCardIds = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
   listId: string,
 ): readonly string[] => {
   const list = state.boardDetail?.lists.find((item) => item.id === listId)
@@ -137,7 +137,7 @@ test('card drop moves immediately and does not rerender matching server state', 
 })
 
 test('card drop rerenders when refreshed lists differ from optimistic state', async () => {
-  const serverBoardDetail: TrelloBoardDetail = {
+  const serverBoardDetail: gpt-voiceBoardDetail = {
     ...movedBoardDetail,
     lists: movedBoardDetail.lists.map((list) => {
       if (list.id !== 'list-2') {

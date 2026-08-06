@@ -1,4 +1,4 @@
-export const localCacheOrigin = 'https://trello.com'
+export const localCacheOrigin = 'https://gpt-voice.com'
 
 export const createLocalCacheRequestUrl = (path: string): string => {
   return new URL(path, localCacheOrigin).href

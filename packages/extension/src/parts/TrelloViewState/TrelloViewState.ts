@@ -5,21 +5,21 @@ import type {
   RecentBoardStorage,
   RecentBoardView,
 } from '../RecentBoardStorage/RecentBoardStorage.ts'
-import type { TrelloClient } from '../TrelloClient/TrelloClient.ts'
-import type { TrelloImageCache } from '../TrelloImageCache/TrelloImageCache.ts'
+import type { gpt-voiceClient } from '../gpt-voiceClient/gpt-voiceClient.ts'
+import type { gpt-voiceImageCache } from '../gpt-voiceImageCache/gpt-voiceImageCache.ts'
 import type {
-  TrelloBoard,
-  TrelloBoardDetail,
-  TrelloCardDetail,
-  TrelloCredentials,
-  TrelloLabel,
-  TrelloSearchResult,
-} from '../TrelloTypes/TrelloTypes.ts'
+  gpt-voiceBoard,
+  gpt-voiceBoardDetail,
+  gpt-voiceCardDetail,
+  gpt-voiceCredentials,
+  gpt-voiceLabel,
+  gpt-voiceSearchResult,
+} from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 
-export interface TrelloViewDependencies {
-  readonly client: TrelloClient
+export interface gpt-voiceViewDependencies {
+  readonly client: gpt-voiceClient
   readonly currentBoardStorage?: CurrentBoardStorage
-  readonly imageCache?: TrelloImageCache
+  readonly imageCache?: gpt-voiceImageCache
   readonly isTest?: boolean
   readonly readBoardBackgroundEnabled?: () => Promise<boolean>
   readonly readCardDetailPopupEnabled?: () => Promise<boolean>
@@ -28,7 +28,7 @@ export interface TrelloViewDependencies {
   readonly storage: CredentialStorage
 }
 
-export interface TrelloViewState {
+export interface gpt-voiceViewState {
   activeSearchQuery: string
   addingCardLabelId: string
   addingCardListId: string
@@ -36,12 +36,12 @@ export interface TrelloViewState {
   attachmentImageUrls: Readonly<Record<string, string>>
   baseUrl: string
   boardBackgroundEnabled: boolean
-  boardDetail: TrelloBoardDetail | undefined
+  boardDetail: gpt-voiceBoardDetail | undefined
   boardFilterOpen: boolean
-  boardLabels: readonly TrelloLabel[]
+  boardLabels: readonly gpt-voiceLabel[]
   boardLabelsLoaded: boolean
   boardLabelsLoading: boolean
-  boards: readonly TrelloBoard[]
+  boards: readonly gpt-voiceBoard[]
   cardAttachmentDropActive: boolean
   cardAttachmentsLoading: boolean
   cardAttachmentsUploading: boolean
@@ -58,7 +58,7 @@ export interface TrelloViewState {
   contextMenuCardId: string
   contextMenuListId: string
   coverImageUrls: Readonly<Record<string, string>>
-  credentials: TrelloCredentials | undefined
+  credentials: gpt-voiceCredentials | undefined
   draftApiKey: string
   draftBoardFilter: string
   draftCardDescription: string
@@ -90,15 +90,15 @@ export interface TrelloViewState {
   savingNewLabel: boolean
   savingNewList: boolean
   searchEnabled: boolean
-  searchResults: readonly TrelloSearchResult[]
-  selectedCardDetail: TrelloCardDetail | undefined
+  searchResults: readonly gpt-voiceSearchResult[]
+  selectedCardDetail: gpt-voiceCardDetail | undefined
   writingComment: boolean
 }
 
-export interface TrelloViewContext {
-  readonly client: TrelloClient
+export interface gpt-voiceViewContext {
+  readonly client: gpt-voiceClient
   readonly currentBoardStorage: CurrentBoardStorage
-  readonly imageCache: TrelloImageCache
+  readonly imageCache: gpt-voiceImageCache
   readonly recentStorage: RecentBoardStorage
   readonly requestRerender: () => void
   readonly showContextMenu: (
@@ -106,14 +106,14 @@ export interface TrelloViewContext {
     x: number,
     y: number,
   ) => Promise<void>
-  readonly state: TrelloViewState
+  readonly state: gpt-voiceViewState
   readonly storage: CredentialStorage
 }
 
-export interface TrelloViewActionContext {
-  readonly client: TrelloClient
+export interface gpt-voiceViewActionContext {
+  readonly client: gpt-voiceClient
   readonly currentBoardStorage: CurrentBoardStorage
-  readonly imageCache: TrelloImageCache
+  readonly imageCache: gpt-voiceImageCache
   readonly recentStorage: RecentBoardStorage
   readonly requestRerender: () => void
   readonly showContextMenu: (
@@ -121,6 +121,6 @@ export interface TrelloViewActionContext {
     x: number,
     y: number,
   ) => Promise<void>
-  readonly state: Readonly<TrelloViewState>
+  readonly state: Readonly<gpt-voiceViewState>
   readonly storage: CredentialStorage
 }

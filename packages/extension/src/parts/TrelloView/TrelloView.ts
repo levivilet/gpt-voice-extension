@@ -1,62 +1,62 @@
 import type { View } from '@lvce-editor/api'
 import { viewId } from '../Constants/Constants.ts'
 import {
-  type ActiveTrelloViewInstance,
+  type Activegpt-voiceViewInstance,
   createInstance,
 } from '../CreateInstance/CreateInstance.ts'
 import { renderEventListeners } from '../RenderEventListeners/RenderEventListeners.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 
-type TrelloView = Omit<View<ActiveTrelloViewInstance>, 'commands'> & {
-  readonly commands: NonNullable<View<ActiveTrelloViewInstance>['commands']>
+type gpt-voiceView = Omit<View<Activegpt-voiceViewInstance>, 'commands'> & {
+  readonly commands: NonNullable<View<Activegpt-voiceViewInstance>['commands']>
   readonly eventListeners?: ReturnType<typeof renderEventListeners>
 }
 
 const runViewAction =
-  (action: (instance: ActiveTrelloViewInstance) => Promise<void>) =>
+  (action: (instance: Activegpt-voiceViewInstance) => Promise<void>) =>
   async (
-    instance: ActiveTrelloViewInstance,
-  ): Promise<ActiveTrelloViewInstance> => {
+    instance: Activegpt-voiceViewInstance,
+  ): Promise<Activegpt-voiceViewInstance> => {
     await action(instance)
     return instance
   }
 
-export const view: TrelloView = {
+export const view: gpt-voiceView = {
   commands: {
-    'trello.backToBoards': runViewAction((instance) => instance.backToBoards()),
-    'trello.logout': runViewAction((instance) => instance.logout()),
-    'trello.refreshBoards': runViewAction((instance) =>
+    'gpt-voice.backToBoards': runViewAction((instance) => instance.backToBoards()),
+    'gpt-voice.logout': runViewAction((instance) => instance.logout()),
+    'gpt-voice.refreshBoards': runViewAction((instance) =>
       instance.refreshBoards(),
     ),
   },
   create: createInstance,
   // @ts-ignore
-  displayName: TrelloStrings.trello(),
+  displayName: gpt-voiceStrings.gpt-voice(),
   eventListeners: renderEventListeners(),
   icon: 'list-tree',
   id: viewId,
   kind: 'virtualDom',
   preferredLocation: 'preview',
-  title: TrelloStrings.trello(),
+  title: gpt-voiceStrings.gpt-voice(),
 }
 
 export {
   readCardDetailPopupEnabledPreference,
-  resetTrelloViewDependencyFactory,
-  setTrelloViewDependencyFactory,
+  resetgpt-voiceViewDependencyFactory,
+  setgpt-voiceViewDependencyFactory,
 } from '../DependencyFactory/DependencyFactory.ts'
 export {
-  backToBoardsActiveTrelloViewInstance,
-  cancelNewCardActiveTrelloViewInstance,
-  closeBoardFilterActiveTrelloViewInstance,
-  closeCardDetailActiveTrelloViewInstance,
-  logoutActiveTrelloViewInstance,
-  openCardActiveTrelloViewInstance,
-  refreshBoardsActiveTrelloViewInstance,
-  reloadActiveTrelloViewInstances,
-  saveCardDetailActiveTrelloViewInstance,
-  startAddCardActiveTrelloViewInstance,
-  submitNewCardActiveTrelloViewInstance,
+  backToBoardsActivegpt-voiceViewInstance,
+  cancelNewCardActivegpt-voiceViewInstance,
+  closeBoardFilterActivegpt-voiceViewInstance,
+  closeCardDetailActivegpt-voiceViewInstance,
+  logoutActivegpt-voiceViewInstance,
+  openCardActivegpt-voiceViewInstance,
+  refreshBoardsActivegpt-voiceViewInstance,
+  reloadActivegpt-voiceViewInstances,
+  saveCardDetailActivegpt-voiceViewInstance,
+  startAddCardActivegpt-voiceViewInstance,
+  submitNewCardActivegpt-voiceViewInstance,
   addList,
   addCard,
   openMockBoard,

@@ -1,13 +1,13 @@
-import type { TrelloCard } from '../TrelloTypes/TrelloTypes.ts'
+import type { gpt-voiceCard } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 import type {
-  TrelloViewActionContext,
-  TrelloViewState,
-} from '../TrelloViewState/TrelloViewState.ts'
+  gpt-voiceViewActionContext,
+  gpt-voiceViewState,
+} from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import { getErrorMessage } from '../GetErrorMessage/GetErrorMessage.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 import { updateBoardDetailCard } from '../UpdateBoardDetailCard/UpdateBoardDetailCard.ts'
 
-const updateCardCommentCount = (card: Readonly<TrelloCard>): TrelloCard => {
+const updateCardCommentCount = (card: Readonly<gpt-voiceCard>): gpt-voiceCard => {
   const count = card.badges?.comments || 0
   return {
     ...card,
@@ -19,10 +19,10 @@ const updateCardCommentCount = (card: Readonly<TrelloCard>): TrelloCard => {
 }
 
 export const startWriteComment = (
-  context: Readonly<TrelloViewActionContext>,
+  context: Readonly<gpt-voiceViewActionContext>,
 ): void => {
   const { requestRerender } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   if (!state.selectedCardDetail) {
     return
   }
@@ -34,10 +34,10 @@ export const startWriteComment = (
 }
 
 export const cancelWriteComment = (
-  context: Readonly<TrelloViewActionContext>,
+  context: Readonly<gpt-voiceViewActionContext>,
 ): void => {
   const { requestRerender } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   state.writingComment = false
   state.draftComment = ''
   state.savingComment = false
@@ -46,16 +46,16 @@ export const cancelWriteComment = (
 }
 
 export const submitComment = async (
-  context: Readonly<TrelloViewActionContext>,
+  context: Readonly<gpt-voiceViewActionContext>,
 ): Promise<void> => {
   const { client, requestRerender } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   if (!state.credentials || !state.selectedCardDetail || state.savingComment) {
     return
   }
   const text = state.draftComment.trim()
   if (!text) {
-    state.error = TrelloStrings.commentRequired()
+    state.error = gpt-voiceStrings.commentRequired()
     requestRerender()
     return
   }

@@ -1,123 +1,123 @@
 import type {
-  TrelloBoard,
-  TrelloBoardDetail,
-  TrelloAttachment,
-  TrelloCard,
-  TrelloCardCreate,
-  TrelloCardDetail,
-  TrelloCardMove,
-  TrelloCardUpdate,
-  TrelloComment,
-  TrelloCredentials,
-  TrelloLabel,
-  TrelloLabelCreate,
-  TrelloList,
-  TrelloListCreate,
-  TrelloListUpdate,
-  TrelloSearchResult,
-} from '../TrelloTypes/TrelloTypes.ts'
+  gpt-voiceBoard,
+  gpt-voiceBoardDetail,
+  gpt-voiceAttachment,
+  gpt-voiceCard,
+  gpt-voiceCardCreate,
+  gpt-voiceCardDetail,
+  gpt-voiceCardMove,
+  gpt-voiceCardUpdate,
+  gpt-voiceComment,
+  gpt-voiceCredentials,
+  gpt-voiceLabel,
+  gpt-voiceLabelCreate,
+  gpt-voiceList,
+  gpt-voiceListCreate,
+  gpt-voiceListUpdate,
+  gpt-voiceSearchResult,
+} from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 
-export interface TrelloCacheFirstResult<T> {
+export interface gpt-voiceCacheFirstResult<T> {
   readonly cached: T | undefined
   readonly fresh: Promise<T>
 }
 
-export interface TrelloCardDetailPartsResult {
-  readonly cached: TrelloCardDetail | undefined
+export interface gpt-voiceCardDetailPartsResult {
+  readonly cached: gpt-voiceCardDetail | undefined
   readonly fresh: {
-    readonly attachments: Promise<TrelloCardDetail['attachments']>
-    readonly card: Promise<TrelloCard>
-    readonly comments: Promise<TrelloCardDetail['comments']>
+    readonly attachments: Promise<gpt-voiceCardDetail['attachments']>
+    readonly card: Promise<gpt-voiceCard>
+    readonly comments: Promise<gpt-voiceCardDetail['comments']>
   }
 }
 
-export interface TrelloClient {
+export interface gpt-voiceClient {
   readonly addCardAttachment: (
-    card: TrelloCard,
+    card: gpt-voiceCard,
     file: File,
-    credentials: TrelloCredentials,
-  ) => Promise<TrelloAttachment>
+    credentials: gpt-voiceCredentials,
+  ) => Promise<gpt-voiceAttachment>
   readonly addCardComment: (
-    card: TrelloCard,
+    card: gpt-voiceCard,
     text: string,
-    credentials: TrelloCredentials,
-  ) => Promise<TrelloComment>
+    credentials: gpt-voiceCredentials,
+  ) => Promise<gpt-voiceComment>
   readonly addCardLabel: (
-    card: TrelloCard,
-    label: TrelloLabel,
-    credentials: TrelloCredentials,
-  ) => Promise<TrelloCard>
+    card: gpt-voiceCard,
+    label: gpt-voiceLabel,
+    credentials: gpt-voiceCredentials,
+  ) => Promise<gpt-voiceCard>
   readonly createCard: (
-    list: TrelloList,
-    create: TrelloCardCreate,
-    credentials: TrelloCredentials,
-  ) => Promise<TrelloCard>
+    list: gpt-voiceList,
+    create: gpt-voiceCardCreate,
+    credentials: gpt-voiceCredentials,
+  ) => Promise<gpt-voiceCard>
   readonly createLabel: (
-    board: TrelloBoard,
-    create: TrelloLabelCreate,
-    credentials: TrelloCredentials,
-  ) => Promise<TrelloLabel>
+    board: gpt-voiceBoard,
+    create: gpt-voiceLabelCreate,
+    credentials: gpt-voiceCredentials,
+  ) => Promise<gpt-voiceLabel>
   readonly createList: (
-    board: TrelloBoard,
-    create: TrelloListCreate,
-    credentials: TrelloCredentials,
-  ) => Promise<TrelloList>
+    board: gpt-voiceBoard,
+    create: gpt-voiceListCreate,
+    credentials: gpt-voiceCredentials,
+  ) => Promise<gpt-voiceList>
   readonly getBoardDetail: (
-    board: TrelloBoard,
-    credentials: TrelloCredentials,
-  ) => Promise<TrelloBoardDetail>
+    board: gpt-voiceBoard,
+    credentials: gpt-voiceCredentials,
+  ) => Promise<gpt-voiceBoardDetail>
   readonly getBoardDetailCacheFirst: (
-    board: TrelloBoard,
-    credentials: TrelloCredentials,
-  ) => Promise<TrelloCacheFirstResult<TrelloBoardDetail>>
+    board: gpt-voiceBoard,
+    credentials: gpt-voiceCredentials,
+  ) => Promise<gpt-voiceCacheFirstResult<gpt-voiceBoardDetail>>
   readonly getCardDetail: (
-    card: TrelloCard,
-    credentials: TrelloCredentials,
-  ) => Promise<TrelloCardDetail>
+    card: gpt-voiceCard,
+    credentials: gpt-voiceCredentials,
+  ) => Promise<gpt-voiceCardDetail>
   readonly getCardDetailCacheFirst: (
-    card: TrelloCard,
-    credentials: TrelloCredentials,
-  ) => Promise<TrelloCacheFirstResult<TrelloCardDetail>>
+    card: gpt-voiceCard,
+    credentials: gpt-voiceCredentials,
+  ) => Promise<gpt-voiceCacheFirstResult<gpt-voiceCardDetail>>
   readonly getCardDetailPartsCacheFirst: (
-    card: TrelloCard,
-    credentials: TrelloCredentials,
-  ) => Promise<TrelloCardDetailPartsResult>
+    card: gpt-voiceCard,
+    credentials: gpt-voiceCredentials,
+  ) => Promise<gpt-voiceCardDetailPartsResult>
   readonly listBoardLabels: (
-    board: TrelloBoard,
-    credentials: TrelloCredentials,
-  ) => Promise<readonly TrelloLabel[]>
+    board: gpt-voiceBoard,
+    credentials: gpt-voiceCredentials,
+  ) => Promise<readonly gpt-voiceLabel[]>
   readonly listBoards: (
-    credentials: TrelloCredentials,
-  ) => Promise<readonly TrelloBoard[]>
+    credentials: gpt-voiceCredentials,
+  ) => Promise<readonly gpt-voiceBoard[]>
   readonly listBoardsCacheFirst: (
-    credentials: TrelloCredentials,
-  ) => Promise<TrelloCacheFirstResult<readonly TrelloBoard[]>>
+    credentials: gpt-voiceCredentials,
+  ) => Promise<gpt-voiceCacheFirstResult<readonly gpt-voiceBoard[]>>
   readonly moveCard: (
-    card: TrelloCard,
-    move: TrelloCardMove,
-    credentials: TrelloCredentials,
-  ) => Promise<TrelloCard>
+    card: gpt-voiceCard,
+    move: gpt-voiceCardMove,
+    credentials: gpt-voiceCredentials,
+  ) => Promise<gpt-voiceCard>
   readonly search: (
     query: string,
-    credentials: TrelloCredentials,
-  ) => Promise<readonly TrelloSearchResult[]>
+    credentials: gpt-voiceCredentials,
+  ) => Promise<readonly gpt-voiceSearchResult[]>
   readonly searchCacheFirst: (
     query: string,
-    credentials: TrelloCredentials,
-  ) => Promise<TrelloCacheFirstResult<readonly TrelloSearchResult[]>>
+    credentials: gpt-voiceCredentials,
+  ) => Promise<gpt-voiceCacheFirstResult<readonly gpt-voiceSearchResult[]>>
   readonly updateCard: (
-    card: TrelloCard,
-    update: TrelloCardUpdate,
-    credentials: TrelloCredentials,
-  ) => Promise<TrelloCard>
+    card: gpt-voiceCard,
+    update: gpt-voiceCardUpdate,
+    credentials: gpt-voiceCredentials,
+  ) => Promise<gpt-voiceCard>
   readonly updateList: (
-    list: TrelloList,
-    update: TrelloListUpdate,
-    credentials: TrelloCredentials,
-  ) => Promise<TrelloList>
+    list: gpt-voiceList,
+    update: gpt-voiceListUpdate,
+    credentials: gpt-voiceCredentials,
+  ) => Promise<gpt-voiceList>
 }
 
-export interface TrelloResponse {
+export interface gpt-voiceResponse {
   readonly json: () => Promise<unknown>
   readonly ok: boolean
   readonly status: number
@@ -125,16 +125,16 @@ export interface TrelloResponse {
   readonly text: () => Promise<string>
 }
 
-export interface TrelloRequestInit {
+export interface gpt-voiceRequestInit {
   readonly body?: Readonly<FormData>
   readonly method?: string
 }
 
-export interface TrelloClientOptions {
+export interface gpt-voiceClientOptions {
   readonly readBatchRequestsEnabled?: () => Promise<boolean>
 }
 
 export type FetchLike = (
   input: string,
-  init?: TrelloRequestInit,
-) => Promise<TrelloResponse>
+  init?: gpt-voiceRequestInit,
+) => Promise<gpt-voiceResponse>

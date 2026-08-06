@@ -1,14 +1,14 @@
 // cspell:ignore prefs
 
-import type { TrelloApiCache } from '../TrelloApiCache/TrelloApiCache.ts'
-import type { FetchLike } from '../TrelloClientTypes/TrelloClientTypes.ts'
+import type { gpt-voiceApiCache } from '../gpt-voiceApiCache/gpt-voiceApiCache.ts'
+import type { FetchLike } from '../gpt-voiceClientTypes/gpt-voiceClientTypes.ts'
 import type {
-  TrelloCredentials,
-  TrelloSearchResult,
-} from '../TrelloTypes/TrelloTypes.ts'
+  gpt-voiceCredentials,
+  gpt-voiceSearchResult,
+} from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 import {
   normalizeSearchResponse,
-  type TrelloSearchResponse,
+  type gpt-voiceSearchResponse,
 } from '../NormalizeSearchResponse/NormalizeSearchResponse.ts'
 import { readCachedJson, requestJson } from '../RequestJson/RequestJson.ts'
 
@@ -24,11 +24,11 @@ const getSearchParams = (query: string): Readonly<Record<string, string>> => {
 }
 
 export const readCachedSearch = async (
-  cache: TrelloApiCache | undefined,
+  cache: gpt-voiceApiCache | undefined,
   query: string,
-  credentials: TrelloCredentials,
-): Promise<readonly TrelloSearchResult[] | undefined> => {
-  const response = await readCachedJson<TrelloSearchResponse>(
+  credentials: gpt-voiceCredentials,
+): Promise<readonly gpt-voiceSearchResult[] | undefined> => {
+  const response = await readCachedJson<gpt-voiceSearchResponse>(
     cache,
     '/search',
     credentials,
@@ -43,10 +43,10 @@ export const readCachedSearch = async (
 export const search = async (
   fetchLike: FetchLike,
   query: string,
-  credentials: TrelloCredentials,
-  cache?: TrelloApiCache,
-): Promise<readonly TrelloSearchResult[]> => {
-  const response = await requestJson<TrelloSearchResponse>(
+  credentials: gpt-voiceCredentials,
+  cache?: gpt-voiceApiCache,
+): Promise<readonly gpt-voiceSearchResult[]> => {
+  const response = await requestJson<gpt-voiceSearchResponse>(
     fetchLike,
     '/search',
     credentials,

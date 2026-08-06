@@ -1,9 +1,9 @@
-import type { TrelloAttachment } from '../TrelloTypes/TrelloTypes.ts'
+import type { gpt-voiceAttachment } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 
 const imageUrlPattern = /\.(?:avif|gif|jpe?g|png|svg|webp)(?:[?#]|$)/i
 
 export const isImageAttachment = (
-  attachment: Readonly<TrelloAttachment>,
+  attachment: Readonly<gpt-voiceAttachment>,
 ): boolean => {
   if (attachment.mimeType?.startsWith('image/')) {
     return true
@@ -15,7 +15,7 @@ export const isImageAttachment = (
 }
 
 export const getAttachmentImageUrl = (
-  attachment: Readonly<TrelloAttachment>,
+  attachment: Readonly<gpt-voiceAttachment>,
 ): string => {
   if (attachment.url && imageUrlPattern.test(attachment.url)) {
     return attachment.url

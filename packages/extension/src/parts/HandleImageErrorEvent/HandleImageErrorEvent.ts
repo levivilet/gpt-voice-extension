@@ -1,13 +1,13 @@
 import type {
-  TrelloViewActionContext,
-  TrelloViewState,
-} from '../TrelloViewState/TrelloViewState.ts'
+  gpt-voiceViewActionContext,
+  gpt-voiceViewState,
+} from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 
 export const handleImageErrorEvent = (
-  context: Readonly<TrelloViewActionContext>,
+  context: Readonly<gpt-voiceViewActionContext>,
   attachmentId: string,
 ): void => {
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   if (
     !attachmentId ||
     state.failedCardAttachmentImageIds.includes(attachmentId)

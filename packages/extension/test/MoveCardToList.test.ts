@@ -1,36 +1,36 @@
 import { expect, test } from '@jest/globals'
-import type { TrelloClient } from '../src/parts/TrelloClient/TrelloClient.ts'
+import type { gpt-voiceClient } from '../src/parts/gpt-voiceClient/gpt-voiceClient.ts'
 import type {
-  TrelloBoard,
-  TrelloBoardDetail,
-  TrelloCard,
-  TrelloCardMove,
-  TrelloCredentials,
-} from '../src/parts/TrelloTypes/TrelloTypes.ts'
+  gpt-voiceBoard,
+  gpt-voiceBoardDetail,
+  gpt-voiceCard,
+  gpt-voiceCardMove,
+  gpt-voiceCredentials,
+} from '../src/parts/gpt-voiceTypes/gpt-voiceTypes.ts'
 import type {
-  TrelloViewActionContext,
-  TrelloViewState,
-} from '../src/parts/TrelloViewState/TrelloViewState.ts'
+  gpt-voiceViewActionContext,
+  gpt-voiceViewState,
+} from '../src/parts/gpt-voiceViewState/gpt-voiceViewState.ts'
 import { createInitialState } from '../src/parts/CreateInitialState/CreateInitialState.ts'
 import { moveCardToList } from '../src/parts/MoveCardToList/MoveCardToList.ts'
 
-const credentials: TrelloCredentials = {
+const credentials: gpt-voiceCredentials = {
   apiKey: 'api-key',
   token: 'token',
 }
 
-const card: TrelloCard = {
+const card: gpt-voiceCard = {
   id: 'card-1',
   name: 'Plan work',
 }
 
-const otherCard: TrelloCard = {
+const otherCard: gpt-voiceCard = {
   id: 'card-2',
   idList: 'list-2',
   name: 'Build work',
 }
 
-const initialBoardDetail: TrelloBoardDetail = {
+const initialBoardDetail: gpt-voiceBoardDetail = {
   board: {
     id: 'board-1',
     name: 'Roadmap',
@@ -50,23 +50,23 @@ const initialBoardDetail: TrelloBoardDetail = {
 }
 
 interface MoveCall {
-  readonly card: TrelloCard
-  readonly credentials: TrelloCredentials
-  readonly move: TrelloCardMove
+  readonly card: gpt-voiceCard
+  readonly credentials: gpt-voiceCredentials
+  readonly move: gpt-voiceCardMove
 }
 
 interface TestContext {
-  readonly context: TrelloViewActionContext
+  readonly context: gpt-voiceViewActionContext
   readonly getBoardDetailCallCount: () => number
   readonly getMoveCalls: () => readonly MoveCall[]
   readonly getRerenderCount: () => number
-  readonly state: TrelloViewState
+  readonly state: gpt-voiceViewState
 }
 
 interface TestContextOptions {
-  readonly getBoardDetail?: TrelloClient['getBoardDetail']
-  readonly moveCard?: TrelloClient['moveCard']
-  readonly state?: Readonly<Partial<TrelloViewState>>
+  readonly getBoardDetail?: gpt-voiceClient['getBoardDetail']
+  readonly moveCard?: gpt-voiceClient['moveCard']
+  readonly state?: Readonly<Partial<gpt-voiceViewState>>
 }
 
 const createContext = (
@@ -83,9 +83,9 @@ const createContext = (
   let rerenderCount = 0
   const client = {
     async getBoardDetail(
-      board: TrelloBoard,
-      currentCredentials: TrelloCredentials,
-    ): Promise<TrelloBoardDetail> {
+      board: gpt-voiceBoard,
+      currentCredentials: gpt-voiceCredentials,
+    ): Promise<gpt-voiceBoardDetail> {
       getBoardDetailCallCount++
       if (options.getBoardDetail) {
         return options.getBoardDetail(board, currentCredentials)
@@ -93,10 +93,10 @@ const createContext = (
       return state.boardDetail || initialBoardDetail
     },
     async moveCard(
-      sourceCard: TrelloCard,
-      move: TrelloCardMove,
-      currentCredentials: TrelloCredentials,
-    ): Promise<TrelloCard> {
+      sourceCard: gpt-voiceCard,
+      move: gpt-voiceCardMove,
+      currentCredentials: gpt-voiceCredentials,
+    ): Promise<gpt-voiceCard> {
       moveCalls.push({
         card: sourceCard,
         credentials: currentCredentials,
@@ -110,7 +110,7 @@ const createContext = (
         idList: move.idList,
       }
     },
-  } as unknown as TrelloClient
+  } as unknown as gpt-voiceClient
   return {
     context: {
       client,
@@ -118,7 +118,7 @@ const createContext = (
         rerenderCount++
       },
       state,
-    } as unknown as TrelloViewActionContext,
+    } as unknown as gpt-voiceViewActionContext,
     getBoardDetailCallCount(): number {
       return getBoardDetailCallCount
     },
@@ -167,7 +167,7 @@ test('moveCardToList rerenders without moving a card already in the target list'
 })
 
 test('moveCardToList applies an optimistic move and refreshes matching selected detail', async () => {
-  const move = Promise.withResolvers<TrelloCard>()
+  const move = Promise.withResolvers<gpt-voiceCard>()
   const testContext = createContext({
     moveCard: async () => move.promise,
     state: {
@@ -218,7 +218,7 @@ test('moveCardToList applies an optimistic move and refreshes matching selected 
 })
 
 test('moveCardToList replaces optimistic state when the refreshed board differs', async () => {
-  const freshBoardDetail: TrelloBoardDetail = {
+  const freshBoardDetail: gpt-voiceBoardDetail = {
     board: initialBoardDetail.board,
     lists: [
       {

@@ -1,6 +1,6 @@
-# builtin.trello
+# builtin.gpt-voice
 
-Trello extension for Lvce Editor.
+gpt-voice extension for Lvce Editor.
 
 ## Development
 

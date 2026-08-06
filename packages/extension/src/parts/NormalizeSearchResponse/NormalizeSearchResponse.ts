@@ -1,27 +1,27 @@
 import type {
-  TrelloBoard,
-  TrelloCard,
-  TrelloSearchResult,
-} from '../TrelloTypes/TrelloTypes.ts'
+  gpt-voiceBoard,
+  gpt-voiceCard,
+  gpt-voiceSearchResult,
+} from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 
-export interface TrelloSearchResponse {
-  readonly boards?: readonly TrelloBoard[]
-  readonly cards?: readonly TrelloCard[]
+export interface gpt-voiceSearchResponse {
+  readonly boards?: readonly gpt-voiceBoard[]
+  readonly cards?: readonly gpt-voiceCard[]
 }
 
 export const normalizeSearchResponse = (
-  response: Readonly<TrelloSearchResponse>,
-): readonly TrelloSearchResult[] => {
+  response: Readonly<gpt-voiceSearchResponse>,
+): readonly gpt-voiceSearchResult[] => {
   const cards = response.cards || []
   const boards = response.boards || []
   return [
-    ...cards.map((card): TrelloSearchResult => {
+    ...cards.map((card): gpt-voiceSearchResult => {
       return {
         ...card,
         type: 'card',
       }
     }),
-    ...boards.map((board): TrelloSearchResult => {
+    ...boards.map((board): gpt-voiceSearchResult => {
       return {
         ...board,
         type: 'board',

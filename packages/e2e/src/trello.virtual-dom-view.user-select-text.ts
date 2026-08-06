@@ -2,16 +2,16 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 import {
   createBoards,
   createMockData,
-  useMockDataAndShowTrello,
-} from './_trello.virtual-dom-view.shared.ts'
+  useMockDataAndShowgpt-voice,
+} from './_gpt-voice.virtual-dom-view.shared.ts'
 
-export const name = 'trello.virtual-dom-view.user-select-text'
+export const name = 'gpt-voice.virtual-dom-view.user-select-text'
 
 export const test: Test = async ({ Command, expect, Locator }) => {
   const boards = createBoards(1)
-  await useMockDataAndShowTrello(Command, createMockData(boards))
+  await useMockDataAndShowgpt-voice(Command, createMockData(boards))
 
-  const welcomeText = Locator('.TrelloWelcomeText')
+  const welcomeText = Locator('.gpt-voiceWelcomeText')
   await expect(welcomeText).toBeVisible()
   await expect(welcomeText).toHaveCSS('user-select', 'text')
 }

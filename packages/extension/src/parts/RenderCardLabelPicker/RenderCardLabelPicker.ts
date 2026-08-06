@@ -2,25 +2,25 @@ import {
   VirtualDomElements,
   type VirtualDomNode,
 } from '@lvce-editor/virtual-dom-worker'
-import type { TrelloLabel } from '../TrelloTypes/TrelloTypes.ts'
-import type { TrelloViewState } from '../TrelloViewState/TrelloViewState.ts'
+import type { gpt-voiceLabel } from '../gpt-voiceTypes/gpt-voiceTypes.ts'
+import type { gpt-voiceViewState } from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import * as MergeClassNames from '../MergeClassNames/MergeClassNames.ts'
 import { renderCardLabelCreate } from '../RenderCardLabelCreate/RenderCardLabelCreate.ts'
 import { renderCardLabelPickerContent } from '../RenderCardLabelPickerContent/RenderCardLabelPickerContent.ts'
 import { renderCardLabelPickerHeader } from '../RenderCardLabelPickerHeader/RenderCardLabelPickerHeader.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 
 export const renderCardLabelPicker = (
-  state: Readonly<TrelloViewState>,
-  labels: readonly TrelloLabel[] | undefined,
+  state: Readonly<gpt-voiceViewState>,
+  labels: readonly gpt-voiceLabel[] | undefined,
 ): readonly VirtualDomNode[] => {
   const { cardLabelCreateOpen, draftLabelSearchQuery } = state
   if (cardLabelCreateOpen) {
     return [
       {
         childCount: 1,
-        className: 'TrelloCardLabelPicker',
+        className: 'gpt-voiceCardLabelPicker',
         name: 'cardLabelPicker',
         onPointerDown:
           DomEventListenerFunctions.HandleCardLabelPickerPointerDown,
@@ -32,7 +32,7 @@ export const renderCardLabelPicker = (
   return [
     {
       childCount: 3,
-      className: 'TrelloCardLabelPicker',
+      className: 'gpt-voiceCardLabelPicker',
       name: 'cardLabelPicker',
       onPointerDown: DomEventListenerFunctions.HandleCardLabelPickerPointerDown,
       type: VirtualDomElements.Div,
@@ -42,14 +42,14 @@ export const renderCardLabelPicker = (
       autocomplete: 'off',
       childCount: 0,
       className: MergeClassNames.mergeClassNames(
-        'TrelloInput',
-        'TrelloCardLabelSearchInput',
+        'gpt-voiceInput',
+        'gpt-voiceCardLabelSearchInput',
       ),
       name: 'cardLabelSearch',
       onBlur: DomEventListenerFunctions.HandleBlur,
       onFocus: DomEventListenerFunctions.HandleFocus,
       onInput: DomEventListenerFunctions.HandleInput,
-      placeholder: TrelloStrings.searchLabels(),
+      placeholder: gpt-voiceStrings.searchLabels(),
       type: VirtualDomElements.Input,
       value: draftLabelSearchQuery,
     },

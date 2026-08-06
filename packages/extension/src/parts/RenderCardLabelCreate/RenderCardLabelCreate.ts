@@ -3,7 +3,7 @@ import {
   VirtualDomElements,
   type VirtualDomNode,
 } from '@lvce-editor/virtual-dom-worker'
-import type { TrelloViewState } from '../TrelloViewState/TrelloViewState.ts'
+import type { gpt-voiceViewState } from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import {
   getLabelColorClassName,
@@ -12,47 +12,47 @@ import {
 import * as MergeClassNames from '../MergeClassNames/MergeClassNames.ts'
 import { renderCardLabelColorChoice } from '../RenderCardLabelColorChoice/RenderCardLabelColorChoice.ts'
 import { renderCardLabelCreateHeader } from '../RenderCardLabelCreateHeader/RenderCardLabelCreateHeader.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 
 export const renderCardLabelCreate = (
-  state: Readonly<TrelloViewState>,
+  state: Readonly<gpt-voiceViewState>,
 ): readonly VirtualDomNode[] => {
   const { draftNewLabelColor, draftNewLabelName, savingNewLabel } = state
   return [
     {
       childCount: 3,
-      className: 'TrelloCardLabelCreate',
+      className: 'gpt-voiceCardLabelCreate',
       type: VirtualDomElements.Div,
     },
     ...renderCardLabelCreateHeader(),
     {
       childCount: 1,
       className: MergeClassNames.mergeClassNames(
-        'TrelloCardLabelCreatePreview',
+        'gpt-voiceCardLabelCreatePreview',
         getLabelColorClassName(draftNewLabelColor),
       ),
       type: VirtualDomElements.Div,
     },
-    text(draftNewLabelName || TrelloStrings.labelTitle()),
+    text(draftNewLabelName || gpt-voiceStrings.labelTitle()),
     {
       childCount: 5,
-      className: 'TrelloCardLabelCreateFields',
+      className: 'gpt-voiceCardLabelCreateFields',
       type: VirtualDomElements.Div,
     },
     {
       childCount: 1,
       type: VirtualDomElements.Label,
     },
-    text(TrelloStrings.title()),
+    text(gpt-voiceStrings.title()),
     {
       autocomplete: 'off',
       childCount: 0,
-      className: 'TrelloInput',
+      className: 'gpt-voiceInput',
       disabled: savingNewLabel,
       name: 'newLabelName',
       onFocus: DomEventListenerFunctions.HandleFocus,
       onInput: DomEventListenerFunctions.HandleInput,
-      placeholder: TrelloStrings.labelTitle(),
+      placeholder: gpt-voiceStrings.labelTitle(),
       type: VirtualDomElements.Input,
       value: draftNewLabelName,
     },
@@ -60,24 +60,24 @@ export const renderCardLabelCreate = (
       childCount: 1,
       type: VirtualDomElements.Label,
     },
-    text(TrelloStrings.selectAColor()),
+    text(gpt-voiceStrings.selectAColor()),
     {
       childCount: labelColors.length,
-      className: 'TrelloCardLabelColorGrid',
+      className: 'gpt-voiceCardLabelColorGrid',
       type: VirtualDomElements.Div,
     },
     ...labelColors.map((color) => renderCardLabelColorChoice(state, color)),
     {
       childCount: 1,
       className: MergeClassNames.mergeClassNames(
-        'TrelloButton',
-        'TrelloPrimaryButton',
+        'gpt-voiceButton',
+        'gpt-voicePrimaryButton',
       ),
       disabled: savingNewLabel || !draftNewLabelName.trim(),
       name: 'createCardLabel',
       onClick: DomEventListenerFunctions.HandleClick,
       type: VirtualDomElements.Button,
     },
-    text(savingNewLabel ? TrelloStrings.creating() : TrelloStrings.create()),
+    text(savingNewLabel ? gpt-voiceStrings.creating() : gpt-voiceStrings.create()),
   ]
 }

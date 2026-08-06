@@ -1,24 +1,24 @@
 import type { ViewEvent } from '@lvce-editor/api'
 import type {
-  TrelloViewActionContext,
-  TrelloViewState,
-} from '../TrelloViewState/TrelloViewState.ts'
+  gpt-voiceViewActionContext,
+  gpt-voiceViewState,
+} from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import { cancelAddCard } from '../AddCard/AddCard.ts'
 import { cancelAddList } from '../AddList/AddList.ts'
 import { closeCardLabelPicker } from '../CardLabelPicker/CardLabelPicker.ts'
 import { getErrorMessage } from '../GetErrorMessage/GetErrorMessage.ts'
 import { saveCardDetail } from '../SaveCardDetail/SaveCardDetail.ts'
-import * as TrelloStrings from '../TrelloStrings/TrelloStrings.ts'
+import * as gpt-voiceStrings from '../gpt-voiceStrings/gpt-voiceStrings.ts'
 import { updateBoardDetailCard } from '../UpdateBoardDetailCard/UpdateBoardDetailCard.ts'
 import { updateBoardDetailList } from '../UpdateBoardDetailList/UpdateBoardDetailList.ts'
 
 const listTitlePrefix = 'listTitle:'
 
 const handleCardTitleBlur = async (
-  context: Readonly<TrelloViewActionContext>,
+  context: Readonly<gpt-voiceViewActionContext>,
 ): Promise<void> => {
   const { client, requestRerender } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   if (!state.credentials || !state.selectedCardDetail) {
     return
   }
@@ -27,7 +27,7 @@ const handleCardTitleBlur = async (
   state.editingCardTitle = false
   if (!name) {
     state.draftCardTitle = card.name
-    state.error = TrelloStrings.cardTitleRequired()
+    state.error = gpt-voiceStrings.cardTitleRequired()
     requestRerender()
     return
   }
@@ -65,14 +65,14 @@ const handleCardTitleBlur = async (
 }
 
 const handleListTitleBlur = async (
-  context: Readonly<TrelloViewActionContext>,
+  context: Readonly<gpt-voiceViewActionContext>,
   event: Readonly<ViewEvent>,
 ): Promise<void> => {
   if (!event.name?.startsWith(listTitlePrefix)) {
     return
   }
   const { client, requestRerender } = context
-  const state = context.state as TrelloViewState
+  const state = context.state as gpt-voiceViewState
   if (!state.credentials || !state.boardDetail) {
     return
   }
@@ -90,7 +90,7 @@ const handleListTitleBlur = async (
       ...state.draftListTitles,
       [listId]: list.name,
     }
-    state.error = TrelloStrings.listTitleRequired()
+    state.error = gpt-voiceStrings.listTitleRequired()
     requestRerender()
     return
   }
@@ -126,7 +126,7 @@ const handleListTitleBlur = async (
 }
 
 export const handleBlurEvent = async (
-  context: Readonly<TrelloViewActionContext>,
+  context: Readonly<gpt-voiceViewActionContext>,
   event: Readonly<ViewEvent>,
 ): Promise<void> => {
   if (event.name?.startsWith('newCardTitle:')) {

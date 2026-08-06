@@ -1,19 +1,19 @@
 import type {
   FetchLike,
-  TrelloCacheFirstResult,
-  TrelloClient,
-  TrelloClientOptions,
-} from '../TrelloClientTypes/TrelloClientTypes.ts'
+  gpt-voiceCacheFirstResult,
+  gpt-voiceClient,
+  gpt-voiceClientOptions,
+} from '../gpt-voiceClientTypes/gpt-voiceClientTypes.ts'
 import type {
-  TrelloBoard,
-  TrelloBoardDetail,
-  TrelloCard,
-  TrelloCardDetail,
-  TrelloComment,
-  TrelloCredentials,
-  TrelloLabel,
-  TrelloSearchResult,
-} from '../TrelloTypes/TrelloTypes.ts'
+  gpt-voiceBoard,
+  gpt-voiceBoardDetail,
+  gpt-voiceCard,
+  gpt-voiceCardDetail,
+  gpt-voiceComment,
+  gpt-voiceCredentials,
+  gpt-voiceLabel,
+  gpt-voiceSearchResult,
+} from '../gpt-voiceTypes/gpt-voiceTypes.ts'
 import { addCardAttachment } from '../AddCardAttachment/AddCardAttachment.ts'
 import { addCardComment } from '../AddCardComment/AddCardComment.ts'
 import { addCardLabel } from '../AddCardLabel/AddCardLabel.ts'
@@ -34,29 +34,29 @@ import { listBoards, readCachedListBoards } from '../ListBoards/ListBoards.ts'
 import { moveCard } from '../MoveCard/MoveCard.ts'
 import { readCachedSearch, search } from '../Search/Search.ts'
 import {
-  createCacheStorageTrelloApiCache,
-  type TrelloApiCache,
-} from '../TrelloApiCache/TrelloApiCache.ts'
+  createCacheStoragegpt-voiceApiCache,
+  type gpt-voiceApiCache,
+} from '../gpt-voiceApiCache/gpt-voiceApiCache.ts'
 import { updateCard } from '../UpdateCard/UpdateCard.ts'
 import { updateList } from '../UpdateList/UpdateList.ts'
 
 export type {
   FetchLike,
-  TrelloClient,
-} from '../TrelloClientTypes/TrelloClientTypes.ts'
+  gpt-voiceClient,
+} from '../gpt-voiceClientTypes/gpt-voiceClientTypes.ts'
 
-export const createTrelloClient = (
+export const creategpt-voiceClient = (
   fetchLike: FetchLike = fetch,
-  cache: TrelloApiCache | undefined = createCacheStorageTrelloApiCache(),
-  options: TrelloClientOptions = {},
-): TrelloClient => {
+  cache: gpt-voiceApiCache | undefined = createCacheStoragegpt-voiceApiCache(),
+  options: gpt-voiceClientOptions = {},
+): gpt-voiceClient => {
   const readBatchRequestsEnabled =
     options.readBatchRequestsEnabled ||
     ((): Promise<boolean> => Promise.resolve(false))
   const getFreshBoardDetail = async (
-    board: TrelloBoard,
-    credentials: TrelloCredentials,
-  ): Promise<TrelloBoardDetail> => {
+    board: gpt-voiceBoard,
+    credentials: gpt-voiceCredentials,
+  ): Promise<gpt-voiceBoardDetail> => {
     return getBoardDetail(
       fetchLike,
       board,
@@ -66,9 +66,9 @@ export const createTrelloClient = (
     )
   }
   const getFreshCardDetail = async (
-    card: TrelloCard,
-    credentials: TrelloCredentials,
-  ): Promise<TrelloCardDetail> => {
+    card: gpt-voiceCard,
+    credentials: gpt-voiceCredentials,
+  ): Promise<gpt-voiceCardDetail> => {
     return getCardDetail(
       fetchLike,
       card,
@@ -82,54 +82,54 @@ export const createTrelloClient = (
       card,
       file,
       credentials,
-    ): ReturnType<TrelloClient['addCardAttachment']> {
+    ): ReturnType<gpt-voiceClient['addCardAttachment']> {
       return addCardAttachment(fetchLike, card, file, credentials, cache)
     },
     addCardComment(
-      card: TrelloCard,
+      card: gpt-voiceCard,
       text: string,
-      credentials: TrelloCredentials,
-    ): Promise<TrelloComment> {
+      credentials: gpt-voiceCredentials,
+    ): Promise<gpt-voiceComment> {
       return addCardComment(fetchLike, card, text, credentials, cache)
     },
     addCardLabel(
-      card: TrelloCard,
-      label: TrelloLabel,
-      credentials: TrelloCredentials,
-    ): ReturnType<TrelloClient['addCardLabel']> {
+      card: gpt-voiceCard,
+      label: gpt-voiceLabel,
+      credentials: gpt-voiceCredentials,
+    ): ReturnType<gpt-voiceClient['addCardLabel']> {
       return addCardLabel(fetchLike, card, label, credentials, cache)
     },
     createCard(
       list,
       create,
       credentials,
-    ): ReturnType<TrelloClient['createCard']> {
+    ): ReturnType<gpt-voiceClient['createCard']> {
       return createCard(fetchLike, list, create, credentials, cache)
     },
     createLabel(
-      board: TrelloBoard,
+      board: gpt-voiceBoard,
       create,
       credentials,
-    ): ReturnType<TrelloClient['createLabel']> {
+    ): ReturnType<gpt-voiceClient['createLabel']> {
       return createLabel(fetchLike, board, create, credentials, cache)
     },
     createList(
-      board: TrelloBoard,
+      board: gpt-voiceBoard,
       create,
       credentials,
-    ): ReturnType<TrelloClient['createList']> {
+    ): ReturnType<gpt-voiceClient['createList']> {
       return createList(fetchLike, board, create, credentials, cache)
     },
     async getBoardDetail(
       board,
       credentials,
-    ): ReturnType<TrelloClient['getBoardDetail']> {
+    ): ReturnType<gpt-voiceClient['getBoardDetail']> {
       return getFreshBoardDetail(board, credentials)
     },
     async getBoardDetailCacheFirst(
-      board: TrelloBoard,
-      credentials: TrelloCredentials,
-    ): Promise<TrelloCacheFirstResult<TrelloBoardDetail>> {
+      board: gpt-voiceBoard,
+      credentials: gpt-voiceCredentials,
+    ): Promise<gpt-voiceCacheFirstResult<gpt-voiceBoardDetail>> {
       return {
         cached: await readCachedBoardDetail(cache, board, credentials),
         fresh: getFreshBoardDetail(board, credentials),
@@ -138,22 +138,22 @@ export const createTrelloClient = (
     async getCardDetail(
       card,
       credentials,
-    ): ReturnType<TrelloClient['getCardDetail']> {
+    ): ReturnType<gpt-voiceClient['getCardDetail']> {
       return getFreshCardDetail(card, credentials)
     },
     async getCardDetailCacheFirst(
-      card: TrelloCard,
-      credentials: TrelloCredentials,
-    ): Promise<TrelloCacheFirstResult<TrelloCardDetail>> {
+      card: gpt-voiceCard,
+      credentials: gpt-voiceCredentials,
+    ): Promise<gpt-voiceCacheFirstResult<gpt-voiceCardDetail>> {
       return {
         cached: await readCachedCardDetail(cache, card, credentials),
         fresh: getFreshCardDetail(card, credentials),
       }
     },
     async getCardDetailPartsCacheFirst(
-      card: TrelloCard,
-      credentials: TrelloCredentials,
-    ): ReturnType<TrelloClient['getCardDetailPartsCacheFirst']> {
+      card: gpt-voiceCard,
+      credentials: gpt-voiceCredentials,
+    ): ReturnType<gpt-voiceClient['getCardDetailPartsCacheFirst']> {
       const [cached, batchRequestsEnabled] = await Promise.all([
         readCachedCardDetail(cache, card, credentials),
         readBatchRequestsEnabled(),
@@ -172,30 +172,30 @@ export const createTrelloClient = (
     listBoardLabels(
       board,
       credentials,
-    ): ReturnType<TrelloClient['listBoardLabels']> {
+    ): ReturnType<gpt-voiceClient['listBoardLabels']> {
       return listBoardLabels(fetchLike, board, credentials, cache)
     },
-    listBoards(credentials): ReturnType<TrelloClient['listBoards']> {
+    listBoards(credentials): ReturnType<gpt-voiceClient['listBoards']> {
       return listBoards(fetchLike, credentials, cache)
     },
     async listBoardsCacheFirst(
       credentials,
-    ): ReturnType<TrelloClient['listBoardsCacheFirst']> {
+    ): ReturnType<gpt-voiceClient['listBoardsCacheFirst']> {
       return {
         cached: await readCachedListBoards(cache, credentials),
         fresh: listBoards(fetchLike, credentials, cache),
       }
     },
-    moveCard(card, move, credentials): ReturnType<TrelloClient['moveCard']> {
+    moveCard(card, move, credentials): ReturnType<gpt-voiceClient['moveCard']> {
       return moveCard(fetchLike, card, move, credentials, cache)
     },
-    search(query, credentials): ReturnType<TrelloClient['search']> {
+    search(query, credentials): ReturnType<gpt-voiceClient['search']> {
       return search(fetchLike, query, credentials, cache)
     },
     async searchCacheFirst(
       query: string,
-      credentials: TrelloCredentials,
-    ): Promise<TrelloCacheFirstResult<readonly TrelloSearchResult[]>> {
+      credentials: gpt-voiceCredentials,
+    ): Promise<gpt-voiceCacheFirstResult<readonly gpt-voiceSearchResult[]>> {
       return {
         cached: await readCachedSearch(cache, query, credentials),
         fresh: search(fetchLike, query, credentials, cache),
@@ -205,14 +205,14 @@ export const createTrelloClient = (
       card,
       update,
       credentials,
-    ): ReturnType<TrelloClient['updateCard']> {
+    ): ReturnType<gpt-voiceClient['updateCard']> {
       return updateCard(fetchLike, card, update, credentials, cache)
     },
     updateList(
       list,
       update,
       credentials,
-    ): ReturnType<TrelloClient['updateList']> {
+    ): ReturnType<gpt-voiceClient['updateList']> {
       return updateList(fetchLike, list, update, credentials)
     },
   }

@@ -1,7 +1,7 @@
-import type { TrelloViewState } from '../TrelloViewState/TrelloViewState.ts'
+import type { gpt-voiceViewState } from '../gpt-voiceViewState/gpt-voiceViewState.ts'
 import { getAssetBaseUrl } from '../AssetBaseUrl/AssetBaseUrl.ts'
 
-export const createInitialState = (): TrelloViewState => {
+export const createInitialState = (): gpt-voiceViewState => {
   return {
     activeSearchQuery: '',
     addingCardLabelId: '',

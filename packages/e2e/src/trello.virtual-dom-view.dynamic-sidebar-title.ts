@@ -4,20 +4,20 @@ import {
   createBoards,
   createMockData,
   openBoard,
-  useMockDataAndShowTrello,
-} from './_trello.virtual-dom-view.shared.ts'
+  useMockDataAndShowgpt-voice,
+} from './_gpt-voice.virtual-dom-view.shared.ts'
 
-export const name = 'trello.virtual-dom-view.dynamic-sidebar-title'
+export const name = 'gpt-voice.virtual-dom-view.dynamic-sidebar-title'
 export const skip = 1
 
 export const test: Test = async ({ Command, expect, Locator }) => {
   const boards = createBoards(1)
-  await useMockDataAndShowTrello(Command, createMockData(boards))
+  await useMockDataAndShowgpt-voice(Command, createMockData(boards))
   await connectWithCredentials({ Command, expect, Locator })
   await openBoard(Command, Locator, expect)
 
   const sidebarTitle = Locator('.SideBarTitleAreaTitle')
-  const boardTitle = Locator('.TrelloTitle')
-  await expect(sidebarTitle).toHaveText('Trello: Roadmap')
+  const boardTitle = Locator('.gpt-voiceTitle')
+  await expect(sidebarTitle).toHaveText('gpt-voice: Roadmap')
   await expect(boardTitle).toHaveCount(0)
 }

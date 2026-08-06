@@ -7,7 +7,7 @@ import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEven
 
 const fieldNode: VirtualDomNode = {
   childCount: 2,
-  className: 'TrelloField',
+  className: 'gpt-voiceField',
   type: VirtualDomElements.Div,
 }
 
@@ -28,7 +28,7 @@ export const renderField = (
     text(label),
     {
       childCount: 0,
-      className: 'TrelloInput',
+      className: 'gpt-voiceInput',
       ...(inputType && { inputType }),
       name,
       onBlur: DomEventListenerFunctions.HandleBlur,
