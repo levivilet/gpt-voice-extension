@@ -4,8 +4,8 @@ import path from 'node:path'
 import { root } from './root.ts'
 
 const extension = path.join(root, 'packages', 'extension')
-const entryPoint = path.join(extension, 'src', 'gptVoiceMainn.ts')
-const outfile = path.join(extension, 'dist', 'gptVoiceMainn.js')
+const entryPoint = path.join(extension, 'src', 'gptVoiceMain.ts')
+const outfile = path.join(extension, 'dist', 'gptVoiceMain.js')
 
 const context = await esbuild.context({
   bundle: true,
