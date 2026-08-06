@@ -19,6 +19,17 @@ export interface ActiveTrelloViewInstance extends VirtualDomViewInstance {
   readonly renderTitle: () => string
 }
 
+const render = (): readonly VirtualDomNode[] => {
+  return [
+    {
+      type: VirtualDomElements.Div,
+      chiltCount: 1,
+      className: 'main',
+    },
+    text('hello world'),
+  ]
+}
+
 export const createInstance = async (
   context?: ViewContext,
 ): Promise<ActiveTrelloViewInstance> => {
@@ -38,16 +49,7 @@ export const createInstance = async (
     getCss() {
       return ''
     },
-    render(): readonly VirtualDomNode[] {
-      return [
-        {
-          type: VirtualDomElements.Div,
-          chiltCount: 1,
-          className: 'main',
-        },
-        text('hello world'),
-      ]
-    },
+    render,
     renderActionsDom(): readonly VirtualDomNode[] {
       return [
         {
