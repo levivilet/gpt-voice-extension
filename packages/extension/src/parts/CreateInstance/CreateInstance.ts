@@ -13,41 +13,14 @@ export interface ActiveTrelloViewInstance extends VirtualDomViewInstance {
   readonly getMenuEntries: (menuId: string) => readonly MenuEntry[]
 
   readonly renderTitle: () => string
-  readonly submitNewCard: () => Promise<void>
 }
 
 const activeInstances = new Set<ActiveTrelloViewInstance>()
-
-const getActiveInstance = (): ActiveTrelloViewInstance | undefined => {
-  let activeInstance: ActiveTrelloViewInstance | undefined
-  for (const instance of activeInstances) {
-    activeInstance = instance
-  }
-  return activeInstance
-}
-
-const becameActive = (
-  oldContext: Readonly<Record<string, boolean>>,
-  newContext: Readonly<Record<string, boolean>>,
-  key: string,
-): boolean => {
-  return !oldContext[key] && newContext[key]
-}
 
 export const createInstance = async (
   context?: ViewContext,
 ): Promise<ActiveTrelloViewInstance> => {
   const state = {}
-  const viewContext = {
-    client: undefined as never,
-    currentBoardStorage: {},
-    imageCache: undefined as never,
-    recentStorage: undefined as never,
-    requestRerender: undefined as never,
-    showContextMenu: undefined as never,
-    state,
-    storage: undefined as never,
-  }
 
   const requestRerender = (): void => {
     // @ts-ignore
@@ -81,6 +54,15 @@ export const createInstance = async (
   await initialize(false)
 
   const instance: ActiveTrelloViewInstance = {
+    getContext() {
+      return {}
+    },
+    getMenuEntries() {
+      return []
+    },
+    getCss() {
+      return ''
+    },
     render(): readonly VirtualDomNode[] {
       return [text('hello world')]
     },
