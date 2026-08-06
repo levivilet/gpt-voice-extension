@@ -10,6 +10,7 @@ export default defineConfig([
   {
     rules: {
       'virtual-dom/prefer-state-destructuring': 'off',
+      '@cspell/spellchecker': 'off',
     },
   },
 ])

@@ -53,7 +53,7 @@ export const createInstance = async (
     renderActionsDom(): readonly VirtualDomNode[] {
       return [
         {
-          chiltCount: 1,
+          childCount: 1,
           className: 'main',
           type: VirtualDomElements.Div,
         },
