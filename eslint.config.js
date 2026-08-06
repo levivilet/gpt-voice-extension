@@ -15,7 +15,7 @@ export default defineConfig([
       'sonarjs/no-trivial-assertions': 'off',
       '@typescript-eslint/no-floating-promises': 'off',
       'sonarjs/x-powered-by': 'off',
-      ' virtual-dom/no-inline-event-handlers': 'off',
+      'virtual-dom/no-inline-event-handlers': 'off',
     },
   },
   {
