@@ -91,60 +91,17 @@ export const createInstance = async (
       oldContext: Readonly<Record<string, boolean>>,
       newContext: Readonly<Record<string, boolean>>,
     ): string {
-      if (becameActive(oldContext, newContext, contextKeyBoardFilterFocus)) {
-        return '[name="boardFilter"]'
-      }
-      if (
-        becameActive(oldContext, newContext, contextKeyCardLabelPickerFocus)
-      ) {
-        return '[name="cardLabelSearch"]'
-      }
-      if (
-        becameActive(oldContext, newContext, contextKeyNewCardInputFocus) &&
-        state.addingCardListId
-      ) {
-        return `[name="newCardTitle:${state.addingCardListId}"]`
-      }
-      if (becameActive(oldContext, newContext, contextKeyNewListInputFocus)) {
-        return '[name="newListTitle"]'
-      }
-      if (
-        becameActive(oldContext, newContext, contextKeyCardDescriptionFocus)
-      ) {
-        return '[name="cardDescription"]'
-      }
       return ''
     },
     renderSelections(): readonly ViewSelection[] {
-      const selections = state.pendingSelections
-      state.pendingSelections = []
-      return selections
+      return []
     },
     renderTitle(): string {
       return getTitle(state)
     },
-    async saveCardDetail(): Promise<void> {
-      await saveCardDetailAction(viewContext)
-      updateContext(state)
-    },
+
     saveState(): unknown {
-      return {
-        boardId: state.boardDetail?.board.id,
-        cardId: state.selectedCardDetail?.card.id,
-        filterValue: state.draftBoardFilter,
-        isAuthenticated: Boolean(state.credentials),
-      }
-    },
-    startAddCard(listId: string): void {
-      startAddCard(viewContext, listId)
-      updateContext(state)
-    },
-    async submitNewCard(): Promise<void> {
-      if (!state.addingCardListId) {
-        return
-      }
-      await submitAddCard(viewContext, `addCard:${state.addingCardListId}`)
-      updateContext(state)
+      return {}
     },
   }
   activeInstances.add(instance)
