@@ -6,6 +6,7 @@ import {
 
 interface State {
   readonly inProgress: boolean
+  readonly transcribedText: string
 }
 
 const renderButton = (state: State): readonly VirtualDomNode[] => {
@@ -76,12 +77,14 @@ const renderStage = (state: State): readonly VirtualDomNode[] => {
 }
 
 const renderTranscript = (state: State): readonly VirtualDomNode[] => {
+  const { transcribedText } = state
   return [
     {
-      childCount: 0,
+      childCount: 1,
       className: 'GptVoiceTranscript',
-      type: VirtualDomElements.Div,
+      type: VirtualDomElements.Pre,
     },
+    text(transcribedText),
   ]
 }
 const renderAudio = (state: State): readonly VirtualDomNode[] => {
