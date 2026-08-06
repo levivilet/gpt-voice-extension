@@ -27,7 +27,7 @@ export const createInstance = async (
     inProgress: false,
   }
 
-  const requestRerender = () => {
+  const requestRerender = (): void => {
     setTimeout(() => {
       context?.requestRerender()
     }, 100)
