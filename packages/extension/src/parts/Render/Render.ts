@@ -69,6 +69,16 @@ const renderStage = (state: State): readonly VirtualDomNode[] => {
   ]
 }
 
+const renderTranscript = (state: State): readonly VirtualDomNode[] => {
+  return [
+    {
+      type: VirtualDomElements.Div,
+      childCount: 0,
+      className: 'GptVoiceTranscript',
+    },
+  ]
+}
+
 export const render = (state: any): readonly VirtualDomNode[] => {
   return [
     {
@@ -79,10 +89,6 @@ export const render = (state: any): readonly VirtualDomNode[] => {
     ...renderStage(state),
     ...renderStatus(state),
     ...renderButton(state),
-    {
-      type: VirtualDomElements.Div,
-      childCount: 0,
-      className: 'GptVoiceTranscript',
-    },
+    ...renderTranscript(state),
   ]
 }
