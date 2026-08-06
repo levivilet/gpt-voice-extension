@@ -94,39 +94,6 @@ export const activate = async (): Promise<void> => {
     },
     id: 'gpt-voice.openMockBoard',
   })
-  registerCommand({
-    execute(options: any) {
-      return gpt-voiceView.addCard(options)
-    },
-    id: 'gpt-voice.addCard',
-  })
-  registerCommand({
-    async execute(data: Readonly<Mockgpt-voiceData>) {
-      await cleargpt-voiceTestCaches()
-      gpt-voiceView.setgpt-voiceViewDependencyFactory(() => ({
-        client: createMockgpt-voiceClient(data),
-        currentBoardStorage: createCacheCurrentBoardStorage(
-          testCurrentBoardCacheName,
-        ),
-        isTest: true,
-        readCardDetailPopupEnabled:
-          gpt-voiceView.readCardDetailPopupEnabledPreference,
-        recentStorage: createCacheRecentBoardStorage(testRecentBoardCacheName),
-        storage: createCacheCredentialStorage(testCredentialCacheName),
-      }))
-      await gpt-voiceView.reloadActivegpt-voiceViewInstances()
-      return { ok: true }
-    },
-    id: 'gpt-voice.test.useMockData',
-  })
-  registerCommand({
-    async execute() {
-      gpt-voiceView.resetgpt-voiceViewDependencyFactory()
-      await gpt-voiceView.reloadActivegpt-voiceViewInstances()
-      return { ok: true }
-    },
-    id: 'gpt-voice.test.reset',
-  })
-}
+  registerCommG
 
 export const deactivate = (): void => {}
