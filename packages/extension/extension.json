@@ -4,7 +4,7 @@
   "workerName": "gpt-voice Worker",
   "description": "Gpt Voice extension for Lvce Editor",
   "repository": "https://github.com/levivilet/gpt-voice-extension",
-  "browser": "dist/gpt-voiceMain.js",
+  "browser": "dist/gptVoiceMainn.js",
   "isolated": true,
   "contentSecurityPolicy": ["default-src 'none'", "script-src 'self'"],
   "categories": ["Other"],

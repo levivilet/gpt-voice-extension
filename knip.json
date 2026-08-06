@@ -13,7 +13,7 @@
       "project": ["src/**/*.ts"]
     },
     "packages/extension": {
-      "entry": ["src/gpt-voiceMain.ts", "test/**/*.test.ts"],
+      "entry": ["src/gptVoiceMainn.ts", "test/**/*.test.ts"],
       "project": ["src/**/*.ts", "test/**/*.ts"]
     },
     "packages/server": {

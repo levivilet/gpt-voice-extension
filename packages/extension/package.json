@@ -2,7 +2,7 @@
   "name": "builtin.gpt-voice",
   "version": "0.0.0-dev",
   "description": "gpt-voice extension for Lvce Editor",
-  "main": "dist/gpt-voiceMain.js",
+  "main": "dist/gptVoiceMainn.js",
   "scripts": {
     "test": "node --unhandled-rejections=warn --experimental-vm-modules ../../node_modules/jest/bin/jest.js --detectOpenHandles --forceExit",
     "test:watch": "node --unhandled-rejections=warn --experimental-vm-modules ../../node_modules/jest/bin/jest.js --watch"

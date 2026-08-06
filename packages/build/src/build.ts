@@ -36,7 +36,7 @@ fs.copyFileSync(
 )
 
 const bundle = await rollup({
-  input: join(extension, 'src', 'gpt-voiceMain.ts'),
+  input: join(extension, 'src', 'gptVoiceMainn.ts'),
   external: ['electron', 'node:*'],
   plugins: [
     nodeResolve({
@@ -53,7 +53,7 @@ const bundle = await rollup({
 })
 
 await bundle.write({
-  file: join(root, 'dist', 'dist', 'gpt-voiceMain.js'),
+  file: join(root, 'dist', 'dist', 'gptVoiceMainn.js'),
   format: 'esm',
 })
 
