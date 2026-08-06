@@ -33,6 +33,27 @@ const renderButton = (state: State): readonly VirtualDomNode[] => {
   ]
 }
 
+const renderStatus = (state: State): readonly VirtualDomNode[] => {
+  if (state.inProgress) {
+    return [
+      {
+        type: VirtualDomElements.Div,
+        className: 'GptVoiceStatus',
+        childCount: 1,
+      },
+      text('In Progress'),
+    ]
+  }
+  return [
+    {
+      type: VirtualDomElements.Div,
+      className: 'GptVoiceStatus',
+      childCount: 1,
+    },
+    text('idle'),
+  ]
+}
+
 export const render = (state: any): readonly VirtualDomNode[] => {
   return [
     {
@@ -50,12 +71,8 @@ export const render = (state: any): readonly VirtualDomNode[] => {
       className: 'GptVoiceBubble',
       childCount: 0,
     },
-    {
-      type: VirtualDomElements.Div,
-      className: 'GptVoiceStatus',
-      childCount: 1,
-    },
-    text('idle'),
+
+    ...renderStatus(state),
     ...renderButton(state),
     {
       type: VirtualDomElements.Div,
