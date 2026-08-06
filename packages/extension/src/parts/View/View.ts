@@ -1,12 +1,12 @@
 import type { View } from '@lvce-editor/api'
 import {
-  type ActiveTrelloViewInstance,
+  type ActiveGptVoiceViewInstance,
   createInstance,
 } from '../CreateInstance/CreateInstance.ts'
 import { renderEventListeners } from '../RenderEventListeners/RenderEventListeners.ts'
 
-type TrelloView = Omit<View<ActiveTrelloViewInstance>, 'commands'> & {
-  readonly commands: NonNullable<View<ActiveTrelloViewInstance>['commands']>
+type TrelloView = Omit<View<ActiveGptVoiceViewInstance>, 'commands'> & {
+  readonly commands: NonNullable<View<ActiveGptVoiceViewInstance>['commands']>
   readonly eventListeners?: ReturnType<typeof renderEventListeners>
 }
 

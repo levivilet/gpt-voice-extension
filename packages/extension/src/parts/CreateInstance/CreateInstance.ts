@@ -12,7 +12,7 @@ import type { MenuEntry } from '../MenuEntries/MenuEntries.ts'
 import { getTitle } from '../GetTitle/GetTitle.ts'
 import { render } from '../Render/Render.ts'
 
-export interface ActiveTrelloViewInstance extends VirtualDomViewInstance {
+export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly getContext: () => Readonly<Record<string, boolean>>
   readonly getCss: () => string
   readonly getMenuEntries: (menuId: string) => readonly MenuEntry[]
@@ -22,14 +22,18 @@ export interface ActiveTrelloViewInstance extends VirtualDomViewInstance {
 
 export const createInstance = async (
   context?: ViewContext,
-): Promise<ActiveTrelloViewInstance> => {
-  const state = {}
+): Promise<ActiveGptVoiceViewInstance> => {
+  const state = {
+    inProgress: false,
+  }
 
-  setTimeout(() => {
-    context?.requestRerender()
-  }, 100)
+  const requestRerender = () => {
+    setTimeout(() => {
+      context?.requestRerender()
+    }, 100)
+  }
 
-  const instance: ActiveTrelloViewInstance = {
+  const instance: ActiveGptVoiceViewInstance = {
     getContext() {
       return {}
     },
@@ -41,6 +45,7 @@ export const createInstance = async (
     },
     async handleClickStart(): Promise<void> {
       console.log(`start clicked`)
+      requestRerender()
       // handleClickStart(context)
       // updateContext(state)
     },
