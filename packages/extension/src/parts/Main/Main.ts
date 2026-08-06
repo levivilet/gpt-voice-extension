@@ -1,3 +1,4 @@
+import {} from '@lvce-editor/api'
 const state = {
   isActivated: false,
 }
@@ -8,5 +9,5 @@ export const activate = async (): Promise<void> => {
   }
   state.isActivated = true
   await activateExtensionApi()
-  registerView(gpt - voiceView.view)
+  registerView(view)
 }
