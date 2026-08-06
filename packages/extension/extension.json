@@ -22,7 +22,7 @@
       "css": "media/gpt-voice.css",
       "displayName": "Gpt Voice",
       "id": "gpt-voice",
-      "title": "Trello",
+      "title": "Gpt Voice",
       "icon": "media/trello.svg",
       "kind": "virtualDom"
     }
