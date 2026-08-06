@@ -11,6 +11,8 @@ export default defineConfig([
     rules: {
       'virtual-dom/prefer-state-destructuring': 'off',
       '@cspell/spellchecker': 'off',
+      'virtual-dom/hoist-static-nodes': 'off',
+      'sonarjs/no-trivial-assertions': 'off',
     },
   },
 ])
