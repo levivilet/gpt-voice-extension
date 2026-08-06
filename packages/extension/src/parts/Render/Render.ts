@@ -54,13 +54,8 @@ const renderStatus = (state: State): readonly VirtualDomNode[] => {
   ]
 }
 
-export const render = (state: any): readonly VirtualDomNode[] => {
+const renderStage = (state: State): readonly VirtualDomNode[] => {
   return [
-    {
-      childCount: 4,
-      className: 'GptVoice',
-      type: VirtualDomElements.Div,
-    },
     {
       type: VirtualDomElements.Div,
       className: 'GptVoiceStage',
@@ -71,7 +66,17 @@ export const render = (state: any): readonly VirtualDomNode[] => {
       className: 'GptVoiceBubble',
       childCount: 0,
     },
+  ]
+}
 
+export const render = (state: any): readonly VirtualDomNode[] => {
+  return [
+    {
+      childCount: 4,
+      className: 'GptVoice',
+      type: VirtualDomElements.Div,
+    },
+    ...renderStage(state),
     ...renderStatus(state),
     ...renderButton(state),
     {
