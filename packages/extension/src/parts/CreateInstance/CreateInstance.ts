@@ -37,11 +37,7 @@ export const createInstance = async (
     }, 0)
   }
 
-  const initialize = async (rerender: boolean): Promise<void> => {
-    if (rerender) {
-      requestRerender()
-    }
-  }
+  const initialize = async (rerender: boolean): Promise<void> => {}
 
   await initialize(false)
 
