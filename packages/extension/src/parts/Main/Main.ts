@@ -1,10 +1,8 @@
-import {} from '@lvce-editor/api'
 import {
   activate as activateExtensionApi,
-  executeCommand,
-  registerCommand,
   registerView,
 } from '@lvce-editor/api'
+import { view } from '../View/View.ts'
 
 const state = {
   isActivated: false,
