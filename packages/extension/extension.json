@@ -9,7 +9,7 @@
   "contentSecurityPolicy": ["default-src 'none'", "script-src 'self'"],
   "categories": ["Other"],
   "configuration": {},
-  "activation": ["onView:gpt-voice"],
+  "activation": ["onView:gpt-voice.views.default"],
   "commands": [
     {
       "id": "gpt-voice.show",
@@ -21,7 +21,7 @@
     {
       "css": "media/gpt-voice.css",
       "displayName": "Gpt Voice",
-      "id": "gpt-voice",
+      "id": "gpt-voice.views.default",
       "title": "Gpt Voice",
       "icon": "media/trello.svg",
       "kind": "virtualDom"
