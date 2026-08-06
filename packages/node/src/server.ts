@@ -1,10 +1,15 @@
 import express from 'express'
-import path from 'path'
-import { fileURLToPath } from 'url'
-import 'dotenv/config'
 import { Server } from 'http'
+import path, { join } from 'path'
+import { fileURLToPath } from 'url'
+import { configDotenv } from 'dotenv'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const root = join(__dirname, '..')
+configDotenv({
+  path: join(root, '.env'),
+})
+
 const app = express()
 app.use(express.static(path.join(__dirname, 'public')))
 
@@ -45,7 +50,7 @@ app.get('/token', async (req, res) => {
         headers: {
           Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Origin': '*', // TODO
         },
         method: 'POST',
       },
