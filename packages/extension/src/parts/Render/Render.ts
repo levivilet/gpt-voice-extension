@@ -11,6 +11,6 @@ export const render = (): readonly VirtualDomNode[] => {
       className: 'gpt-voice',
       type: VirtualDomElements.Div,
     },
-    text('hello world'),
+    text('hello world 123'),
   ]
 }
