@@ -24,6 +24,7 @@ export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly handleClickStart: () => Promise<void>
   readonly stop: () => Promise<void>
   readonly renderTitle: () => string
+  readonly handleData: (data: string) => void
 }
 
 const getEphemeralKey = async (serverId: string): Promise<string> => {
@@ -67,6 +68,7 @@ export const createInstance = async (
     inProgress: false,
     serverId: crypto.randomUUID(),
     uid: -1,
+    transcribedText: ``,
   }
 
   const requestRerender = (): void => {
@@ -88,6 +90,14 @@ export const createInstance = async (
     async stop() {
       await stopWebRtcAudioStream(state.uid)
     },
+    async handleData(data: string) {
+      const parsed = JSON.parse(data)
+      console.log(parsed)
+      if (parsed && parsed.type === 'response.output_audio_transcript.delta') {
+        state.transcribedText += parsed.delta
+        requestRerender()
+      }
+    },
     async handleClickStart(): Promise<void> {
       // TODO create node rpc (starting node app)
       // TODO start node server
@@ -105,6 +115,9 @@ export const createInstance = async (
           elementLocator: '.GptVoiceAudio',
           ephemeralKey,
           uid: state.uid,
+          onData(data) {
+            instance.handleData(data)
+          },
         })
         if (!offerSdp) {
           throw new Error(`offer sdp is required`)
