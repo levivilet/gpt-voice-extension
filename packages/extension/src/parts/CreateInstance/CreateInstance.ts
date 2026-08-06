@@ -8,8 +8,8 @@ import {
   text,
   VirtualDomElements,
 } from '@lvce-editor/virtual-dom-worker'
+import type { MenuEntry } from '../MenuEntries/MenuEntries.ts'
 import { getTitle } from '../GetTitle/GetTitle.ts'
-import { type MenuEntry } from '../MenuEntries/MenuEntries.ts'
 
 export interface ActiveTrelloViewInstance extends VirtualDomViewInstance {
   readonly getContext: () => Readonly<Record<string, boolean>>
@@ -22,9 +22,9 @@ export interface ActiveTrelloViewInstance extends VirtualDomViewInstance {
 const render = (): readonly VirtualDomNode[] => {
   return [
     {
-      type: VirtualDomElements.Div,
       chiltCount: 1,
       className: 'gpt-voice',
+      type: VirtualDomElements.Div,
     },
     text('hello world'),
   ]
@@ -43,19 +43,19 @@ export const createInstance = async (
     getContext() {
       return {}
     },
-    getMenuEntries() {
-      return []
-    },
     getCss() {
       return ''
+    },
+    getMenuEntries() {
+      return []
     },
     render,
     renderActionsDom(): readonly VirtualDomNode[] {
       return [
         {
-          type: VirtualDomElements.Div,
           chiltCount: 1,
           className: 'main',
+          type: VirtualDomElements.Div,
         },
         text('hello world'),
       ]
