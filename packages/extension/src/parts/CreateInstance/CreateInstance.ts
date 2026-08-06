@@ -22,7 +22,7 @@ export interface ActiveTrelloViewInstance extends VirtualDomViewInstance {
 const render = (): readonly VirtualDomNode[] => {
   return [
     {
-      chiltCount: 1,
+      childCount: 1,
       className: 'gpt-voice',
       type: VirtualDomElements.Div,
     },

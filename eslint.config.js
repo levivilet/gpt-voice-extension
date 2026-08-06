@@ -6,4 +6,9 @@ export default [
   ...config.recommendedTsconfig,
   ...config.recommendedVirtualDom,
   ...config.recommendedActions,
+  {
+    rules: {
+      'virtual-dom/prefer-state-destructuring': 'off',
+    },
+  },
 ]
