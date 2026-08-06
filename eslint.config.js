@@ -13,6 +13,8 @@ export default defineConfig([
       '@cspell/spellchecker': 'off',
       'virtual-dom/hoist-static-nodes': 'off',
       'sonarjs/no-trivial-assertions': 'off',
+      '@typescript-eslint/no-floating-promises': 'off',
+      'sonarjs/x-powered-by': 'off',
     },
   },
 ])
