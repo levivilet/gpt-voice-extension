@@ -1,6 +1,7 @@
 import * as config from '@lvce-editor/eslint-config'
+import { defineConfig } from 'eslint/config'
 
-export default [
+export default defineConfig([
   ...config.default,
   ...config.recommendedRegex,
   ...config.recommendedTsconfig,
@@ -11,4 +12,4 @@ export default [
       'virtual-dom/prefer-state-destructuring': 'off',
     },
   },
-]
+])
