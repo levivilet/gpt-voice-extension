@@ -16,7 +16,9 @@ export const view: TrelloView = {
   displayName: 'Gpt Voice',
   eventListeners: renderEventListeners(),
   icon: 'list-tree',
-  id: 'gpt-voice',
+
+  id: 'gpt-voice.views.default',
+
   kind: 'virtualDom',
   title: 'Gpt Voice',
 }
