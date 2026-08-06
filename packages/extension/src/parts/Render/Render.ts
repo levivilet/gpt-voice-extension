@@ -54,6 +54,12 @@ const renderStatus = (state: State): readonly VirtualDomNode[] => {
   ]
 }
 
+const getBubbleClassName = (inProgress: boolean): string => {
+  if (inProgress) {
+    return 'GptVoiceBubble listening'
+  }
+  return 'GptVoiceBubble'
+}
 const renderStage = (state: State): readonly VirtualDomNode[] => {
   return [
     {
@@ -63,7 +69,7 @@ const renderStage = (state: State): readonly VirtualDomNode[] => {
     },
     {
       type: VirtualDomElements.Div,
-      className: 'GptVoiceBubble',
+      className: getBubbleClassName(state.inProgress),
       childCount: 0,
     },
   ]
