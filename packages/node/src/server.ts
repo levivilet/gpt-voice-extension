@@ -22,8 +22,6 @@ app.use(express.static(path.join(__dirname, "public")));
 // input.transcription turns on live speech-to-text for the user's mic audio.
 const sessionConfig = {
   session: {
-    type: "realtime",
-    model: "gpt-realtime-2.1",
     audio: {
       input: {
         transcription: { model: "gpt-4o-transcribe" },
@@ -32,6 +30,8 @@ const sessionConfig = {
         voice: "marin",
       },
     },
+    model: "gpt-realtime-2.1",
+    type: "realtime",
   },
 };
 
@@ -42,12 +42,12 @@ app.get("/token", async (req, res) => {
     const response = await fetch(
       "https://api.openai.com/v1/realtime/client_secrets",
       {
-        method: "POST",
+        body: JSON.stringify(sessionConfig),
         headers: {
           Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(sessionConfig),
+        method: "POST",
       },
     );
     const data = await response.json();
@@ -56,8 +56,8 @@ app.get("/token", async (req, res) => {
       return res.status(response.status).json(data);
     }
     res.json(data);
-  } catch (err) {
-    console.error("Token generation error:", err);
+  } catch (error) {
+    console.error("Token generation error:", error);
     res.status(500).json({ error: "Failed to generate token" });
   }
 });
