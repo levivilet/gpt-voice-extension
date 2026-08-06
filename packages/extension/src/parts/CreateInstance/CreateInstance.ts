@@ -2,9 +2,9 @@ import {
   ViewContext,
   ViewSelection,
   VirtualDomViewInstance,
-  StartWebRpcAudioStreamOptions,
   startWebRtcAudioStream,
   setRemoteDescription,
+  stopWebRtcAudioStream,
 } from '@lvce-editor/api'
 import {
   type VirtualDomNode,
@@ -22,6 +22,7 @@ export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly getCss: () => string
   readonly getMenuEntries: (menuId: string) => readonly MenuEntry[]
   readonly handleClickStart: () => Promise<void>
+  readonly stop: () => Promise<void>
   readonly renderTitle: () => string
 }
 
@@ -65,6 +66,7 @@ export const createInstance = async (
   const state = {
     inProgress: false,
     serverId: crypto.randomUUID(),
+    uid: -1,
   }
 
   const requestRerender = (): void => {
@@ -83,26 +85,39 @@ export const createInstance = async (
     getMenuEntries() {
       return []
     },
+    async stop() {
+      await stopWebRtcAudioStream(state.uid)
+    },
     async handleClickStart(): Promise<void> {
       // TODO create node rpc (starting node app)
       // TODO start node server
       try {
+        if (state.inProgress) {
+          state.inProgress = false
+          await this.stop()
+          return
+        }
+        state.inProgress = !state.inProgress
+
         const ephemeralKey = await getEphemeralKey(state.serverId)
         console.log({ ephemeralKey })
         const offerSdp = await startWebRtcAudioStream({
           elementLocator: '.GptVoiceAudio',
           ephemeralKey,
-          uid: -1,
+          uid: state.uid,
         })
+        if (!offerSdp) {
+          throw new Error(`offer sdp is required`)
+        }
         const answerSdp = await getSdp(offerSdp, ephemeralKey)
+        console.log({ offerSdp, answerSdp })
         await setRemoteDescription({
           sdp: answerSdp,
           type: 'answer',
-          uid: -1,
+          uid: state.uid,
         })
         console.log('all worked')
 
-        state.inProgress = !state.inProgress
         requestRerender()
       } catch (error) {
         console.error(error)

@@ -84,11 +84,20 @@ const renderTranscript = (state: State): readonly VirtualDomNode[] => {
     },
   ]
 }
+const renderAudio = (state: State): readonly VirtualDomNode[] => {
+  return [
+    {
+      childCount: 0,
+      className: 'GptVoiceAudio',
+      type: VirtualDomElements.Audio,
+    },
+  ]
+}
 
 export const render = (state: any): readonly VirtualDomNode[] => {
   return [
     {
-      childCount: 4,
+      childCount: 5,
       className: 'GptVoice',
       type: VirtualDomElements.Div,
     },
@@ -96,5 +105,6 @@ export const render = (state: any): readonly VirtualDomNode[] => {
     ...renderStatus(state),
     ...renderButton(state),
     ...renderTranscript(state),
+    ...renderAudio(state),
   ]
 }
