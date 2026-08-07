@@ -1,0 +1,30 @@
+{
+  "id": "builtin.gpt-voice",
+  "name": "gpt-voice",
+  "workerName": "gpt-voice Worker",
+  "description": "Gpt Voice extension for Lvce Editor",
+  "repository": "https://github.com/levivilet/gpt-voice-extension",
+  "browser": "dist/gptVoiceMain.js",
+  "isolated": true,
+  "contentSecurityPolicy": ["default-src 'none'", "script-src 'self'"],
+  "categories": ["Other"],
+  "configuration": {},
+  "activation": ["onView:gpt-voice.views.default"],
+  "commands": [
+    {
+      "id": "gpt-voice.show",
+      "label": "gpt-voice: Show"
+    }
+  ],
+  "keybindings": [],
+  "views": [
+    {
+      "css": "media/gpt-voice.css",
+      "displayName": "Gpt Voice",
+      "id": "gpt-voice.views.default",
+      "title": "Gpt Voice",
+      "icon": "media/trello.svg",
+      "kind": "virtualDom"
+    }
+  ]
+}
