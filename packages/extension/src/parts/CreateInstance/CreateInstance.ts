@@ -24,6 +24,7 @@ export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly getMenuEntries: (menuId: string) => readonly MenuEntry[]
   readonly handleClickStart: () => Promise<void>
   readonly handleData: (data: string) => void
+  readonly setTranscript: (value: string) => void
   readonly renderTitle: () => string
   readonly setIsTest: () => void
   readonly stop: () => Promise<void>
@@ -55,6 +56,10 @@ export const createInstance = async (
     },
     getMenuEntries() {
       return []
+    },
+    setTranscript(value) {
+      state.transcribedText = value
+      context?.requestRerender()
     },
     async handleClickStart(): Promise<void> {
       // TODO create node rpc (starting node app)
@@ -98,8 +103,7 @@ export const createInstance = async (
     handleData(data: string): void {
       const parsed = JSON.parse(data)
       if (parsed && parsed.type === 'response.output_audio_transcript.delta') {
-        state.transcribedText += parsed.delta
-        requestRerender()
+        instance.setTranscript(state.transcribedText + parsed.delta)
       }
     },
     render() {
