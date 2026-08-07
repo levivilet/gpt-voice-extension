@@ -140,7 +140,9 @@ export const createInstance = async (
 
     async stop() {
       state.inProgress = false
-      await stopWebRtcAudioStream(state.uid)
+      if (!state.isTest) {
+        await stopWebRtcAudioStream(state.uid)
+      }
       await context?.requestRerender()
     },
   }
