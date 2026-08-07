@@ -45,7 +45,12 @@ const parseFunctionCall = (parsed: any): FunctionCallArguments | undefined => {
 
   if (parsed.type === 'response.function_call_arguments.done') {
     const args = parseArgs(parsed.arguments)
-    if (typeof parsed.call_id === 'string' && typeof parsed.name === 'string' && args && typeof args.location === 'string') {
+    if (
+      typeof parsed.call_id === 'string' &&
+      typeof parsed.name === 'string' &&
+      args &&
+      typeof args.location === 'string'
+    ) {
       return {
         callId: parsed.call_id,
         location: args.location,
@@ -92,4 +97,3 @@ export const handleFunctionCall = async (
   )
   await sendToDataChannel(createFunctionResultResponseMessage())
 }
-

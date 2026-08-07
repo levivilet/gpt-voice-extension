@@ -1,6 +1,7 @@
 import { test, expect } from '@jest/globals'
 import { text, VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
 import type { ITranscript } from '../src/parts/CreateInstance/CreateInstance.ts'
+import { mergeClassNames } from '../src/parts/MergeClassNames/MergeClassNames.ts'
 import { render } from '../src/parts/Render/Render.ts'
 import { createRenderState } from '../src/parts/RenderTestHelpers.ts'
 import { RealtimeModelPreset } from '../src/parts/WebRtc/WebRtc.ts'
@@ -28,7 +29,7 @@ test('render - returns virtual dom tree for idle mini state', () => {
     text('Model: Realtime 2.1 mini (cheaper)'),
     {
       childCount: 1,
-      className: 'GptVoiceModelButton active',
+      className: mergeClassNames('GptVoiceModelButton', 'active'),
       onClick: 'setRealtimeModelMini',
       type: VirtualDomElements.Button,
     },
@@ -116,7 +117,7 @@ test('render - returns in-progress standard state for active conversation', () =
     text('Use cheap'),
     {
       childCount: 1,
-      className: 'GptVoiceModelButton active',
+      className: mergeClassNames('GptVoiceModelButton', 'active'),
       onClick: 'setRealtimeModelStandard',
       type: VirtualDomElements.Button,
     },
@@ -128,7 +129,7 @@ test('render - returns in-progress standard state for active conversation', () =
     },
     {
       childCount: 0,
-      className: 'GptVoiceBubble listening',
+      className: mergeClassNames('GptVoiceBubble', 'listening'),
       type: VirtualDomElements.Div,
     },
     {
@@ -152,7 +153,10 @@ test('render - returns in-progress standard state for active conversation', () =
     },
     {
       childCount: 1,
-      className: 'GptVoiceTranscriptItem GptVoiceTranscriptItemUser',
+      className: mergeClassNames(
+        'GptVoiceTranscriptItem',
+        'GptVoiceTranscriptItemUser',
+      ),
       type: VirtualDomElements.Div,
     },
     text('Hello'),

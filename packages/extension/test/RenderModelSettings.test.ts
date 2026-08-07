@@ -1,8 +1,6 @@
 import { test, expect } from '@jest/globals'
-import {
-  text,
-  VirtualDomElements,
-} from '@lvce-editor/virtual-dom-worker'
+import { text, VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
+import { mergeClassNames } from '../src/parts/MergeClassNames/MergeClassNames.ts'
 import { renderModelSettings } from '../src/parts/RenderModelSettings/RenderModelSettings.ts'
 import { RealtimeModelPreset } from '../src/parts/WebRtc/WebRtc.ts'
 
@@ -25,7 +23,7 @@ test('renderModelSettings - mini model is selected', () => {
     text('Model: Realtime 2.1 mini (cheaper)'),
     {
       childCount: 1,
-      className: 'GptVoiceModelButton active',
+      className: mergeClassNames('GptVoiceModelButton', 'active'),
       onClick: 'setRealtimeModelMini',
       type: VirtualDomElements.Button,
     },
@@ -66,7 +64,7 @@ test('renderModelSettings - standard model is selected', () => {
     text('Use cheap'),
     {
       childCount: 1,
-      className: 'GptVoiceModelButton active',
+      className: mergeClassNames('GptVoiceModelButton', 'active'),
       onClick: 'setRealtimeModelStandard',
       type: VirtualDomElements.Button,
     },

@@ -1,6 +1,7 @@
 import { test, expect } from '@jest/globals'
 import { text, VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
 import type { ITranscript } from '../src/parts/CreateInstance/CreateInstance.ts'
+import { mergeClassNames } from '../src/parts/MergeClassNames/MergeClassNames.ts'
 import { createRenderState } from '../src/parts/RenderTestHelpers.ts'
 import { renderTranscript } from '../src/parts/RenderTranscript/RenderTranscript.ts'
 
@@ -36,7 +37,10 @@ test('renderTranscript - single user transcript', () => {
     },
     {
       childCount: 1,
-      className: 'GptVoiceTranscriptItem GptVoiceTranscriptItemUser',
+      className: mergeClassNames(
+        'GptVoiceTranscriptItem',
+        'GptVoiceTranscriptItemUser',
+      ),
       type: VirtualDomElements.Div,
     },
     text('Hello'),
@@ -68,13 +72,19 @@ test('renderTranscript - mixed transcript item types', () => {
     },
     {
       childCount: 1,
-      className: 'GptVoiceTranscriptItem GptVoiceTranscriptItemUser',
+      className: mergeClassNames(
+        'GptVoiceTranscriptItem',
+        'GptVoiceTranscriptItemUser',
+      ),
       type: VirtualDomElements.Div,
     },
     text('Hey'),
     {
       childCount: 1,
-      className: 'GptVoiceTranscriptItem GptVoiceTranscriptItemAi',
+      className: mergeClassNames(
+        'GptVoiceTranscriptItem',
+        'GptVoiceTranscriptItemAi',
+      ),
       type: VirtualDomElements.Div,
     },
     text('Hi there'),

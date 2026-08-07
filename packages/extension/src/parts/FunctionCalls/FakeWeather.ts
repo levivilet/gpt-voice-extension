@@ -5,7 +5,7 @@ type WeatherResult = {
   readonly unit: 'C' | 'F'
 }
 
-const normalizeLocation = (value: unknown) => {
+const normalizeLocation = (value: unknown): string => {
   if (typeof value !== 'string') {
     return 'unknown'
   }
@@ -37,18 +37,17 @@ const fakeWeatherByLocation: Record<string, WeatherResult> = {
   },
 }
 
-export const getFakeWeather = (location: unknown): WeatherResult & { location: string } => {
+export const getFakeWeather = (
+  location: unknown,
+): WeatherResult & { location: string } => {
   const normalizedLocation = normalizeLocation(location)
   return {
     location: normalizedLocation,
-    ...(
-      fakeWeatherByLocation[normalizedLocation] ?? {
-        conditions: 'Partly cloudy',
-        humidity: 65,
-        temperature: 21,
-        unit: 'C',
-      }
-    ),
+    ...(fakeWeatherByLocation[normalizedLocation] ?? {
+      conditions: 'Partly cloudy',
+      humidity: 65,
+      temperature: 21,
+      unit: 'C',
+    }),
   }
 }
-

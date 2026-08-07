@@ -180,8 +180,12 @@ export const createInstance = async (
           createSessionConfig(state.sessionModel),
         )
         const { port1, port2 } = new MessageChannel()
-        port2.onmessage = (event) => {
-          const portData = typeof event.data === 'string' ? event.data : JSON.stringify(event.data)
+        // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
+        port2.onmessage = ({ data }: MessageEvent): void => {
+          const portData =
+            typeof event.data === 'string'
+              ? event.data
+              : JSON.stringify(event.data)
           if (typeof portData === 'string') {
             instance.handleData(portData)
           }
