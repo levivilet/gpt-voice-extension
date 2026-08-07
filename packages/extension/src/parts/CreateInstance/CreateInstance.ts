@@ -268,16 +268,6 @@ export const createInstance = async (
         isTest: true,
       }
     },
-    async stop() {
-      state = {
-        ...state,
-        inProgress: false,
-      }
-      if (!state.isTest) {
-        await stopWebRtcAudioStream(state.uid)
-      }
-      await context?.requestRerender()
-    },
     setRealtimeModelMini() {
       if (state.inProgress) {
         return
@@ -303,6 +293,16 @@ export const createInstance = async (
         sessionModel: RealtimeModelPreset.Standard,
       }
       requestRerender()
+    },
+    async stop() {
+      state = {
+        ...state,
+        inProgress: false,
+      }
+      if (!state.isTest) {
+        await stopWebRtcAudioStream(state.uid)
+      }
+      await context?.requestRerender()
     },
 
     updateTranscript(id, value) {

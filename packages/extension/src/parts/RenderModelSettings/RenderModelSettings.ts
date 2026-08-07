@@ -1,9 +1,9 @@
-import { RealtimeModelPreset } from '../WebRtc/WebRtc.ts'
 import {
   type VirtualDomNode,
   text,
   VirtualDomElements,
 } from '@lvce-editor/virtual-dom-worker'
+import { RealtimeModelPreset } from '../WebRtc/WebRtc.ts'
 
 export const renderModelSettings = (
   state: { sessionModel: RealtimeModelPreset },
