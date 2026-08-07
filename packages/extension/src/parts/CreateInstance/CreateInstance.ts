@@ -4,6 +4,11 @@ import type {
   VirtualDomViewInstance,
 } from '@lvce-editor/api'
 import {
+  setRemoteDescription,
+  startWebRtcAudioStream,
+  stopWebRtcAudioStream,
+} from '@lvce-editor/api'
+import {
   type VirtualDomNode,
   text,
   VirtualDomElements,
@@ -11,13 +16,16 @@ import {
 import type { MenuEntry } from '../MenuEntries/MenuEntries.ts'
 import { getTitle } from '../GetTitle/GetTitle.ts'
 import { render } from '../Render/Render.ts'
+import { getEphemeralKey, getSdp } from '../WebRtc/WebRtc.ts'
 
 export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly getContext: () => Readonly<Record<string, boolean>>
   readonly getCss: () => string
   readonly getMenuEntries: (menuId: string) => readonly MenuEntry[]
   readonly handleClickStart: () => Promise<void>
+  readonly handleData: (data: string) => void
   readonly renderTitle: () => string
+  readonly stop: () => Promise<void>
 }
 
 export const createInstance = async (
@@ -25,6 +33,9 @@ export const createInstance = async (
 ): Promise<ActiveGptVoiceViewInstance> => {
   const state = {
     inProgress: false,
+    serverId: crypto.randomUUID(),
+    transcribedText: ``,
+    uid: -1,
   }
 
   const requestRerender = (): void => {
@@ -44,8 +55,46 @@ export const createInstance = async (
       return []
     },
     async handleClickStart(): Promise<void> {
-      state.inProgress = !state.inProgress
-      requestRerender()
+      // TODO create node rpc (starting node app)
+      // TODO start node server
+      try {
+        if (state.inProgress) {
+          state.inProgress = false
+          await instance.stop()
+          return
+        }
+        state.inProgress = !state.inProgress
+
+        const ephemeralKey = await getEphemeralKey(state.serverId)
+        const offerSdp = await startWebRtcAudioStream({
+          elementLocator: '.GptVoiceAudio',
+          ephemeralKey,
+          onData(data) {
+            instance.handleData(data)
+          },
+          uid: state.uid,
+        })
+        if (!offerSdp) {
+          throw new Error(`offer sdp is required`)
+        }
+        const answerSdp = await getSdp(offerSdp, ephemeralKey)
+        await setRemoteDescription({
+          sdp: answerSdp,
+          type: 'answer',
+          uid: state.uid,
+        })
+
+        requestRerender()
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    handleData(data: string): void {
+      const parsed = JSON.parse(data)
+      if (parsed && parsed.type === 'response.output_audio_transcript.delta') {
+        state.transcribedText += parsed.delta
+        requestRerender()
+      }
     },
     render() {
       return render(state)
@@ -72,9 +121,12 @@ export const createInstance = async (
     renderTitle(): string {
       return getTitle(state)
     },
-
     saveState(): unknown {
       return {}
+    },
+
+    async stop() {
+      await stopWebRtcAudioStream(state.uid)
     },
   }
   return instance

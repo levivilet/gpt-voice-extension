@@ -1,13 +1,18 @@
+import type { Server } from 'http'
+import { configDotenv } from 'dotenv'
 import express from 'express'
-import path from 'path'
+import path, { join } from 'path'
 import { fileURLToPath } from 'url'
-import 'dotenv/config'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const root = join(__dirname, '..')
+configDotenv({
+  path: join(root, '.env'),
+  quiet: true,
+})
+
 const app = express()
 app.use(express.static(path.join(__dirname, 'public')))
-
-const PORT = process.env.PORT || 3000
 
 if (!process.env.OPENAI_API_KEY) {
   console.warn(
@@ -55,6 +60,10 @@ app.get('/token', async (req, res) => {
       console.error('Token error:', data)
       return res.status(response.status).json(data)
     }
+    res.setHeader(
+      'Access-Control-Allow-Origin',
+      '*', // TODO
+    )
     res.json(data)
   } catch (error) {
     console.error('Token generation error:', error)
@@ -62,6 +71,23 @@ app.get('/token', async (req, res) => {
   }
 })
 
-app.listen(PORT, () => {
-  console.info(`Realtime demo running at http://localhost:${PORT}`)
-})
+const servers: Record<string, Server> = Object.create(null)
+
+export const startServer = async (id: string, port: number): Promise<void> => {
+  const { promise, resolve } = Promise.withResolvers<void>()
+  const server = app.listen(port, () => {
+    resolve(undefined)
+  })
+  servers[id] = server
+  await promise
+}
+
+export const stopServer = async (id: string) => {
+  const server = servers[id]
+  delete servers[id]
+  const { promise, resolve } = Promise.withResolvers<void>()
+  server.close(() => {
+    resolve()
+  })
+  await promise
+}
