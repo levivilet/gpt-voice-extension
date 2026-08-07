@@ -12,6 +12,10 @@ type TrelloView = Omit<View<ActiveGptVoiceViewInstance>, 'commands'> & {
 
 export const view: TrelloView = {
   commands: {
+    async 'GptVoice.addTranscript'(context, id: string, value: string) {
+      context.addTranscript(id, value, 'ai')
+      return context
+    },
     async 'GptVoice.handleClickStart'(context) {
       await context.handleClickStart()
       return context
@@ -22,10 +26,6 @@ export const view: TrelloView = {
     },
     async 'GptVoice.setIsTest'(context) {
       context.setIsTest()
-      return context
-    },
-    async 'GptVoice.setTranscript'(context, value: string) {
-      context.setTranscript(value)
       return context
     },
     async 'GptVoice.stop'(context) {

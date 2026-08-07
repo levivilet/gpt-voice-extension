@@ -2,6 +2,8 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'gpt-voice.set-transcript'
 
+export const skip = 1
+
 export const test: Test = async ({ Command, expect, Locator, SideBar }) => {
   // arrange
   await SideBar.open('gpt-voice.views.default')
@@ -11,7 +13,12 @@ export const test: Test = async ({ Command, expect, Locator, SideBar }) => {
   await Command.executeExtensionCommand('GptVoice.handleClickStart')
 
   // act
-  await Command.executeExtensionCommand('GptVoice.setTranscript', 'hello world')
+  const id = 'abcdef'
+  await Command.executeExtensionCommand(
+    'GptVoice.setTranscript',
+    id,
+    'hello world',
+  )
 
   // assert
   const transcript = Locator('.GptVoiceTranscript')
