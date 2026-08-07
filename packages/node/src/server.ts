@@ -1,8 +1,8 @@
+import type { Server } from 'http'
+import { configDotenv } from 'dotenv'
 import express from 'express'
-import { Server } from 'http'
 import path, { join } from 'path'
 import { fileURLToPath } from 'url'
-import { configDotenv } from 'dotenv'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = join(__dirname, '..')
@@ -74,7 +74,7 @@ app.get('/token', async (req, res) => {
 const servers: Record<string, Server> = Object.create(null)
 
 export const startServer = async (id: string, port: number): Promise<void> => {
-  const { resolve, promise } = Promise.withResolvers<void>()
+  const { promise, resolve } = Promise.withResolvers<void>()
   const server = app.listen(port, () => {
     resolve(undefined)
   })
@@ -85,7 +85,7 @@ export const startServer = async (id: string, port: number): Promise<void> => {
 export const stopServer = async (id: string) => {
   const server = servers[id]
   delete servers[id]
-  const { resolve, promise } = Promise.withResolvers<void>()
+  const { promise, resolve } = Promise.withResolvers<void>()
   server.close(() => {
     resolve()
   })

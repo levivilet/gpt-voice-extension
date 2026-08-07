@@ -5,7 +5,7 @@ export const getEphemeralKey = async (serverId: string): Promise<string> => {
   const serverPort = 3333 // TODO maybe use random port?
   await Rpc.invoke('GptVoice.startServer', serverId, serverPort)
   const tokenBaseUrl = `http://localhost:${serverPort}`
-  const tokenUrl = new URL('/token', tokenBaseUrl).toString()
+  const tokenUrl = new URL('/token', tokenBaseUrl).href
   const tokenRes = await fetch(tokenUrl)
   const tokenData = await tokenRes.json()
   if (!tokenRes.ok) {
@@ -23,12 +23,12 @@ export const getSdp = async (
   ephemeralKey: string,
 ): Promise<string> => {
   const sdpResponse = await fetch('https://api.openai.com/v1/realtime/calls', {
-    method: 'POST',
     body: offerSdp,
     headers: {
       Authorization: `Bearer ${ephemeralKey}`,
       'Content-Type': 'application/sdp',
     },
+    method: 'POST',
   })
   const answerSdp = await sdpResponse.text()
   return answerSdp
