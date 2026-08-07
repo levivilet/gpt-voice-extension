@@ -27,6 +27,7 @@ export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
     value: string,
     type: 'user' | 'ai',
   ) => void
+  readonly createOrUpdateTranscript: (parsed: any, type: 'user' | 'ai') => void
   readonly debugData: () => void
   readonly doAnimate: () => Promise<void>
   readonly getContext: () => Readonly<Record<string, boolean>>
@@ -34,6 +35,8 @@ export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly getMenuEntries: (menuId: string) => readonly MenuEntry[]
   readonly handleClickStart: () => Promise<void>
   readonly handleData: (data: string) => void
+  readonly handleInputTranscript: (parsed: any) => void
+  readonly handleOutputTranscript: (parsed: any) => void
   readonly renderTitle: () => string
   readonly setAnimation: (enabled: boolean, scale: number) => void
   readonly setIsTest: () => void
@@ -81,16 +84,27 @@ export const createInstance = async (
   }
 
   const instance: ActiveGptVoiceViewInstance = {
-    addTranscript(id, value, type = 'ai') {
+    addTranscript(id, value, type) {
       state = {
         ...state,
         transcripts: [...state.transcripts, { id, text: value, type }],
       }
       context?.requestRerender()
     },
+    createOrUpdateTranscript(parsed, type) {
+      const { delta, item_id } = parsed
+      const entry = state.transcripts.find((item) => item.id === item_id)
+      if (entry) {
+        instance.updateTranscript(entry.id, entry.text + delta)
+      } else {
+        instance.addTranscript(item_id, delta, type)
+      }
+    },
     debugData() {
       // eslint-disable-next-line no-console
       console.info(state.parsedData)
+      // eslint-disable-next-line no-console
+      console.info(state.transcripts)
     },
     async doAnimate() {
       while (state.animationEnabled) {
@@ -183,26 +197,20 @@ export const createInstance = async (
       }
 
       if (parsed && parsed.type === 'response.output_audio_transcript.delta') {
-        const entry = state.transcripts.find((item) => item.id)
-        const { delta, item_id } = parsed
-        if (entry) {
-          instance.updateTranscript(entry.id, entry.text + delta)
-        } else {
-          instance.addTranscript(item_id, delta, 'ai')
-        }
+        instance.handleOutputTranscript(parsed)
       }
       if (
         parsed &&
         parsed.type === 'conversation.item.input_audio_transcription.delta'
       ) {
-        const { delta, item_id } = parsed
-        const entry = state.transcripts.find((item) => item.id)
-        if (entry) {
-          instance.updateTranscript(entry.id, entry.text + delta)
-        } else {
-          instance.addTranscript(item_id, delta, 'user')
-        }
+        instance.handleInputTranscript(parsed)
       }
+    },
+    handleInputTranscript(parsed) {
+      instance.createOrUpdateTranscript(parsed, 'user')
+    },
+    handleOutputTranscript(parsed) {
+      instance.createOrUpdateTranscript(parsed, 'ai')
     },
     render() {
       return render(state)
@@ -258,17 +266,18 @@ export const createInstance = async (
     },
 
     updateTranscript(id, value) {
+      const { transcripts } = state
       const index = state.transcripts.findIndex((item) => item.id === id)
       if (index === -1) {
         return
       }
+      const old = transcripts[index]
       state = {
         ...state,
-        transcripts: [
-          ...state.transcripts.slice(0, index),
-          { ...state.transcripts[index], text: value },
-          ...state.transcripts.slice(index + 1),
-        ],
+        transcripts: transcripts.with(index, {
+          ...old,
+          text: value,
+        }),
       }
       context?.requestRerender()
     },
