@@ -23,5 +23,5 @@ export const test: Test = async ({
 
   // assert
   const listeningBubble = Locator('.GptVoiceBubble.listening')
-  await expect(listeningBubble).toBeVisible()
+  await expect(listeningBubble).toBeHidden()
 }
