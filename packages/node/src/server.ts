@@ -42,6 +42,17 @@ const DEFAULT_SESSION_CONFIG = {
     audio: {
       input: {
         transcription: { model: 'gpt-4o-mini-transcribe' },
+        turn_detection: {
+          create_response: true,
+          interrupt_response: false,
+          prefix_padding_ms: 300,
+          silence_duration_ms: 800,
+          threshold: 0.7,
+          type: 'server_vad',
+        },
+        noise_reduction: {
+          type: 'near_field',
+        },
       },
       output: {
         voice: 'marin',
