@@ -1,21 +1,19 @@
 import {
+  setRemoteDescription,
+  startWebRtcAudioStream,
+  stopWebRtcAudioStream,
   ViewContext,
   ViewSelection,
   VirtualDomViewInstance,
-  startWebRtcAudioStream,
-  setRemoteDescription,
-  stopWebRtcAudioStream,
 } from '@lvce-editor/api'
 import {
   type VirtualDomNode,
   text,
   VirtualDomElements,
 } from '@lvce-editor/virtual-dom-worker'
-import type { MenuEntry } from '../MenuEntries/MenuEntries.ts'
 import { getTitle } from '../GetTitle/GetTitle.ts'
+import type { MenuEntry } from '../MenuEntries/MenuEntries.ts'
 import { render } from '../Render/Render.ts'
-
-import * as Rpc from '../Rpc/Rpc.ts'
 import { getEphemeralKey, getSdp } from '../WebRtc/WebRtc.ts'
 
 export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
