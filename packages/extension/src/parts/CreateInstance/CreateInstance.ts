@@ -136,6 +136,7 @@ export const createInstance = async (
 
     async stop() {
       await stopWebRtcAudioStream(state.uid)
+      await context?.requestRerender()
     },
   }
   return instance
