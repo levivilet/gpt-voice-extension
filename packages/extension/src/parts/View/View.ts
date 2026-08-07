@@ -16,6 +16,10 @@ export const view: TrelloView = {
       await context.handleClickStart()
       return context
     },
+    async 'GptVoice.setAnimation'(context, enabled: boolean, scale: number) {
+      context.setAnimation(enabled, scale)
+      return context
+    },
     async 'GptVoice.setIsTest'(context) {
       context.setIsTest()
       return context

@@ -25,6 +25,7 @@ export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly handleClickStart: () => Promise<void>
   readonly handleData: (data: string) => void
   readonly renderTitle: () => string
+  readonly setAnimation: (enabled: boolean, scale: number) => void
   readonly setIsTest: () => void
   readonly setTranscript: (value: string) => void
   readonly stop: () => Promise<void>
@@ -34,6 +35,8 @@ export const createInstance = async (
   context?: ViewContext,
 ): Promise<ActiveGptVoiceViewInstance> => {
   const state = {
+    animationEnabled: false,
+    animationScale: 1,
     inProgress: false,
     isTest: false,
     serverId: crypto.randomUUID(),
@@ -129,6 +132,10 @@ export const createInstance = async (
     },
     saveState(): unknown {
       return {}
+    },
+    setAnimation(enabled, scale) {
+      state.animationEnabled = enabled
+      state.animationScale = scale
     },
     setIsTest() {
       state.isTest = true
