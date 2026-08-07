@@ -7,6 +7,7 @@ import {
   setRemoteDescription,
   startWebRtcAudioStream,
   stopWebRtcAudioStream,
+  readMicLevels,
 } from '@lvce-editor/api'
 import {
   type VirtualDomNode,
@@ -14,11 +15,14 @@ import {
   VirtualDomElements,
 } from '@lvce-editor/virtual-dom-worker'
 import type { MenuEntry } from '../MenuEntries/MenuEntries.ts'
+import { animateBubble } from '../AnimateBubble/AnimateBubble.ts'
 import { getTitle } from '../GetTitle/GetTitle.ts'
+import { readLevel } from '../ReadLevel/ReadLevel.ts'
 import { render } from '../Render/Render.ts'
 import { getEphemeralKey, getSdp } from '../WebRtc/WebRtc.ts'
 
 export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
+  readonly doAnimate: () => Promise<void>
   readonly getContext: () => Readonly<Record<string, boolean>>
   readonly getCss: () => string
   readonly getMenuEntries: (menuId: string) => readonly MenuEntry[]
@@ -36,6 +40,7 @@ export const createInstance = async (
 ): Promise<ActiveGptVoiceViewInstance> => {
   const state = {
     animationEnabled: false,
+    animationFrame: -1,
     animationScale: 1,
     inProgress: false,
     isTest: false,
@@ -51,6 +56,24 @@ export const createInstance = async (
   }
 
   const instance: ActiveGptVoiceViewInstance = {
+    async doAnimate() {
+      while (state.animationEnabled) {
+        try {
+          const data = await readMicLevels({
+            uid: state.uid,
+          })
+          await new Promise((resolve) => {
+            requestAnimationFrame(resolve)
+          })
+          const levelMic = readLevel(data.micAnalyzerData)
+          const levelRemote = readLevel(data.remoteAnalyzerData)
+          const anim = animateBubble(levelMic, levelRemote)
+          instance.setAnimation(true, anim.scale)
+        } catch (error) {
+          console.error(error)
+        }
+      }
+    },
     getContext() {
       return {}
     },
@@ -84,6 +107,7 @@ export const createInstance = async (
           onData(data) {
             instance.handleData(data)
           },
+          trackAudioData: true,
           uid: state.uid,
         })
         if (!offerSdp) {
@@ -95,6 +119,11 @@ export const createInstance = async (
           type: 'answer',
           uid: state.uid,
         })
+
+        if (!state.isTest) {
+          state.animationEnabled = true
+          instance.doAnimate()
+        }
 
         requestRerender()
       } catch (error) {
