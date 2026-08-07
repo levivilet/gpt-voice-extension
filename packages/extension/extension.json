@@ -17,6 +17,7 @@
     "onView:gpt-voice.views.default",
     "onCommand:GptVoice.handleClickStart",
     "onCommand:GptVoice.setIsTest",
+    "onCommand:GptVoice.setAnimation",
     "onCommand:GptVoice.stop"
   ],
   "commands": [
@@ -27,6 +28,10 @@
     {
       "id": "GptVoice.setIsTest",
       "label": "gpt-voice: setIsTest"
+    },
+    {
+      "id": "GptVoice.setAnimation",
+      "label": "gpt-voice: setAnimation"
     },
     {
       "id": "GptVoice.stop",

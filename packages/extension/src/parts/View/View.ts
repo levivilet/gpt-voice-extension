@@ -24,6 +24,10 @@ export const view: TrelloView = {
       await context.stop()
       return context
     },
+    async 'GptVoice.setAnimation'(context, enabled: boolean, scale: number) {
+      context.setAnimation(enabled, scale)
+      return context
+    },
   },
   create: createInstance,
   displayName: 'Gpt Voice',
