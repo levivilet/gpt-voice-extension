@@ -32,7 +32,7 @@ export const view: TrelloView = {
       await context.stop()
       return context
     },
-    async debugData(context) {
+    async 'GptVoice.debugData'(context) {
       context.debugData()
       return context
     },
