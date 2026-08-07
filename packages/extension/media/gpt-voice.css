@@ -36,6 +36,7 @@
     transform 60ms linear,
     box-shadow 120ms linear;
   will-change: transform;
+  transform: var(--GptVoiceBubbleTransform);
 }
 
 .GptVoiceBubble.listening {

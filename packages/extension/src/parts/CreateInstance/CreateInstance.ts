@@ -55,7 +55,9 @@ export const createInstance = async (
       return {}
     },
     getCss() {
-      return ''
+      return `.GptVoice {
+--GptVoiceBubbleTransform: scale(${state.animationScale});
+}`
     },
     getMenuEntries() {
       return []
