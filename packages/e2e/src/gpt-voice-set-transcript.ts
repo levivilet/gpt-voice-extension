@@ -1,6 +1,6 @@
 import type { Test } from '@lvce-editor/test-with-playwright'
 
-export const name = 'gpt-voice.button-click'
+export const name = 'gpt-voice.set-transcript'
 
 export const test: Test = async ({ Command, expect, Locator, SideBar }) => {
   // arrange
@@ -8,11 +8,13 @@ export const test: Test = async ({ Command, expect, Locator, SideBar }) => {
   const button = Locator('.GptVoiceButton')
   await expect(button).toBeVisible()
   await Command.executeExtensionCommand('GptVoice.setIsTest')
-
-  // act
   await Command.executeExtensionCommand('GptVoice.handleClickStart')
 
+  // act
+  await Command.executeExtensionCommand('GptVoice.setTranscript', 'hello world')
+
   // assert
-  const listeningBubble = Locator('.GptVoiceBubble.listening')
-  await expect(listeningBubble).toBeVisible()
+  const transcript = Locator('.GptVoiceTranscript')
+  await expect(transcript).toBeVisible()
+  await expect(transcript).toHaveText('hello world')
 }
