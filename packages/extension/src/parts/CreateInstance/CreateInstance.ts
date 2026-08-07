@@ -15,13 +15,14 @@ import {
   VirtualDomElements,
 } from '@lvce-editor/virtual-dom-worker'
 import type { MenuEntry } from '../MenuEntries/MenuEntries.ts'
+import { animateBubble } from '../AnimateBubble/AnimateBubble.ts'
 import { getTitle } from '../GetTitle/GetTitle.ts'
+import { readLevel } from '../ReadLevel/ReadLevel.ts'
 import { render } from '../Render/Render.ts'
 import { getEphemeralKey, getSdp } from '../WebRtc/WebRtc.ts'
-import { animateBubble } from '../AnimateBubble/AnimateBubble.ts'
-import { readLevel } from '../ReadLevel/ReadLevel.ts'
 
 export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
+  readonly doAnimate: () => Promise<void>
   readonly getContext: () => Readonly<Record<string, boolean>>
   readonly getCss: () => string
   readonly getMenuEntries: (menuId: string) => readonly MenuEntry[]
@@ -32,7 +33,6 @@ export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly setIsTest: () => void
   readonly setTranscript: (value: string) => void
   readonly stop: () => Promise<void>
-  readonly doAnimate: () => Promise<void>
 }
 
 export const createInstance = async (
@@ -40,13 +40,13 @@ export const createInstance = async (
 ): Promise<ActiveGptVoiceViewInstance> => {
   const state = {
     animationEnabled: false,
+    animationFrame: -1,
     animationScale: 1,
     inProgress: false,
     isTest: false,
     serverId: crypto.randomUUID(),
     transcribedText: ``,
     uid: -1,
-    animationFrame: -1,
   }
 
   const requestRerender = (): void => {
@@ -56,17 +56,6 @@ export const createInstance = async (
   }
 
   const instance: ActiveGptVoiceViewInstance = {
-    getContext() {
-      return {}
-    },
-    getCss() {
-      return `.GptVoice {
---GptVoiceBubbleTransform: scale(${state.animationScale});
-}`
-    },
-    getMenuEntries() {
-      return []
-    },
     async doAnimate() {
       while (state.animationEnabled) {
         try {
@@ -84,6 +73,17 @@ export const createInstance = async (
           console.error(error)
         }
       }
+    },
+    getContext() {
+      return {}
+    },
+    getCss() {
+      return `.GptVoice {
+--GptVoiceBubbleTransform: scale(${state.animationScale});
+}`
+    },
+    getMenuEntries() {
+      return []
     },
     async handleClickStart(): Promise<void> {
       // TODO create node rpc (starting node app)
@@ -107,8 +107,8 @@ export const createInstance = async (
           onData(data) {
             instance.handleData(data)
           },
-          uid: state.uid,
           trackAudioData: true,
+          uid: state.uid,
         })
         if (!offerSdp) {
           throw new Error(`offer sdp is required`)
