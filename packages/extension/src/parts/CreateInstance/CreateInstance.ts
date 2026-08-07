@@ -89,7 +89,7 @@ export const createInstance = async (
       context?.requestRerender()
     },
     debugData() {
-      // eslint-disable-next-line
+      // eslint-disable-next-line no-console
       console.info(state.parsedData)
     },
     async doAnimate() {
