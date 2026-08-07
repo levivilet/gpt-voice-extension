@@ -39,6 +39,8 @@ app.use(express.static(path.join(__dirname, 'public')))
 // but that's fine — it's only used to open the WebRTC connection).
 const DEFAULT_SESSION_CONFIG = {
   session: {
+    instructions:
+      'A helpful assistant.',
     audio: {
       input: {
         noise_reduction: {
@@ -58,28 +60,7 @@ const DEFAULT_SESSION_CONFIG = {
         voice: 'marin',
       },
     },
-    instructions:
-      'You are a voice assistant with access to tools. If the user asks about weather, call getweather with a location argument.',
     model: 'gpt-realtime-2.1-mini',
-    tool_choice: 'auto',
-    tools: [
-      {
-        description: 'Get weather for a location.',
-        name: 'getweather',
-        parameters: {
-          additionalProperties: false,
-          properties: {
-            location: {
-              description: 'Location to get the weather for',
-              type: 'string',
-            },
-          },
-          required: ['location'],
-          type: 'object',
-        },
-        type: 'function',
-      },
-    ],
     type: 'realtime',
   },
 }
@@ -97,40 +78,6 @@ const extractSessionConfig = (body: unknown) => {
   }
   return body
 }
-
-const normalizeLocation = (value: unknown) => {
-  if (typeof value !== 'string') {
-    return 'unknown'
-  }
-  return value.trim() || 'unknown'
-}
-
-const getWeatherForLocation = (location: string) => {
-  const fakeWeatherByLocation: Record<string, { temperature: number; unit: string; conditions: string; humidity: number }> =
-    {
-      france: { conditions: 'Cloudy', humidity: 76, temperature: 18, unit: 'C' },
-      london: { conditions: 'Rain', humidity: 84, temperature: 14, unit: 'C' },
-      paris: { conditions: 'Sunny', humidity: 58, temperature: 20, unit: 'C' },
-    }
-  const normalizedLocation = location.toLowerCase()
-  return (
-    fakeWeatherByLocation[normalizedLocation] ?? {
-      conditions: 'Partly cloudy',
-      humidity: 65,
-      temperature: 21,
-      unit: 'C',
-    }
-  )
-}
-
-app.post('/tools/getweather', async (req: Request<unknown>, res) => {
-  const location = normalizeLocation((req.body as Record<string, unknown>)?.location)
-  const weather = getWeatherForLocation(location)
-  res.json({
-    location,
-    ...weather,
-  })
-})
 
 const sendToken = async (res: Response, sessionConfig: unknown) => {
   try {
