@@ -266,17 +266,18 @@ export const createInstance = async (
     },
 
     updateTranscript(id, value) {
+      const { transcripts } = state
       const index = state.transcripts.findIndex((item) => item.id === id)
       if (index === -1) {
         return
       }
+      const old = transcripts[index]
       state = {
         ...state,
-        transcripts: [
-          ...state.transcripts.slice(0, index),
-          { ...state.transcripts[index], text: value },
-          ...state.transcripts.slice(index + 1),
-        ],
+        transcripts: transcripts.with(index, {
+          ...old,
+          text: value,
+        }),
       }
       context?.requestRerender()
     },
