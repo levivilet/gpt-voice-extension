@@ -32,6 +32,14 @@ export const view: TrelloView = {
       context.setIsTest()
       return context
     },
+    async 'GptVoice.setRealtimeModelMini'(context) {
+      context.setRealtimeModelMini()
+      return context
+    },
+    async 'GptVoice.setRealtimeModelStandard'(context) {
+      context.setRealtimeModelStandard()
+      return context
+    },
     async 'GptVoice.stop'(context) {
       await context.stop()
       return context

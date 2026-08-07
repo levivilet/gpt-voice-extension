@@ -74,6 +74,34 @@
   background: #c94a4a;
 }
 
+.GptVoiceModelSettings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.GptVoiceModelSettingsLabel {
+  font-size: 12px;
+  color: #9aa0b4;
+}
+
+.GptVoiceModelButton {
+  padding: 6px 14px;
+  font-size: 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  background: #3d4676;
+  color: #eef0f6;
+  font-weight: 500;
+}
+
+.GptVoiceModelButton.active {
+  background: #4a5bd6;
+  border-color: #9dbeff;
+}
+
 .GptVoiceTranscript {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);

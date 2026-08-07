@@ -30,13 +30,13 @@ const DEFAULT_SESSION_CONFIG = {
   session: {
     audio: {
       input: {
-        transcription: { model: 'gpt-4o-transcribe' },
+        transcription: { model: 'gpt-4o-mini-transcribe' },
       },
       output: {
         voice: 'marin',
       },
     },
-    model: 'gpt-realtime-2.1',
+    model: 'gpt-realtime-2.1-mini',
     type: 'realtime',
   },
 }
