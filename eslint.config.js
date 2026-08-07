@@ -23,6 +23,8 @@ export default defineConfig([
     rules: {
       '@typescript-eslint/prefer-readonly-parameter-types': 'off',
       'no-console': 'off',
+      'unicorn/no-top-level-side-effects': 'off',
+      '@typescript-eslint/explicit-function-return-type': 'off',
     },
   },
 ])

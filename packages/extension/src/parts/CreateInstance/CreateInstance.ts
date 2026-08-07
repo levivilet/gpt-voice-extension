@@ -1,11 +1,12 @@
 import type {
   ViewContext,
   ViewSelection,
-  VirtualDomViewInstance} from '@lvce-editor/api';
+  VirtualDomViewInstance,
+} from '@lvce-editor/api'
 import {
   setRemoteDescription,
   startWebRtcAudioStream,
-  stopWebRtcAudioStream
+  stopWebRtcAudioStream,
 } from '@lvce-editor/api'
 import {
   type VirtualDomNode,
@@ -59,7 +60,7 @@ export const createInstance = async (
       try {
         if (state.inProgress) {
           state.inProgress = false
-          await this.stop()
+          await instance.stop()
           return
         }
         state.inProgress = !state.inProgress
@@ -78,13 +79,11 @@ export const createInstance = async (
           throw new Error(`offer sdp is required`)
         }
         const answerSdp = await getSdp(offerSdp, ephemeralKey)
-        console.log({ answerSdp, offerSdp })
         await setRemoteDescription({
           sdp: answerSdp,
           type: 'answer',
           uid: state.uid,
         })
-        console.log('all worked')
 
         requestRerender()
       } catch (error) {

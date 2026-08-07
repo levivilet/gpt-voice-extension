@@ -5,11 +5,11 @@ export const name = 'gpt-voice.button-click'
 export const skip = 1
 
 export const test: Test = async ({
+  Command,
   expect,
+  Layout,
   Locator,
   SideBar,
-  Command,
-  Layout,
 }) => {
   await SideBar.open('gpt-voice.views.default')
   const button = Locator('.GptVoiceButton')

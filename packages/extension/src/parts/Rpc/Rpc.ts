@@ -15,7 +15,10 @@ const createRpc = async (): Promise<Rpc> => {
   return rpc
 }
 
-export const invoke = async (method: string, ...params: readonly any[]) => {
+export const invoke = async (
+  method: string,
+  ...params: readonly any[]
+): Promise<any> => {
   if (!state.rpcPromise) {
     state.rpcPromise = createRpc()
   }
