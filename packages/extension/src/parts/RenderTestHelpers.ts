@@ -11,8 +11,8 @@ export const createRenderState = (state: Partial<IState> = {}): IState => {
     parsedData: [],
     serverId: 'server-id',
     sessionModel: RealtimeModelPreset.Mini,
-    transcripts: [],
     transcribedText: '',
+    transcripts: [],
     uid: 1,
     ...state,
   }

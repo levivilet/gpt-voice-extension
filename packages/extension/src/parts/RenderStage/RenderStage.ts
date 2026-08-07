@@ -2,7 +2,7 @@ import {
   type VirtualDomNode,
   VirtualDomElements,
 } from '@lvce-editor/virtual-dom-worker'
-import type { State } from '../State/State.ts'
+import type { IState } from '../CreateInstance/CreateInstance.ts'
 
 const getBubbleClassName = (inProgress: boolean): string => {
   if (inProgress) {
@@ -10,7 +10,7 @@ const getBubbleClassName = (inProgress: boolean): string => {
   }
   return 'GptVoiceBubble'
 }
-export const renderStage = (state: State): readonly VirtualDomNode[] => {
+export const renderStage = (state: IState): readonly VirtualDomNode[] => {
   return [
     {
       childCount: 1,
