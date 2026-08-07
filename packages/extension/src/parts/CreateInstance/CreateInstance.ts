@@ -59,14 +59,13 @@ export interface ITranscript {
   readonly type: 'user' | 'ai'
 }
 
-  export interface IState {
-    readonly animationEnabled: boolean
-    readonly animationFrame: number
-    readonly animationScale: number
+export interface IState {
+  readonly animationEnabled: boolean
+  readonly animationFrame: number
+  readonly animationScale: number
   readonly inProgress: boolean
   readonly isTest: boolean
   readonly parsedData: readonly any[]
-  readonly transcribedText: string
   readonly serverId: string
   readonly sessionModel: RealtimeModelPreset
   readonly transcribedText: string
