@@ -39,6 +39,8 @@ export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly setIsTest: () => void
   readonly stop: () => Promise<void>
   readonly updateTranscript: (id: string, value: string) => void
+  readonly handleInputTranscript: (parsed: any) => void
+  readonly handleOutputTranscript: (parsed: any) => void
 }
 
 export interface ITranscript {
@@ -175,6 +177,24 @@ export const createInstance = async (
         console.error(error)
       }
     },
+    handleOutputTranscript(parsed) {
+      const { delta, item_id } = parsed
+      const entry = state.transcripts.find((item) => item.id === item_id)
+      if (entry) {
+        instance.updateTranscript(entry.id, entry.text + delta)
+      } else {
+        instance.addTranscript(item_id, delta, 'ai')
+      }
+    },
+    handleInputTranscript(parsed) {
+      const { delta, item_id } = parsed
+      const entry = state.transcripts.find((item) => item.id === item_id)
+      if (entry) {
+        instance.updateTranscript(entry.id, entry.text + delta)
+      } else {
+        instance.addTranscript(item_id, delta, 'user')
+      }
+    },
     handleData(data: string): void {
       const parsed = JSON.parse(data)
       state = {
@@ -183,25 +203,13 @@ export const createInstance = async (
       }
 
       if (parsed && parsed.type === 'response.output_audio_transcript.delta') {
-        const entry = state.transcripts.find((item) => item.id)
-        const { delta, item_id } = parsed
-        if (entry) {
-          instance.updateTranscript(entry.id, entry.text + delta)
-        } else {
-          instance.addTranscript(item_id, delta, 'ai')
-        }
+        instance.handleOutputTranscript(parsed)
       }
       if (
         parsed &&
         parsed.type === 'conversation.item.input_audio_transcription.delta'
       ) {
-        const { delta, item_id } = parsed
-        const entry = state.transcripts.find((item) => item.id)
-        if (entry) {
-          instance.updateTranscript(entry.id, entry.text + delta)
-        } else {
-          instance.addTranscript(item_id, delta, 'user')
-        }
+        instance.handleOutputTranscript(parsed)
       }
     },
     render() {
@@ -258,6 +266,7 @@ export const createInstance = async (
     },
 
     updateTranscript(id, value) {
+      console.log({ id, value })
       const index = state.transcripts.findIndex((item) => item.id === id)
       if (index === -1) {
         return
