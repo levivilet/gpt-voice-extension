@@ -89,7 +89,7 @@ export const createInstance = async (
         console.error(error)
       }
     },
-    async handleData(data: string): Promise<void> {
+    handleData(data: string): void {
       const parsed = JSON.parse(data)
       if (parsed && parsed.type === 'response.output_audio_transcript.delta') {
         state.transcribedText += parsed.delta
