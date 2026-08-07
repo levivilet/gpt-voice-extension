@@ -2,8 +2,6 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'gpt-voice.stop'
 
-export const skip = 1
-
 export const test: Test = async ({ Command, expect, Locator, SideBar }) => {
   // arrange
   await SideBar.open('gpt-voice.views.default')
