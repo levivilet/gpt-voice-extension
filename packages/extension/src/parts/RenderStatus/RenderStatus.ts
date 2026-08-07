@@ -3,9 +3,9 @@ import {
   text,
   VirtualDomElements,
 } from '@lvce-editor/virtual-dom-worker'
-import type { State } from '../State/State.ts'
+import type { IState } from '../CreateInstance/CreateInstance.ts'
 
-export const renderStatus = (state: State): readonly VirtualDomNode[] => {
+export const renderStatus = (state: IState): readonly VirtualDomNode[] => {
   if (state.inProgress) {
     return [
       {

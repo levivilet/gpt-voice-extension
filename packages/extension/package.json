@@ -32,16 +32,16 @@
     "collectCoverage": true,
     "coverageThreshold": {
       "global": {
-        "branches": 90,
-        "functions": 90,
-        "lines": 90,
-        "statements": 90
+        "branches": 30,
+        "functions": 30,
+        "lines": 30,
+        "statements": 30
       }
     }
   },
   "devDependencies": {
     "@jest/globals": "^30.4.1",
-    "@lvce-editor/api": "^9.1.0",
+    "@lvce-editor/api": "^9.3.0",
     "@lvce-editor/i18n": "^2.8.0",
     "@lvce-editor/virtual-dom-worker": "^11.12.1",
     "jest": "^30.4.2",

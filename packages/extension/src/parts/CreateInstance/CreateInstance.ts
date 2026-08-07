@@ -16,6 +16,7 @@ import {
 } from '@lvce-editor/virtual-dom-worker'
 import type { MenuEntry } from '../MenuEntries/MenuEntries.ts'
 import { animateBubble } from '../AnimateBubble/AnimateBubble.ts'
+import { handleFunctionCall } from '../FunctionCalling/FunctionCalling.ts'
 import { getTitle } from '../GetTitle/GetTitle.ts'
 import { readLevel } from '../ReadLevel/ReadLevel.ts'
 import { render } from '../Render/Render.ts'
@@ -67,6 +68,7 @@ export interface IState {
   readonly parsedData: readonly any[]
   readonly serverId: string
   readonly sessionModel: RealtimeModelPreset
+  readonly transcribedText: string
   readonly transcripts: readonly ITranscript[]
   readonly uid: number
 }
@@ -83,8 +85,17 @@ export const createInstance = async (
     parsedData: [],
     serverId: crypto.randomUUID(),
     sessionModel: defaultSessionModel,
+    transcribedText: '',
     transcripts: [],
     uid: -1,
+  }
+  let dataChannelPort: MessagePort | undefined
+
+  const sendToDataChannel = async (data: string): Promise<void> => {
+    if (!dataChannelPort) {
+      throw new Error('data channel port not connected')
+    }
+    dataChannelPort.postMessage(data)
   }
 
   const requestRerender = (): void => {
@@ -170,13 +181,23 @@ export const createInstance = async (
           state.serverId,
           createSessionConfig(state.sessionModel),
         )
+        const { port1, port2 } = new MessageChannel()
+        // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
+        port2.onmessage = (event: MessageEvent): void => {
+          const portData =
+            typeof event.data === 'string'
+              ? event.data
+              : JSON.stringify(event.data)
+          if (typeof portData === 'string') {
+            instance.handleData(portData)
+          }
+        }
+        port2.start()
+        dataChannelPort = port2
         const offerSdp = await startWebRtcAudioStream({
           elementLocator: '.GptVoiceAudio',
           ephemeralKey,
-          onData(data) {
-            // TODO maybe use separate worker for handling transcript data
-            instance.handleData(data)
-          },
+          port: port1,
           trackAudioData: true,
           uid: state.uid,
         })
@@ -200,6 +221,10 @@ export const createInstance = async (
 
         requestRerender()
       } catch (error) {
+        if (dataChannelPort) {
+          dataChannelPort.close()
+          dataChannelPort = undefined
+        }
         console.error(error)
       }
     },
@@ -209,6 +234,10 @@ export const createInstance = async (
         ...state,
         parsedData: [...state.parsedData, parsed],
       }
+
+      void handleFunctionCall(parsed, sendToDataChannel).catch((error) => {
+        console.error(error)
+      })
 
       if (parsed && parsed.type === 'response.output_audio_transcript.delta') {
         instance.handleOutputTranscript(parsed)
@@ -299,8 +328,15 @@ export const createInstance = async (
         ...state,
         inProgress: false,
       }
-      if (!state.isTest) {
-        await stopWebRtcAudioStream(state.uid)
+      try {
+        if (!state.isTest) {
+          await stopWebRtcAudioStream(state.uid)
+        }
+      } finally {
+        if (dataChannelPort) {
+          dataChannelPort.close()
+          dataChannelPort = undefined
+        }
       }
       await context?.requestRerender()
     },

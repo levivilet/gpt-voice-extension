@@ -58,6 +58,7 @@ const DEFAULT_SESSION_CONFIG = {
         voice: 'marin',
       },
     },
+    instructions: 'A helpful assistant.',
     model: 'gpt-realtime-2.1-mini',
     type: 'realtime',
   },
