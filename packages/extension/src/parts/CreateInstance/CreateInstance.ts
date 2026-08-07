@@ -35,18 +35,35 @@ export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly stop: () => Promise<void>
 }
 
+interface ITranscript {
+  readonly type: 'user' | 'ai'
+  readonly text: string
+  readonly id: string
+}
+
+interface IState {
+  readonly animationEnabled: boolean
+  readonly animationFrame: number
+  readonly animationScale: number
+  readonly inProgress: boolean
+  readonly isTest: boolean
+  readonly serverId: string
+  readonly uid: number
+  readonly transcripts: readonly ITranscript[]
+}
+
 export const createInstance = async (
   context?: ViewContext,
 ): Promise<ActiveGptVoiceViewInstance> => {
-  const state = {
+  let state: IState = {
     animationEnabled: false,
     animationFrame: -1,
     animationScale: 1,
     inProgress: false,
     isTest: false,
     serverId: crypto.randomUUID(),
-    transcribedText: ``,
     uid: -1,
+    transcripts: [],
   }
 
   const requestRerender = (): void => {
@@ -90,11 +107,17 @@ export const createInstance = async (
       // TODO start node server
       try {
         if (state.inProgress) {
-          state.inProgress = false
+          state = {
+            ...state,
+            inProgress: false,
+          }
           await instance.stop()
           return
         }
-        state.inProgress = !state.inProgress
+        state = {
+          ...state,
+          inProgress: !state.inProgress,
+        }
 
         if (state.isTest) {
           return
@@ -121,7 +144,10 @@ export const createInstance = async (
         })
 
         if (!state.isTest) {
-          state.animationEnabled = true
+          state = {
+            ...state,
+            animationEnabled: true,
+          }
           instance.doAnimate()
         }
 
@@ -132,8 +158,14 @@ export const createInstance = async (
     },
     handleData(data: string): void {
       const parsed = JSON.parse(data)
+      console.log({ parsed })
       if (parsed && parsed.type === 'response.output_audio_transcript.delta') {
-        instance.setTranscript(state.transcribedText + parsed.delta)
+        const entry = state.transcripts.find((item) => item.id)
+        if (entry) {
+          instance.updateTranscript(entry.id, entry.text + parsed.delta)
+        } else {
+          instance.addTranscript(parsed.id, parsed.delta)
+        }
       }
     },
     render() {
@@ -172,8 +204,26 @@ export const createInstance = async (
     setIsTest() {
       state.isTest = true
     },
-    setTranscript(value) {
-      state.transcribedText = value
+    updateTranscript(id, value) {
+      const index = state.transcripts.findIndex((item) => item.id === id)
+      if (index === -1) {
+        return
+      }
+      state = {
+        ...state,
+        transcripts: [
+          ...state.transcripts.slice(0, index),
+          { ...state.transcripts[index], text: value },
+          ...state.transcripts.slice(index + 1),
+        ],
+      }
+      context?.requestRerender()
+    },
+    addTranscript(id, value) {
+      state = {
+        ...state,
+        transcripts: [...state.transcripts, { id, type: 'ai', text: value }],
+      }
       context?.requestRerender()
     },
 
