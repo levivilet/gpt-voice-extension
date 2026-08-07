@@ -3,7 +3,7 @@ import {
   text,
   VirtualDomElements,
 } from '@lvce-editor/virtual-dom-worker'
-import { IState, ITranscript } from '../CreateInstance/CreateInstance.ts'
+import type { IState, ITranscript } from '../CreateInstance/CreateInstance.ts'
 
 const renderTranscriptItem = (item: ITranscript): readonly VirtualDomNode[] => {
   return [

@@ -22,28 +22,28 @@ import { render } from '../Render/Render.ts'
 import { getEphemeralKey, getSdp } from '../WebRtc/WebRtc.ts'
 
 export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
+  readonly addTranscript: (
+    id: string,
+    value: string,
+    type: 'user' | 'ai',
+  ) => void
   readonly doAnimate: () => Promise<void>
   readonly getContext: () => Readonly<Record<string, boolean>>
   readonly getCss: () => string
   readonly getMenuEntries: (menuId: string) => readonly MenuEntry[]
   readonly handleClickStart: () => Promise<void>
   readonly handleData: (data: string) => void
-  readonly updateTranscript: (id: string, value: string) => void
-  readonly addTranscript: (
-    id: string,
-    value: string,
-    type: 'user' | 'ai',
-  ) => void
   readonly renderTitle: () => string
   readonly setAnimation: (enabled: boolean, scale: number) => void
   readonly setIsTest: () => void
   readonly stop: () => Promise<void>
+  readonly updateTranscript: (id: string, value: string) => void
 }
 
 export interface ITranscript {
-  readonly type: 'user' | 'ai'
-  readonly text: string
   readonly id: string
+  readonly text: string
+  readonly type: 'user' | 'ai'
 }
 
 export interface IState {
@@ -53,8 +53,8 @@ export interface IState {
   readonly inProgress: boolean
   readonly isTest: boolean
   readonly serverId: string
-  readonly uid: number
   readonly transcripts: readonly ITranscript[]
+  readonly uid: number
 }
 
 export const createInstance = async (
@@ -67,8 +67,8 @@ export const createInstance = async (
     inProgress: false,
     isTest: false,
     serverId: crypto.randomUUID(),
-    uid: -1,
     transcripts: [],
+    uid: -1,
   }
 
   const requestRerender = (): void => {
@@ -78,6 +78,13 @@ export const createInstance = async (
   }
 
   const instance: ActiveGptVoiceViewInstance = {
+    addTranscript(id, value, type = 'ai') {
+      state = {
+        ...state,
+        transcripts: [...state.transcripts, { id, text: value, type }],
+      }
+      context?.requestRerender()
+    },
     async doAnimate() {
       while (state.animationEnabled) {
         try {
@@ -226,6 +233,17 @@ export const createInstance = async (
         isTest: true,
       }
     },
+    async stop() {
+      state = {
+        ...state,
+        inProgress: false,
+      }
+      if (!state.isTest) {
+        await stopWebRtcAudioStream(state.uid)
+      }
+      await context?.requestRerender()
+    },
+
     updateTranscript(id, value) {
       const index = state.transcripts.findIndex((item) => item.id === id)
       if (index === -1) {
@@ -240,24 +258,6 @@ export const createInstance = async (
         ],
       }
       context?.requestRerender()
-    },
-    addTranscript(id, value, type = 'ai') {
-      state = {
-        ...state,
-        transcripts: [...state.transcripts, { id, type, text: value }],
-      }
-      context?.requestRerender()
-    },
-
-    async stop() {
-      state = {
-        ...state,
-        inProgress: false,
-      }
-      if (!state.isTest) {
-        await stopWebRtcAudioStream(state.uid)
-      }
-      await context?.requestRerender()
     },
   }
   return instance
