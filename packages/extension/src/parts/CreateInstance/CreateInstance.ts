@@ -31,6 +31,7 @@ export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly getContext: () => Readonly<Record<string, boolean>>
   readonly getCss: () => string
   readonly getMenuEntries: (menuId: string) => readonly MenuEntry[]
+  readonly debugData: () => void
   readonly handleClickStart: () => Promise<void>
   readonly handleData: (data: string) => void
   readonly renderTitle: () => string
@@ -54,6 +55,7 @@ export interface IState {
   readonly isTest: boolean
   readonly serverId: string
   readonly transcripts: readonly ITranscript[]
+  readonly parsedData: readonly any[]
   readonly uid: number
 }
 
@@ -69,6 +71,7 @@ export const createInstance = async (
     serverId: crypto.randomUUID(),
     transcripts: [],
     uid: -1,
+    parsedData: [],
   }
 
   const requestRerender = (): void => {
@@ -105,6 +108,9 @@ export const createInstance = async (
     },
     getContext() {
       return {}
+    },
+    debugData() {
+      console.info(state.parsedData)
     },
     getCss() {
       return `.GptVoice {
@@ -170,6 +176,10 @@ export const createInstance = async (
     },
     handleData(data: string): void {
       const parsed = JSON.parse(data)
+      state = {
+        ...state,
+        parsedData: [...state.parsedData, parsed],
+      }
 
       if (parsed && parsed.type === 'response.output_audio_transcript.delta') {
         const entry = state.transcripts.find((item) => item.id)

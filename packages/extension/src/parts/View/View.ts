@@ -32,6 +32,10 @@ export const view: TrelloView = {
       await context.stop()
       return context
     },
+    async debugData(context) {
+      context.debugData()
+      return context
+    },
   },
   create: createInstance,
   displayName: 'Gpt Voice',

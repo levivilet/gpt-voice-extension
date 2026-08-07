@@ -19,7 +19,8 @@
     "onCommand:GptVoice.setIsTest",
     "onCommand:GptVoice.setAnimation",
     "onCommand:GptVoice.addTranscript",
-    "onCommand:GptVoice.stop"
+    "onCommand:GptVoice.stop",
+    "onCommand:GptVoice.debugData"
   ],
   "commands": [
     {
@@ -37,6 +38,10 @@
     {
       "id": "GptVoice.addTranscript",
       "label": "gpt-voice: add Transcript"
+    },
+    {
+      "id": "GptVoice.debugData",
+      "label": "gpt-voice: Debug"
     },
     {
       "id": "GptVoice.stop",
