@@ -29,7 +29,11 @@ export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly handleClickStart: () => Promise<void>
   readonly handleData: (data: string) => void
   readonly updateTranscript: (id: string, value: string) => void
-  readonly addTranscript: (id: string, value: string) => void
+  readonly addTranscript: (
+    id: string,
+    value: string,
+    type: 'user' | 'ai',
+  ) => void
   readonly renderTitle: () => string
   readonly setAnimation: (enabled: boolean, scale: number) => void
   readonly setIsTest: () => void
@@ -159,13 +163,26 @@ export const createInstance = async (
     },
     handleData(data: string): void {
       const parsed = JSON.parse(data)
+      globalThis.__alData ||= []
+      globalThis.__alData.push(parsed)
       console.log({ parsed })
       if (parsed && parsed.type === 'response.output_audio_transcript.delta') {
         const entry = state.transcripts.find((item) => item.id)
         if (entry) {
           instance.updateTranscript(entry.id, entry.text + parsed.delta)
         } else {
-          instance.addTranscript(parsed.id, parsed.delta)
+          instance.addTranscript(parsed.item_id, parsed.delta, 'ai')
+        }
+      }
+      if (
+        parsed &&
+        parsed.type === 'conversation.item.input_audio_transcription.delta'
+      ) {
+        const entry = state.transcripts.find((item) => item.id)
+        if (entry) {
+          instance.updateTranscript(entry.id, entry.text + parsed.delta)
+        } else {
+          instance.addTranscript(parsed.item_id, parsed.delta, 'user')
         }
       }
     },
@@ -226,10 +243,10 @@ export const createInstance = async (
       }
       context?.requestRerender()
     },
-    addTranscript(id, value) {
+    addTranscript(id, value, type = 'ai') {
       state = {
         ...state,
-        transcripts: [...state.transcripts, { id, type: 'ai', text: value }],
+        transcripts: [...state.transcripts, { id, type, text: value }],
       }
       context?.requestRerender()
     },
