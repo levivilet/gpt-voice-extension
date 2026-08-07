@@ -19,7 +19,7 @@ export const test: Test = async ({
   await Command.executeExtensionCommand('GptVoice.handleClickStart')
 
   // act
-  await Command.executeExtensionCommand('GptVoice.handleClickStop')
+  await Command.executeExtensionCommand('GptVoice.stop')
 
   // assert
   const listeningBubble = Locator('.GptVoiceBubble.listening')
