@@ -163,9 +163,7 @@ export const createInstance = async (
     },
     handleData(data: string): void {
       const parsed = JSON.parse(data)
-      globalThis.__alData ||= []
-      globalThis.__alData.push(parsed)
-      console.log({ parsed })
+
       if (parsed && parsed.type === 'response.output_audio_transcript.delta') {
         const entry = state.transcripts.find((item) => item.id)
         if (entry) {
