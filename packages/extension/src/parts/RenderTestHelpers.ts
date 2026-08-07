@@ -1,5 +1,5 @@
-import type { IState } from '../src/parts/CreateInstance/CreateInstance.ts'
-import { RealtimeModelPreset } from '../src/parts/WebRtc/WebRtc.ts'
+import type { IState } from './CreateInstance/CreateInstance.ts'
+import { RealtimeModelPreset } from './WebRtc/WebRtc.ts'
 
 export const createRenderState = (state: Partial<IState> = {}): IState => {
   return {

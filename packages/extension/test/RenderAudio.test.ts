@@ -1,6 +1,6 @@
 import { test, expect } from '@jest/globals'
 import { VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
-import { createRenderState } from './RenderTestHelpers.ts'
+import { createRenderState } from '../src/parts/RenderTestHelpers.ts'
 import { renderAudio } from '../src/parts/RenderAudio/RenderAudio.ts'
 
 test('renderAudio - returns single audio node', () => {

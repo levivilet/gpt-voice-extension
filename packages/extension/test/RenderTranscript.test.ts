@@ -1,10 +1,7 @@
 import { test, expect } from '@jest/globals'
-import {
-  text,
-  VirtualDomElements,
-} from '@lvce-editor/virtual-dom-worker'
+import { text, VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
 import type { ITranscript } from '../src/parts/CreateInstance/CreateInstance.ts'
-import { createRenderState } from './RenderTestHelpers.ts'
+import { createRenderState } from '../src/parts/RenderTestHelpers.ts'
 import { renderTranscript } from '../src/parts/RenderTranscript/RenderTranscript.ts'
 
 test('renderTranscript - empty list', () => {
