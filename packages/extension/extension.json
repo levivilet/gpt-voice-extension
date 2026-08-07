@@ -17,11 +17,8 @@
     "onView:gpt-voice.views.default",
     "onCommand:GptVoice.handleClickStart",
     "onCommand:GptVoice.setIsTest",
-<<<<<<< HEAD
     "onCommand:GptVoice.setAnimation",
-=======
     "onCommand:GptVoice.setTranscript",
->>>>>>> origin/main
     "onCommand:GptVoice.stop"
   ],
   "commands": [
@@ -34,13 +31,12 @@
       "label": "gpt-voice: setIsTest"
     },
     {
-<<<<<<< HEAD
       "id": "GptVoice.setAnimation",
       "label": "gpt-voice: setAnimation"
-=======
+    },
+    {
       "id": "GptVoice.setTranscript",
       "label": "gpt-voice: set Transcript"
->>>>>>> origin/main
     },
     {
       "id": "GptVoice.stop",
