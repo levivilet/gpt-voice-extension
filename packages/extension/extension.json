@@ -16,7 +16,7 @@
   "activation": [
     "onView:gpt-voice.views.default",
     "onCommand:GptVoice.handleClickStart",
-    "onCommand:GptVoice.setIsTest"
+    "onCommand:GptVoice.setIsTest",
     "onCommand:GptVoice.stop"
   ],
   "commands": [
