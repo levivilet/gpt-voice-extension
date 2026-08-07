@@ -135,6 +135,7 @@ export const createInstance = async (
     },
 
     async stop() {
+      console.log(`stop called...`)
       state.inProgress = false
       await stopWebRtcAudioStream(state.uid)
       await context?.requestRerender()
