@@ -82,6 +82,7 @@
   font-size: 15px;
   line-height: 1.5;
   white-space: normal;
+  overflow-y: auto;
 }
 .GptVoiceTranscript .line {
   margin-bottom: 10px;
