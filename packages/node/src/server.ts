@@ -1,6 +1,6 @@
 import type { Server } from 'http'
 import { configDotenv } from 'dotenv'
-import express from 'express'
+import express, { type Request, type Response } from 'express'
 import path, { join } from 'path'
 import { fileURLToPath } from 'url'
 
@@ -12,6 +12,7 @@ configDotenv({
 })
 
 const app = express()
+app.use(express.json())
 app.use(express.static(path.join(__dirname, 'public')))
 
 if (!process.env.OPENAI_API_KEY) {
@@ -23,9 +24,9 @@ if (!process.env.OPENAI_API_KEY) {
 
 app.use(express.static(path.join(__dirname, 'public')))
 
-// Session config: which model, voice, and transcription settings to use.
-// input.transcription turns on live speech-to-text for the user's mic audio.
-const sessionConfig = {
+// Browser calls this to get a short-lived ephemeral key (expires in ~1 min,
+// but that's fine — it's only used to open the WebRTC connection).
+const DEFAULT_SESSION_CONFIG = {
   session: {
     audio: {
       input: {
@@ -40,9 +41,21 @@ const sessionConfig = {
   },
 }
 
-// Browser calls this to get a short-lived ephemeral key (expires in ~1 min,
-// but that's fine — it's only used to open the WebRTC connection).
-app.get('/token', async (req, res) => {
+const isObject = (value: unknown): value is Record<string, unknown> => {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
+const extractSessionConfig = (body: unknown) => {
+  if (!isObject(body)) {
+    return DEFAULT_SESSION_CONFIG
+  }
+  if (!('session' in body)) {
+    return DEFAULT_SESSION_CONFIG
+  }
+  return body
+}
+
+const sendToken = async (res: Response, sessionConfig: unknown) => {
   try {
     const response = await fetch(
       'https://api.openai.com/v1/realtime/client_secrets',
@@ -69,6 +82,15 @@ app.get('/token', async (req, res) => {
     console.error('Token generation error:', error)
     res.status(500).json({ error: 'Failed to generate token' })
   }
+}
+
+app.get('/token', async (req, res) => {
+  await sendToken(res, DEFAULT_SESSION_CONFIG)
+})
+
+app.post('/token', async (req: Request<unknown>, res) => {
+  const sessionConfig = extractSessionConfig(req.body)
+  await sendToken(res, sessionConfig)
 })
 
 const servers: Record<string, Server> = Object.create(null)

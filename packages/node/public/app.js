@@ -3,6 +3,21 @@ const statusEl = document.getElementById('status')
 const bubble = document.getElementById('bubble')
 const transcriptEl = document.getElementById('transcript')
 
+const defaultSessionConfig = {
+  session: {
+    audio: {
+      input: {
+        transcription: { model: 'gpt-4o-transcribe' },
+      },
+      output: {
+        voice: 'marin',
+      },
+    },
+    model: 'gpt-realtime-2.1',
+    type: 'realtime',
+  },
+}
+
 let pc = null
 let dc = null
 let micStream = null
@@ -106,7 +121,13 @@ async function start() {
   statusEl.textContent = 'connecting…'
 
   // 1. Get a short-lived ephemeral key from our own backend.
-  const tokenRes = await fetch('/token')
+  const tokenRes = await fetch('/token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(defaultSessionConfig),
+  })
   const tokenData = await tokenRes.json()
   if (!tokenRes.ok) {
     statusEl.textContent = 'error — check server logs / API key'
