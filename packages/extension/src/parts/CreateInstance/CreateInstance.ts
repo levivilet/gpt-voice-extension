@@ -25,6 +25,8 @@ export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly handleClickStart: () => Promise<void>
   readonly handleData: (data: string) => void
   readonly renderTitle: () => string
+  readonly setIsTest: () => void
+  readonly setTranscript: (value: string) => void
   readonly stop: () => Promise<void>
 }
 
@@ -33,6 +35,7 @@ export const createInstance = async (
 ): Promise<ActiveGptVoiceViewInstance> => {
   const state = {
     inProgress: false,
+    isTest: false,
     serverId: crypto.randomUUID(),
     transcribedText: ``,
     uid: -1,
@@ -65,6 +68,10 @@ export const createInstance = async (
         }
         state.inProgress = !state.inProgress
 
+        if (state.isTest) {
+          return
+        }
+
         const ephemeralKey = await getEphemeralKey(state.serverId)
         const offerSdp = await startWebRtcAudioStream({
           elementLocator: '.GptVoiceAudio',
@@ -92,8 +99,7 @@ export const createInstance = async (
     handleData(data: string): void {
       const parsed = JSON.parse(data)
       if (parsed && parsed.type === 'response.output_audio_transcript.delta') {
-        state.transcribedText += parsed.delta
-        requestRerender()
+        instance.setTranscript(state.transcribedText + parsed.delta)
       }
     },
     render() {
@@ -124,9 +130,20 @@ export const createInstance = async (
     saveState(): unknown {
       return {}
     },
+    setIsTest() {
+      state.isTest = true
+    },
+    setTranscript(value) {
+      state.transcribedText = value
+      context?.requestRerender()
+    },
 
     async stop() {
-      await stopWebRtcAudioStream(state.uid)
+      state.inProgress = false
+      if (!state.isTest) {
+        await stopWebRtcAudioStream(state.uid)
+      }
+      await context?.requestRerender()
     },
   }
   return instance
