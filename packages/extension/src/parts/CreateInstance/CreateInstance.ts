@@ -70,6 +70,10 @@ export const createInstance = async (
         }
         state.inProgress = !state.inProgress
 
+        if (state.isTest) {
+          return
+        }
+
         const ephemeralKey = await getEphemeralKey(state.serverId)
         const offerSdp = await startWebRtcAudioStream({
           elementLocator: '.GptVoiceAudio',
