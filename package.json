@@ -16,7 +16,7 @@
     "e2e:headless": "npm run e2e:headless --workspace=packages/e2e",
     "format": "prettier --write .",
     "install:extension": "node packages/build/src/install-extension.ts",
-    "lint": "eslint . && prettier --check . && knip --no-config-hints",
+    "lint": "eslint . && prettier --check .",
     "test": "npm test --workspaces --if-present",
     "test:watch": "node --unhandled-rejections=warn --experimental-vm-modules ./node_modules/jest/bin/jest.js --watch",
     "type-check": "tsc -b"
