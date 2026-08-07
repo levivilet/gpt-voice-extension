@@ -11,7 +11,12 @@ type TrelloView = Omit<View<ActiveGptVoiceViewInstance>, 'commands'> & {
 }
 
 export const view: TrelloView = {
-  commands: {},
+  commands: {
+    async 'GptVoice.handleClickStart'(context) {
+      await context.handleClickStart()
+      return context
+    },
+  },
   create: createInstance,
   displayName: 'Gpt Voice',
   eventListeners: renderEventListeners(),
