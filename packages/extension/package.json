@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@jest/globals": "^30.4.1",
-    "@lvce-editor/api": "file:///home/simon/Documents/levivilet/extension-host-worker/.tmp/dist/extension-api",
+    "@lvce-editor/api": "^8.44.1",
     "@lvce-editor/i18n": "^2.8.0",
     "@lvce-editor/virtual-dom-worker": "^11.12.1",
     "jest": "^30.4.2",
