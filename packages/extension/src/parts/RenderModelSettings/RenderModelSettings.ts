@@ -6,7 +6,7 @@ import {
 import { RealtimeModelPreset } from '../WebRtc/WebRtc.ts'
 
 export const renderModelSettings = (
-  state: { sessionModel: RealtimeModelPreset },
+  state: Readonly<{ sessionModel: RealtimeModelPreset }>,
 ): readonly VirtualDomNode[] => {
   return [
     {

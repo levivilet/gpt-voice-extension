@@ -5,7 +5,7 @@ export enum RealtimeModelPreset {
   Standard = 'gpt-realtime-2.1',
 }
 
-const getTranscriptionModel = (sessionModel: RealtimeModelPreset) => {
+const getTranscriptionModel = (sessionModel: RealtimeModelPreset): string => {
   if (sessionModel === RealtimeModelPreset.Mini) {
     return 'gpt-4o-mini-transcribe'
   }
@@ -14,7 +14,26 @@ const getTranscriptionModel = (sessionModel: RealtimeModelPreset) => {
 
 export const defaultSessionModel: RealtimeModelPreset = RealtimeModelPreset.Mini
 
-export const createSessionConfig = (sessionModel: RealtimeModelPreset) => {
+type SessionConfig = {
+  readonly session: {
+    readonly audio: {
+      readonly input: {
+        readonly transcription: {
+          readonly model: 'gpt-4o-mini-transcribe' | 'gpt-4o-transcribe'
+        }
+      }
+      readonly output: {
+        readonly voice: 'marin'
+      }
+    }
+    readonly model: RealtimeModelPreset
+    readonly type: 'realtime'
+  }
+}
+
+export const createSessionConfig = (
+  sessionModel: RealtimeModelPreset,
+): SessionConfig => {
   return {
     session: {
       audio: {
