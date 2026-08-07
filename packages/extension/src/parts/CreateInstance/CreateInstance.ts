@@ -66,6 +66,7 @@ export interface IState {
   readonly inProgress: boolean
   readonly isTest: boolean
   readonly parsedData: readonly any[]
+  readonly transcribedText: string
   readonly serverId: string
   readonly sessionModel: RealtimeModelPreset
   readonly transcripts: readonly ITranscript[]
@@ -79,6 +80,7 @@ export const createInstance = async (
     animationEnabled: false,
     animationFrame: -1,
     animationScale: 1,
+    transcribedText: '',
     inProgress: false,
     isTest: false,
     parsedData: [],
@@ -181,7 +183,7 @@ export const createInstance = async (
         )
         const { port1, port2 } = new MessageChannel()
         // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
-        port2.onmessage = ({ data }: MessageEvent): void => {
+        port2.onmessage = (event: MessageEvent): void => {
           const portData =
             typeof event.data === 'string'
               ? event.data

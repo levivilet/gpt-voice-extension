@@ -6,6 +6,7 @@ export const createRenderState = (state: Partial<IState> = {}): IState => {
     animationEnabled: false,
     animationFrame: -1,
     animationScale: 1,
+    transcribedText: '',
     inProgress: false,
     isTest: false,
     parsedData: [],
