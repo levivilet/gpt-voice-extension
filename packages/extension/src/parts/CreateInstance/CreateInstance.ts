@@ -66,7 +66,6 @@ export const createInstance = async (
         state.inProgress = !state.inProgress
 
         const ephemeralKey = await getEphemeralKey(state.serverId)
-        console.log({ ephemeralKey })
         const offerSdp = await startWebRtcAudioStream({
           elementLocator: '.GptVoiceAudio',
           ephemeralKey,
@@ -90,9 +89,8 @@ export const createInstance = async (
         console.error(error)
       }
     },
-    async handleData(data: string) {
+    async handleData(data: string): Promise<void> {
       const parsed = JSON.parse(data)
-      console.log(parsed)
       if (parsed && parsed.type === 'response.output_audio_transcript.delta') {
         state.transcribedText += parsed.delta
         requestRerender()
