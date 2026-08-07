@@ -138,6 +138,7 @@ export const createInstance = async (
     setAnimation(enabled, scale) {
       state.animationEnabled = enabled
       state.animationScale = scale
+      context?.requestRerender()
     },
     setIsTest() {
       state.isTest = true
