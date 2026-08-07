@@ -58,6 +58,9 @@ export const createSessionConfig = (
     session: {
       audio: {
         input: {
+          noise_reduction: {
+            type: 'near_field',
+          },
           transcription: { model: getTranscriptionModel(sessionModel) },
           turn_detection: {
             create_response: true,
@@ -66,9 +69,6 @@ export const createSessionConfig = (
             silence_duration_ms: 800,
             threshold: 0.7,
             type: 'server_vad',
-          },
-          noise_reduction: {
-            type: 'near_field',
           },
         },
         output: {

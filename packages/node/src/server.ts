@@ -41,6 +41,9 @@ const DEFAULT_SESSION_CONFIG = {
   session: {
     audio: {
       input: {
+        noise_reduction: {
+          type: 'near_field',
+        },
         transcription: { model: 'gpt-4o-mini-transcribe' },
         turn_detection: {
           create_response: true,
@@ -49,9 +52,6 @@ const DEFAULT_SESSION_CONFIG = {
           silence_duration_ms: 800,
           threshold: 0.7,
           type: 'server_vad',
-        },
-        noise_reduction: {
-          type: 'near_field',
         },
       },
       output: {
