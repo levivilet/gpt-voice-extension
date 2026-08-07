@@ -15,7 +15,7 @@ export const renderModelSettings = (
       type: VirtualDomElements.Div,
     },
     {
-      childCount: 0,
+      childCount: 1,
       className: 'GptVoiceModelSettingsLabel',
       type: VirtualDomElements.Div,
     },
