@@ -35,21 +35,13 @@ export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly stop: () => Promise<void>
 }
 
-<<<<<<< Updated upstream
-interface ITranscript {
-=======
 export interface ITranscript {
->>>>>>> Stashed changes
   readonly type: 'user' | 'ai'
   readonly text: string
   readonly id: string
 }
 
-<<<<<<< Updated upstream
-interface IState {
-=======
 export interface IState {
->>>>>>> Stashed changes
   readonly animationEnabled: boolean
   readonly animationFrame: number
   readonly animationScale: number
