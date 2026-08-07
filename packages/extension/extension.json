@@ -13,11 +13,18 @@
   ],
   "categories": ["Other"],
   "configuration": {},
-  "activation": ["onView:gpt-voice.views.default"],
+  "activation": [
+    "onView:gpt-voice.views.default",
+    "onCommand:GptVoice.handleClickStart"
+  ],
   "commands": [
     {
       "id": "gpt-voice.show",
       "label": "gpt-voice: Show"
+    },
+    {
+      "id": "GptVoice.handleClickStart",
+      "label": "gpt-voice: Handle Click Start"
     }
   ],
   "keybindings": [],
