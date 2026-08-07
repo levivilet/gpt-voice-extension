@@ -22,6 +22,17 @@ if (!process.env.OPENAI_API_KEY) {
   )
 }
 
+app.use((_req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*') // TODO: lock this down in production
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
+  next()
+})
+
+app.options('/token', (_req, res) => {
+  res.status(204).end()
+})
+
 app.use(express.static(path.join(__dirname, 'public')))
 
 // Browser calls this to get a short-lived ephemeral key (expires in ~1 min,
@@ -73,10 +84,6 @@ const sendToken = async (res: Response, sessionConfig: unknown) => {
       console.error('Token error:', data)
       return res.status(response.status).json(data)
     }
-    res.setHeader(
-      'Access-Control-Allow-Origin',
-      '*', // TODO
-    )
     res.json(data)
   } catch (error) {
     console.error('Token generation error:', error)
