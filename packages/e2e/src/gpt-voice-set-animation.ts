@@ -16,5 +16,9 @@ export const test: Test = async ({ Command, expect, Locator, SideBar }) => {
   // assert
   const bubble = Locator('.GptVoiceBubble')
   await expect(bubble).toBeVisible()
-  await expect(bubble).toHaveCSS(`transform`, `scale(2.1)`)
+  // TODO avoid timeout
+  await new Promise((r) => {
+    setTimeout(r, 500)
+  })
+  await expect(bubble).toHaveCSS(`transform`, `matrix(2.1, 0, 0, 2.1, 0, 0)`)
 }
