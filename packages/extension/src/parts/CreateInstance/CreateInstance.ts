@@ -34,6 +34,8 @@ export const createInstance = async (
   context?: ViewContext,
 ): Promise<ActiveGptVoiceViewInstance> => {
   const state = {
+    animationEnabled: false,
+    animationScale: 1,
     inProgress: false,
     isTest: false,
     serverId: crypto.randomUUID(),
