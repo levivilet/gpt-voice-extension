@@ -18,6 +18,8 @@
     "onCommand:GptVoice.handleClickStart",
     "onCommand:GptVoice.setIsTest",
     "onCommand:GptVoice.setAnimation",
+    "onCommand:GptVoice.setRealtimeModelMini",
+    "onCommand:GptVoice.setRealtimeModelStandard",
     "onCommand:GptVoice.addTranscript",
     "onCommand:GptVoice.stop",
     "onCommand:GptVoice.debugData"
@@ -34,6 +36,14 @@
     {
       "id": "GptVoice.setAnimation",
       "label": "gpt-voice: setAnimation"
+    },
+    {
+      "id": "GptVoice.setRealtimeModelMini",
+      "label": "gpt-voice: setRealtimeModelMini"
+    },
+    {
+      "id": "GptVoice.setRealtimeModelStandard",
+      "label": "gpt-voice: setRealtimeModelStandard"
     },
     {
       "id": "GptVoice.addTranscript",

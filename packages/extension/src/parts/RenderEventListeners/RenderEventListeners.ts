@@ -11,5 +11,13 @@ export const renderEventListeners = (): readonly DomEventListener[] => {
       name: 'handleClickStart',
       params: ['handleClickStart'],
     },
+    {
+      name: 'setRealtimeModelMini',
+      params: ['setRealtimeModelMini'],
+    },
+    {
+      name: 'setRealtimeModelStandard',
+      params: ['setRealtimeModelStandard'],
+    },
   ]
 }

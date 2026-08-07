@@ -1,19 +1,60 @@
 import * as Rpc from '../Rpc/Rpc.ts'
 
-export const defaultSessionConfig = {
-  session: {
-    audio: {
-      input: {
-        transcription: { model: 'gpt-4o-transcribe' },
-      },
-      output: {
-        voice: 'marin',
-      },
-    },
-    model: 'gpt-realtime-2.1',
-    type: 'realtime',
-  },
+export enum RealtimeModelPreset {
+  Mini = 'gpt-realtime-2.1-mini',
+  Standard = 'gpt-realtime-2.1',
 }
+
+type TranscriptionModel = 'gpt-4o-mini-transcribe' | 'gpt-4o-transcribe'
+
+const getTranscriptionModel = (
+  sessionModel: RealtimeModelPreset,
+): TranscriptionModel => {
+  if (sessionModel === RealtimeModelPreset.Mini) {
+    return 'gpt-4o-mini-transcribe'
+  }
+  return 'gpt-4o-transcribe'
+}
+
+export const defaultSessionModel: RealtimeModelPreset = RealtimeModelPreset.Mini
+
+type SessionConfig = {
+  readonly session: {
+    readonly audio: {
+      readonly input: {
+        readonly transcription: {
+          readonly model: TranscriptionModel
+        }
+      }
+      readonly output: {
+        readonly voice: 'marin'
+      }
+    }
+    readonly model: RealtimeModelPreset
+    readonly type: 'realtime'
+  }
+}
+
+export const createSessionConfig = (
+  sessionModel: RealtimeModelPreset,
+): SessionConfig => {
+  return {
+    session: {
+      audio: {
+        input: {
+          transcription: { model: getTranscriptionModel(sessionModel) },
+        },
+        output: {
+          voice: 'marin',
+        },
+      },
+      model: sessionModel,
+      type: 'realtime',
+    },
+  }
+}
+
+export const defaultSessionConfig = createSessionConfig(defaultSessionModel)
 
 export const getEphemeralKey = async (
   serverId: string,

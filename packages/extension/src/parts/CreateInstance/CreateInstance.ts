@@ -19,7 +19,13 @@ import { animateBubble } from '../AnimateBubble/AnimateBubble.ts'
 import { getTitle } from '../GetTitle/GetTitle.ts'
 import { readLevel } from '../ReadLevel/ReadLevel.ts'
 import { render } from '../Render/Render.ts'
-import { getEphemeralKey, getSdp } from '../WebRtc/WebRtc.ts'
+import {
+  createSessionConfig,
+  defaultSessionModel,
+  getEphemeralKey,
+  RealtimeModelPreset,
+  getSdp,
+} from '../WebRtc/WebRtc.ts'
 
 export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly addTranscript: (
@@ -40,6 +46,8 @@ export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly renderTitle: () => string
   readonly setAnimation: (enabled: boolean, scale: number) => void
   readonly setIsTest: () => void
+  readonly setRealtimeModelMini: () => void
+  readonly setRealtimeModelStandard: () => void
   readonly stop: () => Promise<void>
   readonly updateTranscript: (id: string, value: string) => void
 }
@@ -58,6 +66,7 @@ export interface IState {
   readonly isTest: boolean
   readonly parsedData: readonly any[]
   readonly serverId: string
+  readonly sessionModel: RealtimeModelPreset
   readonly transcripts: readonly ITranscript[]
   readonly uid: number
 }
@@ -73,6 +82,7 @@ export const createInstance = async (
     isTest: false,
     parsedData: [],
     serverId: crypto.randomUUID(),
+    sessionModel: defaultSessionModel,
     transcripts: [],
     uid: -1,
   }
@@ -156,7 +166,10 @@ export const createInstance = async (
           return
         }
 
-        const ephemeralKey = await getEphemeralKey(state.serverId)
+        const ephemeralKey = await getEphemeralKey(
+          state.serverId,
+          createSessionConfig(state.sessionModel),
+        )
         const offerSdp = await startWebRtcAudioStream({
           elementLocator: '.GptVoiceAudio',
           ephemeralKey,
@@ -254,6 +267,32 @@ export const createInstance = async (
         ...state,
         isTest: true,
       }
+    },
+    setRealtimeModelMini() {
+      if (state.inProgress) {
+        return
+      }
+      if (state.sessionModel === RealtimeModelPreset.Mini) {
+        return
+      }
+      state = {
+        ...state,
+        sessionModel: RealtimeModelPreset.Mini,
+      }
+      requestRerender()
+    },
+    setRealtimeModelStandard() {
+      if (state.inProgress) {
+        return
+      }
+      if (state.sessionModel === RealtimeModelPreset.Standard) {
+        return
+      }
+      state = {
+        ...state,
+        sessionModel: RealtimeModelPreset.Standard,
+      }
+      requestRerender()
     },
     async stop() {
       state = {
