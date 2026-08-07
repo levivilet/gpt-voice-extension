@@ -28,6 +28,8 @@ export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly getMenuEntries: (menuId: string) => readonly MenuEntry[]
   readonly handleClickStart: () => Promise<void>
   readonly handleData: (data: string) => void
+  readonly updateTranscript: (id: string, value: string) => void
+  readonly addTranscript: (id: string, value: string) => void
   readonly renderTitle: () => string
   readonly setAnimation: (enabled: boolean, scale: number) => void
   readonly setIsTest: () => void
@@ -197,12 +199,18 @@ export const createInstance = async (
       return {}
     },
     setAnimation(enabled, scale) {
-      state.animationEnabled = enabled
-      state.animationScale = scale
+      state = {
+        ...state,
+        animationEnabled: false,
+        animationScale: scale,
+      }
       context?.requestRerender()
     },
     setIsTest() {
-      state.isTest = true
+      state = {
+        ...state,
+        isTest: true,
+      }
     },
     updateTranscript(id, value) {
       const index = state.transcripts.findIndex((item) => item.id === id)
@@ -228,7 +236,10 @@ export const createInstance = async (
     },
 
     async stop() {
-      state.inProgress = false
+      state = {
+        ...state,
+        inProgress: false,
+      }
       if (!state.isTest) {
         await stopWebRtcAudioStream(state.uid)
       }
