@@ -125,9 +125,9 @@ test('render - returns welcome form when API key is missing', () => {
       name: 'openAiApiKey',
       onInput: 'handleOpenAiApiKeyInput',
       placeholder: 'sk-...',
+      inputType: 'password',
       type: VirtualDomElements.Input,
       value: '',
-      inputType: 'password',
     },
     {
       childCount: 1,

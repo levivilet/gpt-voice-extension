@@ -16,20 +16,20 @@ export const view: GptVoiceView = {
       context.addTranscript(id, value, 'ai')
       return context
     },
-    async 'GptVoice.handleClearOpenAiApiKey'(context) {
-      await context.handleClearOpenAiApiKey()
-      return context
-    },
     async 'GptVoice.debugData'(context) {
       context.debugData()
+      return context
+    },
+    async 'GptVoice.handleClearOpenAiApiKey'(context) {
+      await context.handleClearOpenAiApiKey()
       return context
     },
     async 'GptVoice.handleClickStart'(context) {
       await context.handleClickStart()
       return context
     },
-    async 'GptVoice.handleOpenAiApiKeyInput'(context, value: string) {
-      await context.handleOpenAiApiKeyInput(value)
+    'GptVoice.handleOpenAiApiKeyInput'(context, value: string) {
+      context.handleOpenAiApiKeyInput(value)
       return context
     },
     async 'GptVoice.handleSaveOpenAiApiKey'(context) {

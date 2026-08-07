@@ -11,6 +11,12 @@ export const renderButton = (state: {
   readonly isSavingApiKey: boolean
 }): readonly VirtualDomNode[] => {
   if (!state.hasOpenAiApiKey || state.isCreatingToken || state.isSavingApiKey) {
+    let label = 'Start talking'
+    if (state.isCreatingToken) {
+      label = 'Creating token'
+    } else if (state.isSavingApiKey) {
+      label = 'Saving key'
+    }
     return [
       {
         childCount: 1,
@@ -20,13 +26,7 @@ export const renderButton = (state: {
         onClick: 'handleClickStart',
         type: VirtualDomElements.Button,
       },
-      text(
-        state.isCreatingToken
-          ? 'Creating token'
-          : state.isSavingApiKey
-            ? 'Saving key'
-            : 'Start talking',
-      ),
+      text(label),
     ]
   }
 

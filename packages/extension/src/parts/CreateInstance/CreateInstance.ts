@@ -1,9 +1,9 @@
-import * as ExtensionApi from '@lvce-editor/api'
 import type {
   ViewContext,
   ViewSelection,
   VirtualDomViewInstance,
 } from '@lvce-editor/api'
+import * as ExtensionApi from '@lvce-editor/api'
 import {
   setRemoteDescription,
   startWebRtcAudioStream,
@@ -19,12 +19,11 @@ import type { MenuEntry } from '../MenuEntries/MenuEntries.ts'
 import { animateBubble } from '../AnimateBubble/AnimateBubble.ts'
 import { handleFunctionCall } from '../FunctionCalling/FunctionCalling.ts'
 import { getTitle } from '../GetTitle/GetTitle.ts'
-import { readLevel } from '../ReadLevel/ReadLevel.ts'
-import { render } from '../Render/Render.ts'
 import {
   createOpenAiApiKeyStorage,
-  type SecretStorageApi,
 } from '../OpenAiApiKeyStorage/OpenAiApiKeyStorage.ts'
+import { readLevel } from '../ReadLevel/ReadLevel.ts'
+import { render } from '../Render/Render.ts'
 import {
   createSessionConfig,
   defaultSessionModel,
@@ -42,6 +41,9 @@ export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly createOrUpdateTranscript: (parsed: any, type: 'user' | 'ai') => void
   readonly debugData: () => void
   readonly doAnimate: () => Promise<void>
+  readonly getContext: () => Readonly<Record<string, boolean>>
+  readonly getCss: () => string
+  readonly getMenuEntries: (menuId: string) => readonly MenuEntry[]
   readonly handleClearOpenAiApiKey: () => Promise<void>
   readonly handleClickStart: () => Promise<void>
   readonly handleData: (data: string) => void
@@ -49,9 +51,6 @@ export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly handleOpenAiApiKeyInput: (value: string) => void
   readonly handleOutputTranscript: (parsed: any) => void
   readonly handleSaveOpenAiApiKey: () => Promise<void>
-  readonly getContext: () => Readonly<Record<string, boolean>>
-  readonly getCss: () => string
-  readonly getMenuEntries: (menuId: string) => readonly MenuEntry[]
   readonly renderTitle: () => string
   readonly setAnimation: (enabled: boolean, scale: number) => void
   readonly setIsTest: () => void
@@ -71,8 +70,8 @@ export interface IState {
   readonly animationEnabled: boolean
   readonly animationFrame: number
   readonly animationScale: number
-  readonly apiKeyInput: string
   readonly apiKeyError: string
+  readonly apiKeyInput: string
   readonly hasOpenAiApiKey: boolean
   readonly inProgress: boolean
   readonly isCreatingToken: boolean
@@ -105,16 +104,16 @@ const createTokenErrorMessage = (error: unknown): string => {
 const getMissingApiKeyMessage = (): string =>
   'NO_API_KEY: Add your OpenAI API key above to start.'
 
+const openAiApiKeyRegex = /^sk-[A-Za-z0-9_-]{10,}$/
+
 const isLikelyOpenAiApiKey = (value: string): boolean => {
-  return /^sk-[A-Za-z0-9_-]{10,}$/.test(value)
+  return openAiApiKeyRegex.test(value)
 }
 
 export const createInstance = async (
   context?: ViewContext,
 ): Promise<ActiveGptVoiceViewInstance> => {
-  const openAiApiKeyStorage = createOpenAiApiKeyStorage(
-    ExtensionApi as SecretStorageApi,
-  )
+  const openAiApiKeyStorage = createOpenAiApiKeyStorage(ExtensionApi)
   let hasOpenAiApiKey = false
   try {
     const existingApiKey = await openAiApiKeyStorage.read()
@@ -226,18 +225,6 @@ export const createInstance = async (
     getMenuEntries() {
       return []
     },
-    handleOpenAiApiKeyInput(value: string): void {
-      if (state.isSavingApiKey) {
-        return
-      }
-      state = {
-        ...state,
-        apiKeyInput: typeof value === 'string' ? value : '',
-        apiKeyError: '',
-        tokenError: '',
-      }
-      context?.requestRerender()
-    },
     async handleClearOpenAiApiKey(): Promise<void> {
       if (state.inProgress || state.isCreatingToken || state.isSavingApiKey) {
         return
@@ -261,8 +248,8 @@ export const createInstance = async (
       } catch {
         state = {
           ...state,
-          isSavingApiKey: false,
           apiKeyError: 'Failed to clear OpenAI API key.',
+          isSavingApiKey: false,
         }
       }
       requestRerender()
@@ -375,6 +362,18 @@ export const createInstance = async (
         console.error(error)
         requestRerender()
       }
+    },
+    handleOpenAiApiKeyInput(value: string): void {
+      if (state.isSavingApiKey) {
+        return
+      }
+      state = {
+        ...state,
+        apiKeyError: '',
+        apiKeyInput: value,
+        tokenError: '',
+      }
+      context?.requestRerender()
     },
     handleData(data: string): void {
       const parsed = JSON.parse(data)

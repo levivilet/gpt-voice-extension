@@ -4,11 +4,11 @@ import {
   VirtualDomElements,
 } from '@lvce-editor/virtual-dom-worker'
 import type { IState } from '../CreateInstance/CreateInstance.ts'
+import { renderAudio } from '../RenderAudio/RenderAudio.ts'
 import { renderButton } from '../RenderButton/RenderButton.ts'
 import { renderModelSettings } from '../RenderModelSettings/RenderModelSettings.ts'
 import { renderStage } from '../RenderStage/RenderStage.ts'
 import { renderStatus } from '../RenderStatus/RenderStatus.ts'
-import { renderAudio } from '../RenderAudio/RenderAudio.ts'
 import { renderTranscript } from '../RenderTranscript/RenderTranscript.ts'
 
 const renderWelcome = (state: {
@@ -43,9 +43,9 @@ const renderWelcome = (state: {
       name: 'openAiApiKey',
       onInput: 'handleOpenAiApiKeyInput',
       placeholder: 'sk-...',
+      inputType: 'password',
       type: VirtualDomElements.Input,
       value: state.apiKeyInput,
-      inputType: 'password',
     },
     {
       childCount: 1,
@@ -60,11 +60,7 @@ const renderWelcome = (state: {
       className: 'GptVoiceStatus',
       type: VirtualDomElements.Div,
     },
-    text(
-      statusText
-        ? statusText
-        : 'OpenAI API key required to start a live voice session.',
-    ),
+    text(statusText || 'OpenAI API key required to start a live voice session.'),
   ]
 }
 

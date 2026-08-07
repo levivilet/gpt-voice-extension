@@ -133,7 +133,12 @@ export const getEphemeralKey = async (
     method: 'POST',
   })
   if (!tokenRes.ok) {
-    const tokenErrorData = await tokenRes.json().catch(() => null)
+    let tokenErrorData: unknown
+    try {
+      tokenErrorData = await tokenRes.json()
+    } catch {
+      tokenErrorData = null
+    }
     const tokenErrorMessage =
       tokenErrorData &&
       typeof tokenErrorData === 'object' &&

@@ -1,2 +1,1 @@
-export const commandMap = {
-}
+export const commandMap = {}
