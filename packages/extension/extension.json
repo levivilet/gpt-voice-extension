@@ -15,12 +15,17 @@
   "configuration": {},
   "activation": [
     "onView:gpt-voice.views.default",
-    "onCommand:GptVoice.handleClickStart"
+    "onCommand:GptVoice.handleClickStart",
+    "onCommand:GptVoice.setIsTest"
   ],
   "commands": [
     {
       "id": "gpt-voice.show",
       "label": "gpt-voice: Show"
+    },
+    {
+      "id": "GptVoice.setIsTest",
+      "label": "gpt-voice: setIsTest"
     },
     {
       "id": "GptVoice.handleClickStart",

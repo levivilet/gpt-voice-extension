@@ -15,9 +15,11 @@ export const test: Test = async ({
   await SideBar.open('gpt-voice.views.default')
   const button = Locator('.GptVoiceButton')
   await expect(button).toBeVisible()
+  await Command.executeExtensionCommand('GptVoice.setIsTest')
+  await Command.executeExtensionCommand('GptVoice.handleClickStart')
 
   // act
-  await Command.executeExtensionCommand('GptVoice.handleClickStart')
+  await Command.executeExtensionCommand('GptVoice.handleClickStop')
 
   // assert
   const listeningBubble = Locator('.GptVoiceBubble.listening')
