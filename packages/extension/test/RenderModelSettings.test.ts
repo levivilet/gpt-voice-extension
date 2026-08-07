@@ -3,8 +3,8 @@ import {
   text,
   VirtualDomElements,
 } from '@lvce-editor/virtual-dom-worker'
-import { RealtimeModelPreset } from '../src/parts/WebRtc/WebRtc.ts'
 import { renderModelSettings } from '../src/parts/RenderModelSettings/RenderModelSettings.ts'
+import { RealtimeModelPreset } from '../src/parts/WebRtc/WebRtc.ts'
 
 test('renderModelSettings - mini model is selected', () => {
   const result = renderModelSettings({

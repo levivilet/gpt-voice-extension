@@ -1,9 +1,9 @@
 import { test, expect } from '@jest/globals'
 import { text, VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
 import type { ITranscript } from '../src/parts/CreateInstance/CreateInstance.ts'
-import { RealtimeModelPreset } from '../src/parts/WebRtc/WebRtc.ts'
 import { render } from '../src/parts/Render/Render.ts'
 import { createRenderState } from '../src/parts/RenderTestHelpers.ts'
+import { RealtimeModelPreset } from '../src/parts/WebRtc/WebRtc.ts'
 
 test('render - returns virtual dom tree for idle mini state', () => {
   const state = createRenderState()

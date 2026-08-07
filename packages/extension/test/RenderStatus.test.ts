@@ -1,7 +1,7 @@
 import { test, expect } from '@jest/globals'
 import { text, VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
-import { createRenderState } from '../src/parts/RenderTestHelpers.ts'
 import { renderStatus } from '../src/parts/RenderStatus/RenderStatus.ts'
+import { createRenderState } from '../src/parts/RenderTestHelpers.ts'
 
 test('renderStatus - idle', () => {
   const result = renderStatus(createRenderState())
