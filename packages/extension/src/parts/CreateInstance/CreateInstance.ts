@@ -7,6 +7,7 @@ import {
   setRemoteDescription,
   startWebRtcAudioStream,
   stopWebRtcAudioStream,
+  readMicLevels,
 } from '@lvce-editor/api'
 import {
   type VirtualDomNode,
@@ -17,6 +18,8 @@ import type { MenuEntry } from '../MenuEntries/MenuEntries.ts'
 import { getTitle } from '../GetTitle/GetTitle.ts'
 import { render } from '../Render/Render.ts'
 import { getEphemeralKey, getSdp } from '../WebRtc/WebRtc.ts'
+import { animateBubble } from '../AnimateBubble/AnimateBubble.ts'
+import { readLevel } from '../ReadLevel/ReadLevel.ts'
 
 export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly getContext: () => Readonly<Record<string, boolean>>
@@ -29,6 +32,7 @@ export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly setIsTest: () => void
   readonly setTranscript: (value: string) => void
   readonly stop: () => Promise<void>
+  readonly doAnimate: () => Promise<void>
 }
 
 export const createInstance = async (
@@ -42,6 +46,7 @@ export const createInstance = async (
     serverId: crypto.randomUUID(),
     transcribedText: ``,
     uid: -1,
+    animationFrame: -1,
   }
 
   const requestRerender = (): void => {
@@ -61,6 +66,24 @@ export const createInstance = async (
     },
     getMenuEntries() {
       return []
+    },
+    async doAnimate() {
+      while (state.animationEnabled) {
+        try {
+          const data = await readMicLevels({
+            uid: state.uid,
+          })
+          await new Promise((resolve) => {
+            requestAnimationFrame(resolve)
+          })
+          const levelMic = readLevel(data.micAnalyzerData)
+          const levelRemote = readLevel(data.remoteAnalyzerData)
+          const anim = animateBubble(levelMic, levelRemote)
+          instance.setAnimation(true, anim.scale)
+        } catch (error) {
+          console.error(error)
+        }
+      }
     },
     async handleClickStart(): Promise<void> {
       // TODO create node rpc (starting node app)
@@ -85,6 +108,7 @@ export const createInstance = async (
             instance.handleData(data)
           },
           uid: state.uid,
+          trackAudioData: true,
         })
         if (!offerSdp) {
           throw new Error(`offer sdp is required`)
@@ -95,6 +119,11 @@ export const createInstance = async (
           type: 'answer',
           uid: state.uid,
         })
+
+        if (!state.isTest) {
+          state.animationEnabled = true
+          instance.doAnimate()
+        }
 
         requestRerender()
       } catch (error) {
