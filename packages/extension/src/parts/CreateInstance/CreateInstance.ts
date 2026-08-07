@@ -183,21 +183,23 @@ export const createInstance = async (
 
       if (parsed && parsed.type === 'response.output_audio_transcript.delta') {
         const entry = state.transcripts.find((item) => item.id)
+        const { item_id, delta } = parsed
         if (entry) {
-          instance.updateTranscript(entry.id, entry.text + parsed.delta)
+          instance.updateTranscript(entry.id, entry.text + delta)
         } else {
-          instance.addTranscript(parsed.item_id, parsed.delta, 'ai')
+          instance.addTranscript(item_id, delta, 'ai')
         }
       }
       if (
         parsed &&
         parsed.type === 'conversation.item.input_audio_transcription.delta'
       ) {
+        const { item_id, delta } = parsed
         const entry = state.transcripts.find((item) => item.id)
         if (entry) {
-          instance.updateTranscript(entry.id, entry.text + parsed.delta)
+          instance.updateTranscript(entry.id, entry.text + delta)
         } else {
-          instance.addTranscript(parsed.item_id, parsed.delta, 'user')
+          instance.addTranscript(item_id, delta, 'user')
         }
       }
     },
