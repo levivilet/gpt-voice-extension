@@ -266,7 +266,6 @@ export const createInstance = async (
     },
 
     updateTranscript(id, value) {
-      console.log({ id, value })
       const index = state.transcripts.findIndex((item) => item.id === id)
       if (index === -1) {
         return
