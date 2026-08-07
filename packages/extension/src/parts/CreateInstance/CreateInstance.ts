@@ -84,7 +84,7 @@ export const createInstance = async (
   }
 
   const instance: ActiveGptVoiceViewInstance = {
-    addTranscript(id, value, type = 'ai') {
+    addTranscript(id, value, type) {
       state = {
         ...state,
         transcripts: [...state.transcripts, { id, text: value, type }],
@@ -94,6 +94,8 @@ export const createInstance = async (
     debugData() {
       // eslint-disable-next-line no-console
       console.info(state.parsedData)
+      // eslint-disable-next-line no-console
+      console.info(state.transcripts)
     },
     async doAnimate() {
       while (state.animationEnabled) {
@@ -207,7 +209,7 @@ export const createInstance = async (
         parsed &&
         parsed.type === 'conversation.item.input_audio_transcription.delta'
       ) {
-        instance.handleOutputTranscript(parsed)
+        instance.handleInputTranscript(parsed)
       }
     },
     render() {
