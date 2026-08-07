@@ -6,6 +6,20 @@ export enum RealtimeModelPreset {
 }
 
 type TranscriptionModel = 'gpt-4o-mini-transcribe' | 'gpt-4o-transcribe'
+type ServerVadMode = 'server_vad'
+type TurnDetectionConfig = {
+  readonly create_response: boolean
+  readonly interrupt_response: boolean
+  readonly prefix_padding_ms: number
+  readonly silence_duration_ms: number
+  readonly threshold: number
+  readonly type: ServerVadMode
+}
+
+type NoiseReductionMode = 'near_field' | 'far_field'
+type NoiseReductionConfig = {
+  readonly type: NoiseReductionMode
+}
 
 const getTranscriptionModel = (
   sessionModel: RealtimeModelPreset,
@@ -25,6 +39,8 @@ type SessionConfig = {
         readonly transcription: {
           readonly model: TranscriptionModel
         }
+        readonly turn_detection: TurnDetectionConfig
+        readonly noise_reduction: NoiseReductionConfig
       }
       readonly output: {
         readonly voice: 'marin'
@@ -42,7 +58,18 @@ export const createSessionConfig = (
     session: {
       audio: {
         input: {
+          noise_reduction: {
+            type: 'near_field',
+          },
           transcription: { model: getTranscriptionModel(sessionModel) },
+          turn_detection: {
+            create_response: true,
+            interrupt_response: false,
+            prefix_padding_ms: 300,
+            silence_duration_ms: 800,
+            threshold: 0.7,
+            type: 'server_vad',
+          },
         },
         output: {
           voice: 'marin',
