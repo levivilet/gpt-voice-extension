@@ -41,6 +41,7 @@ export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly updateTranscript: (id: string, value: string) => void
   readonly handleInputTranscript: (parsed: any) => void
   readonly handleOutputTranscript: (parsed: any) => void
+  readonly createOrUpdateTranscript: (parsed: any, type: 'user' | 'ai') => void
 }
 
 export interface ITranscript {
@@ -177,23 +178,20 @@ export const createInstance = async (
         console.error(error)
       }
     },
-    handleOutputTranscript(parsed) {
+    createOrUpdateTranscript(parsed, type) {
       const { delta, item_id } = parsed
       const entry = state.transcripts.find((item) => item.id === item_id)
       if (entry) {
         instance.updateTranscript(entry.id, entry.text + delta)
       } else {
-        instance.addTranscript(item_id, delta, 'ai')
+        instance.addTranscript(item_id, delta, type)
       }
     },
+    handleOutputTranscript(parsed) {
+      instance.createOrUpdateTranscript(parsed, 'ai')
+    },
     handleInputTranscript(parsed) {
-      const { delta, item_id } = parsed
-      const entry = state.transcripts.find((item) => item.id === item_id)
-      if (entry) {
-        instance.updateTranscript(entry.id, entry.text + delta)
-      } else {
-        instance.addTranscript(item_id, delta, 'user')
-      }
+      instance.createOrUpdateTranscript(parsed, 'user')
     },
     handleData(data: string): void {
       const parsed = JSON.parse(data)
