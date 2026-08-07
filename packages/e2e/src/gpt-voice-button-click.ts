@@ -15,6 +15,7 @@ export const test: Test = async ({
   await SideBar.open('gpt-voice.views.default')
   const button = Locator('.GptVoiceButton')
   await expect(button).toBeVisible()
+  await Command.executeExtensionCommand('GptVoice.setIsTest')
 
   // act
   await Command.executeExtensionCommand('GptVoice.handleClickStart')
