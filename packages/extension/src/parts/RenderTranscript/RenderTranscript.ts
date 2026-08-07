@@ -3,16 +3,27 @@ import {
   text,
   VirtualDomElements,
 } from '@lvce-editor/virtual-dom-worker'
-import type { State } from '../State/State.ts'
+import { IState, ITranscript } from '../CreateInstance/CreateInstance.ts'
 
-export const renderTranscript = (state: State): readonly VirtualDomNode[] => {
-  const { transcribedText } = state
+const renderTranscriptItem = (item: ITranscript): readonly VirtualDomNode[] => {
   return [
     {
       childCount: 1,
+      className: 'GptVoiceTranscriptItem',
+      type: VirtualDomElements.Div,
+    },
+
+    text(item.text),
+  ]
+}
+export const renderTranscript = (state: IState): readonly VirtualDomNode[] => {
+  const { transcripts } = state
+  return [
+    {
+      childCount: transcripts.length,
       className: 'GptVoiceTranscript',
       type: VirtualDomElements.Div,
     },
-    text(transcribedText),
+    ...transcripts.flatMap(renderTranscriptItem),
   ]
 }
