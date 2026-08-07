@@ -124,14 +124,17 @@ export const getEphemeralKey = async (
   apiKey: string,
   sessionConfig: unknown = defaultSessionConfig,
 ): Promise<string> => {
-  const tokenRes = await fetch('https://api.openai.com/v1/realtime/client_secrets', {
-    body: JSON.stringify(sessionConfig),
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
+  const tokenRes = await fetch(
+    'https://api.openai.com/v1/realtime/client_secrets',
+    {
+      body: JSON.stringify(sessionConfig),
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
     },
-    method: 'POST',
-  })
+  )
   if (!tokenRes.ok) {
     let tokenErrorData: unknown
     try {

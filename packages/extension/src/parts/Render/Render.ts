@@ -35,15 +35,17 @@ const renderWelcome = (state: {
       className: 'GptVoiceWelcomeDescription',
       type: VirtualDomElements.Div,
     },
-    text('Your key is stored in extension secret storage. Press Save to continue.'),
+    text(
+      'Your key is stored in extension secret storage. Press Save to continue.',
+    ),
     {
       childCount: 0,
       className: 'GptVoiceApiKeyInput',
       disabled: state.isSavingApiKey,
+      inputType: 'password',
       name: 'openAiApiKey',
       onInput: 'handleOpenAiApiKeyInput',
       placeholder: 'sk-...',
-      inputType: 'password',
       type: VirtualDomElements.Input,
       value: state.apiKeyInput,
     },
@@ -60,7 +62,9 @@ const renderWelcome = (state: {
       className: 'GptVoiceStatus',
       type: VirtualDomElements.Div,
     },
-    text(statusText || 'OpenAI API key required to start a live voice session.'),
+    text(
+      statusText || 'OpenAI API key required to start a live voice session.',
+    ),
   ]
 }
 

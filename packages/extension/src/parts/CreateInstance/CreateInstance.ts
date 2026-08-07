@@ -19,9 +19,7 @@ import type { MenuEntry } from '../MenuEntries/MenuEntries.ts'
 import { animateBubble } from '../AnimateBubble/AnimateBubble.ts'
 import { handleFunctionCall } from '../FunctionCalling/FunctionCalling.ts'
 import { getTitle } from '../GetTitle/GetTitle.ts'
-import {
-  createOpenAiApiKeyStorage,
-} from '../OpenAiApiKeyStorage/OpenAiApiKeyStorage.ts'
+import { createOpenAiApiKeyStorage } from '../OpenAiApiKeyStorage/OpenAiApiKeyStorage.ts'
 import { readLevel } from '../ReadLevel/ReadLevel.ts'
 import { render } from '../Render/Render.ts'
 import {
@@ -117,7 +115,8 @@ export const createInstance = async (
   let hasOpenAiApiKey = false
   try {
     const existingApiKey = await openAiApiKeyStorage.read()
-    hasOpenAiApiKey = existingApiKey !== undefined && existingApiKey.trim().length > 0
+    hasOpenAiApiKey =
+      existingApiKey !== undefined && existingApiKey.trim().length > 0
   } catch {
     hasOpenAiApiKey = false
   }
@@ -346,7 +345,9 @@ export const createInstance = async (
         requestRerender()
       } catch (error) {
         const nextApiKeyStatus =
-          error instanceof Error && error.message === 'NO_API_KEY' ? false : state.hasOpenAiApiKey
+          error instanceof Error && error.message === 'NO_API_KEY'
+            ? false
+            : state.hasOpenAiApiKey
         if (dataChannelPort) {
           dataChannelPort.close()
           dataChannelPort = undefined
@@ -362,18 +363,6 @@ export const createInstance = async (
         console.error(error)
         requestRerender()
       }
-    },
-    handleOpenAiApiKeyInput(value: string): void {
-      if (state.isSavingApiKey) {
-        return
-      }
-      state = {
-        ...state,
-        apiKeyError: '',
-        apiKeyInput: value,
-        tokenError: '',
-      }
-      context?.requestRerender()
     },
     handleData(data: string): void {
       const parsed = JSON.parse(data)
@@ -398,6 +387,18 @@ export const createInstance = async (
     },
     handleInputTranscript(parsed) {
       instance.createOrUpdateTranscript(parsed, 'user')
+    },
+    handleOpenAiApiKeyInput(value: string): void {
+      if (state.isSavingApiKey) {
+        return
+      }
+      state = {
+        ...state,
+        apiKeyError: '',
+        apiKeyInput: value,
+        tokenError: '',
+      }
+      context?.requestRerender()
     },
     handleOutputTranscript(parsed) {
       instance.createOrUpdateTranscript(parsed, 'ai')
