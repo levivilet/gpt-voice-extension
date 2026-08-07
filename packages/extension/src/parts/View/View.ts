@@ -24,8 +24,8 @@ export const view: TrelloView = {
       context.setIsTest()
       return context
     },
-    async 'GptVoice.setTranscript'(context, value: string) {
-      context.setTranscript(value)
+    async 'GptVoice.addTranscript'(context, id: string, value: string) {
+      context.addTranscript(id, value)
       return context
     },
     async 'GptVoice.stop'(context) {

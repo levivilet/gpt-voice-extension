@@ -11,7 +11,12 @@ export const test: Test = async ({ Command, expect, Locator, SideBar }) => {
   await Command.executeExtensionCommand('GptVoice.handleClickStart')
 
   // act
-  await Command.executeExtensionCommand('GptVoice.setTranscript', 'hello world')
+  const id = 'abcdef'
+  await Command.executeExtensionCommand(
+    'GptVoice.setTranscript',
+    id,
+    'hello world',
+  )
 
   // assert
   const transcript = Locator('.GptVoiceTranscript')
