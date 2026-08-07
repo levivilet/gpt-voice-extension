@@ -33,7 +33,6 @@ export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly renderTitle: () => string
   readonly setAnimation: (enabled: boolean, scale: number) => void
   readonly setIsTest: () => void
-  readonly setTranscript: (value: string) => void
   readonly stop: () => Promise<void>
 }
 
