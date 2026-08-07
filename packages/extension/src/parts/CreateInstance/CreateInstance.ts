@@ -1,3 +1,4 @@
+import * as ExtensionApi from '@lvce-editor/api'
 import type {
   ViewContext,
   ViewSelection,
@@ -21,6 +22,10 @@ import { getTitle } from '../GetTitle/GetTitle.ts'
 import { readLevel } from '../ReadLevel/ReadLevel.ts'
 import { render } from '../Render/Render.ts'
 import {
+  createOpenAiApiKeyStorage,
+  type SecretStorageApi,
+} from '../OpenAiApiKeyStorage/OpenAiApiKeyStorage.ts'
+import {
   createSessionConfig,
   defaultSessionModel,
   getEphemeralKey,
@@ -37,13 +42,16 @@ export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly createOrUpdateTranscript: (parsed: any, type: 'user' | 'ai') => void
   readonly debugData: () => void
   readonly doAnimate: () => Promise<void>
-  readonly getContext: () => Readonly<Record<string, boolean>>
-  readonly getCss: () => string
-  readonly getMenuEntries: (menuId: string) => readonly MenuEntry[]
+  readonly handleClearOpenAiApiKey: () => Promise<void>
   readonly handleClickStart: () => Promise<void>
   readonly handleData: (data: string) => void
   readonly handleInputTranscript: (parsed: any) => void
+  readonly handleOpenAiApiKeyInput: (value: string) => void
   readonly handleOutputTranscript: (parsed: any) => void
+  readonly handleSaveOpenAiApiKey: () => Promise<void>
+  readonly getContext: () => Readonly<Record<string, boolean>>
+  readonly getCss: () => string
+  readonly getMenuEntries: (menuId: string) => readonly MenuEntry[]
   readonly renderTitle: () => string
   readonly setAnimation: (enabled: boolean, scale: number) => void
   readonly setIsTest: () => void
@@ -63,28 +71,72 @@ export interface IState {
   readonly animationEnabled: boolean
   readonly animationFrame: number
   readonly animationScale: number
+  readonly apiKeyInput: string
+  readonly apiKeyError: string
+  readonly hasOpenAiApiKey: boolean
   readonly inProgress: boolean
+  readonly isCreatingToken: boolean
+  readonly isSavingApiKey: boolean
   readonly isTest: boolean
   readonly parsedData: readonly any[]
-  readonly serverId: string
   readonly sessionModel: RealtimeModelPreset
+  readonly tokenError: string
   readonly transcribedText: string
   readonly transcripts: readonly ITranscript[]
   readonly uid: number
 }
 
+const createTokenErrorMessage = (error: unknown): string => {
+  if (!(error instanceof Error)) {
+    return 'Failed to create token. Check your network and API key.'
+  }
+  if (error.message.includes('401') || error.message.includes('403')) {
+    return 'OpenAI API key is invalid (401/403).'
+  }
+  if (error.message.toLowerCase().includes('failed to fetch')) {
+    return 'Network failure while creating token. Retry and check your internet connection.'
+  }
+  if (error.message === 'NO_API_KEY') {
+    return 'NO_API_KEY: OpenAI API key is not set.'
+  }
+  return error.message || 'Failed to create token.'
+}
+
+const getMissingApiKeyMessage = (): string =>
+  'NO_API_KEY: Add your OpenAI API key above to start.'
+
+const isLikelyOpenAiApiKey = (value: string): boolean => {
+  return /^sk-[A-Za-z0-9_-]{10,}$/.test(value)
+}
+
 export const createInstance = async (
   context?: ViewContext,
 ): Promise<ActiveGptVoiceViewInstance> => {
+  const openAiApiKeyStorage = createOpenAiApiKeyStorage(
+    ExtensionApi as SecretStorageApi,
+  )
+  let hasOpenAiApiKey = false
+  try {
+    const existingApiKey = await openAiApiKeyStorage.read()
+    hasOpenAiApiKey = existingApiKey !== undefined && existingApiKey.trim().length > 0
+  } catch {
+    hasOpenAiApiKey = false
+  }
+
   let state: IState = {
     animationEnabled: false,
     animationFrame: -1,
     animationScale: 1,
+    apiKeyError: '',
+    apiKeyInput: '',
+    hasOpenAiApiKey,
     inProgress: false,
+    isCreatingToken: false,
+    isSavingApiKey: false,
     isTest: false,
     parsedData: [],
-    serverId: crypto.randomUUID(),
     sessionModel: defaultSessionModel,
+    tokenError: '',
     transcribedText: '',
     transcripts: [],
     uid: -1,
@@ -102,6 +154,24 @@ export const createInstance = async (
     setTimeout(() => {
       context?.requestRerender()
     }, 100)
+  }
+
+  const getStoredApiKey = async (): Promise<string> => {
+    const apiKey = await openAiApiKeyStorage.read()
+    if (typeof apiKey !== 'string' || apiKey.trim().length === 0) {
+      hasOpenAiApiKey = false
+      state = {
+        ...state,
+        hasOpenAiApiKey,
+      }
+      throw new Error('NO_API_KEY')
+    }
+    hasOpenAiApiKey = true
+    state = {
+      ...state,
+      hasOpenAiApiKey,
+    }
+    return apiKey
   }
 
   const instance: ActiveGptVoiceViewInstance = {
@@ -156,29 +226,88 @@ export const createInstance = async (
     getMenuEntries() {
       return []
     },
-    async handleClickStart(): Promise<void> {
-      // TODO create node rpc (starting node app)
-      // TODO start node server
+    handleOpenAiApiKeyInput(value: string): void {
+      if (state.isSavingApiKey) {
+        return
+      }
+      state = {
+        ...state,
+        apiKeyInput: typeof value === 'string' ? value : '',
+        apiKeyError: '',
+        tokenError: '',
+      }
+      context?.requestRerender()
+    },
+    async handleClearOpenAiApiKey(): Promise<void> {
+      if (state.inProgress || state.isCreatingToken || state.isSavingApiKey) {
+        return
+      }
+      state = {
+        ...state,
+        isSavingApiKey: true,
+      }
+      requestRerender()
       try {
-        if (state.inProgress) {
-          state = {
-            ...state,
-            inProgress: false,
-          }
-          await instance.stop()
-          return
-        }
+        await openAiApiKeyStorage.delete()
+        hasOpenAiApiKey = false
         state = {
           ...state,
-          inProgress: !state.inProgress,
+          apiKeyError: '',
+          apiKeyInput: '',
+          hasOpenAiApiKey,
+          isSavingApiKey: false,
+          tokenError: '',
         }
-
-        if (state.isTest) {
-          return
+      } catch {
+        state = {
+          ...state,
+          isSavingApiKey: false,
+          apiKeyError: 'Failed to clear OpenAI API key.',
         }
+      }
+      requestRerender()
+    },
+    async handleClickStart(): Promise<void> {
+      if (state.isCreatingToken || state.isSavingApiKey) {
+        return
+      }
+      if (state.inProgress) {
+        state = {
+          ...state,
+          inProgress: false,
+        }
+        await instance.stop()
+        return
+      }
+      if (state.isTest) {
+        state = {
+          ...state,
+          inProgress: true,
+          tokenError: '',
+        }
+        requestRerender()
+        return
+      }
+      if (!state.hasOpenAiApiKey) {
+        state = {
+          ...state,
+          apiKeyError: '',
+          tokenError: getMissingApiKeyMessage(),
+        }
+        requestRerender()
+        return
+      }
+      state = {
+        ...state,
+        isCreatingToken: true,
+        tokenError: '',
+      }
+      requestRerender()
+      try {
+        const apiKey = await getStoredApiKey()
 
         const ephemeralKey = await getEphemeralKey(
-          state.serverId,
+          apiKey,
           createSessionConfig(state.sessionModel),
         )
         const { port1, port2 } = new MessageChannel()
@@ -194,6 +323,10 @@ export const createInstance = async (
         }
         port2.start()
         dataChannelPort = port2
+        state = {
+          ...state,
+          inProgress: true,
+        }
         const offerSdp = await startWebRtcAudioStream({
           elementLocator: '.GptVoiceAudio',
           ephemeralKey,
@@ -202,7 +335,7 @@ export const createInstance = async (
           uid: state.uid,
         })
         if (!offerSdp) {
-          throw new Error(`offer sdp is required`)
+          throw new Error('offer sdp is required')
         }
         const answerSdp = await getSdp(offerSdp, ephemeralKey)
         await setRemoteDescription({
@@ -219,13 +352,28 @@ export const createInstance = async (
           instance.doAnimate()
         }
 
+        state = {
+          ...state,
+          isCreatingToken: false,
+        }
         requestRerender()
       } catch (error) {
+        const nextApiKeyStatus =
+          error instanceof Error && error.message === 'NO_API_KEY' ? false : state.hasOpenAiApiKey
         if (dataChannelPort) {
           dataChannelPort.close()
           dataChannelPort = undefined
         }
+        state = {
+          ...state,
+          hasOpenAiApiKey: nextApiKeyStatus,
+          inProgress: false,
+          isCreatingToken: false,
+          tokenError: createTokenErrorMessage(error),
+        }
+        hasOpenAiApiKey = nextApiKeyStatus
         console.error(error)
+        requestRerender()
       }
     },
     handleData(data: string): void {
@@ -254,6 +402,52 @@ export const createInstance = async (
     },
     handleOutputTranscript(parsed) {
       instance.createOrUpdateTranscript(parsed, 'ai')
+    },
+    async handleSaveOpenAiApiKey(): Promise<void> {
+      const apiKey = state.apiKeyInput.trim()
+      if (!apiKey) {
+        state = {
+          ...state,
+          apiKeyError: 'OpenAI API key is required.',
+          tokenError: '',
+        }
+        requestRerender()
+        return
+      }
+      if (!isLikelyOpenAiApiKey(apiKey)) {
+        state = {
+          ...state,
+          apiKeyError: 'OpenAI API key format looks invalid.',
+          tokenError: '',
+        }
+        requestRerender()
+        return
+      }
+      state = {
+        ...state,
+        apiKeyError: '',
+        isSavingApiKey: true,
+      }
+      requestRerender()
+      try {
+        await openAiApiKeyStorage.write(apiKey)
+        hasOpenAiApiKey = true
+        state = {
+          ...state,
+          apiKeyError: '',
+          apiKeyInput: '',
+          hasOpenAiApiKey,
+          isSavingApiKey: false,
+          tokenError: '',
+        }
+      } catch {
+        state = {
+          ...state,
+          apiKeyError: 'Failed to save OpenAI API key.',
+          isSavingApiKey: false,
+        }
+      }
+      requestRerender()
     },
     render() {
       return render(state)
@@ -358,5 +552,6 @@ export const createInstance = async (
       context?.requestRerender()
     },
   }
+
   return instance
 }

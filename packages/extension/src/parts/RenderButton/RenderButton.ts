@@ -1,11 +1,35 @@
 import {
-  type VirtualDomNode,
   text,
+  type VirtualDomNode,
   VirtualDomElements,
 } from '@lvce-editor/virtual-dom-worker'
-import type { IState } from '../CreateInstance/CreateInstance.ts'
 
-export const renderButton = (state: IState): readonly VirtualDomNode[] => {
+export const renderButton = (state: {
+  readonly inProgress: boolean
+  readonly hasOpenAiApiKey: boolean
+  readonly isCreatingToken: boolean
+  readonly isSavingApiKey: boolean
+}): readonly VirtualDomNode[] => {
+  if (!state.hasOpenAiApiKey || state.isCreatingToken || state.isSavingApiKey) {
+    return [
+      {
+        childCount: 1,
+        className: 'GptVoiceButton',
+        disabled: true,
+        id: 'toggle',
+        onClick: 'handleClickStart',
+        type: VirtualDomElements.Button,
+      },
+      text(
+        state.isCreatingToken
+          ? 'Creating token'
+          : state.isSavingApiKey
+            ? 'Saving key'
+            : 'Start talking',
+      ),
+    ]
+  }
+
   if (state.inProgress) {
     return [
       {
@@ -18,6 +42,7 @@ export const renderButton = (state: IState): readonly VirtualDomNode[] => {
       text('Stop talking'),
     ]
   }
+
   return [
     {
       childCount: 1,

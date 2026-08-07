@@ -1,5 +1,3 @@
-import * as Rpc from '../Rpc/Rpc.ts'
-
 export enum RealtimeModelPreset {
   Mini = 'gpt-realtime-2.1-mini',
   Standard = 'gpt-realtime-2.1',
@@ -123,29 +121,36 @@ export const createSessionConfig = (
 export const defaultSessionConfig = createSessionConfig(defaultSessionModel)
 
 export const getEphemeralKey = async (
-  serverId: string,
+  apiKey: string,
   sessionConfig: unknown = defaultSessionConfig,
 ): Promise<string> => {
-  // 1. Get a short-lived ephemeral key from our own backend.
-  const serverPort = 3333 // TODO maybe use random port?
-  await Rpc.invoke('GptVoice.startServer', serverId, serverPort)
-  const tokenBaseUrl = `http://localhost:${serverPort}`
-  const tokenUrl = new URL('/token', tokenBaseUrl).href
-  const tokenRes = await fetch(tokenUrl, {
+  const tokenRes = await fetch('https://api.openai.com/v1/realtime/client_secrets', {
     body: JSON.stringify(sessionConfig),
     headers: {
+      Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
     },
     method: 'POST',
   })
-  const tokenData = await tokenRes.json()
   if (!tokenRes.ok) {
-    console.error(`failed to fetch token`)
-    console.error(tokenData)
-    return ''
+    const tokenErrorData = await tokenRes.json().catch(() => null)
+    const tokenErrorMessage =
+      tokenErrorData &&
+      typeof tokenErrorData === 'object' &&
+      'error' in tokenErrorData &&
+      typeof tokenErrorData.error === 'object' &&
+      tokenErrorData.error &&
+      'message' in tokenErrorData.error &&
+      typeof tokenErrorData.error.message === 'string'
+        ? tokenErrorData.error.message
+        : `Failed to create ephemeral token (${tokenRes.status})`
+    throw new Error(tokenErrorMessage)
   }
+  const tokenData = await tokenRes.json()
   const ephemeralKey = tokenData.value
-  await Rpc.invoke('GptVoice.stopServer', serverId)
+  if (typeof ephemeralKey !== 'string' || ephemeralKey.length === 0) {
+    throw new Error('Invalid ephemeral key response.')
+  }
   return ephemeralKey
 }
 
