@@ -161,6 +161,7 @@ export const createInstance = async (
           elementLocator: '.GptVoiceAudio',
           ephemeralKey,
           onData(data) {
+            // TODO maybe use separate worker for handling transcript data
             instance.handleData(data)
           },
           trackAudioData: true,
