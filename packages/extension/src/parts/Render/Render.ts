@@ -1,101 +1,12 @@
 import {
   type VirtualDomNode,
-  text,
   VirtualDomElements,
 } from '@lvce-editor/virtual-dom-worker'
-
-interface State {
-  readonly inProgress: boolean
-  readonly transcribedText: string
-}
-
-const renderButton = (state: State): readonly VirtualDomNode[] => {
-  if (state.inProgress) {
-    return [
-      {
-        childCount: 1,
-        className: 'GptVoiceButton',
-        id: 'toggle',
-        onClick: 'handleClickStart',
-        type: VirtualDomElements.Button,
-      },
-      text('Stop talking'),
-    ]
-  }
-  return [
-    {
-      childCount: 1,
-      className: 'GptVoiceButton',
-      id: 'toggle',
-      onClick: 'handleClickStart',
-      type: VirtualDomElements.Button,
-    },
-    text('Start talking'),
-  ]
-}
-
-const renderStatus = (state: State): readonly VirtualDomNode[] => {
-  if (state.inProgress) {
-    return [
-      {
-        childCount: 1,
-        className: 'GptVoiceStatus',
-        type: VirtualDomElements.Div,
-      },
-      text('In Progress'),
-    ]
-  }
-  return [
-    {
-      childCount: 1,
-      className: 'GptVoiceStatus',
-      type: VirtualDomElements.Div,
-    },
-    text('idle'),
-  ]
-}
-
-const getBubbleClassName = (inProgress: boolean): string => {
-  if (inProgress) {
-    return 'GptVoiceBubble listening'
-  }
-  return 'GptVoiceBubble'
-}
-const renderStage = (state: State): readonly VirtualDomNode[] => {
-  return [
-    {
-      childCount: 1,
-      className: 'GptVoiceStage',
-      type: VirtualDomElements.Div,
-    },
-    {
-      childCount: 0,
-      className: getBubbleClassName(state.inProgress),
-      type: VirtualDomElements.Div,
-    },
-  ]
-}
-
-const renderTranscript = (state: State): readonly VirtualDomNode[] => {
-  const { transcribedText } = state
-  return [
-    {
-      childCount: 1,
-      className: 'GptVoiceTranscript',
-      type: VirtualDomElements.Div,
-    },
-    text(transcribedText),
-  ]
-}
-const renderAudio = (state: State): readonly VirtualDomNode[] => {
-  return [
-    {
-      childCount: 0,
-      className: 'GptVoiceAudio',
-      type: VirtualDomElements.Audio,
-    },
-  ]
-}
+import { renderAudio } from '../RenderAudio/RenderAudio.ts'
+import { renderButton } from '../RenderButton/RenderButton.ts'
+import { renderStage } from '../RenderStage/RenderStage.ts'
+import { renderStatus } from '../RenderStatus/RenderStatus.ts'
+import { renderTranscript } from '../RenderTranscript/RenderTranscript.ts'
 
 export const render = (state: any): readonly VirtualDomNode[] => {
   return [
