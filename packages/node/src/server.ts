@@ -39,8 +39,6 @@ app.use(express.static(path.join(__dirname, 'public')))
 // but that's fine — it's only used to open the WebRTC connection).
 const DEFAULT_SESSION_CONFIG = {
   session: {
-    instructions:
-      'A helpful assistant.',
     audio: {
       input: {
         noise_reduction: {
@@ -60,6 +58,8 @@ const DEFAULT_SESSION_CONFIG = {
         voice: 'marin',
       },
     },
+    instructions:
+      'A helpful assistant.',
     model: 'gpt-realtime-2.1-mini',
     type: 'realtime',
   },

@@ -16,6 +16,7 @@ import {
 } from '@lvce-editor/virtual-dom-worker'
 import type { MenuEntry } from '../MenuEntries/MenuEntries.ts'
 import { animateBubble } from '../AnimateBubble/AnimateBubble.ts'
+import { handleFunctionCall } from '../FunctionCalling/FunctionCalling.ts'
 import { getTitle } from '../GetTitle/GetTitle.ts'
 import { readLevel } from '../ReadLevel/ReadLevel.ts'
 import { render } from '../Render/Render.ts'
@@ -26,7 +27,6 @@ import {
   RealtimeModelPreset,
   getSdp,
 } from '../WebRtc/WebRtc.ts'
-import { handleFunctionCall } from '../FunctionCalling/FunctionCalling.ts'
 
 export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly addTranscript: (
