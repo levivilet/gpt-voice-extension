@@ -16,12 +16,12 @@ export const view: TrelloView = {
       await context.handleClickStart()
       return context
     },
-    async 'GptVoice.stop'(context) {
-      await context.stop()
-      return context
-    },
     async 'GptVoice.setIsTest'(context) {
       context.setIsTest()
+      return context
+    },
+    async 'GptVoice.stop'(context) {
+      await context.stop()
       return context
     },
   },

@@ -21,11 +21,11 @@ import { getEphemeralKey, getSdp } from '../WebRtc/WebRtc.ts'
 export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly getContext: () => Readonly<Record<string, boolean>>
   readonly getCss: () => string
-  readonly setIsTest: () => void
   readonly getMenuEntries: (menuId: string) => readonly MenuEntry[]
   readonly handleClickStart: () => Promise<void>
   readonly handleData: (data: string) => void
   readonly renderTitle: () => string
+  readonly setIsTest: () => void
   readonly stop: () => Promise<void>
 }
 
@@ -55,9 +55,6 @@ export const createInstance = async (
     },
     getMenuEntries() {
       return []
-    },
-    setIsTest() {
-      state.isTest = true
     },
     async handleClickStart(): Promise<void> {
       // TODO create node rpc (starting node app)
@@ -133,9 +130,11 @@ export const createInstance = async (
     saveState(): unknown {
       return {}
     },
+    setIsTest() {
+      state.isTest = true
+    },
 
     async stop() {
-      console.log(`stop called...`)
       state.inProgress = false
       await stopWebRtcAudioStream(state.uid)
       await context?.requestRerender()
