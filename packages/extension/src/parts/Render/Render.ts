@@ -3,6 +3,7 @@ import {
   type VirtualDomNode,
   VirtualDomElements,
 } from '@lvce-editor/virtual-dom-worker'
+import type { IState } from '../CreateInstance/CreateInstance.ts'
 import { renderButton } from '../RenderButton/RenderButton.ts'
 import { renderModelSettings } from '../RenderModelSettings/RenderModelSettings.ts'
 import { renderStage } from '../RenderStage/RenderStage.ts'
@@ -67,14 +68,7 @@ const renderWelcome = (state: {
   ]
 }
 
-export const render = (state: {
-  readonly hasOpenAiApiKey: boolean
-  readonly apiKeyError: string
-  readonly apiKeyInput: string
-  readonly inProgress: boolean
-  readonly isSavingApiKey: boolean
-  readonly tokenError: string
-}): readonly VirtualDomNode[] => {
+export const render = (state: IState): readonly VirtualDomNode[] => {
   if (!state.hasOpenAiApiKey) {
     return [
       {
