@@ -55,7 +55,9 @@ export const createInstance = async (
       return {}
     },
     getCss() {
-      return ''
+      return `.GptVoice {
+--GptVoiceBubbleTransform: scale(${state.animationScale});
+}`
     },
     getMenuEntries() {
       return []
@@ -136,6 +138,7 @@ export const createInstance = async (
     setAnimation(enabled, scale) {
       state.animationEnabled = enabled
       state.animationScale = scale
+      context?.requestRerender()
     },
     setIsTest() {
       state.isTest = true
