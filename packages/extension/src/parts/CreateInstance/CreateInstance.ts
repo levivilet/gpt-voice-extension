@@ -63,15 +63,16 @@ export interface ITranscript {
     readonly animationEnabled: boolean
     readonly animationFrame: number
     readonly animationScale: number
-    readonly inProgress: boolean
-    readonly isTest: boolean
-    readonly parsedData: readonly any[]
-    readonly serverId: string
-    readonly sessionModel: RealtimeModelPreset
-    readonly transcripts: readonly ITranscript[]
-    readonly transcribedText: string
-    readonly uid: number
-  }
+  readonly inProgress: boolean
+  readonly isTest: boolean
+  readonly parsedData: readonly any[]
+  readonly transcribedText: string
+  readonly serverId: string
+  readonly sessionModel: RealtimeModelPreset
+  readonly transcribedText: string
+  readonly transcripts: readonly ITranscript[]
+  readonly uid: number
+}
 
 export const createInstance = async (
   context?: ViewContext,
@@ -85,8 +86,8 @@ export const createInstance = async (
     parsedData: [],
     serverId: crypto.randomUUID(),
     sessionModel: defaultSessionModel,
-    transcripts: [],
     transcribedText: '',
+    transcripts: [],
     uid: -1,
   }
   let dataChannelPort: MessagePort | undefined
