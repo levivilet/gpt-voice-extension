@@ -18,7 +18,6 @@ import {
 import type { MenuEntry } from '../MenuEntries/MenuEntries.ts'
 import { animateBubble } from '../AnimateBubble/AnimateBubble.ts'
 import * as ClassNames from '../ClassNames/ClassNames.ts'
-import { handleFunctionCall } from '../FunctionCalling/FunctionCalling.ts'
 import { getCss } from '../GetCss/GetCss.ts'
 import { getTitle } from '../GetTitle/GetTitle.ts'
 import * as GptVoiceStrings from '../GptVoiceStrings/GptVoiceStrings.ts'
@@ -26,6 +25,7 @@ import { createOpenAiApiKeyStorage } from '../OpenAiApiKeyStorage/OpenAiApiKeySt
 import { readLevel } from '../ReadLevel/ReadLevel.ts'
 import { render } from '../Render/Render.ts'
 import { isInTestMode } from '../TestMode/TestMode.ts'
+import * as VoiceFunctionCallingWorker from '../VoiceFunctionCallingWorker/VoiceFunctionCallingWorker.ts'
 import {
   createSessionConfig,
   defaultSessionModel,
@@ -155,6 +155,14 @@ export const createInstance = async (
       throw new Error('data channel port not connected')
     }
     dataChannelPort.postMessage(data)
+  }
+
+  const handleFunctionCall = async (parsed: unknown): Promise<void> => {
+    const messages =
+      await VoiceFunctionCallingWorker.executeFunctionToolCall(parsed)
+    for (const message of messages) {
+      await sendToDataChannel(message)
+    }
   }
 
   const requestRerender = (): void => {
@@ -314,10 +322,12 @@ export const createInstance = async (
       try {
         const apiKey = await getStoredApiKey()
         const { sessionModel } = state
+        const registeredTools =
+          await VoiceFunctionCallingWorker.getRegisteredTools()
 
         const ephemeralKey = await getEphemeralKey(
           apiKey,
-          createSessionConfig(sessionModel),
+          createSessionConfig(sessionModel, registeredTools),
         )
         const { port1, port2 } = new MessageChannel()
         // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
@@ -398,7 +408,7 @@ export const createInstance = async (
         parsedData: [...parsedData, parsed],
       }
 
-      void handleFunctionCall(parsed, sendToDataChannel).catch((error) => {
+      void handleFunctionCall(parsed).catch((error) => {
         console.error(error)
       })
 

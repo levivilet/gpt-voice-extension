@@ -9,6 +9,11 @@ import { root } from './root.ts'
 
 const extension = path.join(root, 'packages', 'extension')
 const media = path.join(extension, 'media')
+const voiceFunctionCallingWorker = path.join(
+  root,
+  'packages',
+  'voice-function-calling-worker',
+)
 const require = createRequire(import.meta.url)
 const commonjs = require('@rollup/plugin-commonjs') as () => Plugin
 
@@ -31,29 +36,46 @@ fs.copyFileSync(
   join(root, 'dist', 'media', 'trello.svg'),
 )
 
-const bundle = await rollup({
-  input: join(extension, 'src', 'gptVoiceMain.ts'),
-  external: ['electron', 'node:*'],
-  plugins: [
-    nodeResolve({
-      browser: true,
-    }),
-    commonjs(),
-    esbuild({
-      target: 'esnext',
-    }),
-  ],
-  treeshake: {
-    moduleSideEffects: false,
-  },
-})
+const buildBundle = async (input: string, output: string): Promise<void> => {
+  const bundle = await rollup({
+    input,
+    external: ['electron', 'node:*'],
+    plugins: [
+      nodeResolve({
+        browser: true,
+      }),
+      commonjs(),
+      esbuild({
+        target: 'esnext',
+      }),
+    ],
+    treeshake: {
+      moduleSideEffects: false,
+    },
+  })
 
-await bundle.write({
-  file: join(root, 'dist', 'dist', 'gptVoiceMain.js'),
-  format: 'esm',
-})
+  await bundle.write({
+    file: output,
+    format: 'esm',
+  })
 
-await bundle.close()
+  await bundle.close()
+}
+
+await Promise.all([
+  buildBundle(
+    join(extension, 'src', 'gptVoiceMain.ts'),
+    join(root, 'dist', 'dist', 'gptVoiceMain.js'),
+  ),
+  buildBundle(
+    join(
+      voiceFunctionCallingWorker,
+      'src',
+      'voiceFunctionCallingWorkerMain.ts',
+    ),
+    join(root, 'dist', 'dist', 'voiceFunctionCallingWorkerMain.js'),
+  ),
+])
 
 await packageExtension({
   highestCompression: true,

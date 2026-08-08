@@ -24,6 +24,27 @@ const stopWebRtcAudioStream = jest.fn<(uid: number) => Promise<void>>(
   async () => undefined,
 )
 const storeSecret = jest.fn<(key: string, value: string) => Promise<void>>()
+const getRegisteredTools = jest.fn(async () => [
+  {
+    description: 'Get weather for a location.',
+    name: 'getweather',
+    parameters: { type: 'object' },
+    type: 'function' as const,
+  },
+])
+const executeFunctionToolCall = jest.fn(
+  async (event: unknown): Promise<readonly string[]> => {
+    if (
+      !event ||
+      typeof event !== 'object' ||
+      !('type' in event) ||
+      event.type !== 'response.function_call_arguments.done'
+    ) {
+      return []
+    }
+    return ['tool-output', 'response']
+  },
+)
 
 // eslint-disable-next-line jest/no-restricted-jest-methods
 jest.unstable_mockModule('@lvce-editor/api', () => {
@@ -39,6 +60,12 @@ jest.unstable_mockModule('@lvce-editor/api', () => {
     storeSecret,
   }
 })
+
+// eslint-disable-next-line jest/no-restricted-jest-methods
+jest.unstable_mockModule(
+  '../src/parts/VoiceFunctionCallingWorker/VoiceFunctionCallingWorker.ts',
+  () => ({ executeFunctionToolCall, getRegisteredTools }),
+)
 
 const { createInstance } =
   await import('../src/parts/CreateInstance/CreateInstance.ts')
@@ -114,6 +141,8 @@ beforeEach(() => {
   startWebRtcAudioStream.mockReset().mockResolvedValue('offer-sdp')
   stopWebRtcAudioStream.mockReset().mockResolvedValue(undefined)
   storeSecret.mockReset().mockResolvedValue(undefined)
+  executeFunctionToolCall.mockClear()
+  getRegisteredTools.mockClear()
   // eslint-disable-next-line unicorn/no-top-level-assignment-in-function
   latestPort2 = undefined
   jest.useFakeTimers()
@@ -334,6 +363,7 @@ test('instance - starts, receives data, animates, and stops session', async () =
   await instance.handleClickStart()
   await flushAnimation()
 
+  expect(getRegisteredTools).toHaveBeenCalledTimes(1)
   expect(startWebRtcAudioStream).toHaveBeenCalled()
   expect(setRemoteDescription).toHaveBeenCalledWith({
     sdp: 'answer-sdp',

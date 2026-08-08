@@ -1,3 +1,5 @@
+import type { FunctionToolDefinition } from '../VoiceFunctionCallingWorker/VoiceFunctionCallingWorker.ts'
+
 export enum RealtimeModelPreset {
   Mini = 'gpt-realtime-2.1-mini',
   Standard = 'gpt-realtime-2.1',
@@ -34,22 +36,7 @@ type SessionConfig = {
   readonly session: {
     readonly instructions: string
     readonly tool_choice: 'auto' | 'none' | 'required'
-    readonly tools: readonly {
-      readonly name: 'getweather'
-      readonly type: 'function'
-      readonly description: string
-      readonly parameters: {
-        readonly type: 'object'
-        readonly properties: {
-          readonly location: {
-            readonly type: 'string'
-            readonly description: string
-          }
-        }
-        readonly required: readonly ['location']
-        readonly additionalProperties: false
-      }
-    }[]
+    readonly tools: readonly FunctionToolDefinition[]
     readonly audio: {
       readonly input: {
         readonly transcription: {
@@ -69,24 +56,8 @@ type SessionConfig = {
 
 export const createSessionConfig = (
   sessionModel: RealtimeModelPreset,
+  tools: readonly FunctionToolDefinition[] = [],
 ): SessionConfig => {
-  const getWeatherTool = {
-    description: 'Get weather for a location.',
-    name: 'getweather',
-    parameters: {
-      additionalProperties: false,
-      properties: {
-        location: {
-          description: 'Location to get the weather for',
-          type: 'string',
-        },
-      },
-      required: ['location'],
-      type: 'object',
-    },
-    type: 'function',
-  } as const
-
   return {
     session: {
       audio: {
@@ -108,11 +79,10 @@ export const createSessionConfig = (
           voice: 'marin',
         },
       },
-      instructions:
-        'You are a voice assistant with access to tools. If the user asks about weather, call getweather with a location argument.',
+      instructions: 'You are a voice assistant with access to tools.',
       model: sessionModel,
       tool_choice: 'auto',
-      tools: [getWeatherTool],
+      tools,
       type: 'realtime',
     },
   }
