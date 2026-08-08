@@ -1,0 +1,62 @@
+import { getFakeWeather } from '../FakeWeather/FakeWeather.ts'
+
+export interface FunctionToolDefinition {
+  readonly description: string
+  readonly name: string
+  readonly parameters: Readonly<Record<string, unknown>>
+  readonly type: 'function'
+}
+
+interface RegisteredFunctionTool {
+  readonly definition: FunctionToolDefinition
+  readonly execute: (
+    argumentsValue: Readonly<Record<string, unknown>>,
+  ) => unknown
+}
+
+const getWeatherTool: RegisteredFunctionTool = {
+  definition: {
+    description: 'Get weather for a location.',
+    name: 'getweather',
+    parameters: {
+      additionalProperties: false,
+      properties: {
+        location: {
+          description: 'Location to get the weather for',
+          type: 'string',
+        },
+      },
+      required: ['location'],
+      type: 'object',
+    },
+    type: 'function',
+  },
+  execute(argumentsValue) {
+    return getFakeWeather(argumentsValue.location)
+  },
+}
+
+const registeredTools: readonly RegisteredFunctionTool[] = [getWeatherTool]
+
+const parseArguments = (value: string): Readonly<Record<string, unknown>> => {
+  const parsed: unknown = JSON.parse(value)
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+    throw new TypeError('Function tool arguments must be a JSON object')
+  }
+  return parsed as Readonly<Record<string, unknown>>
+}
+
+export const getRegisteredTools = (): readonly FunctionToolDefinition[] => {
+  return registeredTools.map((tool) => tool.definition)
+}
+
+export const executeRegisteredFunctionTool = (
+  name: string,
+  argumentsValue: string,
+): unknown => {
+  const tool = registeredTools.find((tool) => tool.definition.name === name)
+  if (!tool) {
+    throw new Error(`Unknown function tool: ${name}`)
+  }
+  return tool.execute(parseArguments(argumentsValue))
+}
