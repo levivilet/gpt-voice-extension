@@ -32,3 +32,37 @@ test('renderStatus - in progress', () => {
     text('In Progress'),
   ])
 })
+
+test('renderStatus - creating token', () => {
+  const result = renderStatus(
+    createRenderState({
+      isCreatingToken: true,
+    }),
+  )
+
+  expect(result).toEqual([
+    {
+      childCount: 1,
+      className: 'GptVoiceStatus',
+      type: VirtualDomElements.Div,
+    },
+    text('Creating token'),
+  ])
+})
+
+test('renderStatus - token error', () => {
+  const result = renderStatus(
+    createRenderState({
+      tokenError: 'invalid key',
+    }),
+  )
+
+  expect(result).toEqual([
+    {
+      childCount: 1,
+      className: 'GptVoiceStatus',
+      type: VirtualDomElements.Div,
+    },
+    text('invalid key'),
+  ])
+})

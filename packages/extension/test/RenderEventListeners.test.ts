@@ -5,6 +5,18 @@ test('renderEventListeners - returns all listeners', () => {
   const eventListeners = renderEventListeners()
   expect(eventListeners).toEqual([
     {
+      name: 'handleOpenAiApiKeyInput',
+      params: ['handleOpenAiApiKeyInput', 'event.target.value'],
+    },
+    {
+      name: 'handleClearOpenAiApiKey',
+      params: ['handleClearOpenAiApiKey'],
+    },
+    {
+      name: 'handleSaveOpenAiApiKey',
+      params: ['handleSaveOpenAiApiKey'],
+    },
+    {
       name: 'handleClickStart',
       params: ['handleClickStart'],
     },

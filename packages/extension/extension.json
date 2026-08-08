@@ -9,25 +9,44 @@
   "contentSecurityPolicy": [
     "default-src 'none'",
     "script-src 'self'",
-    "connect-src 'self' http://localhost:3333 https://api.openai.com"
+    "connect-src 'self' https://api.openai.com"
   ],
   "categories": ["Other"],
   "configuration": {},
   "activation": [
+    "onCommand:gpt-voice.show",
     "onView:gpt-voice.views.default",
     "onCommand:GptVoice.handleClickStart",
+    "onCommand:GptVoice.handleClearOpenAiApiKey",
+    "onCommand:GptVoice.handleOpenAiApiKeyInput",
+    "onCommand:GptVoice.handleSaveOpenAiApiKey",
     "onCommand:GptVoice.setIsTest",
     "onCommand:GptVoice.setAnimation",
     "onCommand:GptVoice.setRealtimeModelMini",
     "onCommand:GptVoice.setRealtimeModelStandard",
     "onCommand:GptVoice.addTranscript",
-    "onCommand:GptVoice.stop",
-    "onCommand:GptVoice.debugData"
+    "onCommand:GptVoice.stop"
   ],
   "commands": [
     {
       "id": "gpt-voice.show",
       "label": "gpt-voice: Show"
+    },
+    {
+      "id": "GptVoice.handleClickStart",
+      "label": "gpt-voice: Handle Click Start"
+    },
+    {
+      "id": "GptVoice.handleClearOpenAiApiKey",
+      "label": "gpt-voice: Clear OpenAI API key"
+    },
+    {
+      "id": "GptVoice.handleOpenAiApiKeyInput",
+      "label": "gpt-voice: Handle OpenAI API key input"
+    },
+    {
+      "id": "GptVoice.handleSaveOpenAiApiKey",
+      "label": "gpt-voice: Save OpenAI API key"
     },
     {
       "id": "GptVoice.setIsTest",
@@ -50,16 +69,8 @@
       "label": "gpt-voice: add Transcript"
     },
     {
-      "id": "GptVoice.debugData",
-      "label": "gpt-voice: Debug"
-    },
-    {
       "id": "GptVoice.stop",
       "label": "gpt-voice: stop"
-    },
-    {
-      "id": "GptVoice.handleClickStart",
-      "label": "gpt-voice: Handle Click Start"
     }
   ],
   "keybindings": [],
@@ -71,14 +82,6 @@
       "title": "Gpt Voice",
       "icon": "media/trello.svg",
       "kind": "virtualDom"
-    }
-  ],
-  "rpc": [
-    {
-      "id": "gpt-voice-client",
-      "type": "node",
-      "name": "Gpt Voice",
-      "url": "../node/src/gptVoiceClient.ts"
     }
   ]
 }

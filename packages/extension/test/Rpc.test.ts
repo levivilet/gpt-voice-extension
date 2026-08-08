@@ -1,21 +1,8 @@
-import { beforeEach, expect, jest, test } from '@jest/globals'
-import { invoke, state } from '../src/parts/Rpc/Rpc.ts'
+import { expect, test } from '@jest/globals'
+import { invoke } from '../src/parts/Rpc/Rpc.ts'
 
-const rpcInvoke = jest.fn<(method: string, ...params: readonly any[]) => any>()
-
-beforeEach(() => {
-  rpcInvoke.mockReset()
-  state.rpcPromise = Promise.resolve({
-    invoke: rpcInvoke,
-  })
-})
-
-test('invoke - reuses existing rpc', async () => {
-  rpcInvoke.mockResolvedValue('result')
-
-  await invoke('first')
-  await invoke('second')
-
-  expect(rpcInvoke).toHaveBeenNthCalledWith(1, 'first')
-  expect(rpcInvoke).toHaveBeenNthCalledWith(2, 'second')
+test('invoke - rejects legacy node rpc requests', async () => {
+  await expect(invoke('test.method', 'one')).rejects.toThrow(
+    'Legacy Node RPC (test.method) is not supported for gpt-voice',
+  )
 })

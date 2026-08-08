@@ -8,6 +8,18 @@ interface DomEventListener {
 export const renderEventListeners = (): readonly DomEventListener[] => {
   return [
     {
+      name: 'handleOpenAiApiKeyInput',
+      params: ['handleOpenAiApiKeyInput', 'event.target.value'],
+    },
+    {
+      name: 'handleClearOpenAiApiKey',
+      params: ['handleClearOpenAiApiKey'],
+    },
+    {
+      name: 'handleSaveOpenAiApiKey',
+      params: ['handleSaveOpenAiApiKey'],
+    },
+    {
       name: 'handleClickStart',
       params: ['handleClickStart'],
     },
