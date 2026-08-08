@@ -36,10 +36,6 @@ export const view: GptVoiceView = {
       context.setAnimation(enabled, scale)
       return context
     },
-    async 'GptVoice.setIsTest'(context) {
-      context.setIsTest()
-      return context
-    },
     async 'GptVoice.setRealtimeModelMini'(context) {
       context.setRealtimeModelMini()
       return context
