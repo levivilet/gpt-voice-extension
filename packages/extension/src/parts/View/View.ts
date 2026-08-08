@@ -3,6 +3,7 @@ import {
   type ActiveGptVoiceViewInstance,
   createInstance,
 } from '../CreateInstance/CreateInstance.ts'
+import * as GptVoiceStrings from '../GptVoiceStrings/GptVoiceStrings.ts'
 import { renderEventListeners } from '../RenderEventListeners/RenderEventListeners.ts'
 
 type GptVoiceView = Omit<View<ActiveGptVoiceViewInstance>, 'commands'> & {
@@ -50,12 +51,12 @@ export const view: GptVoiceView = {
     },
   },
   create: createInstance,
-  displayName: 'GptVoice',
+  displayName: GptVoiceStrings.gptVoiceDisplayName(),
   eventListeners: renderEventListeners(),
   icon: 'list-tree',
 
   id: 'gpt-voice.views.default',
 
   kind: 'virtualDom',
-  title: 'Gpt Voice',
+  title: GptVoiceStrings.gptVoice(),
 }

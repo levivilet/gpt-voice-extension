@@ -59,6 +59,7 @@ test('gpt-voice.show command opens floating extension window url', async () => {
 })
 
 test('setIsTest initializes the next view instance in test mode', async () => {
+  await Main.activate()
   const requestRerender = jest.fn()
   const setIsTestCommand = registerCommand.mock.calls.at(1)?.[0]
   if (!setIsTestCommand) {
