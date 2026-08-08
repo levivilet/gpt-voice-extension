@@ -1,18 +1,24 @@
+import type * as Api from '@lvce-editor/api'
 import { expect, jest, test } from '@jest/globals'
 
 const activateExtensionApi = jest.fn(async () => {})
-const executeCommand = jest.fn(async () => {})
-const readMicLevels = jest.fn(async () => ({ micAnalyzerData: [], remoteAnalyzerData: [] }))
-const registerCommand = jest.fn(() => ({
-  dispose: jest.fn(),
+const executeCommand = jest.fn(async (commandId: string, url: string) => {})
+const readMicLevels = jest.fn(async () => ({
+  micAnalyzerData: [],
+  remoteAnalyzerData: [],
 }))
+const registerCommand = jest.fn(
+  (command: Readonly<{ id: string; execute: () => Promise<void> }>) => ({
+    dispose: jest.fn(),
+  }),
+)
 const registerView = jest.fn(() => ({
   dispose: jest.fn(),
 }))
 
 // eslint-disable-next-line jest/no-restricted-jest-methods
-jest.unstable_mockModule('@lvce-editor/api', async () => {
-  const actual = await jest.requireActual('@lvce-editor/api')
+jest.unstable_mockModule('@lvce-editor/api', () => {
+  const actual = jest.requireActual<typeof Api>('@lvce-editor/api')
   return {
     ...actual,
     activate: activateExtensionApi,
@@ -24,8 +30,8 @@ jest.unstable_mockModule('@lvce-editor/api', async () => {
     registerView,
     setRemoteDescription: jest.fn(),
     startWebRtcAudioStream: jest.fn(),
-    storeSecret: jest.fn(),
     stopWebRtcAudioStream: jest.fn(),
+    storeSecret: jest.fn(),
   }
 })
 
