@@ -6,7 +6,7 @@ interface FileSystemDirent {
 }
 
 export interface WorkspaceFileSystemApi {
-  readonly getWorkspaceFolder: () => Promise<string>
+  readonly getWorkspaceUri: () => Promise<string>
   readonly readDirWithFileTypes: (
     uri: string,
   ) => Promise<readonly FileSystemDirent[]>
@@ -15,8 +15,8 @@ export interface WorkspaceFileSystemApi {
 }
 
 const defaultApi: WorkspaceFileSystemApi = {
-  getWorkspaceFolder: () =>
-    Rpc.invoke<string>('WorkspaceFileSystem.getWorkspaceFolder'),
+  getWorkspaceUri: () =>
+    Rpc.invoke<string>('WorkspaceFileSystem.getWorkspaceUri'),
   readDirWithFileTypes: (uri) =>
     Rpc.invoke<readonly FileSystemDirent[]>(
       'WorkspaceFileSystem.readDirWithFileTypes',
@@ -30,14 +30,6 @@ const defaultApi: WorkspaceFileSystemApi = {
 const uriSchemeRegex = /^[A-Za-z][A-Za-z\d+.-]*:/
 const windowsAbsolutePathRegex = /^[A-Za-z]:[\\/]/
 const pathSeparatorRegex = /[\\/]+/
-
-const trimTrailingPathSeparators = (value: string): string => {
-  let end = value.length
-  while (end > 0 && (value[end - 1] === '/' || value[end - 1] === '\\')) {
-    end--
-  }
-  return value.slice(0, end)
-}
 
 const getPathSegments = (
   relativePath: string,
@@ -70,39 +62,51 @@ const getPathSegments = (
   return segments
 }
 
-const resolveWorkspacePath = (
-  workspaceFolder: string,
+const resolveWorkspaceUri = (
+  workspaceUri: string,
   relativePath: string,
   pathKind: 'directory' | 'file',
   allowWorkspaceRoot = false,
 ): string => {
-  if (!workspaceFolder) {
+  if (!workspaceUri) {
     throw new Error('No workspace folder is currently open.')
+  }
+  if (!uriSchemeRegex.test(workspaceUri)) {
+    throw new Error(
+      'The opened workspace does not provide a valid filesystem URI.',
+    )
   }
   const segments = getPathSegments(relativePath, pathKind, allowWorkspaceRoot)
   if (segments.length === 0) {
-    return workspaceFolder
+    return workspaceUri
   }
-  const pathSeparator =
-    workspaceFolder.includes('\\') && !workspaceFolder.includes('/')
-      ? '\\'
-      : '/'
-  const workspaceRoot = trimTrailingPathSeparators(workspaceFolder)
-  return `${workspaceRoot}${pathSeparator}${segments.join(pathSeparator)}`
+  const workspaceRoot = workspaceUri.endsWith('/')
+    ? workspaceUri
+    : `${workspaceUri}/`
+  try {
+    return new URL(
+      segments.map((segment) => encodeURIComponent(segment)).join('/'),
+      workspaceRoot,
+    ).href
+  } catch {
+    throw new Error(
+      'The opened workspace does not provide a valid filesystem URI.',
+    )
+  }
 }
 
-export const resolveWorkspaceFilePath = (
-  workspaceFolder: string,
+export const resolveWorkspaceFileUri = (
+  workspaceUri: string,
   relativePath: string,
 ): string => {
-  return resolveWorkspacePath(workspaceFolder, relativePath, 'file')
+  return resolveWorkspaceUri(workspaceUri, relativePath, 'file')
 }
 
-export const resolveWorkspaceDirectoryPath = (
-  workspaceFolder: string,
+export const resolveWorkspaceDirectoryUri = (
+  workspaceUri: string,
   relativePath: string,
 ): string => {
-  return resolveWorkspacePath(workspaceFolder, relativePath, 'directory', true)
+  return resolveWorkspaceUri(workspaceUri, relativePath, 'directory', true)
 }
 
 type WorkspaceDirectoryEntryType =
@@ -118,6 +122,10 @@ type WorkspaceDirectoryEntryType =
 interface WorkspaceDirectoryEntry {
   readonly name: string
   readonly type: WorkspaceDirectoryEntryType
+}
+
+const getErrorMessage = (error: unknown): string => {
+  return error instanceof Error ? error.message : String(error)
 }
 
 const getDirectoryEntryType = (type: number): WorkspaceDirectoryEntryType => {
@@ -156,12 +164,16 @@ export const listWorkspaceDirectory = async (
     path: string
   }>
 > => {
-  const workspaceFolder = await api.getWorkspaceFolder()
-  const absolutePath = resolveWorkspaceDirectoryPath(
-    workspaceFolder,
-    relativePath,
-  )
-  const dirents = await api.readDirWithFileTypes(absolutePath)
+  const workspaceUri = await api.getWorkspaceUri()
+  const directoryUri = resolveWorkspaceDirectoryUri(workspaceUri, relativePath)
+  let dirents: readonly FileSystemDirent[]
+  try {
+    dirents = await api.readDirWithFileTypes(directoryUri)
+  } catch (error) {
+    throw new Error(
+      `Failed to list workspace directory "${relativePath}": ${getErrorMessage(error)}`,
+    )
+  }
   const entries = dirents
     .map<WorkspaceDirectoryEntry>((dirent) => ({
       name: dirent.name,
@@ -178,9 +190,16 @@ export const readWorkspaceFile = async (
   relativePath: string,
   api: WorkspaceFileSystemApi = defaultApi,
 ): Promise<Readonly<{ content: string; path: string }>> => {
-  const workspaceFolder = await api.getWorkspaceFolder()
-  const absolutePath = resolveWorkspaceFilePath(workspaceFolder, relativePath)
-  const content = await api.readFile(absolutePath)
+  const workspaceUri = await api.getWorkspaceUri()
+  const fileUri = resolveWorkspaceFileUri(workspaceUri, relativePath)
+  let content: string
+  try {
+    content = await api.readFile(fileUri)
+  } catch (error) {
+    throw new Error(
+      `Failed to read workspace file "${relativePath}": ${getErrorMessage(error)}`,
+    )
+  }
   return {
     content,
     path: relativePath,
@@ -192,9 +211,15 @@ export const writeWorkspaceFile = async (
   content: string,
   api: WorkspaceFileSystemApi = defaultApi,
 ): Promise<Readonly<{ path: string; written: boolean }>> => {
-  const workspaceFolder = await api.getWorkspaceFolder()
-  const absolutePath = resolveWorkspaceFilePath(workspaceFolder, relativePath)
-  await api.writeFile(absolutePath, content)
+  const workspaceUri = await api.getWorkspaceUri()
+  const fileUri = resolveWorkspaceFileUri(workspaceUri, relativePath)
+  try {
+    await api.writeFile(fileUri, content)
+  } catch (error) {
+    throw new Error(
+      `Failed to write workspace file "${relativePath}": ${getErrorMessage(error)}`,
+    )
+  }
   return {
     path: relativePath,
     written: true,
