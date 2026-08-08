@@ -17,12 +17,12 @@ import {
 } from '@lvce-editor/virtual-dom-worker'
 import type { MenuEntry } from '../MenuEntries/MenuEntries.ts'
 import { animateBubble } from '../AnimateBubble/AnimateBubble.ts'
-import { handleFunctionCall } from '../FunctionCalling/FunctionCalling.ts'
 import { getTitle } from '../GetTitle/GetTitle.ts'
 import { createOpenAiApiKeyStorage } from '../OpenAiApiKeyStorage/OpenAiApiKeyStorage.ts'
 import { readLevel } from '../ReadLevel/ReadLevel.ts'
 import { render } from '../Render/Render.ts'
 import { isInTestMode } from '../TestMode/TestMode.ts'
+import * as VoiceFunctionCallingWorker from '../VoiceFunctionCallingWorker/VoiceFunctionCallingWorker.ts'
 import {
   createSessionConfig,
   defaultSessionModel,
@@ -147,6 +147,14 @@ export const createInstance = async (
       throw new Error('data channel port not connected')
     }
     dataChannelPort.postMessage(data)
+  }
+
+  const handleFunctionCall = async (parsed: unknown): Promise<void> => {
+    const messages =
+      await VoiceFunctionCallingWorker.executeFunctionToolCall(parsed)
+    for (const message of messages) {
+      await sendToDataChannel(message)
+    }
   }
 
   const requestRerender = (): void => {
@@ -289,10 +297,12 @@ export const createInstance = async (
       requestRerender()
       try {
         const apiKey = await getStoredApiKey()
+        const registeredTools =
+          await VoiceFunctionCallingWorker.getRegisteredTools()
 
         const ephemeralKey = await getEphemeralKey(
           apiKey,
-          createSessionConfig(state.sessionModel),
+          createSessionConfig(state.sessionModel, registeredTools),
         )
         const { port1, port2 } = new MessageChannel()
         // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
@@ -369,7 +379,7 @@ export const createInstance = async (
         parsedData: [...state.parsedData, parsed],
       }
 
-      void handleFunctionCall(parsed, sendToDataChannel).catch((error) => {
+      void handleFunctionCall(parsed).catch((error) => {
         console.error(error)
       })
 
