@@ -1,0 +1,155 @@
+import type { FunctionToolDefinition } from '../FunctionToolRegistry/FunctionToolRegistry.ts'
+import * as Rpc from '../Rpc/Rpc.ts'
+
+interface FunctionCallArguments {
+  readonly argumentsValue: string
+  readonly callId: string
+  readonly name: string
+}
+
+interface WorkspaceApi {
+  readonly setWorkspaceUri: (uri: string) => Promise<void>
+}
+
+const defaultApi: WorkspaceApi = {
+  setWorkspaceUri: (uri) => Rpc.invoke<void>('Workspace.setWorkspaceUri', uri),
+}
+
+const uriSchemeRegex = /^[A-Za-z][A-Za-z\d+.-]*:\/\//
+
+const openWorkspaceFolderTool: FunctionToolDefinition = {
+  description:
+    'Open or switch the LVCE Editor workspace folder. Call only when the user explicitly asks to open or switch a workspace. Pass a full filesystem URI.',
+  name: 'open_workspace_folder',
+  parameters: {
+    additionalProperties: false,
+    properties: {
+      uri: {
+        description:
+          'Full workspace folder URI, for example "file:///home/user/project" or "remote-ssh://host/project".',
+        type: 'string',
+      },
+    },
+    required: ['uri'],
+    type: 'object',
+  },
+  type: 'function',
+}
+
+export const workspaceFunctionTools: readonly FunctionToolDefinition[] = [
+  openWorkspaceFolderTool,
+]
+
+const parseFunctionCall = (
+  parsed: unknown,
+): FunctionCallArguments | undefined => {
+  if (!parsed || typeof parsed !== 'object') {
+    return undefined
+  }
+  if (
+    'type' in parsed &&
+    parsed.type === 'response.function_call_arguments.done' &&
+    'call_id' in parsed &&
+    typeof parsed.call_id === 'string' &&
+    'name' in parsed &&
+    parsed.name === 'open_workspace_folder' &&
+    'arguments' in parsed &&
+    typeof parsed.arguments === 'string'
+  ) {
+    return {
+      argumentsValue: parsed.arguments,
+      callId: parsed.call_id,
+      name: parsed.name,
+    }
+  }
+  if (
+    'type' in parsed &&
+    parsed.type === 'response.output_item.done' &&
+    'item' in parsed &&
+    parsed.item &&
+    typeof parsed.item === 'object' &&
+    'type' in parsed.item &&
+    parsed.item.type === 'function_call' &&
+    'call_id' in parsed.item &&
+    typeof parsed.item.call_id === 'string' &&
+    'name' in parsed.item &&
+    parsed.item.name === 'open_workspace_folder' &&
+    'arguments' in parsed.item &&
+    typeof parsed.item.arguments === 'string'
+  ) {
+    return {
+      argumentsValue: parsed.item.arguments,
+      callId: parsed.item.call_id,
+      name: parsed.item.name,
+    }
+  }
+  return undefined
+}
+
+const createToolOutputMessage = (callId: string, output: string): string => {
+  return JSON.stringify({
+    item: {
+      call_id: callId,
+      output,
+      type: 'function_call_output',
+    },
+    type: 'conversation.item.create',
+  })
+}
+
+const createFunctionResultResponseMessage = (): string => {
+  return JSON.stringify({ type: 'response.create' })
+}
+
+const getWorkspaceUriArgument = (value: string): string => {
+  let parsed: unknown
+  try {
+    parsed = JSON.parse(value)
+  } catch {
+    throw new TypeError('Function tool arguments must be valid JSON.')
+  }
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+    throw new TypeError('Function tool arguments must be a JSON object.')
+  }
+  const { uri } = parsed as Readonly<Record<string, unknown>>
+  if (typeof uri !== 'string') {
+    throw new TypeError('Function tool argument "uri" must be a string.')
+  }
+  const trimmedUri = uri.trim()
+  if (!uriSchemeRegex.test(trimmedUri)) {
+    throw new TypeError(
+      'Function tool argument "uri" must be a full workspace URI.',
+    )
+  }
+  return trimmedUri
+}
+
+const getErrorMessage = (error: unknown): string => {
+  return error instanceof Error ? error.message : String(error)
+}
+
+export const executeWorkspaceFunctionToolCall = async (
+  functionCallEvent: unknown,
+  api: WorkspaceApi = defaultApi,
+): Promise<readonly string[] | undefined> => {
+  const functionCall = parseFunctionCall(functionCallEvent)
+  if (!functionCall) {
+    return undefined
+  }
+  let output: unknown
+  try {
+    const uri = getWorkspaceUriArgument(functionCall.argumentsValue)
+    await api.setWorkspaceUri(uri)
+    output = { opened: true, uri }
+  } catch (error) {
+    output = {
+      error: getErrorMessage(error),
+      hint: 'Pass a full workspace folder URI, such as {"uri":"file:///home/user/project"}.',
+      tool: functionCall.name,
+    }
+  }
+  return [
+    createToolOutputMessage(functionCall.callId, JSON.stringify(output)),
+    createFunctionResultResponseMessage(),
+  ]
+}

@@ -10,14 +10,16 @@ const createRpc = jest.fn<typeof Api.createRpc>(
     }) as never,
 )
 const closeUri = jest.fn<(uri: string) => Promise<void>>(async () => undefined)
-const getWorkspaceFolder = jest.fn(async () => '/workspace')
-const getWorkspaceUri = jest.fn(async () => 'file:///workspace')
 const openUri = jest.fn<(uri: string) => Promise<void>>(async () => undefined)
+const getWorkspaceUri = jest.fn(async () => 'file:///workspace')
 const readDirWithFileTypes = jest.fn(async () => [
   { name: 'package.json', type: 7 },
 ])
 const readFile = jest.fn<(uri: string) => Promise<string>>(
   async () => 'workspace content',
+)
+const setWorkspaceUri = jest.fn<(uri: string) => Promise<void>>(
+  async () => undefined,
 )
 const writeFile = jest.fn<(uri: string, content: string) => Promise<void>>(
   async () => undefined,
@@ -30,11 +32,11 @@ jest.unstable_mockModule('@lvce-editor/api', () => {
     ...actual,
     closeUri,
     createRpc,
-    getWorkspaceFolder,
     getWorkspaceUri,
     openUri,
     readDirWithFileTypes,
     readFile,
+    setWorkspaceUri,
     writeFile,
   }
 })
@@ -46,11 +48,11 @@ beforeEach(() => {
   createRpc.mockClear()
   closeUri.mockClear()
   invoke.mockReset()
-  getWorkspaceFolder.mockClear()
   getWorkspaceUri.mockClear()
   openUri.mockClear()
   readDirWithFileTypes.mockClear()
   readFile.mockClear()
+  setWorkspaceUri.mockClear()
   writeFile.mockClear()
   VoiceFunctionCallingWorker.state.rpcPromise = undefined
 })
@@ -72,10 +74,11 @@ test('creates a web worker RPC and queries registered tools', async () => {
 
   expect(createRpc).toHaveBeenCalledWith({
     commandMap: {
+      'Workspace.setWorkspaceUri': setWorkspaceUri,
       'WorkspaceMainArea.closeUri': closeUri,
       'WorkspaceMainArea.getWorkspaceUri': getWorkspaceUri,
       'WorkspaceMainArea.openUri': openUri,
-      'WorkspaceFileSystem.getWorkspaceFolder': getWorkspaceFolder,
+      'WorkspaceFileSystem.getWorkspaceUri': getWorkspaceUri,
       'WorkspaceFileSystem.readDirWithFileTypes': readDirWithFileTypes,
       'WorkspaceFileSystem.readFile': readFile,
       'WorkspaceFileSystem.writeFile': writeFile,

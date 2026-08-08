@@ -1,11 +1,11 @@
 import {
   closeUri,
   createRpc,
-  getWorkspaceFolder,
   getWorkspaceUri,
   openUri,
   readDirWithFileTypes,
   readFile,
+  setWorkspaceUri,
   writeFile,
 } from '@lvce-editor/api'
 
@@ -33,10 +33,11 @@ interface WebWorkerRpcOptions {
 type CreateRpc = (options: WebWorkerRpcOptions) => Promise<Rpc>
 
 const commandMap = {
+  'Workspace.setWorkspaceUri': setWorkspaceUri,
   'WorkspaceMainArea.closeUri': closeUri,
   'WorkspaceMainArea.getWorkspaceUri': getWorkspaceUri,
   'WorkspaceMainArea.openUri': openUri,
-  'WorkspaceFileSystem.getWorkspaceFolder': getWorkspaceFolder,
+  'WorkspaceFileSystem.getWorkspaceUri': getWorkspaceUri,
   'WorkspaceFileSystem.readDirWithFileTypes': readDirWithFileTypes,
   'WorkspaceFileSystem.readFile': readFile,
   'WorkspaceFileSystem.writeFile': writeFile,

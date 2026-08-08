@@ -48,7 +48,7 @@ test('executes completed function call output items', async () => {
 test('executes workspace file function calls in the worker', async () => {
   const invoke = jest
     .fn<(method: string, ...params: readonly unknown[]) => Promise<unknown>>()
-    .mockResolvedValueOnce('/workspace')
+    .mockResolvedValueOnce('file:///workspace')
     .mockResolvedValueOnce('const value = 1')
   const globalScope = globalThis as typeof globalThis & {
     rpc: { readonly invoke: typeof invoke }
@@ -64,12 +64,12 @@ test('executes workspace file function calls in the worker', async () => {
 
   expect(invoke).toHaveBeenNthCalledWith(
     1,
-    'WorkspaceFileSystem.getWorkspaceFolder',
+    'WorkspaceFileSystem.getWorkspaceUri',
   )
   expect(invoke).toHaveBeenNthCalledWith(
     2,
     'WorkspaceFileSystem.readFile',
-    '/workspace/src/index.ts',
+    'file:///workspace/src/index.ts',
   )
   expect(result[0]).toContain('const value = 1')
 })
@@ -77,7 +77,7 @@ test('executes workspace file function calls in the worker', async () => {
 test('executes workspace directory listing calls in the worker', async () => {
   const invoke = jest
     .fn<(method: string, ...params: readonly unknown[]) => Promise<unknown>>()
-    .mockResolvedValueOnce('/workspace')
+    .mockResolvedValueOnce('file:///workspace')
     .mockResolvedValueOnce([{ name: 'package.json', type: 7 }])
   const globalScope = globalThis as typeof globalThis & {
     rpc: { readonly invoke: typeof invoke }
@@ -93,14 +93,37 @@ test('executes workspace directory listing calls in the worker', async () => {
 
   expect(invoke).toHaveBeenNthCalledWith(
     1,
-    'WorkspaceFileSystem.getWorkspaceFolder',
+    'WorkspaceFileSystem.getWorkspaceUri',
   )
   expect(invoke).toHaveBeenNthCalledWith(
     2,
     'WorkspaceFileSystem.readDirWithFileTypes',
-    '/workspace',
+    'file:///workspace',
   )
   expect(result[0]).toContain('package.json')
+})
+
+test('executes open workspace folder calls in the worker', async () => {
+  const invoke = jest
+    .fn<(method: string, ...params: readonly unknown[]) => Promise<unknown>>()
+    .mockResolvedValue(undefined)
+  const globalScope = globalThis as typeof globalThis & {
+    rpc: { readonly invoke: typeof invoke }
+  }
+  globalScope.rpc = { invoke }
+
+  const result = await executeFunctionToolCall({
+    arguments: '{"uri":"file:///home/user/project"}',
+    call_id: 'open-workspace-call',
+    name: 'open_workspace_folder',
+    type: 'response.function_call_arguments.done',
+  })
+
+  expect(invoke).toHaveBeenCalledWith(
+    'Workspace.setWorkspaceUri',
+    'file:///home/user/project',
+  )
+  expect(result[0]).toContain('file:///home/user/project')
 })
 
 test.each([

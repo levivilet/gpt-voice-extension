@@ -126,15 +126,30 @@ const getErrorMessage = (error: unknown): string => {
   return String(error)
 }
 
+const getToolErrorHint = (toolName: string): string => {
+  if (toolName === 'list_workspace_directory') {
+    return 'To list the workspace root, call list_workspace_directory with no arguments: {}. To list a subdirectory, pass only a relative path such as {"path":"src"}. Never pass an absolute path or URI.'
+  }
+  if (
+    toolName === 'read_workspace_file' ||
+    toolName === 'open_workspace_file' ||
+    toolName === 'close_workspace_file'
+  ) {
+    return 'Pass a file path relative to the workspace, such as {"path":"src/index.ts"}. Never pass an absolute path or URI.'
+  }
+  return 'Pass a file path relative to the workspace and complete file content. Never pass an absolute path or URI.'
+}
+
 const readWorkspaceFileTool: FunctionToolDefinition = {
   description:
-    'Read a UTF-8 text file from the currently opened workspace. The path must be relative to the workspace folder.',
+    'Read a UTF-8 text file from the opened workspace. Use a path returned by list_workspace_directory, or another path relative to the workspace. Never pass an absolute path or URI.',
   name: 'read_workspace_file',
   parameters: {
     additionalProperties: false,
     properties: {
       path: {
-        description: 'File path relative to the currently opened workspace',
+        description:
+          'Required relative file path, for example "package.json" or "src/index.ts". Do not pass file:// URIs or absolute paths.',
         type: 'string',
       },
     },
@@ -146,14 +161,14 @@ const readWorkspaceFileTool: FunctionToolDefinition = {
 
 const listWorkspaceDirectoryTool: FunctionToolDefinition = {
   description:
-    'List the immediate files and directories in a directory in the currently opened workspace. Omit path or use "." to list the workspace root.',
+    'Use this tool whenever the user asks which files or folders exist in the opened workspace. For the workspace root or top-level files, call it with no arguments: {}. For a subdirectory, pass a relative path such as {"path":"src"}. Never pass an absolute path, URI, or workspace folder name.',
   name: 'list_workspace_directory',
   parameters: {
     additionalProperties: false,
     properties: {
       path: {
         description:
-          'Directory path relative to the currently opened workspace. Defaults to ".".',
+          'Optional relative subdirectory path, for example "src". Omit this property to list the workspace root. Do not pass ".", file:// URIs, absolute paths, or the workspace folder name.',
         type: 'string',
       },
     },
@@ -164,7 +179,7 @@ const listWorkspaceDirectoryTool: FunctionToolDefinition = {
 
 const writeWorkspaceFileTool: FunctionToolDefinition = {
   description:
-    'Write UTF-8 text to a file in the currently opened workspace. The path must be relative to the workspace folder.',
+    'Create or replace a UTF-8 text file in the opened workspace. Call only when the user explicitly asks to create or modify a file. The path must be relative; never pass an absolute path or URI.',
   name: 'write_workspace_file',
   parameters: {
     additionalProperties: false,
@@ -174,7 +189,8 @@ const writeWorkspaceFileTool: FunctionToolDefinition = {
         type: 'string',
       },
       path: {
-        description: 'File path relative to the currently opened workspace',
+        description:
+          'Required relative file path, for example "src/index.ts". Do not pass file:// URIs or absolute paths.',
         type: 'string',
       },
     },
@@ -186,13 +202,14 @@ const writeWorkspaceFileTool: FunctionToolDefinition = {
 
 const openWorkspaceFileTool: FunctionToolDefinition = {
   description:
-    'Open a file from the currently opened workspace in the editor main area. The path must be relative to the workspace folder.',
+    'Open a file from the currently opened workspace in the editor main area. The path must be relative; never pass an absolute path or URI.',
   name: 'open_workspace_file',
   parameters: {
     additionalProperties: false,
     properties: {
       path: {
-        description: 'File path relative to the currently opened workspace',
+        description:
+          'Required relative file path, for example "src/index.ts". Do not pass file:// URIs or absolute paths.',
         type: 'string',
       },
     },
@@ -204,13 +221,14 @@ const openWorkspaceFileTool: FunctionToolDefinition = {
 
 const closeWorkspaceFileTool: FunctionToolDefinition = {
   description:
-    'Close every editor tab showing a file from the currently opened workspace. The path must be relative to the workspace folder.',
+    'Close every editor tab showing a file from the currently opened workspace. The path must be relative; never pass an absolute path or URI.',
   name: 'close_workspace_file',
   parameters: {
     additionalProperties: false,
     properties: {
       path: {
-        description: 'File path relative to the currently opened workspace',
+        description:
+          'Required relative file path, for example "src/index.ts". Do not pass file:// URIs or absolute paths.',
         type: 'string',
       },
     },
@@ -274,7 +292,11 @@ export const executeWorkspaceFileFunctionToolCall = async (
       )
     }
   } catch (error) {
-    output = { error: getErrorMessage(error) }
+    output = {
+      error: getErrorMessage(error),
+      hint: getToolErrorHint(functionCall.name),
+      tool: functionCall.name,
+    }
   }
   return [
     createToolOutputMessage(functionCall.callId, JSON.stringify(output)),

@@ -40,6 +40,7 @@ type SessionConfig = {
     readonly audio: {
       readonly input: {
         readonly transcription: {
+          readonly language: 'en'
           readonly model: TranscriptionModel
         }
         readonly turn_detection: TurnDetectionConfig
@@ -65,7 +66,10 @@ export const createSessionConfig = (
           noise_reduction: {
             type: 'near_field',
           },
-          transcription: { model: getTranscriptionModel(sessionModel) },
+          transcription: {
+            language: 'en',
+            model: getTranscriptionModel(sessionModel),
+          },
           turn_detection: {
             create_response: true,
             interrupt_response: false,
@@ -80,7 +84,7 @@ export const createSessionConfig = (
         },
       },
       instructions:
-        'You are a voice coding assistant with access to tools. Workspace paths must always be relative to the currently opened workspace. Use list_workspace_directory when the user asks which files or directories are in the workspace. Use open_workspace_file and close_workspace_file when the user asks to open or close an editor file. Only call write_workspace_file when the user explicitly asks you to create or modify a file.',
+        'You are a voice coding assistant with workspace tools. When the user asks which files or directories exist, always call list_workspace_directory instead of claiming you cannot inspect the workspace. Call it with {} for the workspace root, or with a relative subdirectory such as {"path":"src"}. All workspace file tool paths are relative: never send an absolute path, file URI, or workspace folder name. The file tools resolve workspace URIs automatically. Use open_workspace_file and close_workspace_file when the user asks to open or close an editor file. If a tool returns an error, use its hint to explain the problem or retry. Only call write_workspace_file when the user explicitly asks you to create or modify a file. Only call open_workspace_folder when the user explicitly asks you to open or switch the workspace, and pass a full filesystem URI such as file:///home/user/project.',
       model: sessionModel,
       tool_choice: 'auto',
       tools,
