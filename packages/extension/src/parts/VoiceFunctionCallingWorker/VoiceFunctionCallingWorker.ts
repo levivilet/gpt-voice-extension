@@ -32,12 +32,17 @@ export const state: {
 }
 
 const getRpc = (): Promise<Rpc> => {
-  state.rpcPromise ||= state.createRpc({
+  const { createRpc, rpcPromise } = state
+  if (rpcPromise) {
+    return rpcPromise
+  }
+  const newRpcPromise = createRpc({
     contentSecurityPolicy: "default-src 'none'; script-src 'self'",
     name: 'Voice Function Calling Worker',
     url: new URL('voiceFunctionCallingWorkerMain.js', import.meta.url).href,
   })
-  return state.rpcPromise
+  state.rpcPromise = newRpcPromise
+  return newRpcPromise
 }
 
 export const getRegisteredTools = async (): Promise<

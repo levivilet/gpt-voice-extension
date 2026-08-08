@@ -17,7 +17,9 @@ import {
 } from '@lvce-editor/virtual-dom-worker'
 import type { MenuEntry } from '../MenuEntries/MenuEntries.ts'
 import { animateBubble } from '../AnimateBubble/AnimateBubble.ts'
+import * as ClassNames from '../ClassNames/ClassNames.ts'
 import { getTitle } from '../GetTitle/GetTitle.ts'
+import * as GptVoiceStrings from '../GptVoiceStrings/GptVoiceStrings.ts'
 import { createOpenAiApiKeyStorage } from '../OpenAiApiKeyStorage/OpenAiApiKeyStorage.ts'
 import { readLevel } from '../ReadLevel/ReadLevel.ts'
 import { render } from '../Render/Render.ts'
@@ -30,6 +32,15 @@ import {
   RealtimeModelPreset,
   getSdp,
 } from '../WebRtc/WebRtc.ts'
+
+const actionsDomNode: VirtualDomNode = {
+  childCount: 1,
+  className: ClassNames.Main,
+  type: VirtualDomElements.Div,
+}
+
+const focusSelector = `.${ClassNames.Main}`
+const gptVoiceSelector = '.GptVoice'
 
 export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly addTranscript: (
@@ -84,22 +95,19 @@ export interface IState {
 
 const createTokenErrorMessage = (error: unknown): string => {
   if (!(error instanceof Error)) {
-    return 'Failed to create token. Check your network and API key.'
+    return GptVoiceStrings.failedToCreateTokenWithDetails()
   }
   if (error.message.includes('401') || error.message.includes('403')) {
-    return 'OpenAI API key is invalid (401/403).'
+    return GptVoiceStrings.invalidOpenAiApiKey()
   }
   if (error.message.toLowerCase().includes('failed to fetch')) {
-    return 'Network failure while creating token. Retry and check your internet connection.'
+    return GptVoiceStrings.networkFailure()
   }
   if (error.message === 'NO_API_KEY') {
-    return 'NO_API_KEY: OpenAI API key is not set.'
+    return GptVoiceStrings.missingOpenAiApiKey()
   }
-  return error.message || 'Failed to create token.'
+  return error.message || GptVoiceStrings.failedToCreateToken()
 }
-
-const getMissingApiKeyMessage = (): string =>
-  'NO_API_KEY: Add your OpenAI API key above to start.'
 
 const openAiApiKeyRegex = /^sk-[A-Za-z0-9_-]{10,}$/
 
@@ -183,15 +191,17 @@ export const createInstance = async (
 
   const instance: ActiveGptVoiceViewInstance = {
     addTranscript(id, value, type) {
+      const { transcripts } = state
       state = {
         ...state,
-        transcripts: [...state.transcripts, { id, text: value, type }],
+        transcripts: [...transcripts, { id, text: value, type }],
       }
       context?.requestRerender()
     },
     createOrUpdateTranscript(parsed, type) {
       const { delta, item_id } = parsed
-      const entry = state.transcripts.find((item) => item.id === item_id)
+      const { transcripts } = state
+      const entry = transcripts.find((item) => item.id === item_id)
       if (entry) {
         instance.updateTranscript(entry.id, entry.text + delta)
       } else {
@@ -199,10 +209,14 @@ export const createInstance = async (
       }
     },
     async doAnimate() {
-      while (state.animationEnabled) {
+      while (true) {
+        const { animationEnabled, uid } = state
+        if (!animationEnabled) {
+          break
+        }
         try {
           const data = await readMicLevels({
-            uid: state.uid,
+            uid,
           })
           await new Promise((resolve) => {
             requestAnimationFrame(resolve)
@@ -220,15 +234,17 @@ export const createInstance = async (
       return {}
     },
     getCss() {
-      return `.GptVoice {
---GptVoiceBubbleTransform: scale(${state.animationScale});
+      const { animationScale } = state
+      return `${gptVoiceSelector} {
+--GptVoiceBubbleTransform: scale(${animationScale});
 }`
     },
     getMenuEntries() {
       return []
     },
     async handleClearOpenAiApiKey(): Promise<void> {
-      if (state.inProgress || state.isCreatingToken || state.isSavingApiKey) {
+      const { inProgress, isCreatingToken, isSavingApiKey } = state
+      if (inProgress || isCreatingToken || isSavingApiKey) {
         return
       }
       state = {
@@ -250,17 +266,24 @@ export const createInstance = async (
       } catch {
         state = {
           ...state,
-          apiKeyError: 'Failed to clear OpenAI API key.',
+          apiKeyError: GptVoiceStrings.failedToClearOpenAiApiKey(),
           isSavingApiKey: false,
         }
       }
       requestRerender()
     },
     async handleClickStart(): Promise<void> {
-      if (state.isCreatingToken || state.isSavingApiKey) {
+      const {
+        hasOpenAiApiKey: hasApiKey,
+        inProgress,
+        isCreatingToken,
+        isSavingApiKey,
+        isTest,
+      } = state
+      if (isCreatingToken || isSavingApiKey) {
         return
       }
-      if (state.inProgress) {
+      if (inProgress) {
         state = {
           ...state,
           inProgress: false,
@@ -268,7 +291,7 @@ export const createInstance = async (
         await instance.stop()
         return
       }
-      if (state.isTest || isInTestMode()) {
+      if (isTest || isInTestMode()) {
         hasOpenAiApiKey = true
         state = {
           ...state,
@@ -280,11 +303,11 @@ export const createInstance = async (
         requestRerender()
         return
       }
-      if (!state.hasOpenAiApiKey) {
+      if (!hasApiKey) {
         state = {
           ...state,
           apiKeyError: '',
-          tokenError: getMissingApiKeyMessage(),
+          tokenError: GptVoiceStrings.missingOpenAiApiKeyPrompt(),
         }
         requestRerender()
         return
@@ -297,12 +320,13 @@ export const createInstance = async (
       requestRerender()
       try {
         const apiKey = await getStoredApiKey()
+        const { sessionModel } = state
         const registeredTools =
           await VoiceFunctionCallingWorker.getRegisteredTools()
 
         const ephemeralKey = await getEphemeralKey(
           apiKey,
-          createSessionConfig(state.sessionModel, registeredTools),
+          createSessionConfig(sessionModel, registeredTools),
         )
         const { port1, port2 } = new MessageChannel()
         // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
@@ -321,12 +345,13 @@ export const createInstance = async (
           ...state,
           inProgress: true,
         }
+        const { uid } = state
         const offerSdp = await startWebRtcAudioStream({
-          elementLocator: '.GptVoiceAudio',
+          elementLocator: `.${ClassNames.GptVoiceAudio}`,
           ephemeralKey,
           port: port1,
           trackAudioData: true,
-          uid: state.uid,
+          uid,
         })
         if (!offerSdp) {
           throw new Error('offer sdp is required')
@@ -335,10 +360,11 @@ export const createInstance = async (
         await setRemoteDescription({
           sdp: answerSdp,
           type: 'answer',
-          uid: state.uid,
+          uid,
         })
 
-        if (!state.isTest) {
+        const { isTest: isCurrentlyTest } = state
+        if (!isCurrentlyTest) {
           state = {
             ...state,
             animationEnabled: true,
@@ -352,10 +378,11 @@ export const createInstance = async (
         }
         requestRerender()
       } catch (error) {
+        const { hasOpenAiApiKey: currentHasOpenAiApiKey } = state
         const nextApiKeyStatus =
           error instanceof Error && error.message === 'NO_API_KEY'
             ? false
-            : state.hasOpenAiApiKey
+            : currentHasOpenAiApiKey
         if (dataChannelPort) {
           dataChannelPort.close()
           dataChannelPort = undefined
@@ -374,9 +401,10 @@ export const createInstance = async (
     },
     handleData(data: string): void {
       const parsed = JSON.parse(data)
+      const { parsedData } = state
       state = {
         ...state,
-        parsedData: [...state.parsedData, parsed],
+        parsedData: [...parsedData, parsed],
       }
 
       void handleFunctionCall(parsed).catch((error) => {
@@ -397,7 +425,8 @@ export const createInstance = async (
       instance.createOrUpdateTranscript(parsed, 'user')
     },
     handleOpenAiApiKeyInput(value: string): void {
-      if (state.isSavingApiKey) {
+      const { isSavingApiKey } = state
+      if (isSavingApiKey) {
         return
       }
       state = {
@@ -412,11 +441,12 @@ export const createInstance = async (
       instance.createOrUpdateTranscript(parsed, 'ai')
     },
     async handleSaveOpenAiApiKey(): Promise<void> {
-      const apiKey = state.apiKeyInput.trim()
+      const { apiKeyInput } = state
+      const apiKey = apiKeyInput.trim()
       if (!apiKey) {
         state = {
           ...state,
-          apiKeyError: 'OpenAI API key is required.',
+          apiKeyError: GptVoiceStrings.openAiApiKeyRequired(),
           tokenError: '',
         }
         requestRerender()
@@ -425,7 +455,7 @@ export const createInstance = async (
       if (!isLikelyOpenAiApiKey(apiKey)) {
         state = {
           ...state,
-          apiKeyError: 'OpenAI API key format looks invalid.',
+          apiKeyError: GptVoiceStrings.invalidOpenAiApiKeyFormat(),
           tokenError: '',
         }
         requestRerender()
@@ -451,7 +481,7 @@ export const createInstance = async (
       } catch {
         state = {
           ...state,
-          apiKeyError: 'Failed to save OpenAI API key.',
+          apiKeyError: GptVoiceStrings.failedToSaveOpenAiApiKey(),
           isSavingApiKey: false,
         }
       }
@@ -461,20 +491,13 @@ export const createInstance = async (
       return render(state)
     },
     renderActionsDom(): readonly VirtualDomNode[] {
-      return [
-        {
-          childCount: 1,
-          className: 'main',
-          type: VirtualDomElements.Div,
-        },
-        text('hello world'),
-      ]
+      return [actionsDomNode, text(GptVoiceStrings.helloWorld())]
     },
     renderFocus(
       oldContext: Readonly<Record<string, boolean>>,
       newContext: Readonly<Record<string, boolean>>,
     ): string {
-      return '.main'
+      return focusSelector
     },
     renderSelections(): readonly ViewSelection[] {
       return []
@@ -494,10 +517,11 @@ export const createInstance = async (
       context?.requestRerender()
     },
     setRealtimeModelMini() {
-      if (state.inProgress) {
+      const { inProgress, sessionModel } = state
+      if (inProgress) {
         return
       }
-      if (state.sessionModel === RealtimeModelPreset.Mini) {
+      if (sessionModel === RealtimeModelPreset.Mini) {
         return
       }
       state = {
@@ -507,10 +531,11 @@ export const createInstance = async (
       requestRerender()
     },
     setRealtimeModelStandard() {
-      if (state.inProgress) {
+      const { inProgress, sessionModel } = state
+      if (inProgress) {
         return
       }
-      if (state.sessionModel === RealtimeModelPreset.Standard) {
+      if (sessionModel === RealtimeModelPreset.Standard) {
         return
       }
       state = {
@@ -525,8 +550,9 @@ export const createInstance = async (
         inProgress: false,
       }
       try {
-        if (!state.isTest) {
-          await stopWebRtcAudioStream(state.uid)
+        const { isTest, uid } = state
+        if (!isTest) {
+          await stopWebRtcAudioStream(uid)
         }
       } finally {
         if (dataChannelPort) {
@@ -539,7 +565,7 @@ export const createInstance = async (
 
     updateTranscript(id, value) {
       const { transcripts } = state
-      const index = state.transcripts.findIndex((item) => item.id === id)
+      const index = transcripts.findIndex((item) => item.id === id)
       if (index === -1) {
         return
       }

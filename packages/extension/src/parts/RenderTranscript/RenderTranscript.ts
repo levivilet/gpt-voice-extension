@@ -4,12 +4,20 @@ import {
   VirtualDomElements,
 } from '@lvce-editor/virtual-dom-worker'
 import type { IState, ITranscript } from '../CreateInstance/CreateInstance.ts'
+import * as ClassNames from '../ClassNames/ClassNames.ts'
+import * as MergeClassNames from '../MergeClassNames/MergeClassNames.ts'
 
 const getItemClassName = (item: ITranscript): string => {
   if (item.type === 'ai') {
-    return 'GptVoiceTranscriptItem GptVoiceTranscriptItemAi'
+    return MergeClassNames.mergeClassNames(
+      ClassNames.GptVoiceTranscriptItem,
+      ClassNames.GptVoiceTranscriptItemAi,
+    )
   }
-  return 'GptVoiceTranscriptItem GptVoiceTranscriptItemUser'
+  return MergeClassNames.mergeClassNames(
+    ClassNames.GptVoiceTranscriptItem,
+    ClassNames.GptVoiceTranscriptItemUser,
+  )
 }
 
 const renderTranscriptItem = (item: ITranscript): readonly VirtualDomNode[] => {
@@ -28,7 +36,7 @@ export const renderTranscript = (state: IState): readonly VirtualDomNode[] => {
   return [
     {
       childCount: transcripts.length,
-      className: 'GptVoiceTranscript',
+      className: ClassNames.GptVoiceTranscript,
       type: VirtualDomElements.Div,
     },
     ...transcripts.flatMap(renderTranscriptItem),

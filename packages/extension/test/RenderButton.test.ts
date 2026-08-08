@@ -1,5 +1,6 @@
 import { test, expect } from '@jest/globals'
 import { text, VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
+import * as DomEventListenerFunctions from '../src/parts/DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import { renderButton } from '../src/parts/RenderButton/RenderButton.ts'
 import { createRenderState } from '../src/parts/RenderTestHelpers.ts'
 
@@ -11,7 +12,7 @@ test('renderButton - idle state', () => {
       childCount: 1,
       className: 'GptVoiceButton',
       id: 'toggle',
-      onClick: 'handleClickStart',
+      onClick: DomEventListenerFunctions.HandleClickStart,
       type: VirtualDomElements.Button,
     },
     text('Start talking'),
@@ -30,7 +31,7 @@ test('renderButton - active recording state', () => {
       childCount: 1,
       className: 'GptVoiceButton',
       id: 'toggle',
-      onClick: 'handleClickStart',
+      onClick: DomEventListenerFunctions.HandleClickStart,
       type: VirtualDomElements.Button,
     },
     text('Stop talking'),
@@ -50,7 +51,7 @@ test('renderButton - disabled when creating token', () => {
       className: 'GptVoiceButton',
       disabled: true,
       id: 'toggle',
-      onClick: 'handleClickStart',
+      onClick: DomEventListenerFunctions.HandleClickStart,
       type: VirtualDomElements.Button,
     },
     text('Creating token'),
@@ -70,7 +71,7 @@ test('renderButton - disabled when saving API key', () => {
       className: 'GptVoiceButton',
       disabled: true,
       id: 'toggle',
-      onClick: 'handleClickStart',
+      onClick: DomEventListenerFunctions.HandleClickStart,
       type: VirtualDomElements.Button,
     },
     text('Saving key'),
@@ -90,7 +91,7 @@ test('renderButton - disabled when API key has not been saved', () => {
       className: 'GptVoiceButton',
       disabled: true,
       id: 'toggle',
-      onClick: 'handleClickStart',
+      onClick: DomEventListenerFunctions.HandleClickStart,
       type: VirtualDomElements.Button,
     },
     text('Start talking'),
