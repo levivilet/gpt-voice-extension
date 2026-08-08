@@ -16,10 +16,6 @@ export const view: GptVoiceView = {
       context.addTranscript(id, value, 'ai')
       return context
     },
-    async 'GptVoice.debugData'(context) {
-      context.debugData()
-      return context
-    },
     async 'GptVoice.handleClearOpenAiApiKey'(context) {
       await context.handleClearOpenAiApiKey()
       return context
@@ -38,10 +34,6 @@ export const view: GptVoiceView = {
     },
     async 'GptVoice.setAnimation'(context, enabled: boolean, scale: number) {
       context.setAnimation(enabled, scale)
-      return context
-    },
-    async 'GptVoice.setIsTest'(context) {
-      context.setIsTest()
       return context
     },
     async 'GptVoice.setRealtimeModelMini'(context) {

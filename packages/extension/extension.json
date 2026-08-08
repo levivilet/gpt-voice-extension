@@ -14,6 +14,7 @@
   "categories": ["Other"],
   "configuration": {},
   "activation": [
+    "onCommand:gpt-voice.show",
     "onView:gpt-voice.views.default",
     "onCommand:GptVoice.handleClickStart",
     "onCommand:GptVoice.handleClearOpenAiApiKey",
@@ -24,8 +25,7 @@
     "onCommand:GptVoice.setRealtimeModelMini",
     "onCommand:GptVoice.setRealtimeModelStandard",
     "onCommand:GptVoice.addTranscript",
-    "onCommand:GptVoice.stop",
-    "onCommand:GptVoice.debugData"
+    "onCommand:GptVoice.stop"
   ],
   "commands": [
     {
@@ -67,10 +67,6 @@
     {
       "id": "GptVoice.addTranscript",
       "label": "gpt-voice: add Transcript"
-    },
-    {
-      "id": "GptVoice.debugData",
-      "label": "gpt-voice: Debug"
     },
     {
       "id": "GptVoice.stop",

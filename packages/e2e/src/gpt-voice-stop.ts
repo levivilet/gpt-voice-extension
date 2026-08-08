@@ -9,6 +9,7 @@ export const test: Test = async ({ Command, expect, Locator, SideBar }) => {
   await expect(button).toBeVisible()
   await Command.executeExtensionCommand('GptVoice.setIsTest')
   await Command.executeExtensionCommand('GptVoice.handleClickStart')
+  await expect(button).toHaveText('Stop talking')
 
   // act
   await Command.executeExtensionCommand('GptVoice.stop')
@@ -16,4 +17,5 @@ export const test: Test = async ({ Command, expect, Locator, SideBar }) => {
   // assert
   const listeningBubble = Locator('.GptVoiceBubble.listening')
   await expect(listeningBubble).toBeHidden()
+  await expect(button).toHaveText('Start talking')
 }
