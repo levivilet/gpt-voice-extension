@@ -1,3 +1,5 @@
+import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
+
 interface DomEventListener {
   readonly name: string | number
   readonly params: readonly string[]
@@ -8,27 +10,27 @@ interface DomEventListener {
 export const renderEventListeners = (): readonly DomEventListener[] => {
   return [
     {
-      name: 'handleOpenAiApiKeyInput',
+      name: DomEventListenerFunctions.HandleOpenAiApiKeyInput,
       params: ['handleOpenAiApiKeyInput', 'event.target.value'],
     },
     {
-      name: 'handleClearOpenAiApiKey',
+      name: DomEventListenerFunctions.HandleClearOpenAiApiKey,
       params: ['handleClearOpenAiApiKey'],
     },
     {
-      name: 'handleSaveOpenAiApiKey',
+      name: DomEventListenerFunctions.HandleSaveOpenAiApiKey,
       params: ['handleSaveOpenAiApiKey'],
     },
     {
-      name: 'handleClickStart',
+      name: DomEventListenerFunctions.HandleClickStart,
       params: ['handleClickStart'],
     },
     {
-      name: 'setRealtimeModelMini',
+      name: DomEventListenerFunctions.SetRealtimeModelMini,
       params: ['setRealtimeModelMini'],
     },
     {
-      name: 'setRealtimeModelStandard',
+      name: DomEventListenerFunctions.SetRealtimeModelStandard,
       params: ['setRealtimeModelStandard'],
     },
   ]

@@ -3,6 +3,22 @@ import {
   type VirtualDomNode,
   VirtualDomElements,
 } from '@lvce-editor/virtual-dom-worker'
+import * as ClassNames from '../ClassNames/ClassNames.ts'
+import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
+import * as GptVoiceStrings from '../GptVoiceStrings/GptVoiceStrings.ts'
+
+const buttonNode: VirtualDomNode = {
+  childCount: 1,
+  className: ClassNames.GptVoiceButton,
+  id: 'toggle',
+  onClick: DomEventListenerFunctions.HandleClickStart,
+  type: VirtualDomElements.Button,
+}
+
+const disabledButtonNode: VirtualDomNode = {
+  ...buttonNode,
+  disabled: true,
+}
 
 export const renderButton = (state: {
   readonly inProgress: boolean
@@ -10,47 +26,20 @@ export const renderButton = (state: {
   readonly isCreatingToken: boolean
   readonly isSavingApiKey: boolean
 }): readonly VirtualDomNode[] => {
-  if (!state.hasOpenAiApiKey || state.isCreatingToken || state.isSavingApiKey) {
-    let label = 'Start talking'
-    if (state.isCreatingToken) {
-      label = 'Creating token'
-    } else if (state.isSavingApiKey) {
-      label = 'Saving key'
+  const { hasOpenAiApiKey, inProgress, isCreatingToken, isSavingApiKey } = state
+  if (!hasOpenAiApiKey || isCreatingToken || isSavingApiKey) {
+    let label = GptVoiceStrings.startTalking()
+    if (isCreatingToken) {
+      label = GptVoiceStrings.creatingToken()
+    } else if (isSavingApiKey) {
+      label = GptVoiceStrings.savingKey()
     }
-    return [
-      {
-        childCount: 1,
-        className: 'GptVoiceButton',
-        disabled: true,
-        id: 'toggle',
-        onClick: 'handleClickStart',
-        type: VirtualDomElements.Button,
-      },
-      text(label),
-    ]
+    return [disabledButtonNode, text(label)]
   }
 
-  if (state.inProgress) {
-    return [
-      {
-        childCount: 1,
-        className: 'GptVoiceButton',
-        id: 'toggle',
-        onClick: 'handleClickStart',
-        type: VirtualDomElements.Button,
-      },
-      text('Stop talking'),
-    ]
+  if (inProgress) {
+    return [buttonNode, text(GptVoiceStrings.stopTalking())]
   }
 
-  return [
-    {
-      childCount: 1,
-      className: 'GptVoiceButton',
-      id: 'toggle',
-      onClick: 'handleClickStart',
-      type: VirtualDomElements.Button,
-    },
-    text('Start talking'),
-  ]
+  return [buttonNode, text(GptVoiceStrings.startTalking())]
 }

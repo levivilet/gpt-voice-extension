@@ -3,46 +3,61 @@ import {
   text,
   VirtualDomElements,
 } from '@lvce-editor/virtual-dom-worker'
+import * as ClassNames from '../ClassNames/ClassNames.ts'
+import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
+import * as GptVoiceStrings from '../GptVoiceStrings/GptVoiceStrings.ts'
+import * as MergeClassNames from '../MergeClassNames/MergeClassNames.ts'
 import { RealtimeModelPreset } from '../WebRtc/WebRtc.ts'
+
+const modelSettingsNode: VirtualDomNode = {
+  childCount: 3,
+  className: ClassNames.GptVoiceModelSettings,
+  type: VirtualDomElements.Div,
+}
+
+const modelSettingsLabelNode: VirtualDomNode = {
+  childCount: 1,
+  className: ClassNames.GptVoiceModelSettingsLabel,
+  type: VirtualDomElements.Div,
+}
 
 export const renderModelSettings = (
   state: Readonly<{ sessionModel: RealtimeModelPreset }>,
 ): readonly VirtualDomNode[] => {
+  const { sessionModel } = state
   return [
-    {
-      childCount: 3,
-      className: 'GptVoiceModelSettings',
-      type: VirtualDomElements.Div,
-    },
-    {
-      childCount: 1,
-      className: 'GptVoiceModelSettingsLabel',
-      type: VirtualDomElements.Div,
-    },
+    modelSettingsNode,
+    modelSettingsLabelNode,
     text(
-      state.sessionModel === RealtimeModelPreset.Mini
-        ? 'Model: Realtime 2.1 mini (cheaper)'
-        : 'Model: Realtime 2.1 (better quality)',
+      sessionModel === RealtimeModelPreset.Mini
+        ? GptVoiceStrings.realtimeMiniModel()
+        : GptVoiceStrings.realtimeStandardModel(),
     ),
     {
       childCount: 1,
       className:
-        state.sessionModel === RealtimeModelPreset.Mini
-          ? 'GptVoiceModelButton active'
-          : 'GptVoiceModelButton',
-      onClick: 'setRealtimeModelMini',
+        sessionModel === RealtimeModelPreset.Mini
+          ? MergeClassNames.mergeClassNames(
+              ClassNames.GptVoiceModelButton,
+              ClassNames.Active,
+            )
+          : ClassNames.GptVoiceModelButton,
+      onClick: DomEventListenerFunctions.SetRealtimeModelMini,
       type: VirtualDomElements.Button,
     },
-    text('Use cheap'),
+    text(GptVoiceStrings.useCheap()),
     {
       childCount: 1,
       className:
-        state.sessionModel === RealtimeModelPreset.Standard
-          ? 'GptVoiceModelButton active'
-          : 'GptVoiceModelButton',
-      onClick: 'setRealtimeModelStandard',
+        sessionModel === RealtimeModelPreset.Standard
+          ? MergeClassNames.mergeClassNames(
+              ClassNames.GptVoiceModelButton,
+              ClassNames.Active,
+            )
+          : ClassNames.GptVoiceModelButton,
+      onClick: DomEventListenerFunctions.SetRealtimeModelStandard,
       type: VirtualDomElements.Button,
     },
-    text('Use better'),
+    text(GptVoiceStrings.useBetter()),
   ]
 }

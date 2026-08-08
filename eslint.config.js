@@ -9,13 +9,10 @@ export default defineConfig([
   ...config.recommendedActions,
   {
     rules: {
-      'virtual-dom/prefer-state-destructuring': 'off',
       '@cspell/spellchecker': 'off',
-      'virtual-dom/hoist-static-nodes': 'off',
       'sonarjs/no-trivial-assertions': 'off',
       '@typescript-eslint/no-floating-promises': 'off',
       'sonarjs/x-powered-by': 'off',
-      'virtual-dom/no-inline-event-handlers': 'off',
     },
   },
 ])
