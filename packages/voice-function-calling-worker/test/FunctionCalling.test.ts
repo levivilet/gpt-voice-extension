@@ -74,6 +74,35 @@ test('executes workspace file function calls in the worker', async () => {
   expect(result[0]).toContain('const value = 1')
 })
 
+test('executes workspace directory listing calls in the worker', async () => {
+  const invoke = jest
+    .fn<(method: string, ...params: readonly unknown[]) => Promise<unknown>>()
+    .mockResolvedValueOnce('/workspace')
+    .mockResolvedValueOnce([{ name: 'package.json', type: 7 }])
+  const globalScope = globalThis as typeof globalThis & {
+    rpc: { readonly invoke: typeof invoke }
+  }
+  globalScope.rpc = { invoke }
+
+  const result = await executeFunctionToolCall({
+    arguments: '{}',
+    call_id: 'list-call',
+    name: 'list_workspace_directory',
+    type: 'response.function_call_arguments.done',
+  })
+
+  expect(invoke).toHaveBeenNthCalledWith(
+    1,
+    'WorkspaceFileSystem.getWorkspaceFolder',
+  )
+  expect(invoke).toHaveBeenNthCalledWith(
+    2,
+    'WorkspaceFileSystem.readDirWithFileTypes',
+    '/workspace',
+  )
+  expect(result[0]).toContain('package.json')
+})
+
 test.each([
   undefined,
   null,

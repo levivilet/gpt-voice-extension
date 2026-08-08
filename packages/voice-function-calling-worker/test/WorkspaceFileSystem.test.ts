@@ -1,6 +1,8 @@
 import { expect, jest, test } from '@jest/globals'
 import {
+  listWorkspaceDirectory,
   readWorkspaceFile,
+  resolveWorkspaceDirectoryPath,
   resolveWorkspaceFilePath,
   type WorkspaceFileSystemApi,
   writeWorkspaceFile,
@@ -8,6 +10,10 @@ import {
 
 const createApi = (workspaceFolder = '/workspace'): WorkspaceFileSystemApi => ({
   getWorkspaceFolder: jest.fn(async () => workspaceFolder),
+  readDirWithFileTypes: jest.fn(async () => [
+    { name: 'src', type: 3 },
+    { name: 'package.json', type: 7 },
+  ]),
   readFile: jest.fn(async () => 'file content'),
   writeFile: jest.fn(async () => undefined),
 })
@@ -21,6 +27,20 @@ test.each([
   'resolveWorkspaceFilePath - resolves %s and %s',
   (workspaceFolder, relativePath, expected) => {
     expect(resolveWorkspaceFilePath(workspaceFolder, relativePath)).toBe(
+      expected,
+    )
+  },
+)
+
+test.each([
+  ['/workspace', '.', '/workspace'],
+  ['/workspace/', 'src', '/workspace/src'],
+  ['C:\\workspace', '.', 'C:\\workspace'],
+  ['C:\\workspace', 'src/lib', 'C:\\workspace\\src\\lib'],
+])(
+  'resolveWorkspaceDirectoryPath - resolves %s and %s',
+  (workspaceFolder, relativePath, expected) => {
+    expect(resolveWorkspaceDirectoryPath(workspaceFolder, relativePath)).toBe(
       expected,
     )
   },
@@ -54,6 +74,62 @@ test.each([
     expect(() =>
       resolveWorkspaceFilePath(workspaceFolder, relativePath),
     ).toThrow(message)
+  },
+)
+
+test.each([
+  ['/workspace', '', 'Workspace directory path is required.'],
+  ['/workspace', '/tmp', 'Workspace directory path must be relative.'],
+  [
+    '/workspace',
+    '../outside',
+    'Workspace directory path cannot leave the opened workspace.',
+  ],
+])(
+  'resolveWorkspaceDirectoryPath - rejects unsafe path %#',
+  (workspaceFolder, relativePath, message) => {
+    expect(() =>
+      resolveWorkspaceDirectoryPath(workspaceFolder, relativePath),
+    ).toThrow(message)
+  },
+)
+
+test('listWorkspaceDirectory - lists sorted workspace entries', async () => {
+  const api = createApi()
+
+  await expect(listWorkspaceDirectory('.', api)).resolves.toEqual({
+    entries: [
+      { name: 'package.json', type: 'file' },
+      { name: 'src', type: 'directory' },
+    ],
+    path: '.',
+  })
+  expect(api.readDirWithFileTypes).toHaveBeenCalledWith('/workspace')
+})
+
+test.each([
+  [1, 'block-device'],
+  [2, 'character-device'],
+  [4, 'directory'],
+  [5, 'directory'],
+  [6, 'fifo'],
+  [8, 'socket'],
+  [9, 'symbolic-link'],
+  [10, 'file'],
+  [11, 'directory'],
+  [12, 'unknown'],
+])(
+  'listWorkspaceDirectory - maps file type %s to %s',
+  async (type, expected) => {
+    const api = createApi()
+    jest
+      .mocked(api.readDirWithFileTypes)
+      .mockResolvedValue([{ name: 'entry', type }])
+
+    await expect(listWorkspaceDirectory('src', api)).resolves.toEqual({
+      entries: [{ name: 'entry', type: expected }],
+      path: 'src',
+    })
   },
 )
 
