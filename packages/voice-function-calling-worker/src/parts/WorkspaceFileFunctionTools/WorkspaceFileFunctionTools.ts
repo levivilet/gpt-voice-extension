@@ -1,5 +1,6 @@
 import type { FunctionToolDefinition } from '../FunctionToolRegistry/FunctionToolRegistry.ts'
 import {
+  listWorkspaceDirectory,
   readWorkspaceFile,
   type WorkspaceFileSystemApi,
   writeWorkspaceFile,
@@ -98,6 +99,21 @@ const getRequiredString = (
   return value
 }
 
+const getOptionalString = (
+  argumentsValue: Readonly<Record<string, unknown>>,
+  name: string,
+  defaultValue: string,
+): string => {
+  const value = argumentsValue[name]
+  if (value === undefined) {
+    return defaultValue
+  }
+  if (typeof value !== 'string') {
+    throw new TypeError(`Function tool argument "${name}" must be a string.`)
+  }
+  return value
+}
+
 const getErrorMessage = (error: unknown): string => {
   if (error instanceof Error) {
     return error.message
@@ -118,6 +134,24 @@ const readWorkspaceFileTool: FunctionToolDefinition = {
       },
     },
     required: ['path'],
+    type: 'object',
+  },
+  type: 'function',
+}
+
+const listWorkspaceDirectoryTool: FunctionToolDefinition = {
+  description:
+    'List the immediate files and directories in a directory in the currently opened workspace. Omit path or use "." to list the workspace root.',
+  name: 'list_workspace_directory',
+  parameters: {
+    additionalProperties: false,
+    properties: {
+      path: {
+        description:
+          'Directory path relative to the currently opened workspace. Defaults to ".".',
+        type: 'string',
+      },
+    },
     type: 'object',
   },
   type: 'function',
@@ -146,6 +180,7 @@ const writeWorkspaceFileTool: FunctionToolDefinition = {
 }
 
 export const workspaceFileFunctionTools: readonly FunctionToolDefinition[] = [
+  listWorkspaceDirectoryTool,
   readWorkspaceFileTool,
   writeWorkspaceFileTool,
 ]
@@ -168,10 +203,16 @@ export const executeWorkspaceFileFunctionToolCall = async (
   let output: unknown
   try {
     const argumentsValue = parseArguments(functionCall.argumentsValue)
-    const path = getRequiredString(argumentsValue, 'path')
-    if (functionCall.name === 'read_workspace_file') {
+    if (functionCall.name === 'list_workspace_directory') {
+      output = await listWorkspaceDirectory(
+        getOptionalString(argumentsValue, 'path', '.'),
+        fileSystemApi,
+      )
+    } else if (functionCall.name === 'read_workspace_file') {
+      const path = getRequiredString(argumentsValue, 'path')
       output = await readWorkspaceFile(path, fileSystemApi)
     } else {
+      const path = getRequiredString(argumentsValue, 'path')
       output = await writeWorkspaceFile(
         path,
         getRequiredString(argumentsValue, 'content'),

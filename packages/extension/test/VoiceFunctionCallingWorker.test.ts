@@ -10,6 +10,9 @@ const createRpc = jest.fn<typeof Api.createRpc>(
     }) as never,
 )
 const getWorkspaceFolder = jest.fn(async () => '/workspace')
+const readDirWithFileTypes = jest.fn(async () => [
+  { name: 'package.json', type: 7 },
+])
 const readFile = jest.fn<(uri: string) => Promise<string>>(
   async () => 'workspace content',
 )
@@ -24,6 +27,7 @@ jest.unstable_mockModule('@lvce-editor/api', () => {
     ...actual,
     createRpc,
     getWorkspaceFolder,
+    readDirWithFileTypes,
     readFile,
     writeFile,
   }
@@ -36,6 +40,7 @@ beforeEach(() => {
   createRpc.mockClear()
   invoke.mockReset()
   getWorkspaceFolder.mockClear()
+  readDirWithFileTypes.mockClear()
   readFile.mockClear()
   writeFile.mockClear()
   VoiceFunctionCallingWorker.state.rpcPromise = undefined
@@ -59,6 +64,7 @@ test('creates a web worker RPC and queries registered tools', async () => {
   expect(createRpc).toHaveBeenCalledWith({
     commandMap: {
       'WorkspaceFileSystem.getWorkspaceFolder': getWorkspaceFolder,
+      'WorkspaceFileSystem.readDirWithFileTypes': readDirWithFileTypes,
       'WorkspaceFileSystem.readFile': readFile,
       'WorkspaceFileSystem.writeFile': writeFile,
     },
