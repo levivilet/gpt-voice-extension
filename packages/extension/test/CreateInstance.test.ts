@@ -406,6 +406,46 @@ test('instance - recovers from one animation read failure', async () => {
   await instance.stop()
 })
 
+test('instance - keeps updating the bubble scale for microphone and remote audio', async () => {
+  const instance = await createInstance()
+  type AudioLevels = Awaited<ReturnType<typeof readMicLevels>>
+  const firstRead = Promise.withResolvers<AudioLevels>()
+  const secondRead = Promise.withResolvers<AudioLevels>()
+  const thirdRead = Promise.withResolvers<AudioLevels>()
+  readMicLevels
+    .mockReturnValueOnce(firstRead.promise)
+    .mockReturnValueOnce(secondRead.promise)
+    .mockReturnValueOnce(thirdRead.promise)
+
+  instance.setAnimation(true, 1)
+  const animation = instance.doAnimate()
+  firstRead.resolve({
+    micAnalyzerData: new Uint8Array([160]),
+    remoteAnalyzerData: new Uint8Array([128]),
+  })
+  await flushAnimation()
+
+  expect(readMicLevels).toHaveBeenCalledTimes(2)
+  expect(instance.getCss()).toContain('scale(1.8)')
+
+  secondRead.resolve({
+    micAnalyzerData: new Uint8Array([128]),
+    remoteAnalyzerData: new Uint8Array([144]),
+  })
+  await flushAnimation()
+
+  expect(readMicLevels).toHaveBeenCalledTimes(3)
+  expect(instance.getCss()).toContain('scale(1.4)')
+
+  instance.setAnimation(false, 1)
+  thirdRead.resolve({
+    micAnalyzerData: new Uint8Array([255]),
+    remoteAnalyzerData: new Uint8Array([128]),
+  })
+  await animation
+  expect(instance.getCss()).toContain('scale(1)')
+})
+
 test('instance - switches models while idle', async () => {
   const instance = await createInstance()
 
