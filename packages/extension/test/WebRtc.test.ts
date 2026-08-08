@@ -44,6 +44,8 @@ test('createSessionConfig - selects transcription model for each realtime model'
   expect(standard.session.audio.input.transcription.model).toBe(
     'gpt-4o-transcribe',
   )
+  expect(mini.session.audio.input.transcription.language).toBe('en')
+  expect(standard.session.audio.input.transcription.language).toBe('en')
   expect(mini.session.model).toBe(RealtimeModelPreset.Mini)
   expect(standard.session.model).toBe(RealtimeModelPreset.Standard)
 })

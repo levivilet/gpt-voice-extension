@@ -40,6 +40,7 @@ type SessionConfig = {
     readonly audio: {
       readonly input: {
         readonly transcription: {
+          readonly language: 'en'
           readonly model: TranscriptionModel
         }
         readonly turn_detection: TurnDetectionConfig
@@ -65,7 +66,10 @@ export const createSessionConfig = (
           noise_reduction: {
             type: 'near_field',
           },
-          transcription: { model: getTranscriptionModel(sessionModel) },
+          transcription: {
+            language: 'en',
+            model: getTranscriptionModel(sessionModel),
+          },
           turn_detection: {
             create_response: true,
             interrupt_response: false,
