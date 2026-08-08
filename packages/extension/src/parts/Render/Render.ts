@@ -7,6 +7,7 @@ import type { IState } from '../CreateInstance/CreateInstance.ts'
 import * as ClassNames from '../ClassNames/ClassNames.ts'
 import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import * as GptVoiceStrings from '../GptVoiceStrings/GptVoiceStrings.ts'
+import { mergeClassNames } from '../MergeClassNames/MergeClassNames.ts'
 import { renderAudio } from '../RenderAudio/RenderAudio.ts'
 import { renderButton } from '../RenderButton/RenderButton.ts'
 import { renderModelSettings } from '../RenderModelSettings/RenderModelSettings.ts'
@@ -40,13 +41,19 @@ const statusNode: VirtualDomNode = {
 
 const welcomeContainerNode: VirtualDomNode = {
   childCount: 1,
-  className: ClassNames.GptVoice,
+  className: mergeClassNames(ClassNames.GptVoice, ClassNames.GptVoiceSetup),
   type: VirtualDomElements.Div,
 }
 
 const voiceContainerNode: VirtualDomNode = {
-  childCount: 7,
+  childCount: 6,
   className: ClassNames.GptVoice,
+  type: VirtualDomElements.Div,
+}
+
+const toolbarNode: VirtualDomNode = {
+  childCount: 2,
+  className: ClassNames.GptVoiceToolbar,
   type: VirtualDomElements.Div,
 }
 
@@ -104,9 +111,8 @@ export const render = (state: IState): readonly VirtualDomNode[] => {
 
   return [
     voiceContainerNode,
+    toolbarNode,
     ...renderModelSettings(state),
-    ...renderStage(state),
-    ...renderStatus(state),
     apiKeyActionsNode,
     {
       childCount: 1,
@@ -116,6 +122,8 @@ export const render = (state: IState): readonly VirtualDomNode[] => {
       type: VirtualDomElements.Button,
     },
     text(GptVoiceStrings.changeApiKey()),
+    ...renderStage(state),
+    ...renderStatus(state),
     ...renderButton(state),
     ...renderTranscript(state),
     ...renderAudio(),
