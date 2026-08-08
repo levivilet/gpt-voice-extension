@@ -9,6 +9,13 @@ const createRpc = jest.fn<typeof Api.createRpc>(
       invoke,
     }) as never,
 )
+const getWorkspaceFolder = jest.fn(async () => '/workspace')
+const readFile = jest.fn<(uri: string) => Promise<string>>(
+  async () => 'workspace content',
+)
+const writeFile = jest.fn<(uri: string, content: string) => Promise<void>>(
+  async () => undefined,
+)
 
 // eslint-disable-next-line jest/no-restricted-jest-methods
 jest.unstable_mockModule('@lvce-editor/api', () => {
@@ -16,6 +23,9 @@ jest.unstable_mockModule('@lvce-editor/api', () => {
   return {
     ...actual,
     createRpc,
+    getWorkspaceFolder,
+    readFile,
+    writeFile,
   }
 })
 
@@ -25,6 +35,9 @@ const VoiceFunctionCallingWorker =
 beforeEach(() => {
   createRpc.mockClear()
   invoke.mockReset()
+  getWorkspaceFolder.mockClear()
+  readFile.mockClear()
+  writeFile.mockClear()
   VoiceFunctionCallingWorker.state.rpcPromise = undefined
 })
 
@@ -39,9 +52,13 @@ test('creates a web worker RPC and queries registered tools', async () => {
   ]
   invoke.mockResolvedValue(tools)
 
-  await expect(VoiceFunctionCallingWorker.getRegisteredTools()).resolves.toBe(
-    tools,
-  )
+  await expect(
+    VoiceFunctionCallingWorker.getRegisteredTools(),
+  ).resolves.toEqual([
+    ...tools,
+    expect.objectContaining({ name: 'read_workspace_file' }),
+    expect.objectContaining({ name: 'write_workspace_file' }),
+  ])
 
   expect(createRpc).toHaveBeenCalledWith({
     contentSecurityPolicy: "default-src 'none'; script-src 'self'",
@@ -52,6 +69,23 @@ test('creates a web worker RPC and queries registered tools', async () => {
     ).href.replace('/test/', '/src/parts/VoiceFunctionCallingWorker/'),
   })
   expect(invoke).toHaveBeenCalledWith('VoiceFunctionCalling.getRegisteredTools')
+})
+
+test('executes a workspace file tool without invoking the worker', async () => {
+  const functionCallEvent = {
+    arguments: '{"path":"src/index.ts"}',
+    call_id: 'read-call',
+    name: 'read_workspace_file',
+    type: 'response.function_call_arguments.done',
+  }
+
+  const messages =
+    await VoiceFunctionCallingWorker.executeFunctionToolCall(functionCallEvent)
+
+  expect(messages).toHaveLength(2)
+  expect(readFile).toHaveBeenCalledWith('/workspace/src/index.ts')
+  expect(createRpc).not.toHaveBeenCalled()
+  expect(invoke).not.toHaveBeenCalled()
 })
 
 test('invokes a function tool call on the worker', async () => {

@@ -1,11 +1,11 @@
 import { createRpc } from '@lvce-editor/api'
+import type { FunctionToolDefinition } from '../FunctionToolDefinition/FunctionToolDefinition.ts'
+import {
+  executeWorkspaceFileFunctionToolCall,
+  workspaceFileFunctionTools,
+} from '../WorkspaceFileFunctionTools/WorkspaceFileFunctionTools.ts'
 
-export interface FunctionToolDefinition {
-  readonly description: string
-  readonly name: string
-  readonly parameters: Readonly<Record<string, unknown>>
-  readonly type: 'function'
-}
+export type { FunctionToolDefinition } from '../FunctionToolDefinition/FunctionToolDefinition.ts'
 
 interface Rpc {
   readonly invoke: (
@@ -49,14 +49,20 @@ export const getRegisteredTools = async (): Promise<
   readonly FunctionToolDefinition[]
 > => {
   const rpc = await getRpc()
-  return rpc.invoke('VoiceFunctionCalling.getRegisteredTools') as Promise<
-    readonly FunctionToolDefinition[]
-  >
+  const workerTools = (await rpc.invoke(
+    'VoiceFunctionCalling.getRegisteredTools',
+  )) as readonly FunctionToolDefinition[]
+  return [...workerTools, ...workspaceFileFunctionTools]
 }
 
 export const executeFunctionToolCall = async (
   functionCallEvent: unknown,
 ): Promise<readonly string[]> => {
+  const workspaceFileMessages =
+    await executeWorkspaceFileFunctionToolCall(functionCallEvent)
+  if (workspaceFileMessages) {
+    return workspaceFileMessages
+  }
   const rpc = await getRpc()
   return rpc.invoke(
     'VoiceFunctionCalling.executeFunctionToolCall',

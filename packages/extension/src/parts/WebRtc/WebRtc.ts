@@ -79,7 +79,8 @@ export const createSessionConfig = (
           voice: 'marin',
         },
       },
-      instructions: 'You are a voice assistant with access to tools.',
+      instructions:
+        'You are a voice coding assistant with access to tools. Workspace file paths must always be relative to the currently opened workspace. Only call write_workspace_file when the user explicitly asks you to create or modify a file.',
       model: sessionModel,
       tool_choice: 'auto',
       tools,
