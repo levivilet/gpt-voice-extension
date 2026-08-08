@@ -1,6 +1,9 @@
 import {
+  closeUri,
   createRpc,
   getWorkspaceFolder,
+  getWorkspaceUri,
+  openUri,
   readDirWithFileTypes,
   readFile,
   writeFile,
@@ -30,6 +33,9 @@ interface WebWorkerRpcOptions {
 type CreateRpc = (options: WebWorkerRpcOptions) => Promise<Rpc>
 
 const commandMap = {
+  'WorkspaceMainArea.closeUri': closeUri,
+  'WorkspaceMainArea.getWorkspaceUri': getWorkspaceUri,
+  'WorkspaceMainArea.openUri': openUri,
   'WorkspaceFileSystem.getWorkspaceFolder': getWorkspaceFolder,
   'WorkspaceFileSystem.readDirWithFileTypes': readDirWithFileTypes,
   'WorkspaceFileSystem.readFile': readFile,

@@ -24,7 +24,7 @@ test('createSessionConfig - includes registered function tools', () => {
 
   expect(config.session.tools).toBe(tools)
   expect(config.session.instructions).toBe(
-    'You are a voice coding assistant with access to tools. Workspace paths must always be relative to the currently opened workspace. Use list_workspace_directory when the user asks which files or directories are in the workspace. Only call write_workspace_file when the user explicitly asks you to create or modify a file.',
+    'You are a voice coding assistant with access to tools. Workspace paths must always be relative to the currently opened workspace. Use list_workspace_directory when the user asks which files or directories are in the workspace. Use open_workspace_file and close_workspace_file when the user asks to open or close an editor file. Only call write_workspace_file when the user explicitly asks you to create or modify a file.',
   )
 })
 

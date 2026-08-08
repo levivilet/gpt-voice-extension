@@ -104,6 +104,35 @@ test('executes workspace directory listing calls in the worker', async () => {
 })
 
 test.each([
+  ['open_workspace_file', 'WorkspaceMainArea.openUri', 'opened'],
+  ['close_workspace_file', 'WorkspaceMainArea.closeUri', 'closed'],
+])('executes %s calls in the worker', async (name, method, resultProperty) => {
+  const invoke = jest
+    .fn<(method: string, ...params: readonly unknown[]) => Promise<unknown>>()
+    .mockResolvedValueOnce('file:///workspace')
+    .mockResolvedValueOnce(undefined)
+  const globalScope = globalThis as typeof globalThis & {
+    rpc: { readonly invoke: typeof invoke }
+  }
+  globalScope.rpc = { invoke }
+
+  const result = await executeFunctionToolCall({
+    arguments: '{"path":"src/index.ts"}',
+    call_id: `${name}-call`,
+    name,
+    type: 'response.function_call_arguments.done',
+  })
+
+  expect(invoke).toHaveBeenNthCalledWith(1, 'WorkspaceMainArea.getWorkspaceUri')
+  expect(invoke).toHaveBeenNthCalledWith(
+    2,
+    method,
+    'file:///workspace/src/index.ts',
+  )
+  expect(result[0]).toContain(`\\"${resultProperty}\\":true`)
+})
+
+test.each([
   undefined,
   null,
   'value',

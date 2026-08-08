@@ -1,5 +1,10 @@
 import type { FunctionToolDefinition } from '../FunctionToolRegistry/FunctionToolRegistry.ts'
 import {
+  closeWorkspaceFile,
+  openWorkspaceFile,
+  type WorkspaceMainAreaApi,
+} from '../WorkspaceMainArea/WorkspaceMainArea.ts'
+import {
   listWorkspaceDirectory,
   readWorkspaceFile,
   type WorkspaceFileSystemApi,
@@ -179,10 +184,48 @@ const writeWorkspaceFileTool: FunctionToolDefinition = {
   type: 'function',
 }
 
+const openWorkspaceFileTool: FunctionToolDefinition = {
+  description:
+    'Open a file from the currently opened workspace in the editor main area. The path must be relative to the workspace folder.',
+  name: 'open_workspace_file',
+  parameters: {
+    additionalProperties: false,
+    properties: {
+      path: {
+        description: 'File path relative to the currently opened workspace',
+        type: 'string',
+      },
+    },
+    required: ['path'],
+    type: 'object',
+  },
+  type: 'function',
+}
+
+const closeWorkspaceFileTool: FunctionToolDefinition = {
+  description:
+    'Close every editor tab showing a file from the currently opened workspace. The path must be relative to the workspace folder.',
+  name: 'close_workspace_file',
+  parameters: {
+    additionalProperties: false,
+    properties: {
+      path: {
+        description: 'File path relative to the currently opened workspace',
+        type: 'string',
+      },
+    },
+    required: ['path'],
+    type: 'object',
+  },
+  type: 'function',
+}
+
 export const workspaceFileFunctionTools: readonly FunctionToolDefinition[] = [
   listWorkspaceDirectoryTool,
   readWorkspaceFileTool,
   writeWorkspaceFileTool,
+  openWorkspaceFileTool,
+  closeWorkspaceFileTool,
 ]
 
 const workspaceFileFunctionToolNames = workspaceFileFunctionTools.map(
@@ -192,6 +235,7 @@ const workspaceFileFunctionToolNames = workspaceFileFunctionTools.map(
 export const executeWorkspaceFileFunctionToolCall = async (
   functionCallEvent: unknown,
   fileSystemApi?: WorkspaceFileSystemApi,
+  mainAreaApi?: WorkspaceMainAreaApi,
 ): Promise<readonly string[] | undefined> => {
   const functionCall = parseFunctionCall(functionCallEvent)
   if (
@@ -211,12 +255,22 @@ export const executeWorkspaceFileFunctionToolCall = async (
     } else if (functionCall.name === 'read_workspace_file') {
       const path = getRequiredString(argumentsValue, 'path')
       output = await readWorkspaceFile(path, fileSystemApi)
-    } else {
+    } else if (functionCall.name === 'write_workspace_file') {
       const path = getRequiredString(argumentsValue, 'path')
       output = await writeWorkspaceFile(
         path,
         getRequiredString(argumentsValue, 'content'),
         fileSystemApi,
+      )
+    } else if (functionCall.name === 'open_workspace_file') {
+      output = await openWorkspaceFile(
+        getRequiredString(argumentsValue, 'path'),
+        mainAreaApi,
+      )
+    } else {
+      output = await closeWorkspaceFile(
+        getRequiredString(argumentsValue, 'path'),
+        mainAreaApi,
       )
     }
   } catch (error) {

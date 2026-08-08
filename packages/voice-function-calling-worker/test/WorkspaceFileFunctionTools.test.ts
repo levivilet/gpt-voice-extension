@@ -1,4 +1,5 @@
 import { expect, jest, test } from '@jest/globals'
+import type { WorkspaceMainAreaApi } from '../src/parts/WorkspaceMainArea/WorkspaceMainArea.ts'
 import type { WorkspaceFileSystemApi } from '../src/parts/WorkspaceFileSystem/WorkspaceFileSystem.ts'
 import {
   executeWorkspaceFileFunctionToolCall,
@@ -17,6 +18,12 @@ const createFileSystemApi = (
   writeFile: jest.fn(async () => undefined),
 })
 
+const createMainAreaApi = (): WorkspaceMainAreaApi => ({
+  closeUri: jest.fn(async () => undefined),
+  getWorkspaceUri: jest.fn(async () => 'file:///workspace'),
+  openUri: jest.fn(async () => undefined),
+})
+
 const getToolOutput = (messages: readonly string[]): unknown => {
   const message = JSON.parse(messages[0])
   return JSON.parse(message.item.output)
@@ -27,6 +34,8 @@ test('exposes workspace file tool definitions', () => {
     'list_workspace_directory',
     'read_workspace_file',
     'write_workspace_file',
+    'open_workspace_file',
+    'close_workspace_file',
   ])
   expect(workspaceFileFunctionTools[0]?.parameters.required).toBeUndefined()
   expect(workspaceFileFunctionTools[1]?.parameters.required).toEqual(['path'])
@@ -34,6 +43,31 @@ test('exposes workspace file tool definitions', () => {
     'path',
     'content',
   ])
+  expect(workspaceFileFunctionTools[3]?.parameters.required).toEqual(['path'])
+  expect(workspaceFileFunctionTools[4]?.parameters.required).toEqual(['path'])
+})
+
+test.each([
+  ['open_workspace_file', 'openUri', { opened: true, path: 'src/index.ts' }],
+  ['close_workspace_file', 'closeUri', { closed: true, path: 'src/index.ts' }],
+])('executes the %s tool', async (name, method, output) => {
+  const fileSystemApi = createFileSystemApi()
+  const mainAreaApi = createMainAreaApi()
+  const messages = await executeWorkspaceFileFunctionToolCall(
+    {
+      arguments: JSON.stringify({ path: 'src/index.ts' }),
+      call_id: `${name}-call`,
+      name,
+      type: 'response.function_call_arguments.done',
+    },
+    fileSystemApi,
+    mainAreaApi,
+  )
+
+  expect(mainAreaApi[method as 'openUri' | 'closeUri']).toHaveBeenCalledWith(
+    'file:///workspace/src/index.ts',
+  )
+  expect(getToolOutput(messages || [])).toEqual(output)
 })
 
 test('lists the workspace root by default', async () => {
