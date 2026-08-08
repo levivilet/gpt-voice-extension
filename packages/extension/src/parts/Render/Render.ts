@@ -73,7 +73,7 @@ export const render = (state: IState): readonly VirtualDomNode[] => {
     return [
       {
         childCount: 1,
-        className: 'GptVoice',
+        className: 'GptVoice GptVoiceSetup',
         type: VirtualDomElements.Div,
       },
       ...renderWelcome(state),
@@ -82,13 +82,16 @@ export const render = (state: IState): readonly VirtualDomNode[] => {
 
   return [
     {
-      childCount: 7,
+      childCount: 6,
       className: 'GptVoice',
       type: VirtualDomElements.Div,
     },
+    {
+      childCount: 2,
+      className: 'GptVoiceToolbar',
+      type: VirtualDomElements.Div,
+    },
     ...renderModelSettings(state),
-    ...renderStage(state),
-    ...renderStatus(state),
     {
       childCount: 1,
       className: 'GptVoiceApiKeyActions',
@@ -102,6 +105,8 @@ export const render = (state: IState): readonly VirtualDomNode[] => {
       type: VirtualDomElements.Button,
     },
     text('Change API key'),
+    ...renderStage(state),
+    ...renderStatus(state),
     ...renderButton(state),
     ...renderTranscript(state),
     ...renderAudio(state),

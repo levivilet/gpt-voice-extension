@@ -12,8 +12,13 @@ test('render - returns virtual dom tree for idle mini state', () => {
 
   expect(result).toEqual([
     {
-      childCount: 7,
+      childCount: 6,
       className: 'GptVoice',
+      type: VirtualDomElements.Div,
+    },
+    {
+      childCount: 2,
+      className: 'GptVoiceToolbar',
       type: VirtualDomElements.Div,
     },
     {
@@ -43,6 +48,19 @@ test('render - returns virtual dom tree for idle mini state', () => {
     text('Use better'),
     {
       childCount: 1,
+      className: 'GptVoiceApiKeyActions',
+      type: VirtualDomElements.Div,
+    },
+    {
+      childCount: 1,
+      className: 'GptVoiceApiKeyClearButton',
+      disabled: false,
+      onClick: 'handleClearOpenAiApiKey',
+      type: VirtualDomElements.Button,
+    },
+    text('Change API key'),
+    {
+      childCount: 1,
       className: 'GptVoiceStage',
       type: VirtualDomElements.Div,
     },
@@ -57,19 +75,6 @@ test('render - returns virtual dom tree for idle mini state', () => {
       type: VirtualDomElements.Div,
     },
     text('idle'),
-    {
-      childCount: 1,
-      className: 'GptVoiceApiKeyActions',
-      type: VirtualDomElements.Div,
-    },
-    {
-      childCount: 1,
-      className: 'GptVoiceApiKeyClearButton',
-      disabled: false,
-      onClick: 'handleClearOpenAiApiKey',
-      type: VirtualDomElements.Button,
-    },
-    text('Change API key'),
     {
       childCount: 1,
       className: 'GptVoiceButton',
@@ -98,7 +103,7 @@ test('render - returns welcome form when API key is missing', () => {
   expect(result).toEqual([
     {
       childCount: 1,
-      className: 'GptVoice',
+      className: 'GptVoice GptVoiceSetup',
       type: VirtualDomElements.Div,
     },
     {
@@ -163,8 +168,13 @@ test('render - returns in-progress standard state for active conversation', () =
 
   expect(result).toEqual([
     {
-      childCount: 7,
+      childCount: 6,
       className: 'GptVoice',
+      type: VirtualDomElements.Div,
+    },
+    {
+      childCount: 2,
+      className: 'GptVoiceToolbar',
       type: VirtualDomElements.Div,
     },
     {
@@ -194,6 +204,19 @@ test('render - returns in-progress standard state for active conversation', () =
     text('Use better'),
     {
       childCount: 1,
+      className: 'GptVoiceApiKeyActions',
+      type: VirtualDomElements.Div,
+    },
+    {
+      childCount: 1,
+      className: 'GptVoiceApiKeyClearButton',
+      disabled: true,
+      onClick: 'handleClearOpenAiApiKey',
+      type: VirtualDomElements.Button,
+    },
+    text('Change API key'),
+    {
+      childCount: 1,
       className: 'GptVoiceStage',
       type: VirtualDomElements.Div,
     },
@@ -208,19 +231,6 @@ test('render - returns in-progress standard state for active conversation', () =
       type: VirtualDomElements.Div,
     },
     text('In Progress'),
-    {
-      childCount: 1,
-      className: 'GptVoiceApiKeyActions',
-      type: VirtualDomElements.Div,
-    },
-    {
-      childCount: 1,
-      className: 'GptVoiceApiKeyClearButton',
-      disabled: true,
-      onClick: 'handleClearOpenAiApiKey',
-      type: VirtualDomElements.Button,
-    },
-    text('Change API key'),
     {
       childCount: 1,
       className: 'GptVoiceButton',
