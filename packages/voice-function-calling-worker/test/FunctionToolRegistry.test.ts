@@ -22,6 +22,8 @@ test('returns registered function tool definitions', () => {
       },
       type: 'function',
     },
+    expect.objectContaining({ name: 'read_workspace_file' }),
+    expect.objectContaining({ name: 'write_workspace_file' }),
   ])
 })
 

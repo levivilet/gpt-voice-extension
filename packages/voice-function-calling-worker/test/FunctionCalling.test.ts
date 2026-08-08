@@ -1,8 +1,8 @@
-import { expect, test } from '@jest/globals'
+import { expect, jest, test } from '@jest/globals'
 import { executeFunctionToolCall } from '../src/parts/FunctionCalling/FunctionCalling.ts'
 
-test('executes completed function call arguments and creates response messages', () => {
-  const result = executeFunctionToolCall({
+test('executes completed function call arguments and creates response messages', async () => {
+  const result = await executeFunctionToolCall({
     arguments: '{"location":"Paris"}',
     call_id: 'call-1',
     name: 'getweather',
@@ -29,8 +29,8 @@ test('executes completed function call arguments and creates response messages',
   expect(result[1]).toBe(JSON.stringify({ type: 'response.create' }))
 })
 
-test('executes completed function call output items', () => {
-  const result = executeFunctionToolCall({
+test('executes completed function call output items', async () => {
+  const result = await executeFunctionToolCall({
     item: {
       arguments: '{"location":"London"}',
       call_id: 'call-2',
@@ -45,6 +45,35 @@ test('executes completed function call output items', () => {
   expect(result[0]).toContain('london')
 })
 
+test('executes workspace file function calls in the worker', async () => {
+  const invoke = jest
+    .fn<(method: string, ...params: readonly unknown[]) => Promise<unknown>>()
+    .mockResolvedValueOnce('/workspace')
+    .mockResolvedValueOnce('const value = 1')
+  const globalScope = globalThis as typeof globalThis & {
+    rpc: { readonly invoke: typeof invoke }
+  }
+  globalScope.rpc = { invoke }
+
+  const result = await executeFunctionToolCall({
+    arguments: '{"path":"src/index.ts"}',
+    call_id: 'read-call',
+    name: 'read_workspace_file',
+    type: 'response.function_call_arguments.done',
+  })
+
+  expect(invoke).toHaveBeenNthCalledWith(
+    1,
+    'WorkspaceFileSystem.getWorkspaceFolder',
+  )
+  expect(invoke).toHaveBeenNthCalledWith(
+    2,
+    'WorkspaceFileSystem.readFile',
+    '/workspace/src/index.ts',
+  )
+  expect(result[0]).toContain('const value = 1')
+})
+
 test.each([
   undefined,
   null,
@@ -52,17 +81,20 @@ test.each([
   {},
   { type: 'response.function_call_arguments.done' },
   { item: {}, type: 'response.output_item.done' },
-])('ignores events without a completed function call', (event: unknown) => {
-  expect(executeFunctionToolCall(event)).toEqual([])
-})
+])(
+  'ignores events without a completed function call',
+  async (event: unknown) => {
+    await expect(executeFunctionToolCall(event)).resolves.toEqual([])
+  },
+)
 
-test('rejects calls for unknown tools', () => {
-  expect(() =>
+test('rejects calls for unknown tools', async () => {
+  await expect(
     executeFunctionToolCall({
       arguments: '{}',
       call_id: 'call-3',
       name: 'unknown',
       type: 'response.function_call_arguments.done',
     }),
-  ).toThrow('Unknown function tool: unknown')
+  ).rejects.toThrow('Unknown function tool: unknown')
 })

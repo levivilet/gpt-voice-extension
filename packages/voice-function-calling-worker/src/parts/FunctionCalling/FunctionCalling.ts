@@ -1,4 +1,5 @@
 import { executeRegisteredFunctionTool } from '../FunctionToolRegistry/FunctionToolRegistry.ts'
+import { executeWorkspaceFileFunctionToolCall } from '../WorkspaceFileFunctionTools/WorkspaceFileFunctionTools.ts'
 
 interface FunctionCallArguments {
   readonly argumentsValue: string
@@ -76,7 +77,14 @@ const parseFunctionCall = (
   return undefined
 }
 
-export const executeFunctionToolCall = (parsed: unknown): readonly string[] => {
+export const executeFunctionToolCall = async (
+  parsed: unknown,
+): Promise<readonly string[]> => {
+  const workspaceFileMessages =
+    await executeWorkspaceFileFunctionToolCall(parsed)
+  if (workspaceFileMessages) {
+    return workspaceFileMessages
+  }
   const functionCall = parseFunctionCall(parsed)
   if (!functionCall) {
     return []
