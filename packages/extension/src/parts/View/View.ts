@@ -13,8 +13,13 @@ type GptVoiceView = Omit<View<ActiveGptVoiceViewInstance>, 'commands'> & {
 
 export const view: GptVoiceView = {
   commands: {
-    async 'GptVoice.addTranscript'(context, id: string, value: string) {
-      context.addTranscript(id, value, 'ai')
+    async 'GptVoice.addTranscript'(
+      context,
+      id: string,
+      value: string,
+      type: 'user' | 'ai' = 'ai',
+    ) {
+      context.addTranscript(id, value, type)
       return context
     },
     async 'GptVoice.handleClearOpenAiApiKey'(context) {
