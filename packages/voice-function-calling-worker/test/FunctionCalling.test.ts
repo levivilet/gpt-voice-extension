@@ -103,6 +103,29 @@ test('executes workspace directory listing calls in the worker', async () => {
   expect(result[0]).toContain('package.json')
 })
 
+test('executes open workspace folder calls in the worker', async () => {
+  const invoke = jest
+    .fn<(method: string, ...params: readonly unknown[]) => Promise<unknown>>()
+    .mockResolvedValue(undefined)
+  const globalScope = globalThis as typeof globalThis & {
+    rpc: { readonly invoke: typeof invoke }
+  }
+  globalScope.rpc = { invoke }
+
+  const result = await executeFunctionToolCall({
+    arguments: '{"uri":"file:///home/user/project"}',
+    call_id: 'open-workspace-call',
+    name: 'open_workspace_folder',
+    type: 'response.function_call_arguments.done',
+  })
+
+  expect(invoke).toHaveBeenCalledWith(
+    'Workspace.setWorkspaceUri',
+    'file:///home/user/project',
+  )
+  expect(result[0]).toContain('file:///home/user/project')
+})
+
 test.each([
   undefined,
   null,
