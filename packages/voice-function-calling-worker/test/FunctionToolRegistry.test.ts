@@ -22,10 +22,13 @@ test('returns registered function tool definitions', () => {
       },
       type: 'function',
     },
+    expect.objectContaining({ name: 'set_panel' }),
     expect.objectContaining({ name: 'open_workspace_folder' }),
     expect.objectContaining({ name: 'list_workspace_directory' }),
     expect.objectContaining({ name: 'read_workspace_file' }),
     expect.objectContaining({ name: 'write_workspace_file' }),
+    expect.objectContaining({ name: 'open_workspace_file' }),
+    expect.objectContaining({ name: 'close_workspace_file' }),
   ])
 })
 
