@@ -6,9 +6,9 @@ import {
 } from '../src/parts/WorkspaceFileFunctionTools/WorkspaceFileFunctionTools.ts'
 
 const createFileSystemApi = (
-  workspaceFolder = '/workspace',
+  workspaceUri = 'file:///workspace',
 ): WorkspaceFileSystemApi => ({
-  getWorkspaceFolder: jest.fn(async () => workspaceFolder),
+  getWorkspaceUri: jest.fn(async () => workspaceUri),
   readDirWithFileTypes: jest.fn(async () => [
     { name: 'src', type: 3 },
     { name: 'package.json', type: 7 },
@@ -48,7 +48,9 @@ test('lists the workspace root by default', async () => {
     fileSystemApi,
   )
 
-  expect(fileSystemApi.readDirWithFileTypes).toHaveBeenCalledWith('/workspace')
+  expect(fileSystemApi.readDirWithFileTypes).toHaveBeenCalledWith(
+    'file:///workspace',
+  )
   expect(getToolOutput(messages || [])).toEqual({
     entries: [
       { name: 'package.json', type: 'file' },
@@ -74,7 +76,7 @@ test('lists a workspace subdirectory', async () => {
   )
 
   expect(fileSystemApi.readDirWithFileTypes).toHaveBeenCalledWith(
-    '/workspace/src',
+    'file:///workspace/src',
   )
 })
 
@@ -91,7 +93,9 @@ test('reads a workspace file', async () => {
   )
 
   expect(messages).toHaveLength(2)
-  expect(fileSystemApi.readFile).toHaveBeenCalledWith('/workspace/src/index.ts')
+  expect(fileSystemApi.readFile).toHaveBeenCalledWith(
+    'file:///workspace/src/index.ts',
+  )
   expect(getToolOutput(messages || [])).toEqual({
     content: 'const value = 1',
     path: 'src/index.ts',
@@ -117,7 +121,7 @@ test('writes a workspace file from an output item event', async () => {
   )
 
   expect(fileSystemApi.writeFile).toHaveBeenCalledWith(
-    '/workspace/src/index.ts',
+    'file:///workspace/src/index.ts',
     'const value = 2',
   )
   expect(getToolOutput(messages || [])).toEqual({
@@ -147,7 +151,11 @@ test.each([
   )
 
   expect(fileSystemApi.readFile).not.toHaveBeenCalled()
-  expect(getToolOutput(messages || [])).toEqual({ error })
+  expect(getToolOutput(messages || [])).toEqual({
+    error,
+    hint: 'Pass a file path relative to the workspace, such as {"path":"src/index.ts"}. Never pass an absolute path or URI.',
+    tool: 'read_workspace_file',
+  })
 })
 
 test('returns invalid directory path errors to the model', async () => {
@@ -165,6 +173,8 @@ test('returns invalid directory path errors to the model', async () => {
   expect(fileSystemApi.readDirWithFileTypes).not.toHaveBeenCalled()
   expect(getToolOutput(messages || [])).toEqual({
     error: 'Workspace directory path cannot leave the opened workspace.',
+    hint: 'To list the workspace root, call list_workspace_directory with no arguments: {}. To list a subdirectory, pass only a relative path such as {"path":"src"}. Never pass an absolute path or URI.',
+    tool: 'list_workspace_directory',
   })
 })
 
@@ -182,6 +192,30 @@ test('returns invalid directory argument errors to the model', async () => {
 
   expect(getToolOutput(messages || [])).toEqual({
     error: 'Function tool argument "path" must be a string.',
+    hint: 'To list the workspace root, call list_workspace_directory with no arguments: {}. To list a subdirectory, pass only a relative path such as {"path":"src"}. Never pass an absolute path or URI.',
+    tool: 'list_workspace_directory',
+  })
+})
+
+test('returns filesystem failures with actionable listing guidance', async () => {
+  const fileSystemApi = createFileSystemApi()
+  jest
+    .mocked(fileSystemApi.readDirWithFileTypes)
+    .mockRejectedValue(new TypeError('URI must be valid'))
+  const messages = await executeWorkspaceFileFunctionToolCall(
+    {
+      arguments: '{}',
+      call_id: 'list-call',
+      name: 'list_workspace_directory',
+      type: 'response.function_call_arguments.done',
+    },
+    fileSystemApi,
+  )
+
+  expect(getToolOutput(messages || [])).toEqual({
+    error: 'Failed to list workspace directory ".": URI must be valid',
+    hint: 'To list the workspace root, call list_workspace_directory with no arguments: {}. To list a subdirectory, pass only a relative path such as {"path":"src"}. Never pass an absolute path or URI.',
+    tool: 'list_workspace_directory',
   })
 })
 

@@ -1,6 +1,6 @@
 import {
   createRpc,
-  getWorkspaceFolder,
+  getWorkspaceUri,
   readDirWithFileTypes,
   readFile,
   writeFile,
@@ -30,7 +30,7 @@ interface WebWorkerRpcOptions {
 type CreateRpc = (options: WebWorkerRpcOptions) => Promise<Rpc>
 
 const commandMap = {
-  'WorkspaceFileSystem.getWorkspaceFolder': getWorkspaceFolder,
+  'WorkspaceFileSystem.getWorkspaceUri': getWorkspaceUri,
   'WorkspaceFileSystem.readDirWithFileTypes': readDirWithFileTypes,
   'WorkspaceFileSystem.readFile': readFile,
   'WorkspaceFileSystem.writeFile': writeFile,

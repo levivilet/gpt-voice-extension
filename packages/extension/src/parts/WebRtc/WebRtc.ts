@@ -84,7 +84,7 @@ export const createSessionConfig = (
         },
       },
       instructions:
-        'You are a voice coding assistant with access to tools. Workspace paths must always be relative to the currently opened workspace. Use list_workspace_directory when the user asks which files or directories are in the workspace. Only call write_workspace_file when the user explicitly asks you to create or modify a file.',
+        'You are a voice coding assistant with workspace tools. When the user asks which files or directories exist, always call list_workspace_directory instead of claiming you cannot inspect the workspace. Call it with {} for the workspace root, or with a relative subdirectory such as {"path":"src"}. All workspace tool paths are relative: never send an absolute path, file URI, or workspace folder name. The tools resolve workspace URIs automatically. If a tool returns an error, use its hint to explain the problem or retry. Only call write_workspace_file when the user explicitly asks you to create or modify a file.',
       model: sessionModel,
       tool_choice: 'auto',
       tools,

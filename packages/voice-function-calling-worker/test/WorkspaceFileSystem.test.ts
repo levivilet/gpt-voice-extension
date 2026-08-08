@@ -2,14 +2,16 @@ import { expect, jest, test } from '@jest/globals'
 import {
   listWorkspaceDirectory,
   readWorkspaceFile,
-  resolveWorkspaceDirectoryPath,
-  resolveWorkspaceFilePath,
+  resolveWorkspaceDirectoryUri,
+  resolveWorkspaceFileUri,
   type WorkspaceFileSystemApi,
   writeWorkspaceFile,
 } from '../src/parts/WorkspaceFileSystem/WorkspaceFileSystem.ts'
 
-const createApi = (workspaceFolder = '/workspace'): WorkspaceFileSystemApi => ({
-  getWorkspaceFolder: jest.fn(async () => workspaceFolder),
+const createApi = (
+  workspaceUri = 'file:///workspace',
+): WorkspaceFileSystemApi => ({
+  getWorkspaceUri: jest.fn(async () => workspaceUri),
   readDirWithFileTypes: jest.fn(async () => [
     { name: 'src', type: 3 },
     { name: 'package.json', type: 7 },
@@ -19,28 +21,34 @@ const createApi = (workspaceFolder = '/workspace'): WorkspaceFileSystemApi => ({
 })
 
 test.each([
-  ['/workspace', 'src/index.ts', '/workspace/src/index.ts'],
-  ['/workspace/', './src/index.ts', '/workspace/src/index.ts'],
+  ['file:///workspace', 'src/index.ts', 'file:///workspace/src/index.ts'],
+  ['file:///workspace/', './src/index.ts', 'file:///workspace/src/index.ts'],
   ['github://owner/repo', 'src\\index.ts', 'github://owner/repo/src/index.ts'],
-  ['C:\\workspace', 'src/index.ts', 'C:\\workspace\\src\\index.ts'],
+  [
+    'file:///C:/workspace',
+    'folder name/file.txt',
+    'file:///C:/workspace/folder%20name/file.txt',
+  ],
 ])(
-  'resolveWorkspaceFilePath - resolves %s and %s',
-  (workspaceFolder, relativePath, expected) => {
-    expect(resolveWorkspaceFilePath(workspaceFolder, relativePath)).toBe(
-      expected,
-    )
+  'resolveWorkspaceFileUri - resolves %s and %s',
+  (workspaceUri, relativePath, expected) => {
+    expect(resolveWorkspaceFileUri(workspaceUri, relativePath)).toBe(expected)
   },
 )
 
 test.each([
-  ['/workspace', '.', '/workspace'],
-  ['/workspace/', 'src', '/workspace/src'],
-  ['C:\\workspace', '.', 'C:\\workspace'],
-  ['C:\\workspace', 'src/lib', 'C:\\workspace\\src\\lib'],
+  ['file:///workspace', '.', 'file:///workspace'],
+  ['file:///workspace/', 'src', 'file:///workspace/src'],
+  ['memfs:///workspace', '.', 'memfs:///workspace'],
+  [
+    'remote-ssh://host/workspace',
+    'src/lib',
+    'remote-ssh://host/workspace/src/lib',
+  ],
 ])(
-  'resolveWorkspaceDirectoryPath - resolves %s and %s',
-  (workspaceFolder, relativePath, expected) => {
-    expect(resolveWorkspaceDirectoryPath(workspaceFolder, relativePath)).toBe(
+  'resolveWorkspaceDirectoryUri - resolves %s and %s',
+  (workspaceUri, relativePath, expected) => {
+    expect(resolveWorkspaceDirectoryUri(workspaceUri, relativePath)).toBe(
       expected,
     )
   },
@@ -48,48 +56,65 @@ test.each([
 
 test.each([
   ['', 'file.txt', 'No workspace folder is currently open.'],
-  ['/workspace', '', 'Workspace file path is required.'],
-  ['/workspace', '.', 'Workspace file path is required.'],
-  ['/workspace', '/tmp/file.txt', 'Workspace file path must be relative.'],
-  ['/workspace', '\\tmp\\file.txt', 'Workspace file path must be relative.'],
-  ['/workspace', 'C:\\tmp\\file.txt', 'Workspace file path must be relative.'],
   [
     '/workspace',
+    'file.txt',
+    'The opened workspace does not provide a valid filesystem URI.',
+  ],
+  ['file:///workspace', '', 'Workspace file path is required.'],
+  ['file:///workspace', '.', 'Workspace file path is required.'],
+  [
+    'file:///workspace',
+    '/tmp/file.txt',
+    'Workspace file path must be relative.',
+  ],
+  [
+    'file:///workspace',
+    '\\tmp\\file.txt',
+    'Workspace file path must be relative.',
+  ],
+  [
+    'file:///workspace',
+    'C:\\tmp\\file.txt',
+    'Workspace file path must be relative.',
+  ],
+  [
+    'file:///workspace',
     'file:///tmp/file.txt',
     'Workspace file path must be relative.',
   ],
   [
-    '/workspace',
+    'file:///workspace',
     '../outside.txt',
     'Workspace file path cannot leave the opened workspace.',
   ],
   [
-    '/workspace',
+    'file:///workspace',
     'src\\..\\..\\outside.txt',
     'Workspace file path cannot leave the opened workspace.',
   ],
 ])(
-  'resolveWorkspaceFilePath - rejects unsafe path %#',
-  (workspaceFolder, relativePath, message) => {
-    expect(() =>
-      resolveWorkspaceFilePath(workspaceFolder, relativePath),
-    ).toThrow(message)
+  'resolveWorkspaceFileUri - rejects unsafe path %#',
+  (workspaceUri, relativePath, message) => {
+    expect(() => resolveWorkspaceFileUri(workspaceUri, relativePath)).toThrow(
+      message,
+    )
   },
 )
 
 test.each([
-  ['/workspace', '', 'Workspace directory path is required.'],
-  ['/workspace', '/tmp', 'Workspace directory path must be relative.'],
+  ['file:///workspace', '', 'Workspace directory path is required.'],
+  ['file:///workspace', '/tmp', 'Workspace directory path must be relative.'],
   [
-    '/workspace',
+    'file:///workspace',
     '../outside',
     'Workspace directory path cannot leave the opened workspace.',
   ],
 ])(
-  'resolveWorkspaceDirectoryPath - rejects unsafe path %#',
-  (workspaceFolder, relativePath, message) => {
+  'resolveWorkspaceDirectoryUri - rejects unsafe path %#',
+  (workspaceUri, relativePath, message) => {
     expect(() =>
-      resolveWorkspaceDirectoryPath(workspaceFolder, relativePath),
+      resolveWorkspaceDirectoryUri(workspaceUri, relativePath),
     ).toThrow(message)
   },
 )
@@ -104,7 +129,7 @@ test('listWorkspaceDirectory - lists sorted workspace entries', async () => {
     ],
     path: '.',
   })
-  expect(api.readDirWithFileTypes).toHaveBeenCalledWith('/workspace')
+  expect(api.readDirWithFileTypes).toHaveBeenCalledWith('file:///workspace')
 })
 
 test.each([
@@ -140,7 +165,7 @@ test('readWorkspaceFile - reads resolved workspace file', async () => {
     content: 'file content',
     path: 'src/index.ts',
   })
-  expect(api.readFile).toHaveBeenCalledWith('/workspace/src/index.ts')
+  expect(api.readFile).toHaveBeenCalledWith('file:///workspace/src/index.ts')
 })
 
 test('writeWorkspaceFile - writes resolved workspace file', async () => {
@@ -153,7 +178,36 @@ test('writeWorkspaceFile - writes resolved workspace file', async () => {
     written: true,
   })
   expect(api.writeFile).toHaveBeenCalledWith(
-    '/workspace/src/index.ts',
+    'file:///workspace/src/index.ts',
     'new content',
+  )
+})
+
+test('listWorkspaceDirectory - adds operation context to errors', async () => {
+  const api = createApi()
+  jest
+    .mocked(api.readDirWithFileTypes)
+    .mockRejectedValue(new TypeError('URI is unavailable'))
+
+  await expect(listWorkspaceDirectory('.', api)).rejects.toThrow(
+    'Failed to list workspace directory ".": URI is unavailable',
+  )
+})
+
+test('readWorkspaceFile - adds operation context to errors', async () => {
+  const api = createApi()
+  jest.mocked(api.readFile).mockRejectedValue(new Error('Not found'))
+
+  await expect(readWorkspaceFile('missing.txt', api)).rejects.toThrow(
+    'Failed to read workspace file "missing.txt": Not found',
+  )
+})
+
+test('writeWorkspaceFile - adds operation context to errors', async () => {
+  const api = createApi()
+  jest.mocked(api.writeFile).mockRejectedValue('Read only')
+
+  await expect(writeWorkspaceFile('file.txt', 'content', api)).rejects.toThrow(
+    'Failed to write workspace file "file.txt": Read only',
   )
 })
