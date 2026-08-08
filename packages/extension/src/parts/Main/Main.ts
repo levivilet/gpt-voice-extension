@@ -4,7 +4,6 @@ import {
   registerCommand,
   registerView,
 } from '@lvce-editor/api'
-import { enableTestMode } from '../TestMode/TestMode.ts'
 import { view } from '../View/View.ts'
 
 const floatingWindowUrl =
@@ -26,11 +25,5 @@ export const activate = async (): Promise<void> => {
       await executeCommand('Open.openUrl', floatingWindowUrl)
     },
     id: 'gpt-voice.show',
-  })
-  registerCommand({
-    async execute() {
-      enableTestMode()
-    },
-    id: 'GptVoice.setIsTest',
   })
 }

@@ -22,7 +22,6 @@ import { getTitle } from '../GetTitle/GetTitle.ts'
 import { createOpenAiApiKeyStorage } from '../OpenAiApiKeyStorage/OpenAiApiKeyStorage.ts'
 import { readLevel } from '../ReadLevel/ReadLevel.ts'
 import { render } from '../Render/Render.ts'
-import { isInTestMode } from '../TestMode/TestMode.ts'
 import {
   createSessionConfig,
   defaultSessionModel,
@@ -51,6 +50,7 @@ export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly handleSaveOpenAiApiKey: () => Promise<void>
   readonly renderTitle: () => string
   readonly setAnimation: (enabled: boolean, scale: number) => void
+  readonly setIsTest: () => void
   readonly setRealtimeModelMini: () => void
   readonly setRealtimeModelStandard: () => void
   readonly stop: () => Promise<void>
@@ -111,15 +111,13 @@ export const createInstance = async (
   context?: ViewContext,
 ): Promise<ActiveGptVoiceViewInstance> => {
   const openAiApiKeyStorage = createOpenAiApiKeyStorage(ExtensionApi)
-  const hasTestMode = isInTestMode()
   let hasOpenAiApiKey = false
   try {
     const existingApiKey = await openAiApiKeyStorage.read()
     hasOpenAiApiKey =
-      (existingApiKey !== undefined && existingApiKey.trim().length > 0) ||
-      hasTestMode
+      existingApiKey !== undefined && existingApiKey.trim().length > 0
   } catch {
-    hasOpenAiApiKey = hasTestMode
+    hasOpenAiApiKey = false
   }
 
   let state: IState = {
@@ -132,7 +130,7 @@ export const createInstance = async (
     inProgress: false,
     isCreatingToken: false,
     isSavingApiKey: false,
-    isTest: hasTestMode,
+    isTest: false,
     parsedData: [],
     sessionModel: defaultSessionModel,
     tokenError: '',
@@ -260,7 +258,7 @@ export const createInstance = async (
         await instance.stop()
         return
       }
-      if (state.isTest || isInTestMode()) {
+      if (state.isTest) {
         hasOpenAiApiKey = true
         state = {
           ...state,
@@ -482,6 +480,17 @@ export const createInstance = async (
         animationScale: scale,
       }
       context?.requestRerender()
+    },
+    setIsTest() {
+      hasOpenAiApiKey = true
+      state = {
+        ...state,
+        apiKeyError: '',
+        hasOpenAiApiKey,
+        isTest: true,
+        tokenError: '',
+      }
+      requestRerender()
     },
     setRealtimeModelMini() {
       if (state.inProgress) {
