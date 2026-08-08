@@ -18,6 +18,7 @@ import {
 import type { MenuEntry } from '../MenuEntries/MenuEntries.ts'
 import { animateBubble } from '../AnimateBubble/AnimateBubble.ts'
 import * as ClassNames from '../ClassNames/ClassNames.ts'
+import { getCss } from '../GetCss/GetCss.ts'
 import { getTitle } from '../GetTitle/GetTitle.ts'
 import * as GptVoiceStrings from '../GptVoiceStrings/GptVoiceStrings.ts'
 import { createOpenAiApiKeyStorage } from '../OpenAiApiKeyStorage/OpenAiApiKeyStorage.ts'
@@ -40,7 +41,6 @@ const actionsDomNode: VirtualDomNode = {
 }
 
 const focusSelector = `.${ClassNames.Main}`
-const gptVoiceSelector = '.GptVoice'
 
 export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly addTranscript: (
@@ -234,10 +234,7 @@ export const createInstance = async (
       return {}
     },
     getCss() {
-      const { animationScale } = state
-      return `${gptVoiceSelector} {
---GptVoiceBubbleTransform: scale(${animationScale});
-}`
+      return getCss(state)
     },
     getMenuEntries() {
       return []
