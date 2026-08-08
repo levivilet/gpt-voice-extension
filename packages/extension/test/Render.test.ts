@@ -1,6 +1,7 @@
 import { test, expect } from '@jest/globals'
 import { text, VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
 import type { ITranscript } from '../src/parts/CreateInstance/CreateInstance.ts'
+import * as DomEventListenerFunctions from '../src/parts/DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import { mergeClassNames } from '../src/parts/MergeClassNames/MergeClassNames.ts'
 import { render } from '../src/parts/Render/Render.ts'
 import { createRenderState } from '../src/parts/RenderTestHelpers.ts'
@@ -30,14 +31,14 @@ test('render - returns virtual dom tree for idle mini state', () => {
     {
       childCount: 1,
       className: mergeClassNames('GptVoiceModelButton', 'active'),
-      onClick: 'setRealtimeModelMini',
+      onClick: DomEventListenerFunctions.SetRealtimeModelMini,
       type: VirtualDomElements.Button,
     },
     text('Use cheap'),
     {
       childCount: 1,
       className: 'GptVoiceModelButton',
-      onClick: 'setRealtimeModelStandard',
+      onClick: DomEventListenerFunctions.SetRealtimeModelStandard,
       type: VirtualDomElements.Button,
     },
     text('Use better'),
@@ -66,7 +67,7 @@ test('render - returns virtual dom tree for idle mini state', () => {
       childCount: 1,
       className: 'GptVoiceApiKeyClearButton',
       disabled: false,
-      onClick: 'handleClearOpenAiApiKey',
+      onClick: DomEventListenerFunctions.HandleClearOpenAiApiKey,
       type: VirtualDomElements.Button,
     },
     text('Change API key'),
@@ -74,7 +75,7 @@ test('render - returns virtual dom tree for idle mini state', () => {
       childCount: 1,
       className: 'GptVoiceButton',
       id: 'toggle',
-      onClick: 'handleClickStart',
+      onClick: DomEventListenerFunctions.HandleClickStart,
       type: VirtualDomElements.Button,
     },
     text('Start talking'),
@@ -126,7 +127,7 @@ test('render - returns welcome form when API key is missing', () => {
       disabled: false,
       inputType: 'password',
       name: 'openAiApiKey',
-      onInput: 'handleOpenAiApiKeyInput',
+      onInput: DomEventListenerFunctions.HandleOpenAiApiKeyInput,
       placeholder: 'sk-...',
       type: VirtualDomElements.Input,
       value: '',
@@ -135,7 +136,7 @@ test('render - returns welcome form when API key is missing', () => {
       childCount: 1,
       className: 'GptVoiceButton',
       disabled: false,
-      onClick: 'handleSaveOpenAiApiKey',
+      onClick: DomEventListenerFunctions.HandleSaveOpenAiApiKey,
       type: VirtualDomElements.Button,
     },
     text('Save API key'),
@@ -181,14 +182,14 @@ test('render - returns in-progress standard state for active conversation', () =
     {
       childCount: 1,
       className: 'GptVoiceModelButton',
-      onClick: 'setRealtimeModelMini',
+      onClick: DomEventListenerFunctions.SetRealtimeModelMini,
       type: VirtualDomElements.Button,
     },
     text('Use cheap'),
     {
       childCount: 1,
       className: mergeClassNames('GptVoiceModelButton', 'active'),
-      onClick: 'setRealtimeModelStandard',
+      onClick: DomEventListenerFunctions.SetRealtimeModelStandard,
       type: VirtualDomElements.Button,
     },
     text('Use better'),
@@ -217,7 +218,7 @@ test('render - returns in-progress standard state for active conversation', () =
       childCount: 1,
       className: 'GptVoiceApiKeyClearButton',
       disabled: true,
-      onClick: 'handleClearOpenAiApiKey',
+      onClick: DomEventListenerFunctions.HandleClearOpenAiApiKey,
       type: VirtualDomElements.Button,
     },
     text('Change API key'),
@@ -225,7 +226,7 @@ test('render - returns in-progress standard state for active conversation', () =
       childCount: 1,
       className: 'GptVoiceButton',
       id: 'toggle',
-      onClick: 'handleClickStart',
+      onClick: DomEventListenerFunctions.HandleClickStart,
       type: VirtualDomElements.Button,
     },
     text('Stop talking'),

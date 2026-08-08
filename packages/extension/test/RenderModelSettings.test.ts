@@ -1,5 +1,6 @@
 import { test, expect } from '@jest/globals'
 import { text, VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
+import * as DomEventListenerFunctions from '../src/parts/DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import { mergeClassNames } from '../src/parts/MergeClassNames/MergeClassNames.ts'
 import { renderModelSettings } from '../src/parts/RenderModelSettings/RenderModelSettings.ts'
 import { RealtimeModelPreset } from '../src/parts/WebRtc/WebRtc.ts'
@@ -24,14 +25,14 @@ test('renderModelSettings - mini model is selected', () => {
     {
       childCount: 1,
       className: mergeClassNames('GptVoiceModelButton', 'active'),
-      onClick: 'setRealtimeModelMini',
+      onClick: DomEventListenerFunctions.SetRealtimeModelMini,
       type: VirtualDomElements.Button,
     },
     text('Use cheap'),
     {
       childCount: 1,
       className: 'GptVoiceModelButton',
-      onClick: 'setRealtimeModelStandard',
+      onClick: DomEventListenerFunctions.SetRealtimeModelStandard,
       type: VirtualDomElements.Button,
     },
     text('Use better'),
@@ -58,14 +59,14 @@ test('renderModelSettings - standard model is selected', () => {
     {
       childCount: 1,
       className: 'GptVoiceModelButton',
-      onClick: 'setRealtimeModelMini',
+      onClick: DomEventListenerFunctions.SetRealtimeModelMini,
       type: VirtualDomElements.Button,
     },
     text('Use cheap'),
     {
       childCount: 1,
       className: mergeClassNames('GptVoiceModelButton', 'active'),
-      onClick: 'setRealtimeModelStandard',
+      onClick: DomEventListenerFunctions.SetRealtimeModelStandard,
       type: VirtualDomElements.Button,
     },
     text('Use better'),

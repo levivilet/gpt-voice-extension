@@ -15,7 +15,8 @@ const state = {
 }
 
 export const activate = async (): Promise<void> => {
-  if (state.isActivated) {
+  const { isActivated } = state
+  if (isActivated) {
     return
   }
   state.isActivated = true
