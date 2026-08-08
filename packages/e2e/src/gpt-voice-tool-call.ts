@@ -1,0 +1,40 @@
+import type { Test } from '@lvce-editor/test-with-playwright'
+
+export const name = 'gpt-voice.tool-call'
+
+export const test: Test = async ({ Command, expect, Locator, SideBar }) => {
+  await Command.executeExtensionCommand('GptVoice.setIsTest')
+  await SideBar.open('gpt-voice.views.default')
+  await Command.executeExtensionCommand(
+    'GptVoice.handleData',
+    JSON.stringify({
+      arguments: JSON.stringify({ location: 'Paris' }),
+      call_id: 'weather-call',
+      name: 'getweather',
+      type: 'response.function_call_arguments.done',
+    }),
+  )
+
+  const toolCall = Locator('.GptVoiceToolCall')
+  const toggle = toolCall.locator('.GptVoiceToolCallButton')
+  await new Promise((resolve) => {
+    setTimeout(resolve, 1000)
+  })
+  await expect(toolCall).toHaveText('✓Ran getweather⌄')
+  await expect(toggle).toHaveAttribute('aria-expanded', 'false')
+  await expect(toggle).toHaveAttribute('name', 'weather-call')
+
+  // eslint-disable-next-line e2e/no-direct-click -- verifies the rendered tool disclosure is wired to the view command
+  await toggle.click()
+  await new Promise((resolve) => {
+    setTimeout(resolve, 200)
+  })
+
+  await expect(toggle).toHaveAttribute('aria-expanded', 'true')
+  await expect(toolCall.locator('.GptVoiceToolCallDetails')).toContainText(
+    '"location": "Paris"',
+  )
+  await expect(toolCall.locator('.GptVoiceToolCallDetails')).toContainText(
+    '"temperature": 20',
+  )
+}

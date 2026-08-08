@@ -185,8 +185,8 @@ test('render - returns in-progress standard state for active conversation', () =
   }
   const state = createRenderState({
     inProgress: true,
+    messages: [transcript],
     sessionModel: RealtimeModelPreset.Standard,
-    transcripts: [transcript],
   })
   const result = render(state)
 

@@ -13,11 +13,11 @@ export const createRenderState = (state: Partial<IState> = {}): IState => {
     isCreatingToken: false,
     isSavingApiKey: false,
     isTest: false,
+    messages: [],
     parsedData: [],
     sessionModel: RealtimeModelPreset.Mini,
     tokenError: '',
     transcribedText: '',
-    transcripts: [],
     uid: 1,
     ...state,
   }

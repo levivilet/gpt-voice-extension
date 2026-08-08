@@ -32,6 +32,15 @@ const getRegisteredTools = jest.fn(async () => [
     type: 'function' as const,
   },
 ])
+const createToolOutput = (callId: string, output: string): string =>
+  JSON.stringify({
+    item: {
+      call_id: callId,
+      output,
+      type: 'function_call_output',
+    },
+    type: 'conversation.item.create',
+  })
 const executeFunctionToolCall = jest.fn(
   async (event: unknown): Promise<readonly string[]> => {
     if (
@@ -42,7 +51,10 @@ const executeFunctionToolCall = jest.fn(
     ) {
       return []
     }
-    return ['tool-output', 'response']
+    return [
+      createToolOutput('call', JSON.stringify({ temperature: 21 })),
+      JSON.stringify({ type: 'response.create' }),
+    ]
   },
 )
 
@@ -508,6 +520,74 @@ test('instance - handles tool call without connected data channel', async () => 
   await flushAnimation()
 
   expect(consoleError).toHaveBeenCalledWith(expect.any(Error))
+  expect(instance.render()).toContainEqual(text('Ran getweather'))
+  instance.toggleToolCall('call')
+  expect(instance.render()).toContainEqual(text('{\n  "temperature": 21\n}'))
+  instance.toggleToolCall('missing')
+  instance.updateTranscript('call', 'ignored')
+})
+
+test('instance - shows a tool call while it is running and ignores duplicate events', async () => {
+  const instance = await createInstance()
+  const response = Promise.withResolvers<readonly string[]>()
+  executeFunctionToolCall.mockReturnValueOnce(response.promise)
+  jest.spyOn(console, 'error').mockImplementation(() => undefined)
+  const event = {
+    arguments: JSON.stringify({ path: 'src' }),
+    call_id: 'pending-call',
+    name: 'list_workspace_directory',
+    type: 'response.function_call_arguments.done',
+  }
+
+  instance.handleData(JSON.stringify(event))
+  instance.handleData(JSON.stringify(event))
+
+  expect(instance.render()).toContainEqual(
+    text('Running list_workspace_directory…'),
+  )
+  expect(executeFunctionToolCall).toHaveBeenCalledTimes(1)
+
+  response.resolve([
+    createToolOutput('pending-call', JSON.stringify({ files: ['a.ts'] })),
+  ])
+  await flushAnimation()
+
+  expect(instance.render()).toContainEqual(text('Ran list_workspace_directory'))
+})
+
+test('instance - shows failed tool calls', async () => {
+  const instance = await createInstance()
+  const consoleError = jest
+    .spyOn(console, 'error')
+    .mockImplementation(() => undefined)
+  executeFunctionToolCall
+    .mockRejectedValueOnce(new Error('tool failed'))
+    .mockRejectedValueOnce('worker stopped')
+
+  instance.handleData(
+    JSON.stringify({
+      arguments: '{}',
+      call_id: 'failed-call',
+      name: 'read_workspace_file',
+      type: 'response.function_call_arguments.done',
+    }),
+  )
+  instance.handleData(
+    JSON.stringify({
+      arguments: '{}',
+      call_id: 'stopped-call',
+      name: 'read_workspace_file',
+      type: 'response.function_call_arguments.done',
+    }),
+  )
+  await flushAnimation()
+
+  expect(instance.render()).toContainEqual(text('Failed read_workspace_file'))
+  instance.toggleToolCall('failed-call')
+  expect(instance.render()).toContainEqual(text('tool failed'))
+  instance.toggleToolCall('stopped-call')
+  expect(instance.render()).toContainEqual(text('worker stopped'))
+  expect(consoleError).toHaveBeenCalledTimes(2)
 })
 
 test('instance - enters test mode before and after creation', async () => {
@@ -522,6 +602,16 @@ test('instance - enters test mode before and after creation', async () => {
   const createdInTestMode = await createInstance()
   await createdInTestMode.handleClickStart()
   expect(createdInTestMode.render()).toContainEqual(text('Stop talking'))
+  createdInTestMode.handleData(
+    JSON.stringify({
+      arguments: JSON.stringify({ location: 'Paris' }),
+      call_id: 'test-call',
+      name: 'getweather',
+      type: 'response.function_call_arguments.done',
+    }),
+  )
+  await flushAnimation()
+  expect(createdInTestMode.render()).toContainEqual(text('Ran getweather'))
   await createdInTestMode.stop()
   expect(stopWebRtcAudioStream).not.toHaveBeenCalled()
 })

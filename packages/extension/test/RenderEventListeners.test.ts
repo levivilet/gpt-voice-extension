@@ -29,5 +29,9 @@ test('renderEventListeners - returns all listeners', () => {
       name: DomEventListenerFunctions.SetRealtimeModelStandard,
       params: ['setRealtimeModelStandard'],
     },
+    {
+      name: DomEventListenerFunctions.ToggleToolCall,
+      params: ['toggleToolCall', 'event.target.name'],
+    },
   ])
 })
