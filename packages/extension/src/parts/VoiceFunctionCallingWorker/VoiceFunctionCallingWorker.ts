@@ -1,6 +1,7 @@
 import {
   closeUri,
   createRpc,
+  executeCommand,
   getWorkspaceUri,
   openUri,
   readDirWithFileTypes,
@@ -32,7 +33,21 @@ interface WebWorkerRpcOptions {
 
 type CreateRpc = (options: WebWorkerRpcOptions) => Promise<Rpc>
 
+const closePanel = async (): Promise<void> => {
+  await executeCommand('Layout.hidePanel')
+}
+
+const openPanel = async (view?: string): Promise<void> => {
+  if (view === undefined) {
+    await executeCommand('Layout.showPanel')
+    return
+  }
+  await executeCommand('Layout.showPanel', view)
+}
+
 const commandMap = {
+  'Panel.close': closePanel,
+  'Panel.open': openPanel,
   'Workspace.setWorkspaceUri': setWorkspaceUri,
   'WorkspaceFileSystem.getWorkspaceUri': getWorkspaceUri,
   'WorkspaceFileSystem.readDirWithFileTypes': readDirWithFileTypes,

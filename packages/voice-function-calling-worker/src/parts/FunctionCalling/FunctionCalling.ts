@@ -1,4 +1,5 @@
 import { executeRegisteredFunctionTool } from '../FunctionToolRegistry/FunctionToolRegistry.ts'
+import { executePanelFunctionToolCall } from '../PanelFunctionTools/PanelFunctionTools.ts'
 import { executeWorkspaceFileFunctionToolCall } from '../WorkspaceFileFunctionTools/WorkspaceFileFunctionTools.ts'
 import { executeWorkspaceFunctionToolCall } from '../WorkspaceFunctionTools/WorkspaceFunctionTools.ts'
 
@@ -81,6 +82,10 @@ const parseFunctionCall = (
 export const executeFunctionToolCall = async (
   parsed: unknown,
 ): Promise<readonly string[]> => {
+  const panelMessages = await executePanelFunctionToolCall(parsed)
+  if (panelMessages) {
+    return panelMessages
+  }
   const workspaceMessages = await executeWorkspaceFunctionToolCall(parsed)
   if (workspaceMessages) {
     return workspaceMessages

@@ -1,4 +1,5 @@
 import { getFakeWeather } from '../FakeWeather/FakeWeather.ts'
+import { panelFunctionTools } from '../PanelFunctionTools/PanelFunctionTools.ts'
 import { workspaceFileFunctionTools } from '../WorkspaceFileFunctionTools/WorkspaceFileFunctionTools.ts'
 import { workspaceFunctionTools } from '../WorkspaceFunctionTools/WorkspaceFunctionTools.ts'
 
@@ -51,6 +52,7 @@ const parseArguments = (value: string): Readonly<Record<string, unknown>> => {
 export const getRegisteredTools = (): readonly FunctionToolDefinition[] => {
   return [
     ...registeredTools.map((tool) => tool.definition),
+    ...panelFunctionTools,
     ...workspaceFunctionTools,
     ...workspaceFileFunctionTools,
   ]

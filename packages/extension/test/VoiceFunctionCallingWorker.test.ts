@@ -11,6 +11,7 @@ const createRpc = jest.fn<typeof Api.createRpc>(
 )
 const closeUri = jest.fn<(uri: string) => Promise<void>>(async () => undefined)
 const openUri = jest.fn<(uri: string) => Promise<void>>(async () => undefined)
+const executeCommand = jest.fn<typeof Api.executeCommand>(async () => undefined)
 const getWorkspaceUri = jest.fn(async () => 'file:///workspace')
 const readDirWithFileTypes = jest.fn(async () => [
   { name: 'package.json', type: 7 },
@@ -32,6 +33,7 @@ jest.unstable_mockModule('@lvce-editor/api', () => {
     ...actual,
     closeUri,
     createRpc,
+    executeCommand,
     getWorkspaceUri,
     openUri,
     readDirWithFileTypes,
@@ -47,6 +49,7 @@ const VoiceFunctionCallingWorker =
 beforeEach(() => {
   createRpc.mockClear()
   closeUri.mockClear()
+  executeCommand.mockClear()
   invoke.mockReset()
   getWorkspaceUri.mockClear()
   openUri.mockClear()
@@ -74,6 +77,8 @@ test('creates a web worker RPC and queries registered tools', async () => {
 
   expect(createRpc).toHaveBeenCalledWith({
     commandMap: {
+      'Panel.close': expect.any(Function),
+      'Panel.open': expect.any(Function),
       'Workspace.setWorkspaceUri': setWorkspaceUri,
       'WorkspaceFileSystem.getWorkspaceUri': getWorkspaceUri,
       'WorkspaceFileSystem.readDirWithFileTypes': readDirWithFileTypes,
@@ -91,6 +96,27 @@ test('creates a web worker RPC and queries registered tools', async () => {
     ).href.replace('/test/', '/src/parts/VoiceFunctionCallingWorker/'),
   })
   expect(invoke).toHaveBeenCalledWith('VoiceFunctionCalling.getRegisteredTools')
+})
+
+test('bridges panel commands from the function calling worker', async () => {
+  invoke.mockResolvedValue([])
+  await VoiceFunctionCallingWorker.getRegisteredTools()
+
+  const options = createRpc.mock.calls[0]?.[0]
+  const commandMap = options?.commandMap as Readonly<
+    Record<string, (...args: readonly unknown[]) => Promise<void>>
+  >
+  await commandMap['Panel.open']?.('Terminals')
+  await commandMap['Panel.open']?.()
+  await commandMap['Panel.close']?.()
+
+  expect(executeCommand).toHaveBeenNthCalledWith(
+    1,
+    'Layout.showPanel',
+    'Terminals',
+  )
+  expect(executeCommand).toHaveBeenNthCalledWith(2, 'Layout.showPanel')
+  expect(executeCommand).toHaveBeenNthCalledWith(3, 'Layout.hidePanel')
 })
 
 test('invokes a workspace file tool on the worker', async () => {

@@ -126,6 +126,26 @@ test('executes open workspace folder calls in the worker', async () => {
   expect(result[0]).toContain('file:///home/user/project')
 })
 
+test('executes panel calls in the worker', async () => {
+  const invoke = jest
+    .fn<(method: string, ...params: readonly unknown[]) => Promise<unknown>>()
+    .mockResolvedValue(undefined)
+  const globalScope = globalThis as typeof globalThis & {
+    rpc: { readonly invoke: typeof invoke }
+  }
+  globalScope.rpc = { invoke }
+
+  const result = await executeFunctionToolCall({
+    arguments: '{"action":"open","view":"terminal"}',
+    call_id: 'panel-call',
+    name: 'set_panel',
+    type: 'response.function_call_arguments.done',
+  })
+
+  expect(invoke).toHaveBeenCalledWith('Panel.open', 'Terminals')
+  expect(result[0]).toContain('terminal')
+})
+
 test.each([
   ['open_workspace_file', 'WorkspaceMainArea.openUri', 'opened'],
   ['close_workspace_file', 'WorkspaceMainArea.closeUri', 'closed'],
