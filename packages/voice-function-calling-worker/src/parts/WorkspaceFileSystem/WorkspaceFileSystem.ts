@@ -1,4 +1,4 @@
-import { getWorkspaceFolder, readFile, writeFile } from '@lvce-editor/api'
+import * as Rpc from '../Rpc/Rpc.ts'
 
 export interface WorkspaceFileSystemApi {
   readonly getWorkspaceFolder: () => Promise<string>
@@ -7,9 +7,11 @@ export interface WorkspaceFileSystemApi {
 }
 
 const defaultApi: WorkspaceFileSystemApi = {
-  getWorkspaceFolder,
-  readFile,
-  writeFile,
+  getWorkspaceFolder: () =>
+    Rpc.invoke<string>('WorkspaceFileSystem.getWorkspaceFolder'),
+  readFile: (uri) => Rpc.invoke<string>('WorkspaceFileSystem.readFile', uri),
+  writeFile: (uri, content) =>
+    Rpc.invoke<void>('WorkspaceFileSystem.writeFile', uri, content),
 }
 
 const uriSchemeRegex = /^[A-Za-z][A-Za-z\d+.-]*:/

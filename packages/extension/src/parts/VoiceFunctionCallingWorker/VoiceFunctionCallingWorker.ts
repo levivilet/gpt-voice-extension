@@ -1,11 +1,16 @@
-import { createRpc } from '@lvce-editor/api'
-import type { FunctionToolDefinition } from '../FunctionToolDefinition/FunctionToolDefinition.ts'
 import {
-  executeWorkspaceFileFunctionToolCall,
-  workspaceFileFunctionTools,
-} from '../WorkspaceFileFunctionTools/WorkspaceFileFunctionTools.ts'
+  createRpc,
+  getWorkspaceFolder,
+  readFile,
+  writeFile,
+} from '@lvce-editor/api'
 
-export type { FunctionToolDefinition } from '../FunctionToolDefinition/FunctionToolDefinition.ts'
+export interface FunctionToolDefinition {
+  readonly description: string
+  readonly name: string
+  readonly parameters: Readonly<Record<string, unknown>>
+  readonly type: 'function'
+}
 
 interface Rpc {
   readonly invoke: (
@@ -23,6 +28,12 @@ interface WebWorkerRpcOptions {
 
 type CreateRpc = (options: WebWorkerRpcOptions) => Promise<Rpc>
 
+const commandMap = {
+  'WorkspaceFileSystem.getWorkspaceFolder': getWorkspaceFolder,
+  'WorkspaceFileSystem.readFile': readFile,
+  'WorkspaceFileSystem.writeFile': writeFile,
+}
+
 export const state: {
   createRpc: CreateRpc
   rpcPromise: Promise<Rpc> | undefined
@@ -37,6 +48,7 @@ const getRpc = (): Promise<Rpc> => {
     return rpcPromise
   }
   const newRpcPromise = createRpc({
+    commandMap,
     contentSecurityPolicy: "default-src 'none'; script-src 'self'",
     name: 'Voice Function Calling Worker',
     url: new URL('voiceFunctionCallingWorkerMain.js', import.meta.url).href,
@@ -49,20 +61,14 @@ export const getRegisteredTools = async (): Promise<
   readonly FunctionToolDefinition[]
 > => {
   const rpc = await getRpc()
-  const workerTools = (await rpc.invoke(
-    'VoiceFunctionCalling.getRegisteredTools',
-  )) as readonly FunctionToolDefinition[]
-  return [...workerTools, ...workspaceFileFunctionTools]
+  return rpc.invoke('VoiceFunctionCalling.getRegisteredTools') as Promise<
+    readonly FunctionToolDefinition[]
+  >
 }
 
 export const executeFunctionToolCall = async (
   functionCallEvent: unknown,
 ): Promise<readonly string[]> => {
-  const workspaceFileMessages =
-    await executeWorkspaceFileFunctionToolCall(functionCallEvent)
-  if (workspaceFileMessages) {
-    return workspaceFileMessages
-  }
   const rpc = await getRpc()
   return rpc.invoke(
     'VoiceFunctionCalling.executeFunctionToolCall',

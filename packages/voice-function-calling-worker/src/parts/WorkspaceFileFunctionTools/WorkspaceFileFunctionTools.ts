@@ -1,4 +1,4 @@
-import type { FunctionToolDefinition } from '../FunctionToolDefinition/FunctionToolDefinition.ts'
+import type { FunctionToolDefinition } from '../FunctionToolRegistry/FunctionToolRegistry.ts'
 import {
   readWorkspaceFile,
   type WorkspaceFileSystemApi,

@@ -52,15 +52,16 @@ test('creates a web worker RPC and queries registered tools', async () => {
   ]
   invoke.mockResolvedValue(tools)
 
-  await expect(
-    VoiceFunctionCallingWorker.getRegisteredTools(),
-  ).resolves.toEqual([
-    ...tools,
-    expect.objectContaining({ name: 'read_workspace_file' }),
-    expect.objectContaining({ name: 'write_workspace_file' }),
-  ])
+  await expect(VoiceFunctionCallingWorker.getRegisteredTools()).resolves.toBe(
+    tools,
+  )
 
   expect(createRpc).toHaveBeenCalledWith({
+    commandMap: {
+      'WorkspaceFileSystem.getWorkspaceFolder': getWorkspaceFolder,
+      'WorkspaceFileSystem.readFile': readFile,
+      'WorkspaceFileSystem.writeFile': writeFile,
+    },
     contentSecurityPolicy: "default-src 'none'; script-src 'self'",
     name: 'Voice Function Calling Worker',
     url: new URL(
@@ -71,7 +72,7 @@ test('creates a web worker RPC and queries registered tools', async () => {
   expect(invoke).toHaveBeenCalledWith('VoiceFunctionCalling.getRegisteredTools')
 })
 
-test('executes a workspace file tool without invoking the worker', async () => {
+test('invokes a workspace file tool on the worker', async () => {
   const functionCallEvent = {
     arguments: '{"path":"src/index.ts"}',
     call_id: 'read-call',
@@ -79,13 +80,18 @@ test('executes a workspace file tool without invoking the worker', async () => {
     type: 'response.function_call_arguments.done',
   }
 
-  const messages =
-    await VoiceFunctionCallingWorker.executeFunctionToolCall(functionCallEvent)
+  const result = ['output', 'response']
+  invoke.mockResolvedValue(result)
 
-  expect(messages).toHaveLength(2)
-  expect(readFile).toHaveBeenCalledWith('/workspace/src/index.ts')
-  expect(createRpc).not.toHaveBeenCalled()
-  expect(invoke).not.toHaveBeenCalled()
+  await expect(
+    VoiceFunctionCallingWorker.executeFunctionToolCall(functionCallEvent),
+  ).resolves.toBe(result)
+
+  expect(invoke).toHaveBeenCalledWith(
+    'VoiceFunctionCalling.executeFunctionToolCall',
+    functionCallEvent,
+  )
+  expect(readFile).not.toHaveBeenCalled()
 })
 
 test('invokes a function tool call on the worker', async () => {

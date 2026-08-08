@@ -1,4 +1,5 @@
 import { getFakeWeather } from '../FakeWeather/FakeWeather.ts'
+import { workspaceFileFunctionTools } from '../WorkspaceFileFunctionTools/WorkspaceFileFunctionTools.ts'
 
 export interface FunctionToolDefinition {
   readonly description: string
@@ -47,7 +48,10 @@ const parseArguments = (value: string): Readonly<Record<string, unknown>> => {
 }
 
 export const getRegisteredTools = (): readonly FunctionToolDefinition[] => {
-  return registeredTools.map((tool) => tool.definition)
+  return [
+    ...registeredTools.map((tool) => tool.definition),
+    ...workspaceFileFunctionTools,
+  ]
 }
 
 export const executeRegisteredFunctionTool = (
