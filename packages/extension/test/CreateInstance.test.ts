@@ -408,10 +408,7 @@ test('instance - recovers from one animation read failure', async () => {
 
 test('instance - keeps updating the bubble scale for microphone and remote audio', async () => {
   const instance = await createInstance()
-  type AudioLevels = {
-    readonly micAnalyzerData: Uint8Array
-    readonly remoteAnalyzerData: Uint8Array
-  }
+  type AudioLevels = Awaited<ReturnType<typeof readMicLevels>>
   const firstRead = Promise.withResolvers<AudioLevels>()
   const secondRead = Promise.withResolvers<AudioLevels>()
   const thirdRead = Promise.withResolvers<AudioLevels>()

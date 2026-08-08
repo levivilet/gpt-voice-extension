@@ -213,7 +213,8 @@ export const createInstance = async (
           await new Promise((resolve) => {
             requestAnimationFrame(resolve)
           })
-          if (!state.animationEnabled) {
+          const { animationEnabled: isAnimationStillEnabled } = state
+          if (!isAnimationStillEnabled) {
             break
           }
           const levelMic = readLevel(data.micAnalyzerData)
