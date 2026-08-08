@@ -12,7 +12,7 @@ test('render - returns virtual dom tree for idle mini state', () => {
 
   expect(result).toEqual([
     {
-      childCount: 6,
+      childCount: 7,
       className: 'GptVoice',
       type: VirtualDomElements.Div,
     },
@@ -59,6 +59,19 @@ test('render - returns virtual dom tree for idle mini state', () => {
     text('idle'),
     {
       childCount: 1,
+      className: 'GptVoiceApiKeyActions',
+      type: VirtualDomElements.Div,
+    },
+    {
+      childCount: 1,
+      className: 'GptVoiceApiKeyClearButton',
+      disabled: false,
+      onClick: 'handleClearOpenAiApiKey',
+      type: VirtualDomElements.Button,
+    },
+    text('Change API key'),
+    {
+      childCount: 1,
       className: 'GptVoiceButton',
       id: 'toggle',
       onClick: 'handleClickStart',
@@ -78,6 +91,63 @@ test('render - returns virtual dom tree for idle mini state', () => {
   ])
 })
 
+test('render - returns welcome form when API key is missing', () => {
+  const state = createRenderState({ hasOpenAiApiKey: false })
+  const result = render(state)
+
+  expect(result).toEqual([
+    {
+      childCount: 1,
+      className: 'GptVoice',
+      type: VirtualDomElements.Div,
+    },
+    {
+      childCount: 6,
+      className: 'GptVoiceWelcome',
+      type: VirtualDomElements.Div,
+    },
+    {
+      childCount: 1,
+      className: 'GptVoiceWelcomeTitle',
+      type: VirtualDomElements.Div,
+    },
+    text('Set up your OpenAI API key'),
+    {
+      childCount: 0,
+      className: 'GptVoiceWelcomeDescription',
+      type: VirtualDomElements.Div,
+    },
+    text(
+      'Your key is stored in extension secret storage. Press Save to continue.',
+    ),
+    {
+      childCount: 0,
+      className: 'GptVoiceApiKeyInput',
+      disabled: false,
+      inputType: 'password',
+      name: 'openAiApiKey',
+      onInput: 'handleOpenAiApiKeyInput',
+      placeholder: 'sk-...',
+      type: VirtualDomElements.Input,
+      value: '',
+    },
+    {
+      childCount: 1,
+      className: 'GptVoiceButton',
+      disabled: false,
+      onClick: 'handleSaveOpenAiApiKey',
+      type: VirtualDomElements.Button,
+    },
+    text('Save API key'),
+    {
+      childCount: 0,
+      className: 'GptVoiceStatus',
+      type: VirtualDomElements.Div,
+    },
+    text('OpenAI API key required to start a live voice session.'),
+  ])
+})
+
 test('render - returns in-progress standard state for active conversation', () => {
   const transcript: ITranscript = {
     id: 'id-1',
@@ -93,7 +163,7 @@ test('render - returns in-progress standard state for active conversation', () =
 
   expect(result).toEqual([
     {
-      childCount: 6,
+      childCount: 7,
       className: 'GptVoice',
       type: VirtualDomElements.Div,
     },
@@ -138,6 +208,19 @@ test('render - returns in-progress standard state for active conversation', () =
       type: VirtualDomElements.Div,
     },
     text('In Progress'),
+    {
+      childCount: 1,
+      className: 'GptVoiceApiKeyActions',
+      type: VirtualDomElements.Div,
+    },
+    {
+      childCount: 1,
+      className: 'GptVoiceApiKeyClearButton',
+      disabled: true,
+      onClick: 'handleClearOpenAiApiKey',
+      type: VirtualDomElements.Button,
+    },
+    text('Change API key'),
     {
       childCount: 1,
       className: 'GptVoiceButton',
