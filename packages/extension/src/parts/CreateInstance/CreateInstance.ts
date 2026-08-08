@@ -213,6 +213,9 @@ export const createInstance = async (
           await new Promise((resolve) => {
             requestAnimationFrame(resolve)
           })
+          if (!state.animationEnabled) {
+            break
+          }
           const levelMic = readLevel(data.micAnalyzerData)
           const levelRemote = readLevel(data.remoteAnalyzerData)
           const anim = animateBubble(levelMic, levelRemote)
@@ -501,7 +504,7 @@ export const createInstance = async (
     setAnimation(enabled, scale) {
       state = {
         ...state,
-        animationEnabled: false,
+        animationEnabled: enabled,
         animationScale: scale,
       }
       context?.requestRerender()
@@ -537,6 +540,8 @@ export const createInstance = async (
     async stop() {
       state = {
         ...state,
+        animationEnabled: false,
+        animationScale: 1,
         inProgress: false,
       }
       try {
