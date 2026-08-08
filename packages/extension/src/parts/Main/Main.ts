@@ -1,8 +1,13 @@
 import {
   activate as activateExtensionApi,
+  executeCommand,
+  registerCommand,
   registerView,
 } from '@lvce-editor/api'
 import { view } from '../View/View.ts'
+
+const floatingWindowUrl =
+  'lvce-oss://-/?floatingWindowMode=extensionView&floatingExtensionViewId=gpt-voice.views.default'
 
 const state = {
   isActivated: false,
@@ -15,4 +20,10 @@ export const activate = async (): Promise<void> => {
   state.isActivated = true
   await activateExtensionApi()
   registerView(view)
+  registerCommand({
+    async execute() {
+      await executeCommand('Open.openUrl', floatingWindowUrl)
+    },
+    id: 'gpt-voice.show',
+  })
 }
