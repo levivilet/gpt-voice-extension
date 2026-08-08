@@ -30,6 +30,10 @@ export const view: GptVoiceView = {
       await context.handleClickStart()
       return context
     },
+    async 'GptVoice.handleData'(context, data: string) {
+      context.handleData(data)
+      return context
+    },
     'GptVoice.handleOpenAiApiKeyInput'(context, value: string) {
       context.handleOpenAiApiKeyInput(value)
       return context
@@ -52,6 +56,10 @@ export const view: GptVoiceView = {
     },
     async 'GptVoice.stop'(context) {
       await context.stop()
+      return context
+    },
+    async 'GptVoice.toggleToolCall'(context, callId: string) {
+      context.toggleToolCall(callId)
       return context
     },
   },

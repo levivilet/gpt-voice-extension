@@ -1,6 +1,10 @@
 import { test, expect } from '@jest/globals'
 import { text, VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
-import type { ITranscript } from '../src/parts/CreateInstance/CreateInstance.ts'
+import type {
+  IToolCallMessage,
+  ITranscript,
+} from '../src/parts/CreateInstance/CreateInstance.ts'
+import * as DomEventListenerFunctions from '../src/parts/DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import { mergeClassNames } from '../src/parts/MergeClassNames/MergeClassNames.ts'
 import { createRenderState } from '../src/parts/RenderTestHelpers.ts'
 import { renderTranscript } from '../src/parts/RenderTranscript/RenderTranscript.ts'
@@ -25,7 +29,7 @@ test('renderTranscript - single user transcript', () => {
   }
   const result = renderTranscript(
     createRenderState({
-      transcripts: [transcript],
+      messages: [transcript],
     }),
   )
 
@@ -60,7 +64,7 @@ test('renderTranscript - mixed transcript item types', () => {
   }
   const result = renderTranscript(
     createRenderState({
-      transcripts: [userTranscript, aiTranscript],
+      messages: [userTranscript, aiTranscript],
     }),
   )
 
@@ -89,4 +93,66 @@ test('renderTranscript - mixed transcript item types', () => {
     },
     text('Hi there'),
   ])
+})
+
+const createToolCall = (
+  overrides: Partial<IToolCallMessage> = {},
+): IToolCallMessage => ({
+  argumentsValue: '{"path":"src"}',
+  expanded: false,
+  id: 'call-1',
+  name: 'list_workspace_directory',
+  output: '{"files":["a.ts"]}',
+  status: 'completed',
+  type: 'tool',
+  ...overrides,
+})
+
+test('renderTranscript - collapsed completed tool call', () => {
+  const result = renderTranscript(
+    createRenderState({ messages: [createToolCall()] }),
+  )
+
+  expect(result).toContainEqual({
+    ariaExpanded: false,
+    childCount: 3,
+    className: 'GptVoiceToolCallButton',
+    name: 'call-1',
+    onClick: DomEventListenerFunctions.ToggleToolCall,
+    type: VirtualDomElements.Button,
+  })
+  expect(result).toContainEqual(text('✓'))
+  expect(result).toContainEqual(text('Ran list_workspace_directory'))
+  expect(result).not.toContainEqual(text('Arguments'))
+})
+
+test('renderTranscript - expanded completed tool call', () => {
+  const result = renderTranscript(
+    createRenderState({
+      messages: [createToolCall({ expanded: true })],
+    }),
+  )
+
+  expect(result).toContainEqual(text('Arguments'))
+  expect(result).toContainEqual(text('{\n  "path": "src"\n}'))
+  expect(result).toContainEqual(text('Output'))
+  expect(result).toContainEqual(text('{\n  "files": [\n    "a.ts"\n  ]\n}'))
+  expect(result).toContainEqual(text('⌃'))
+})
+
+test('renderTranscript - in-progress and failed tool calls', () => {
+  const result = renderTranscript(
+    createRenderState({
+      messages: [
+        createToolCall({ expanded: true, status: 'in-progress' }),
+        createToolCall({ id: 'call-2', status: 'failed' }),
+      ],
+    }),
+  )
+
+  expect(result).toContainEqual(text('●'))
+  expect(result).toContainEqual(text('Running list_workspace_directory…'))
+  expect(result).toContainEqual(text('Waiting for tool output…'))
+  expect(result).toContainEqual(text('!'))
+  expect(result).toContainEqual(text('Failed list_workspace_directory'))
 })

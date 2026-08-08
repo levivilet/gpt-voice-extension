@@ -25,6 +25,7 @@ import { createOpenAiApiKeyStorage } from '../OpenAiApiKeyStorage/OpenAiApiKeySt
 import { readLevel } from '../ReadLevel/ReadLevel.ts'
 import { render } from '../Render/Render.ts'
 import { isInTestMode } from '../TestMode/TestMode.ts'
+import { getToolCallOutput, parseToolCall } from '../ToolCall/ToolCall.ts'
 import * as VoiceFunctionCallingWorker from '../VoiceFunctionCallingWorker/VoiceFunctionCallingWorker.ts'
 import {
   createSessionConfig,
@@ -65,6 +66,7 @@ export interface ActiveGptVoiceViewInstance extends VirtualDomViewInstance {
   readonly setRealtimeModelMini: () => void
   readonly setRealtimeModelStandard: () => void
   readonly stop: () => Promise<void>
+  readonly toggleToolCall: (callId: string) => void
   readonly updateTranscript: (id: string, value: string) => void
 }
 
@@ -73,6 +75,18 @@ export interface ITranscript {
   readonly text: string
   readonly type: 'user' | 'ai'
 }
+
+export interface IToolCallMessage {
+  readonly argumentsValue: string
+  readonly expanded: boolean
+  readonly id: string
+  readonly name: string
+  readonly output: string
+  readonly status: 'completed' | 'failed' | 'in-progress'
+  readonly type: 'tool'
+}
+
+export type IMessage = ITranscript | IToolCallMessage
 
 export interface IState {
   readonly animationEnabled: boolean
@@ -85,11 +99,11 @@ export interface IState {
   readonly isCreatingToken: boolean
   readonly isSavingApiKey: boolean
   readonly isTest: boolean
+  readonly messages: readonly IMessage[]
   readonly parsedData: readonly any[]
   readonly sessionModel: RealtimeModelPreset
   readonly tokenError: string
   readonly transcribedText: string
-  readonly transcripts: readonly ITranscript[]
   readonly uid: number
 }
 
@@ -141,11 +155,11 @@ export const createInstance = async (
     isCreatingToken: false,
     isSavingApiKey: false,
     isTest: hasTestMode,
+    messages: [],
     parsedData: [],
     sessionModel: defaultSessionModel,
     tokenError: '',
     transcribedText: '',
-    transcripts: [],
     uid: -1,
   }
   let dataChannelPort: MessagePort | undefined
@@ -158,9 +172,71 @@ export const createInstance = async (
   }
 
   const handleFunctionCall = async (parsed: unknown): Promise<void> => {
-    const messages =
-      await VoiceFunctionCallingWorker.executeFunctionToolCall(parsed)
-    for (const message of messages) {
+    const toolCall = parseToolCall(parsed)
+    if (!toolCall) {
+      return
+    }
+    const { messages } = state
+    const existing = messages.some(
+      (message) => message.type === 'tool' && message.id === toolCall.callId,
+    )
+    if (existing) {
+      return
+    }
+    state = {
+      ...state,
+      messages: [
+        ...messages,
+        {
+          argumentsValue: toolCall.argumentsValue,
+          expanded: false,
+          id: toolCall.callId,
+          name: toolCall.name,
+          output: '',
+          status: 'in-progress',
+          type: 'tool',
+        },
+      ],
+    }
+    context?.requestRerender()
+    let responseMessages: readonly string[]
+    try {
+      responseMessages =
+        await VoiceFunctionCallingWorker.executeFunctionToolCall(parsed)
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : String(error)
+      const { messages: currentMessages } = state
+      state = {
+        ...state,
+        messages: currentMessages.map((message) =>
+          message.type === 'tool' && message.id === toolCall.callId
+            ? { ...message, output: errorMessage, status: 'failed' }
+            : message,
+        ),
+      }
+      context?.requestRerender()
+      throw error
+    }
+    const { messages: currentMessages } = state
+    state = {
+      ...state,
+      messages: currentMessages.map((message) =>
+        message.type === 'tool' && message.id === toolCall.callId
+          ? {
+              ...message,
+              output: getToolCallOutput(responseMessages, toolCall.callId),
+              status: 'completed',
+            }
+          : message,
+      ),
+    }
+    context?.requestRerender()
+    const { isTest } = state
+    if (isTest) {
+      return
+    }
+    for (const message of responseMessages) {
       await sendToDataChannel(message)
     }
   }
@@ -191,18 +267,20 @@ export const createInstance = async (
 
   const instance: ActiveGptVoiceViewInstance = {
     addTranscript(id, value, type) {
-      const { transcripts } = state
+      const { messages } = state
       state = {
         ...state,
-        transcripts: [...transcripts, { id, text: value, type }],
+        messages: [...messages, { id, text: value, type }],
       }
       context?.requestRerender()
     },
     createOrUpdateTranscript(parsed, type) {
       const { delta, item_id } = parsed
-      const { transcripts } = state
-      const entry = transcripts.find((item) => item.id === item_id)
-      if (entry) {
+      const { messages } = state
+      const entry = messages.find(
+        (item) => item.type !== 'tool' && item.id === item_id,
+      )
+      if (entry && entry.type !== 'tool') {
         instance.updateTranscript(entry.id, entry.text + delta)
       } else {
         instance.addTranscript(item_id, delta, type)
@@ -565,17 +643,33 @@ export const createInstance = async (
       }
       await context?.requestRerender()
     },
-
+    toggleToolCall(callId) {
+      const { messages } = state
+      state = {
+        ...state,
+        messages: messages.map((message) =>
+          message.type === 'tool' && message.id === callId
+            ? { ...message, expanded: !message.expanded }
+            : message,
+        ),
+      }
+      context?.requestRerender()
+    },
     updateTranscript(id, value) {
-      const { transcripts } = state
-      const index = transcripts.findIndex((item) => item.id === id)
+      const { messages } = state
+      const index = messages.findIndex(
+        (item) => item.type !== 'tool' && item.id === id,
+      )
       if (index === -1) {
         return
       }
-      const old = transcripts[index]
+      const old = messages[index]
+      if (!old || old.type === 'tool') {
+        return
+      }
       state = {
         ...state,
-        transcripts: transcripts.with(index, {
+        messages: messages.with(index, {
           ...old,
           text: value,
         }),

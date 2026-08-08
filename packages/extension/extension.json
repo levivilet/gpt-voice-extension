@@ -17,6 +17,7 @@
     "onCommand:gpt-voice.show",
     "onView:gpt-voice.views.default",
     "onCommand:GptVoice.handleClickStart",
+    "onCommand:GptVoice.handleData",
     "onCommand:GptVoice.handleClearOpenAiApiKey",
     "onCommand:GptVoice.handleOpenAiApiKeyInput",
     "onCommand:GptVoice.handleSaveOpenAiApiKey",
@@ -35,6 +36,10 @@
     {
       "id": "GptVoice.handleClickStart",
       "label": "gpt-voice: Handle Click Start"
+    },
+    {
+      "id": "GptVoice.handleData",
+      "label": "gpt-voice: Handle Data"
     },
     {
       "id": "GptVoice.handleClearOpenAiApiKey",

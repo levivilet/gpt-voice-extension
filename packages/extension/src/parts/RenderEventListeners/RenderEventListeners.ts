@@ -33,5 +33,9 @@ export const renderEventListeners = (): readonly DomEventListener[] => {
       name: DomEventListenerFunctions.SetRealtimeModelStandard,
       params: ['setRealtimeModelStandard'],
     },
+    {
+      name: DomEventListenerFunctions.ToggleToolCall,
+      params: ['toggleToolCall', 'event.target.name'],
+    },
   ]
 }
