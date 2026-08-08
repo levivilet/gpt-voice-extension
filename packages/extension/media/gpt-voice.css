@@ -1,15 +1,22 @@
 .GptVoice {
+  box-sizing: border-box;
+  height: 100vh;
   margin: 0;
-  min-height: 100vh;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 28px;
+  justify-content: flex-start;
+  gap: 10px;
   background: radial-gradient(circle at 50% 30%, #1b1f2e, #0a0c14 70%);
   color: #eef0f6;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  padding: 6px;
+  padding: 14px 12px 12px;
+  overflow: hidden;
+}
+
+.GptVoiceSetup {
+  justify-content: center;
 }
 
 .GptVoiceWelcome {
@@ -45,16 +52,17 @@
 }
 
 .GptVoiceStage {
-  width: 260px;
-  height: 260px;
+  width: clamp(120px, 20vh, 180px);
+  height: clamp(120px, 20vh, 180px);
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .GptVoiceBubble {
-  width: 140px;
-  height: 140px;
+  width: clamp(90px, 15vh, 140px);
+  height: clamp(90px, 15vh, 140px);
   border-radius: 50%;
   background: radial-gradient(
     circle at 35% 30%,
@@ -106,10 +114,20 @@
   background: #c94a4a;
 }
 
-.GptVoiceApiKeyActions {
-  min-height: 16px;
+.GptVoiceToolbar {
+  box-sizing: border-box;
+  width: min(680px, 100%);
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  flex-wrap: wrap;
+}
+
+.GptVoiceApiKeyActions {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
 }
 
 .GptVoiceApiKeyClearButton {
@@ -129,9 +147,10 @@
 
 .GptVoiceModelSettings {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .GptVoiceModelSettingsLabel {
@@ -157,7 +176,9 @@
 
 .GptVoiceTranscript {
   box-sizing: border-box;
-  width: min(720px, 100%);
+  width: min(680px, 100%);
+  min-height: 0;
+  flex: 1 1 0;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 14px;
@@ -166,6 +187,7 @@
   line-height: 1.5;
   white-space: normal;
   overflow-y: auto;
+  overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
   gap: 10px;

@@ -83,5 +83,14 @@
       "icon": "media/trello.svg",
       "kind": "virtualDom"
     }
+  ],
+  "rpc": [
+    {
+      "id": "builtin.gpt-voice.voice-function-calling-worker",
+      "type": "web-worker",
+      "name": "Voice Function Calling Worker",
+      "url": "dist/voiceFunctionCallingWorkerMain.js",
+      "contentSecurityPolicy": ["default-src 'none'", "script-src 'self'"]
+    }
   ]
 }

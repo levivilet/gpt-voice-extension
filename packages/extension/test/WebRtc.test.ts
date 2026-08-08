@@ -10,6 +10,30 @@ afterEach(() => {
   jest.restoreAllMocks()
 })
 
+test('createSessionConfig - includes registered function tools', () => {
+  const tools = [
+    {
+      description: 'Test tool',
+      name: 'test',
+      parameters: { type: 'object' },
+      type: 'function' as const,
+    },
+  ]
+
+  const config = createSessionConfig(RealtimeModelPreset.Standard, tools)
+
+  expect(config.session.tools).toBe(tools)
+  expect(config.session.instructions).toBe(
+    'You are a voice assistant with access to tools.',
+  )
+})
+
+test('createSessionConfig - defaults to no tools', () => {
+  expect(createSessionConfig(RealtimeModelPreset.Mini).session.tools).toEqual(
+    [],
+  )
+})
+
 test('createSessionConfig - selects transcription model for each realtime model', () => {
   const mini = createSessionConfig(RealtimeModelPreset.Mini)
   const standard = createSessionConfig(RealtimeModelPreset.Standard)
