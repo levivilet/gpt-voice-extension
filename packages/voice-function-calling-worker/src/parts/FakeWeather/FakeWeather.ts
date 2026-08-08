@@ -1,6 +1,7 @@
-type WeatherResult = {
+export interface WeatherResult {
   readonly conditions: string
   readonly humidity: number
+  readonly location: string
   readonly temperature: number
   readonly unit: 'C' | 'F'
 }
@@ -16,7 +17,9 @@ const normalizeLocation = (value: unknown): string => {
   return trimmed.toLowerCase()
 }
 
-const fakeWeatherByLocation: Record<string, WeatherResult> = {
+const fakeWeatherByLocation: Readonly<
+  Record<string, Omit<WeatherResult, 'location'>>
+> = {
   france: {
     conditions: 'Cloudy',
     humidity: 76,
@@ -37,9 +40,7 @@ const fakeWeatherByLocation: Record<string, WeatherResult> = {
   },
 }
 
-export const getFakeWeather = (
-  location: unknown,
-): WeatherResult & { location: string } => {
+export const getFakeWeather = (location: unknown): WeatherResult => {
   const normalizedLocation = normalizeLocation(location)
   return {
     location: normalizedLocation,

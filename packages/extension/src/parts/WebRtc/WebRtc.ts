@@ -1,7 +1,4 @@
-import {
-  functionTools,
-  type FunctionToolDefinition,
-} from '../FunctionTools/FunctionTools.ts'
+import type { FunctionToolDefinition } from '../VoiceFunctionCallingWorker/VoiceFunctionCallingWorker.ts'
 
 export enum RealtimeModelPreset {
   Mini = 'gpt-realtime-2.1-mini',
@@ -59,6 +56,7 @@ type SessionConfig = {
 
 export const createSessionConfig = (
   sessionModel: RealtimeModelPreset,
+  tools: readonly FunctionToolDefinition[] = [],
 ): SessionConfig => {
   return {
     session: {
@@ -85,7 +83,7 @@ export const createSessionConfig = (
         'You are a voice coding assistant with access to tools. Workspace file paths must always be relative to the currently opened workspace. Only call write_workspace_file when the user explicitly asks you to create or modify a file.',
       model: sessionModel,
       tool_choice: 'auto',
-      tools: functionTools,
+      tools,
       type: 'realtime',
     },
   }

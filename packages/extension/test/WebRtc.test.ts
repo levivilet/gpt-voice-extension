@@ -10,6 +10,30 @@ afterEach(() => {
   jest.restoreAllMocks()
 })
 
+test('createSessionConfig - includes registered function tools', () => {
+  const tools = [
+    {
+      description: 'Test tool',
+      name: 'test',
+      parameters: { type: 'object' },
+      type: 'function' as const,
+    },
+  ]
+
+  const config = createSessionConfig(RealtimeModelPreset.Standard, tools)
+
+  expect(config.session.tools).toBe(tools)
+  expect(config.session.instructions).toBe(
+    'You are a voice coding assistant with access to tools. Workspace file paths must always be relative to the currently opened workspace. Only call write_workspace_file when the user explicitly asks you to create or modify a file.',
+  )
+})
+
+test('createSessionConfig - defaults to no tools', () => {
+  expect(createSessionConfig(RealtimeModelPreset.Mini).session.tools).toEqual(
+    [],
+  )
+})
+
 test('createSessionConfig - selects transcription model for each realtime model', () => {
   const mini = createSessionConfig(RealtimeModelPreset.Mini)
   const standard = createSessionConfig(RealtimeModelPreset.Standard)
@@ -22,11 +46,6 @@ test('createSessionConfig - selects transcription model for each realtime model'
   )
   expect(mini.session.model).toBe(RealtimeModelPreset.Mini)
   expect(standard.session.model).toBe(RealtimeModelPreset.Standard)
-  expect(mini.session.tools.map((tool) => tool.name)).toEqual([
-    'getweather',
-    'read_workspace_file',
-    'write_workspace_file',
-  ])
 })
 
 test('getEphemeralKey - posts session and returns token', async () => {
