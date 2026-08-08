@@ -1,8 +1,13 @@
 import { getFakeWeather } from '../FunctionCalls/FakeWeather.ts'
+import {
+  readWorkspaceFile,
+  type WorkspaceFileSystemApi,
+  writeWorkspaceFile,
+} from '../WorkspaceFileSystem/WorkspaceFileSystem.ts'
 
 type FunctionCallArguments = {
+  readonly argumentsValue: Readonly<Record<string, unknown>>
   readonly callId: string
-  readonly location: string
   readonly name: string
 }
 
@@ -48,12 +53,11 @@ const parseFunctionCall = (parsed: any): FunctionCallArguments | undefined => {
     if (
       typeof parsed.call_id === 'string' &&
       typeof parsed.name === 'string' &&
-      args &&
-      typeof args.location === 'string'
+      args
     ) {
       return {
+        argumentsValue: args,
         callId: parsed.call_id,
-        location: args.location,
         name: parsed.name,
       }
     }
@@ -70,10 +74,10 @@ const parseFunctionCall = (parsed: any): FunctionCallArguments | undefined => {
     typeof parsed.item.arguments === 'string'
   ) {
     const args = parseArgs(parsed.item.arguments)
-    if (args && typeof args.location === 'string') {
+    if (args) {
       return {
+        argumentsValue: args,
         callId: parsed.item.call_id,
-        location: args.location,
         name: parsed.item.name,
       }
     }
@@ -82,18 +86,76 @@ const parseFunctionCall = (parsed: any): FunctionCallArguments | undefined => {
   return undefined
 }
 
+const getRequiredString = (
+  argumentsValue: Readonly<Record<string, unknown>>,
+  name: string,
+): string => {
+  const value = argumentsValue[name]
+  if (typeof value !== 'string') {
+    throw new TypeError(`Function tool argument "${name}" must be a string.`)
+  }
+  return value
+}
+
+const executeFunctionTool = async (
+  functionCall: FunctionCallArguments,
+  fileSystemApi?: WorkspaceFileSystemApi,
+): Promise<unknown> => {
+  const { argumentsValue, name } = functionCall
+  switch (name) {
+    case 'getweather':
+      return getFakeWeather(getRequiredString(argumentsValue, 'location'))
+    case 'read_workspace_file':
+      return readWorkspaceFile(
+        getRequiredString(argumentsValue, 'path'),
+        fileSystemApi,
+      )
+    case 'write_workspace_file':
+      return writeWorkspaceFile(
+        getRequiredString(argumentsValue, 'path'),
+        getRequiredString(argumentsValue, 'content'),
+        fileSystemApi,
+      )
+    default:
+      return undefined
+  }
+}
+
+const supportedFunctionToolNames: readonly string[] = [
+  'getweather',
+  'read_workspace_file',
+  'write_workspace_file',
+]
+
+const isSupportedFunctionTool = (name: string): boolean => {
+  return supportedFunctionToolNames.includes(name)
+}
+
+const getErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) {
+    return error.message
+  }
+  return String(error)
+}
+
 export const handleFunctionCall = async (
   parsed: any,
   sendToDataChannel: (data: string) => Promise<void>,
+  fileSystemApi?: WorkspaceFileSystemApi,
 ): Promise<void> => {
   const functionCall = parseFunctionCall(parsed)
-  if (!functionCall || functionCall.name !== 'getweather') {
+  if (!functionCall || !isSupportedFunctionTool(functionCall.name)) {
     return
   }
 
-  const fakeWeather = getFakeWeather(functionCall.location)
+  let output: unknown
+  try {
+    output = await executeFunctionTool(functionCall, fileSystemApi)
+  } catch (error) {
+    output = { error: getErrorMessage(error) }
+  }
   await sendToDataChannel(
-    createToolOutputMessage(functionCall.callId, JSON.stringify(fakeWeather)),
+    createToolOutputMessage(functionCall.callId, JSON.stringify(output)),
   )
   await sendToDataChannel(createFunctionResultResponseMessage())
 }

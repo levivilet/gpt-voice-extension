@@ -22,6 +22,11 @@ test('createSessionConfig - selects transcription model for each realtime model'
   )
   expect(mini.session.model).toBe(RealtimeModelPreset.Mini)
   expect(standard.session.model).toBe(RealtimeModelPreset.Standard)
+  expect(mini.session.tools.map((tool) => tool.name)).toEqual([
+    'getweather',
+    'read_workspace_file',
+    'write_workspace_file',
+  ])
 })
 
 test('getEphemeralKey - posts session and returns token', async () => {
