@@ -1,7 +1,9 @@
 import {
+  closeUri,
   createRpc,
   executeCommand,
   getWorkspaceUri,
+  openUri,
   readDirWithFileTypes,
   readFile,
   setWorkspaceUri,
@@ -51,6 +53,9 @@ const commandMap = {
   'WorkspaceFileSystem.readDirWithFileTypes': readDirWithFileTypes,
   'WorkspaceFileSystem.readFile': readFile,
   'WorkspaceFileSystem.writeFile': writeFile,
+  'WorkspaceMainArea.closeUri': closeUri,
+  'WorkspaceMainArea.getWorkspaceUri': getWorkspaceUri,
+  'WorkspaceMainArea.openUri': openUri,
 }
 
 export const state: {

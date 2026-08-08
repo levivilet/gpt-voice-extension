@@ -9,6 +9,8 @@ const createRpc = jest.fn<typeof Api.createRpc>(
       invoke,
     }) as never,
 )
+const closeUri = jest.fn<(uri: string) => Promise<void>>(async () => undefined)
+const openUri = jest.fn<(uri: string) => Promise<void>>(async () => undefined)
 const executeCommand = jest.fn<typeof Api.executeCommand>(async () => undefined)
 const getWorkspaceUri = jest.fn(async () => 'file:///workspace')
 const readDirWithFileTypes = jest.fn(async () => [
@@ -29,9 +31,11 @@ jest.unstable_mockModule('@lvce-editor/api', () => {
   const actual = jest.requireActual<typeof Api>('@lvce-editor/api')
   return {
     ...actual,
+    closeUri,
     createRpc,
     executeCommand,
     getWorkspaceUri,
+    openUri,
     readDirWithFileTypes,
     readFile,
     setWorkspaceUri,
@@ -44,9 +48,11 @@ const VoiceFunctionCallingWorker =
 
 beforeEach(() => {
   createRpc.mockClear()
+  closeUri.mockClear()
   executeCommand.mockClear()
   invoke.mockReset()
   getWorkspaceUri.mockClear()
+  openUri.mockClear()
   readDirWithFileTypes.mockClear()
   readFile.mockClear()
   setWorkspaceUri.mockClear()
@@ -78,6 +84,9 @@ test('creates a web worker RPC and queries registered tools', async () => {
       'WorkspaceFileSystem.readDirWithFileTypes': readDirWithFileTypes,
       'WorkspaceFileSystem.readFile': readFile,
       'WorkspaceFileSystem.writeFile': writeFile,
+      'WorkspaceMainArea.closeUri': closeUri,
+      'WorkspaceMainArea.getWorkspaceUri': getWorkspaceUri,
+      'WorkspaceMainArea.openUri': openUri,
     },
     contentSecurityPolicy: "default-src 'none'; script-src 'self'",
     name: 'Voice Function Calling Worker',
