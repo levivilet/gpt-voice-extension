@@ -148,6 +148,29 @@ test('render - returns welcome form when API key is missing', () => {
   ])
 })
 
+test('render - shows api key error in welcome form', () => {
+  const result = render(
+    createRenderState({
+      apiKeyError: 'Invalid key',
+      hasOpenAiApiKey: false,
+      tokenError: 'Token error',
+    }),
+  )
+
+  expect(result).toContainEqual(text('Invalid key'))
+})
+
+test('render - shows saving state in welcome form', () => {
+  const result = render(
+    createRenderState({
+      hasOpenAiApiKey: false,
+      isSavingApiKey: true,
+    }),
+  )
+
+  expect(result).toContainEqual(text('Saving...'))
+})
+
 test('render - returns in-progress standard state for active conversation', () => {
   const transcript: ITranscript = {
     id: 'id-1',
