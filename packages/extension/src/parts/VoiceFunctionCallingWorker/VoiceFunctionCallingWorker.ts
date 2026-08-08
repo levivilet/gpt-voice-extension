@@ -34,13 +34,13 @@ type CreateRpc = (options: WebWorkerRpcOptions) => Promise<Rpc>
 
 const commandMap = {
   'Workspace.setWorkspaceUri': setWorkspaceUri,
-  'WorkspaceMainArea.closeUri': closeUri,
-  'WorkspaceMainArea.getWorkspaceUri': getWorkspaceUri,
-  'WorkspaceMainArea.openUri': openUri,
   'WorkspaceFileSystem.getWorkspaceUri': getWorkspaceUri,
   'WorkspaceFileSystem.readDirWithFileTypes': readDirWithFileTypes,
   'WorkspaceFileSystem.readFile': readFile,
   'WorkspaceFileSystem.writeFile': writeFile,
+  'WorkspaceMainArea.closeUri': closeUri,
+  'WorkspaceMainArea.getWorkspaceUri': getWorkspaceUri,
+  'WorkspaceMainArea.openUri': openUri,
 }
 
 export const state: {

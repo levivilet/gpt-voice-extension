@@ -75,13 +75,13 @@ test('creates a web worker RPC and queries registered tools', async () => {
   expect(createRpc).toHaveBeenCalledWith({
     commandMap: {
       'Workspace.setWorkspaceUri': setWorkspaceUri,
-      'WorkspaceMainArea.closeUri': closeUri,
-      'WorkspaceMainArea.getWorkspaceUri': getWorkspaceUri,
-      'WorkspaceMainArea.openUri': openUri,
       'WorkspaceFileSystem.getWorkspaceUri': getWorkspaceUri,
       'WorkspaceFileSystem.readDirWithFileTypes': readDirWithFileTypes,
       'WorkspaceFileSystem.readFile': readFile,
       'WorkspaceFileSystem.writeFile': writeFile,
+      'WorkspaceMainArea.closeUri': closeUri,
+      'WorkspaceMainArea.getWorkspaceUri': getWorkspaceUri,
+      'WorkspaceMainArea.openUri': openUri,
     },
     contentSecurityPolicy: "default-src 'none'; script-src 'self'",
     name: 'Voice Function Calling Worker',

@@ -1,6 +1,6 @@
 import { expect, jest, test } from '@jest/globals'
-import type { WorkspaceMainAreaApi } from '../src/parts/WorkspaceMainArea/WorkspaceMainArea.ts'
 import type { WorkspaceFileSystemApi } from '../src/parts/WorkspaceFileSystem/WorkspaceFileSystem.ts'
+import type { WorkspaceMainAreaApi } from '../src/parts/WorkspaceMainArea/WorkspaceMainArea.ts'
 import {
   executeWorkspaceFileFunctionToolCall,
   workspaceFileFunctionTools,
@@ -48,9 +48,9 @@ test('exposes workspace file tool definitions', () => {
 })
 
 test.each([
-  ['open_workspace_file', 'openUri', { opened: true, path: 'src/index.ts' }],
-  ['close_workspace_file', 'closeUri', { closed: true, path: 'src/index.ts' }],
-])('executes the %s tool', async (name, method, output) => {
+  ['open_workspace_file', 'openUri'],
+  ['close_workspace_file', 'closeUri'],
+])('executes the %s tool', async (name, method) => {
   const fileSystemApi = createFileSystemApi()
   const mainAreaApi = createMainAreaApi()
   const messages = await executeWorkspaceFileFunctionToolCall(
@@ -67,7 +67,11 @@ test.each([
   expect(mainAreaApi[method as 'openUri' | 'closeUri']).toHaveBeenCalledWith(
     'file:///workspace/src/index.ts',
   )
-  expect(getToolOutput(messages || [])).toEqual(output)
+  expect(getToolOutput(messages || [])).toEqual(
+    name === 'open_workspace_file'
+      ? { opened: true, path: 'src/index.ts' }
+      : { closed: true, path: 'src/index.ts' },
+  )
 })
 
 test.each(['open_workspace_file', 'close_workspace_file'])(

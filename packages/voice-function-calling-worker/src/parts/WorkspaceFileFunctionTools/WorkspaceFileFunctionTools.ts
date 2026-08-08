@@ -1,15 +1,15 @@
 import type { FunctionToolDefinition } from '../FunctionToolRegistry/FunctionToolRegistry.ts'
 import {
-  closeWorkspaceFile,
-  openWorkspaceFile,
-  type WorkspaceMainAreaApi,
-} from '../WorkspaceMainArea/WorkspaceMainArea.ts'
-import {
   listWorkspaceDirectory,
   readWorkspaceFile,
   type WorkspaceFileSystemApi,
   writeWorkspaceFile,
 } from '../WorkspaceFileSystem/WorkspaceFileSystem.ts'
+import {
+  closeWorkspaceFile,
+  openWorkspaceFile,
+  type WorkspaceMainAreaApi,
+} from '../WorkspaceMainArea/WorkspaceMainArea.ts'
 
 interface FunctionCallArguments {
   readonly argumentsValue: string
@@ -131,9 +131,11 @@ const getToolErrorHint = (toolName: string): string => {
     return 'To list the workspace root, call list_workspace_directory with no arguments: {}. To list a subdirectory, pass only a relative path such as {"path":"src"}. Never pass an absolute path or URI.'
   }
   if (
-    toolName === 'read_workspace_file' ||
-    toolName === 'open_workspace_file' ||
-    toolName === 'close_workspace_file'
+    [
+      'read_workspace_file',
+      'open_workspace_file',
+      'close_workspace_file',
+    ].includes(toolName)
   ) {
     return 'Pass a file path relative to the workspace, such as {"path":"src/index.ts"}. Never pass an absolute path or URI.'
   }
@@ -265,31 +267,40 @@ export const executeWorkspaceFileFunctionToolCall = async (
   let output: unknown
   try {
     const argumentsValue = parseArguments(functionCall.argumentsValue)
-    if (functionCall.name === 'list_workspace_directory') {
-      output = await listWorkspaceDirectory(
-        getOptionalString(argumentsValue, 'path', '.'),
-        fileSystemApi,
-      )
-    } else if (functionCall.name === 'read_workspace_file') {
-      const path = getRequiredString(argumentsValue, 'path')
-      output = await readWorkspaceFile(path, fileSystemApi)
-    } else if (functionCall.name === 'write_workspace_file') {
-      const path = getRequiredString(argumentsValue, 'path')
-      output = await writeWorkspaceFile(
-        path,
-        getRequiredString(argumentsValue, 'content'),
-        fileSystemApi,
-      )
-    } else if (functionCall.name === 'open_workspace_file') {
-      output = await openWorkspaceFile(
-        getRequiredString(argumentsValue, 'path'),
-        mainAreaApi,
-      )
-    } else {
-      output = await closeWorkspaceFile(
-        getRequiredString(argumentsValue, 'path'),
-        mainAreaApi,
-      )
+    switch (functionCall.name) {
+      case 'close_workspace_file':
+        output = await closeWorkspaceFile(
+          getRequiredString(argumentsValue, 'path'),
+          mainAreaApi,
+        )
+        break
+      case 'list_workspace_directory':
+        output = await listWorkspaceDirectory(
+          getOptionalString(argumentsValue, 'path', '.'),
+          fileSystemApi,
+        )
+        break
+      case 'open_workspace_file':
+        output = await openWorkspaceFile(
+          getRequiredString(argumentsValue, 'path'),
+          mainAreaApi,
+        )
+        break
+      case 'read_workspace_file':
+        output = await readWorkspaceFile(
+          getRequiredString(argumentsValue, 'path'),
+          fileSystemApi,
+        )
+        break
+      case 'write_workspace_file':
+        output = await writeWorkspaceFile(
+          getRequiredString(argumentsValue, 'path'),
+          getRequiredString(argumentsValue, 'content'),
+          fileSystemApi,
+        )
+        break
+      default:
+        throw new Error(`Unknown workspace file tool: ${functionCall.name}`)
     }
   } catch (error) {
     output = {
