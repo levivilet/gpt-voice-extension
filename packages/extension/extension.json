@@ -1,6 +1,7 @@
 {
   "id": "builtin.gpt-voice",
   "name": "gpt-voice",
+  "icon": "media/voice-chat.svg",
   "workerName": "gpt-voice Worker",
   "description": "Gpt Voice extension for Lvce Editor",
   "repository": "https://github.com/lvce-editor/gpt-voice-extension",
